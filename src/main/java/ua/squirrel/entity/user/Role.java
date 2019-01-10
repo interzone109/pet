@@ -18,9 +18,9 @@ import lombok.Data;
 public class Role {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-
 	@Column(name = "role_Id", nullable = false)
 	private long id;
+	@Column(name = "role_name", nullable = false)
 	private String name ;
     @ManyToMany(mappedBy = "roles")
 	private Set<User> users;

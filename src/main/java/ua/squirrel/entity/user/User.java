@@ -19,9 +19,6 @@ public class User {
 	@ManyToMany
     @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"),
     inverseJoinColumns = @JoinColumn(name = "role_id"))
-	 private Set<Role> roles;
-	@ManyToMany
-	@JoinTable(name = "user_state", joinColumns = @JoinColumn(name = "user_id"),
-    inverseJoinColumns = @JoinColumn(name = "state_id"))
-	private Set<State> states;
+	private Set<Role> roles;
+	private State states;
 }

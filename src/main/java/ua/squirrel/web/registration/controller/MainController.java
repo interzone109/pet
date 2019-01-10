@@ -11,7 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequestMapping("/main")
 @Slf4j
-@Secured("ADMIN")
+@Secured("USER")
 public class MainController {
 	
 	@GetMapping

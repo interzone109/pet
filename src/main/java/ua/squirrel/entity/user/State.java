@@ -20,6 +20,7 @@ public class State {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "states_Id", nullable = false)
 	private long id;
+	@Column(name = "states_name", nullable = false)
 	private String name ;
     @ManyToMany(mappedBy = "states")
 	private Set<User> users;
