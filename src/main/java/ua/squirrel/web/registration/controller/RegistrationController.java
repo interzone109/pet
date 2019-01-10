@@ -1,4 +1,10 @@
 package ua.squirrel.web.registration.controller;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +19,10 @@ import ua.squirrel.entity.user.Role;
 import ua.squirrel.entity.user.State;
 import ua.squirrel.entity.user.User;
 import ua.squirrel.web.registration.model.UserModel;
+import ua.squirrel.web.registration.role.service.RoleRepository;
+import ua.squirrel.web.registration.role.service.RoleServiceImpl;
+import ua.squirrel.web.registration.state.service.StateRepository;
+import ua.squirrel.web.registration.state.service.StateServiceImpl;
 import ua.squirrel.web.registration.user.service.UserServiceImpl;
 
 
@@ -23,6 +33,10 @@ public class RegistrationController {
 	
 	@Autowired
 	private UserServiceImpl userServiceImpl;
+	@Autowired
+	private StateServiceImpl stateServiceImpl;
+	@Autowired
+	private  RoleServiceImpl roleServiceImpl;
 	
 	
 	@GetMapping
@@ -34,10 +48,16 @@ public class RegistrationController {
 	@PostMapping
 	User registr(@RequestBody UserModel userModel ) {
 		logger.info("enter method post url:/registr"+userModel.getLogin());
+		
+		  Set<Role> role =   new HashSet<>();
+		  role.add(roleServiceImpl.findOneByName("USER"));
+		  Set<State> state =   new HashSet<>();
+		  state.add(stateServiceImpl.findOneByName("ACTIVE"));
+		
 		User user = User.builder().login(userModel.getLogin())
 				.hashPass(userModel.getHashPass())
-				//.role(Role.USER)
-				//.state(State.ACTIVE)
+				.roles(role)
+				.states(state)
 				.build();
 		userServiceImpl.save(user);
 		

@@ -1,5 +1,7 @@
 package ua.squirrel.web.registration.role.service;
 
-public interface RoleService {
+import ua.squirrel.entity.user.Role;
 
+public interface RoleService {
+	public Role findOneByName(String name);
 }

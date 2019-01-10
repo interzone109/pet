@@ -1,5 +1,6 @@
 package ua.squirrel.web.registration.controller;
 
+
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
