@@ -1,4 +1,4 @@
-package ua.squirrel.entity.user;
+package ua.squirrel.web.entity.user;
 
 import java.util.Set;
 

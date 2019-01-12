@@ -3,7 +3,7 @@ package ua.squirrel.web.registration.role.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import ua.squirrel.entity.user.Role;
+import ua.squirrel.web.entity.user.Role;
 
 @Service
 public class RoleServiceImpl implements RoleService{

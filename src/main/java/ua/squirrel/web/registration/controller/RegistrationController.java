@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import ua.squirrel.entity.user.Role;
-import ua.squirrel.entity.user.State;
-import ua.squirrel.entity.user.User;
+import ua.squirrel.web.entity.user.Role;
+import ua.squirrel.web.entity.user.State;
+import ua.squirrel.web.entity.user.User;
 import ua.squirrel.web.registration.model.UserModel;
 import ua.squirrel.web.registration.role.service.RoleRepository;
 import ua.squirrel.web.registration.role.service.RoleServiceImpl;

@@ -4,7 +4,8 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ua.squirrel.entity.user.User;
+
+import ua.squirrel.web.entity.user.User;
 
 @Service
 public class UserServiceImpl implements UserService {
