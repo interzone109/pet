@@ -1,8 +1,6 @@
 package ua.squirrel.web.registration.controller;
-import java.util.ArrayList;
-import java.util.Collection;
+
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Set;
 
 import org.slf4j.Logger;
@@ -19,9 +17,7 @@ import ua.squirrel.web.entity.user.Role;
 import ua.squirrel.web.entity.user.State;
 import ua.squirrel.web.entity.user.User;
 import ua.squirrel.web.registration.model.UserModel;
-import ua.squirrel.web.registration.role.service.RoleRepository;
 import ua.squirrel.web.registration.role.service.RoleServiceImpl;
-import ua.squirrel.web.registration.state.service.StateRepository;
 import ua.squirrel.web.registration.state.service.StateServiceImpl;
 import ua.squirrel.web.registration.user.service.UserServiceImpl;
 
@@ -40,26 +36,39 @@ public class RegistrationController {
 	
 	
 	@GetMapping
-	UserModel hello(Authentication authentication) {
-		logger.info("enter method get url:/registr");
-		return new  UserModel();
-	}
-	
-	@PostMapping
-	User registr(@RequestBody UserModel userModel ) {
-		logger.info("enter method post url:/registr"+userModel.getLogin());
-		
-		  Set<Role> role =   new HashSet<>();
+	public String hello(Authentication authentication) {
+		Set<Role> role =   new HashSet<>();
 		  role.add(roleServiceImpl.findOneByName("USER"));
 		  Set<State> state =   new HashSet<>();
 		  state.add(stateServiceImpl.findOneByName("ACTIVE"));
 		
-		User user = User.builder().login(userModel.getLogin())
-				.hashPass(userModel.getHashPass())
-				.roles(role)
-				.states(state)
-				.build();
+		User user = new User();
+		user.setLogin("test");
+		user.setHashPass("user");
+		user.setRoles(role);
+		user.setMail("user@mail.com");
+		user.setStates(state);
+		
 		userServiceImpl.save(user);
+		
+		return "user create";
+	}
+	
+	@PostMapping
+	public User registr(@RequestBody UserModel userModel ) {
+		logger.info("enter method post url:/registr"+userModel.getLogin());
+		
+		Set<Role> role =   new HashSet<>();
+		  role.add(roleServiceImpl.findOneByName("USER"));
+		  Set<State> state =   new HashSet<>();
+		  state.add(stateServiceImpl.findOneByName("ACTIVE"));
+		
+		User user = new User();
+		user.setLogin("test");
+		user.setHashPass("user");
+		user.setRoles(role);
+		user.setMail("user@mail.com");
+		user.setStates(state);
 		
 		return user;
 	}

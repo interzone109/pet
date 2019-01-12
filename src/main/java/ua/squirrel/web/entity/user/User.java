@@ -1,14 +1,14 @@
 package ua.squirrel.web.entity.user;
 
+import java.util.List;
 import java.util.Set;
 import javax.persistence.*;
-import lombok.Builder;
 import lombok.Data;
+import ua.squirrel.user.assortment.product.Product;
 
 
 @Entity
 @Table(name = "user")
-@Builder
 @Data
 public class User {
 	@Id
@@ -25,13 +25,22 @@ public class User {
 	@Column(name = "mail", nullable = false)
 	private String mail ;
 	
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"),
     inverseJoinColumns = @JoinColumn(name = "role_id"))
 	private Set<Role> roles;
 	
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_state", joinColumns = @JoinColumn(name = "user_id"),
     inverseJoinColumns = @JoinColumn(name = "state_id"))
 	private Set<State> states;
+	
+	
+	
+	@OneToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "user_product", joinColumns = @JoinColumn(name = "user_id"),
+    inverseJoinColumns = @JoinColumn(name = "product_id"))
+	private List<Product> products;
+	
+	
 }
