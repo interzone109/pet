@@ -30,6 +30,6 @@ public class Product {
 	private Partner partner ;
 	
 	@OneToOne
-	private User user ;
+	private User userOwner ;
 	
 }

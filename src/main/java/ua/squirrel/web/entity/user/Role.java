@@ -2,8 +2,10 @@ package ua.squirrel.web.entity.user;
 
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -22,7 +24,7 @@ public class Role {
 	private long id;
 	@Column(name = "role_name", nullable = false)
 	private String name ;
-    @ManyToMany(mappedBy = "roles")
-	private Set<User> users;
+   /* @ManyToMany(mappedBy = "roles", fetch=FetchType.LAZY)
+	private Set<User> users;*/
     
 }

@@ -2,7 +2,6 @@ package ua.squirrel.user.assortment.partner;
 
 
 import java.util.List;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,9 +9,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
-import lombok.Builder;
 import lombok.Data;
 import ua.squirrel.user.assortment.product.Product;
 
@@ -30,7 +28,7 @@ public class Partner {
 	private String phonNumber;
 	@Column(name = "partner_mail")
 	private String partnerMail;
-	@OneToMany
+	@ManyToMany
     @JoinTable(name = "partner_product", joinColumns = @JoinColumn(name = "partner_id"),
     inverseJoinColumns = @JoinColumn(name = "product_id"))
 	private List<Product> assortment;

@@ -22,7 +22,7 @@ public class State {
 	private long id;
 	@Column(name = "state_name", nullable = false)
 	private String name ;
-	@ManyToMany(mappedBy = "states")
-	private Set<User> users;
+/*	@ManyToMany(mappedBy = "states")
+	private Set<User> users;*/
     
 }
