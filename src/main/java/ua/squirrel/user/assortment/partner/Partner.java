@@ -33,6 +33,6 @@ public class Partner {
 	private String phonNumber;
 	@Column(name = "partner_mail")
 	private String partnerMail;
-	/*@OneToMany(fetch = FetchType.LAZY , cascade=CascadeType.ALL)
-	private List<Product> assortment;*/
+	@OneToMany(fetch = FetchType.LAZY , cascade=CascadeType.ALL)
+	private List<Product> assortment;
 }
