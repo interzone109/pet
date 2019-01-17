@@ -13,16 +13,16 @@ import ua.squirrel.user.assortment.product.Product;
 public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "user_id", nullable = false)
+	@Column(name = "user_id", nullable = false,unique=true)
 	private long id;
 	
-	@Column(name = "login", nullable = false)
+	@Column(name = "login", nullable = false,unique=true)
 	private String login;
 	
 	@Column(name = "password", nullable = false)
 	private String hashPass;
 	
-	@Column(name = "mail", nullable = false)
+	@Column(name = "mail", nullable = false,unique=true)
 	private String mail ;
 	
 	@ManyToMany(fetch = FetchType.EAGER)
@@ -37,7 +37,7 @@ public class User {
 	
 	
 	
-	@OneToMany(fetch = FetchType.EAGER)
+	@OneToMany(fetch = FetchType.LAZY , cascade=CascadeType.ALL)
     @JoinTable(name = "user_product", joinColumns = @JoinColumn(name = "user_id"),
     inverseJoinColumns = @JoinColumn(name = "product_id"))
 	private List<Product> products;
