@@ -1,10 +1,9 @@
 package ua.squirrel.web.assortment.controller;
 
-import java.util.ArrayList;
+
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -12,14 +11,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.extern.slf4j.Slf4j;
-import ua.squirrel.user.assortment.partner.Partner;
 import ua.squirrel.user.assortment.partner.service.PartnerServiceImpl;
 import ua.squirrel.user.assortment.product.Product;
 import ua.squirrel.user.assortment.product.helper.service.GroupProductServiceImpl;
 import ua.squirrel.user.assortment.product.helper.service.MeasureProductServiceImpl;
 import ua.squirrel.user.assortment.product.service.ProductServiceImpl;
-import ua.squirrel.web.entity.user.User;
-import ua.squirrel.web.registration.model.UserModel;
 import ua.squirrel.web.registration.user.service.UserServiceImpl;
 
 @RestController

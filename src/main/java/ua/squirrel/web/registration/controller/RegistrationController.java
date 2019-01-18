@@ -1,10 +1,9 @@
 package ua.squirrel.web.registration.controller;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,7 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.extern.slf4j.Slf4j;
-import ua.squirrel.web.assortment.controller.ProductController;
+import ua.squirrel.user.assortment.partner.Partner;
+import ua.squirrel.user.assortment.partner.service.PartnerServiceImpl;
+import ua.squirrel.user.assortment.product.Product;
 import ua.squirrel.web.entity.user.Role;
 import ua.squirrel.web.entity.user.State;
 import ua.squirrel.web.entity.user.User;
@@ -38,9 +39,10 @@ public class RegistrationController {
 	private StateServiceImpl stateServiceImpl;
 	@Autowired
 	private RoleServiceImpl roleServiceImpl;
+	
 
 	@GetMapping
-	public UserModel hello(Authentication authentication) {
+	public User hello(Authentication authentication) {
 
 		Set<Role> role = new HashSet<>();
 		role.add(roleServiceImpl.findOneByName("USER"));
@@ -54,26 +56,18 @@ public class RegistrationController {
 		user1.setMail("user1@mail.com");
 		user1.setStates(state);
 
+		List<Partner> l = getPartner();
+		l.get(0).setUserOwner(user1);
+		l.get(1).setUserOwner(user1);
+		user1.setPartners(l);
+		
 		userServiceImpl.save(user1);
 		
-		role = new HashSet<>();
-		role.add(roleServiceImpl.findOneByName("USER"));
-		
-		state = new HashSet<>();
-		state.add(stateServiceImpl.findOneByName("ACTIVE"));
-		
-		User user2 = new User();
-		user2.setLogin("test2");
-		user2.setHashPass("user2");
-		user2.setRoles(role);
-		user2.setMail("user2@mail.com");
-		user2.setStates(state);
-
-		userServiceImpl.save(user2);
-
 		log.info("LOGGER: return new user model ");
-		return new UserModel();
+		return user1;
 	}
+
+	
 
 	@PostMapping
 	public User registr(@RequestBody UserModel userModel) {
@@ -93,4 +87,41 @@ public class RegistrationController {
 
 		return user;
 	}
+	
+	
+	
+
+	@Autowired
+	private PartnerServiceImpl partnerServiceImpl;
+	
+	private List<Partner> getPartner() {
+		List<Partner> partner = new ArrayList<>();
+		
+		for (int i = 0; i < 2; i++) {
+			Partner p = new Partner();
+			p.setCompany("partner "+i);
+			p.setPartnerMail("partner"+i+"@mail.com");
+			p.setPhonNumber("21313");
+			partner.add(p);
+		}
+	
+		return partner;
+	}
+
+
+
+	private List<Product> getProduct() {
+		List<Product> product = new ArrayList<>();
+		
+		for (int i = 0; i < 2; i++) {
+		Product p = new Product();
+		p.setName("food "+i);
+		p.setDescription("desc "+i);
+		p.setPrice(12.5f+i);
+		product.add(p);
+		}
+		
+		return product;
+	}
+	
 }
