@@ -3,18 +3,15 @@ package ua.squirrel.user.assortment.product;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-
 import lombok.Data;
-import ua.squirrel.user.assortment.partner.Partner;
-import ua.squirrel.web.entity.user.User;
+import ua.squirrel.user.assortment.product.helper.GroupProduct;
+import ua.squirrel.user.assortment.product.helper.MeasureProduct;
+
 
 @Data
 @Entity
@@ -24,13 +21,21 @@ public class Product {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "product_id", nullable = false)
 	private long id;
-	@Column(name = "product_name", nullable = false)
+	@Column(name = "product_name", nullable = false,unique=true)
 	private String name;
 	@Column(name = "description")
 	private String description;
-	@ManyToOne(targetEntity = Partner.class)
+	@Column(name = "price")
+	private float price;
+	@OneToOne
+	private GroupProduct groupProduct;
+	@OneToOne
+	private MeasureProduct measureProduct;
+
+	
+	/*@ManyToOne(targetEntity = Partner.class)
 	private Partner partner ;
 	@OneToOne
-	private User user ;
+	private User user ;*/
 	
 }

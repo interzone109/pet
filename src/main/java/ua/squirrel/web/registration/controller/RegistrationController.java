@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.extern.slf4j.Slf4j;
-import ua.squirrel.web.app.controller.ProductController;
+import ua.squirrel.web.assortment.controller.ProductController;
 import ua.squirrel.web.entity.user.Role;
 import ua.squirrel.web.entity.user.State;
 import ua.squirrel.web.entity.user.User;

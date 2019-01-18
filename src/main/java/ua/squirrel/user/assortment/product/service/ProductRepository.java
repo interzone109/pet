@@ -8,6 +8,6 @@ import ua.squirrel.user.assortment.product.Product;
 import ua.squirrel.web.entity.user.User;
 
 public interface ProductRepository extends JpaRepository<Product, Long>{
-	List<Product> findByUser(User user);
+
 
 }

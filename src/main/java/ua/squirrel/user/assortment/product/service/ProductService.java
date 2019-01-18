@@ -6,6 +6,5 @@ import ua.squirrel.user.assortment.product.Product;
 import ua.squirrel.web.entity.user.User;
 
 public interface ProductService {
-	public void save(Product productToSave);
-	List<Product> findByUser(User user);
+	 void save(Product productToSave);
 }

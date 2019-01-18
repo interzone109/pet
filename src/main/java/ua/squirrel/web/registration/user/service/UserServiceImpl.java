@@ -22,4 +22,7 @@ public class UserServiceImpl implements UserService {
 	public Optional<User> findOneByLogin(String login) {
 		return userRepository.findOneByLogin(login);
 	}
+	public User findByIdAndFetchPartnersEagerly( Long id) {
+		return userRepository.findByIdAndFetchPartnersEagerly(id);
+	}
 }
