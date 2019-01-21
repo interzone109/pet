@@ -1,4 +1,4 @@
-package ua.squirrel.web.assortment.controller;
+package ua.squirrel.user.partner.controller;
 
 
 import java.util.List;
@@ -9,15 +9,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import lombok.extern.slf4j.Slf4j;
-import ua.squirrel.user.assortment.partner.Partner;
-import ua.squirrel.user.assortment.partner.service.PartnerServiceImpl;
+import ua.squirrel.user.partner.Partner;
+import ua.squirrel.user.partner.service.PartnerServiceImpl;
 import ua.squirrel.web.entity.user.User;
 import ua.squirrel.web.registration.user.service.UserServiceImpl;
 
 @RestController
-@RequestMapping("/partner")
+@RequestMapping("/partners")
 @Slf4j
-public class PartnerController {
+public class AllPartnersController {
 	
 	@Autowired
 	private PartnerServiceImpl partnerServiceImpl;
@@ -46,7 +46,7 @@ public class PartnerController {
 	
 	
 	@GetMapping
-	public List<Partner> getSavePartner() {
+	public List<Partner> getAllPartner() {
 		log.info("LOGGER: show all partners");
 		
 		User user = userServiceImpl.findOneByLogin("test1").get();

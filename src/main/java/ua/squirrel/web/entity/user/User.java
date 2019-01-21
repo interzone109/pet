@@ -1,14 +1,12 @@
 package ua.squirrel.web.entity.user;
 
-import java.io.Serializable;
+
 import java.util.List;
 import java.util.Set;
 import javax.persistence.*;
-
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-
 import lombok.Data;
-import ua.squirrel.user.assortment.partner.Partner;
+import ua.squirrel.user.partner.Partner;
 
 @Entity
 @Table(name = "user")
@@ -43,7 +41,8 @@ public class User {
 	@JoinTable(name = "user_partner", joinColumns = @JoinColumn(name = "user_id"),
 	inverseJoinColumns = @JoinColumn(name = "partner_id"))*/
 	@JsonManagedReference
-	@OneToMany(mappedBy = "userOwner" , fetch = FetchType.LAZY, cascade=CascadeType.ALL)//,cascade=CascadeType.ALL
+	@OneToMany(mappedBy = "user" , fetch = FetchType.LAZY ,
+	orphanRemoval=true , cascade=CascadeType.ALL)
 	private List<Partner> partners;
 
 }

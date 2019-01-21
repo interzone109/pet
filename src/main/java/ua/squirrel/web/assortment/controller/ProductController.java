@@ -11,11 +11,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.extern.slf4j.Slf4j;
-import ua.squirrel.user.assortment.partner.service.PartnerServiceImpl;
 import ua.squirrel.user.assortment.product.Product;
 import ua.squirrel.user.assortment.product.helper.service.GroupProductServiceImpl;
 import ua.squirrel.user.assortment.product.helper.service.MeasureProductServiceImpl;
 import ua.squirrel.user.assortment.product.service.ProductServiceImpl;
+import ua.squirrel.user.partner.service.PartnerServiceImpl;
 import ua.squirrel.web.registration.user.service.UserServiceImpl;
 
 @RestController

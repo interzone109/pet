@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.extern.slf4j.Slf4j;
-import ua.squirrel.user.assortment.partner.Partner;
-import ua.squirrel.user.assortment.partner.service.PartnerServiceImpl;
 import ua.squirrel.user.assortment.product.Product;
+import ua.squirrel.user.partner.Partner;
+import ua.squirrel.user.partner.service.PartnerServiceImpl;
 import ua.squirrel.web.entity.user.Role;
 import ua.squirrel.web.entity.user.State;
 import ua.squirrel.web.entity.user.User;
@@ -57,8 +57,8 @@ public class RegistrationController {
 		user1.setStates(state);
 
 		List<Partner> l = getPartner();
-		l.get(0).setUserOwner(user1);
-		l.get(1).setUserOwner(user1);
+		l.get(0).setUser(user1);
+		l.get(1).setUser(user1);
 		user1.setPartners(l);
 		
 		userServiceImpl.save(user1);

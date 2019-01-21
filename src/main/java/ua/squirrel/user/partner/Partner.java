@@ -1,8 +1,6 @@
-package ua.squirrel.user.assortment.partner;
+package ua.squirrel.user.partner;
 
 
-import java.io.Serializable;
-import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,15 +9,15 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import lombok.Data;
-import ua.squirrel.user.assortment.product.Product;
 import ua.squirrel.web.entity.user.User;
 
 
@@ -49,5 +47,5 @@ public class Partner {
 	@JsonBackReference
 	@ManyToOne(fetch = FetchType.LAZY  )
     @JoinColumn(name = "user_owner_id" ,nullable=false )
-	private User userOwner ;
+	private User user ;
 }
