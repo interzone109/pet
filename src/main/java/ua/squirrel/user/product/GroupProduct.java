@@ -18,7 +18,7 @@ public class GroupProduct {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "group_product_Id", nullable = false)
 	private long id;
-	@Column(name = "group_product_name", nullable = false)
+	@Column(name = "group_product_name", nullable = false , unique=true)
 	private String name ;
 	
 }

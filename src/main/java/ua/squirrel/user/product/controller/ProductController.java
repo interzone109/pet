@@ -107,7 +107,7 @@ public class ProductController {
 	@DeleteMapping
 	public void deleteProduct(Authentication authentication, @PathVariable("partner_id") Long id,
 			@PathVariable("product_id") Long productId ) throws NotFoundException {
-		log.info("LOGGER: add product to current partner");
+		log.info("LOGGER: delete product ");
 
 	}
 	

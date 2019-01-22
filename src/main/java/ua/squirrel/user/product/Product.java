@@ -29,8 +29,8 @@ public class Product {
 	@Column(name = "description")
 	private String description;
 	
-	@Column(name = "price")
-	private float price;
+	@Column(name = "unit_price")
+	private long price;
 	
 	@OneToOne
 	private GroupProduct groupProduct;

@@ -1,6 +1,6 @@
 package ua.squirrel.web.registration.controller;
 
-import java.util.ArrayList;
+
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import lombok.extern.slf4j.Slf4j;
 import ua.squirrel.user.partner.Partner;
-import ua.squirrel.user.product.Product;
 import ua.squirrel.web.entity.user.Role;
 import ua.squirrel.web.entity.user.State;
 import ua.squirrel.web.entity.user.User;
@@ -21,6 +20,7 @@ import ua.squirrel.web.entity.user.UserModel;
 import ua.squirrel.web.registration.service.RoleServiceImpl;
 import ua.squirrel.web.registration.service.StateServiceImpl;
 import ua.squirrel.web.registration.user.service.UserServiceImpl;
+import ua.squirrel.z.util.FillDataUtil;
 /**
  * @author Maksim Gromko
  * контролер регистрации пользователя
@@ -37,7 +37,8 @@ public class RegistrationController {
 	private StateServiceImpl stateServiceImpl;
 	@Autowired
 	private RoleServiceImpl roleServiceImpl;
-	
+	@Autowired
+	private FillDataUtil fillDataUtil ;
 
 	@GetMapping
 	public UserModel hello(Authentication authentication) {
@@ -50,13 +51,15 @@ public class RegistrationController {
 		User user1 = new User();
 		user1.setLogin("test1");
 		user1.setHashPass("user1");
-		user1.setRoles(role);
 		user1.setMail("user1@mail.com");
+		user1.setRoles(role);
 		user1.setStates(state);
-
-		List<Partner> l = getPartner();
+		
+		
+		List<Partner> l = fillDataUtil.getPartner();
 		l.get(0).setUser(user1);
 		l.get(1).setUser(user1);
+		l.get(2).setUser(user1);
 		user1.setPartners(l);
 			
 		userServiceImpl.save(user1);
@@ -65,8 +68,6 @@ public class RegistrationController {
 				.login(user1.getLogin())
 				.mail(user1.getMail())
 				.build();
-			
-		
 	}
 
 	
@@ -92,47 +93,5 @@ public class RegistrationController {
 				.mail(user.getMail())
 				.build();
 	}
-	
 
-	
-	/**
-	 * 
-	 * 
-	 * тестовое заполнение полей пользователя
-	 * данными о партнерах и их продуктах
-	 * 
-	 * */
-	
-	private List<Partner> getPartner() {
-		List<Partner> partner = new ArrayList<>();
-		
-		for (int i = 0; i < 2; i++) {
-			Partner p = new Partner();
-			p.setCompany("partner "+i);
-			p.setPartnerMail("partner"+i+"@mail.com");
-			p.setProducts(getProduct(p));
-			p.setPhonNumber("21313");
-			partner.add(p);
-		}
-	
-		return partner;
-	}
-
-
-
-	private List<Product> getProduct(Partner partner) {
-		List<Product> product = new ArrayList<>();
-		
-		for (int i = 0; i < 2; i++) {
-		Product p = new Product();
-		p.setName("food "+i);
-		p.setDescription("desc "+i);
-		p.setPrice(12.5f+i);
-		p.setPartner(partner);
-		product.add(p);
-		}
-		
-		return product;
-	}
-	
 }
