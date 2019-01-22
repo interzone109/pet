@@ -1,4 +1,4 @@
-package ua.squirrel.web.registration.role.service;
+package ua.squirrel.web.registration.service;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

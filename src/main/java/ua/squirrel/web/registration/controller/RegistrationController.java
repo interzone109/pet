@@ -11,17 +11,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import lombok.extern.slf4j.Slf4j;
-import ua.squirrel.user.assortment.product.Product;
 import ua.squirrel.user.partner.Partner;
-import ua.squirrel.user.partner.service.PartnerServiceImpl;
+import ua.squirrel.user.product.Product;
 import ua.squirrel.web.entity.user.Role;
 import ua.squirrel.web.entity.user.State;
 import ua.squirrel.web.entity.user.User;
-import ua.squirrel.web.registration.model.UserModel;
-import ua.squirrel.web.registration.role.service.RoleServiceImpl;
-import ua.squirrel.web.registration.state.service.StateServiceImpl;
+import ua.squirrel.web.entity.user.UserModel;
+import ua.squirrel.web.registration.service.RoleServiceImpl;
+import ua.squirrel.web.registration.service.StateServiceImpl;
 import ua.squirrel.web.registration.user.service.UserServiceImpl;
 /**
  * @author Maksim Gromko
@@ -42,8 +40,8 @@ public class RegistrationController {
 	
 
 	@GetMapping
-	public User hello(Authentication authentication) {
-
+	public UserModel hello(Authentication authentication) {
+		log.info("LOGGER: return new user model ");
 		Set<Role> role = new HashSet<>();
 		role.add(roleServiceImpl.findOneByName("USER"));
 		Set<State> state = new HashSet<>();
@@ -60,17 +58,21 @@ public class RegistrationController {
 		l.get(0).setUser(user1);
 		l.get(1).setUser(user1);
 		user1.setPartners(l);
-		
+			
 		userServiceImpl.save(user1);
 		
-		log.info("LOGGER: return new user model ");
-		return user1;
+		return UserModel.builder()
+				.login(user1.getLogin())
+				.mail(user1.getMail())
+				.build();
+			
+		
 	}
 
 	
 
 	@PostMapping
-	public User registr(@RequestBody UserModel userModel) {
+	public UserModel registr(@RequestBody UserModel userModel) {
 		log.info("LOGGER: regist new user " + userModel.getLogin());
 
 		Set<Role> role = new HashSet<>();
@@ -85,14 +87,21 @@ public class RegistrationController {
 		user.setMail(userModel.getMail());
 		user.setStates(state);
 
-		return user;
+		return UserModel.builder()
+				.login(user.getLogin())
+				.mail(user.getMail())
+				.build();
 	}
 	
-	
-	
 
-	@Autowired
-	private PartnerServiceImpl partnerServiceImpl;
+	
+	/**
+	 * 
+	 * 
+	 * тестовое заполнение полей пользователя
+	 * данными о партнерах и их продуктах
+	 * 
+	 * */
 	
 	private List<Partner> getPartner() {
 		List<Partner> partner = new ArrayList<>();
@@ -101,6 +110,7 @@ public class RegistrationController {
 			Partner p = new Partner();
 			p.setCompany("partner "+i);
 			p.setPartnerMail("partner"+i+"@mail.com");
+			p.setProducts(getProduct(p));
 			p.setPhonNumber("21313");
 			partner.add(p);
 		}
@@ -110,7 +120,7 @@ public class RegistrationController {
 
 
 
-	private List<Product> getProduct() {
+	private List<Product> getProduct(Partner partner) {
 		List<Product> product = new ArrayList<>();
 		
 		for (int i = 0; i < 2; i++) {
@@ -118,6 +128,7 @@ public class RegistrationController {
 		p.setName("food "+i);
 		p.setDescription("desc "+i);
 		p.setPrice(12.5f+i);
+		p.setPartner(partner);
 		product.add(p);
 		}
 		

@@ -1,8 +1,10 @@
-package ua.squirrel.web.registration.model;
+package ua.squirrel.web.entity.user;
 
 
+import lombok.Builder;
 import lombok.Data;
 
+@Builder
 @Data
 public class UserModel {
 	private String login;

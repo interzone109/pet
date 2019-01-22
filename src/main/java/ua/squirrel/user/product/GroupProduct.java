@@ -1,20 +1,18 @@
-package ua.squirrel.user.assortment.product.helper;
+package ua.squirrel.user.product;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import lombok.Data;
-import ua.squirrel.user.assortment.product.Product;
 
 
 @Data
 @Entity
-@Table(name="group_products")
+@Table(name="products_group")
 public class GroupProduct {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

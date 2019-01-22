@@ -1,4 +1,4 @@
-package ua.squirrel.web.registration.role.service;
+package ua.squirrel.web.registration.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -1,4 +1,4 @@
-package ua.squirrel.web.registration.state.service;
+package ua.squirrel.web.registration.service;
 
 import ua.squirrel.web.entity.user.State;
 

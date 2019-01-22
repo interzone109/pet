@@ -1,4 +1,4 @@
-package ua.squirrel.user.assortment.product.helper;
+package ua.squirrel.user.product;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,7 +10,7 @@ import javax.persistence.Table;
 import lombok.Data;
 @Data
 @Entity
-@Table(name="measure_products")
+@Table(name="products_measure")
 public class MeasureProduct {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

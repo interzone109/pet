@@ -1,6 +1,5 @@
 package ua.squirrel.web.entity.user;
 
-
 import java.util.List;
 import java.util.Set;
 import javax.persistence.*;
@@ -28,21 +27,15 @@ public class User {
 	private String mail;
 
 	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"),
-	inverseJoinColumns = @JoinColumn(name = "role_id"))
+	@JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
 	private Set<Role> roles;
 
 	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(name = "user_state", joinColumns = @JoinColumn(name = "user_id"),
-	inverseJoinColumns = @JoinColumn(name = "state_id"))
+	@JoinTable(name = "user_state", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "state_id"))
 	private Set<State> states;
 
-	/*@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JoinTable(name = "user_partner", joinColumns = @JoinColumn(name = "user_id"),
-	inverseJoinColumns = @JoinColumn(name = "partner_id"))*/
 	@JsonManagedReference
-	@OneToMany(mappedBy = "user" , fetch = FetchType.LAZY ,
-	orphanRemoval=true , cascade=CascadeType.ALL)
+	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<Partner> partners;
 
 }

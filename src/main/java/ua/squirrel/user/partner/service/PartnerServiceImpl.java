@@ -34,4 +34,6 @@ public class PartnerServiceImpl implements PartnerService {
 		partnerRepository.deleteByIdAndUser(partner, user);
 
 	}
+	
+	
 }

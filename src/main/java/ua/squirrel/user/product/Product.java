@@ -1,17 +1,18 @@
-package ua.squirrel.user.assortment.product;
-
+package ua.squirrel.user.product;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Data;
-import ua.squirrel.user.assortment.product.helper.GroupProduct;
-import ua.squirrel.user.assortment.product.helper.MeasureProduct;
-
+import ua.squirrel.user.partner.Partner;
 
 @Data
 @Entity
@@ -21,21 +22,25 @@ public class Product {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "product_id", nullable = false)
 	private long id;
+	
 	@Column(name = "product_name", nullable = false)
 	private String name;
+	
 	@Column(name = "description")
 	private String description;
+	
 	@Column(name = "price")
 	private float price;
+	
 	@OneToOne
 	private GroupProduct groupProduct;
+	
 	@OneToOne
 	private MeasureProduct measureProduct;
 
-	
-	/*@ManyToOne(targetEntity = Partner.class)
-	private Partner partner ;
-	@OneToOne
-	private User user ;*/
-	
+	@JsonBackReference
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "product_partner_id", nullable = false)
+	private Partner partner;
+
 }

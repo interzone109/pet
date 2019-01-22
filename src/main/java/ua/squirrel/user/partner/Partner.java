@@ -1,25 +1,12 @@
 package ua.squirrel.user.partner;
 
-
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
-
+import java.util.List;
+import javax.persistence.*;
 import com.fasterxml.jackson.annotation.JsonBackReference;
-
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
+import ua.squirrel.user.product.Product;
 import ua.squirrel.web.entity.user.User;
-
 
 @Entity
 @Table(name = "partners")
@@ -29,23 +16,23 @@ public class Partner {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "partner_id", nullable = false)
 	private long id;
-	
+
 	@Column(name = "company", nullable = false)
 	private String company;
-	
+
 	@Column(name = "partner_phone")
 	private String phonNumber;
-	
+
 	@Column(name = "partner_mail")
 	private String partnerMail;
-	
-	/*@OneToMany(fetch = FetchType.LAZY , cascade=CascadeType.ALL)
-	@JoinTable(name = "partner_product", joinColumns = @JoinColumn(name = "partner_id"),
-    inverseJoinColumns = @JoinColumn(name = "product_id"))
-	private List<Product> products;*/
-	
+
+	@JsonManagedReference
+	@OneToMany(mappedBy = "partner", fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.ALL)
+	private List<Product> products;
+
 	@JsonBackReference
-	@ManyToOne(fetch = FetchType.LAZY  )
-    @JoinColumn(name = "user_owner_id" ,nullable=false )
-	private User user ;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "user_owner_id", nullable = false)
+	private User user;
+
 }
