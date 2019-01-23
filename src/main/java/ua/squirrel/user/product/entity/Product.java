@@ -1,5 +1,6 @@
 package ua.squirrel.user.product.entity;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -39,8 +40,13 @@ public class Product {
 	private MeasureProduct measureProduct;
 
 	@JsonBackReference
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY, cascade=CascadeType.ALL)
 	@JoinColumn(name = "product_partner_id", nullable = false)
 	private Partner partner;
 
+	
+	/*@JsonBackReference
+	@ManyToMany(mappedBy = "products",fetch = FetchType.LAZY)
+	private List<CompositeProduct> compositeProduct;*/
+	
 }

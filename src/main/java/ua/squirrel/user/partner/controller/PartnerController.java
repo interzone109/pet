@@ -19,8 +19,8 @@ import ua.squirrel.user.partner.entity.Partner;
 import ua.squirrel.user.partner.entity.PartnerModel;
 import ua.squirrel.user.partner.service.PartnerServiceImpl;
 import ua.squirrel.user.product.entity.ProductModel;
-import ua.squirrel.web.entity.user.entity.User;
 import ua.squirrel.web.registration.user.service.UserServiceImpl;
+import ua.squirrel.web.user.entity.User;
 
 @RestController
 @RequestMapping("/partners/{partner_id}/info")
@@ -57,7 +57,8 @@ public class PartnerController {
 					.description(obj.getDescription())
 					.price(obj.getPrice())
 					.groupProduct(obj.getGroupProduct())
-					.measureProduct(obj.getMeasureProduct()).build());
+					.measureProduct(obj.getMeasureProduct())
+					.build());
 		});
 
 		return PartnerModel.builder().id(partner.getId()).company(partner.getCompany())

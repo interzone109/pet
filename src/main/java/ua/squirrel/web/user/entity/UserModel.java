@@ -1,4 +1,4 @@
-package ua.squirrel.web.entity.user.entity;
+package ua.squirrel.web.user.entity;
 
 
 import lombok.Builder;

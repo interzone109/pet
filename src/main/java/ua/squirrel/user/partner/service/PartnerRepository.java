@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import ua.squirrel.user.partner.entity.Partner;
-import ua.squirrel.web.entity.user.entity.User;
+import ua.squirrel.web.user.entity.User;
 
 public interface PartnerRepository extends JpaRepository<Partner, Long> {
 

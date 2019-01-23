@@ -3,7 +3,7 @@ package ua.squirrel.user.partner.service;
 import java.util.Optional;
 
 import ua.squirrel.user.partner.entity.Partner;
-import ua.squirrel.web.entity.user.entity.User;
+import ua.squirrel.web.user.entity.User;
 
 public interface PartnerService {
 	void save(Partner partner);

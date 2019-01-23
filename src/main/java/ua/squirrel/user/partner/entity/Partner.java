@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 import ua.squirrel.user.product.entity.Product;
-import ua.squirrel.web.entity.user.entity.User;
+import ua.squirrel.web.user.entity.User;
 
 @Entity
 @Table(name = "partners")

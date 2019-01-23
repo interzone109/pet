@@ -21,8 +21,8 @@ import ua.squirrel.user.product.entity.ProductModel;
 import ua.squirrel.user.product.helper.service.GroupProductServiceImpl;
 import ua.squirrel.user.product.helper.service.MeasureProductServiceImpl;
 import ua.squirrel.user.product.service.ProductServiceImpl;
-import ua.squirrel.web.entity.user.entity.User;
 import ua.squirrel.web.registration.user.service.UserServiceImpl;
+import ua.squirrel.web.user.entity.User;
 
 @RestController
 @RequestMapping("/partners/{partner_id}/info/{product_id}/edit")
@@ -59,7 +59,7 @@ public class ProductController {
 			Product addProduct = new Product();
 			addProduct.setDescription(obj.getDescription());
 			addProduct.setName(obj.getName());
-			addProduct.setGroupProduct(
+			addProduct.setGroupProduct( 
 					groupProductServiceImpl.findOneByName(obj.getGroupProduct().getName()));
 			addProduct.setMeasureProduct(
 					measureProductServiceImpl.findOneByMeasure(obj.getMeasureProduct().getMeasure()));
@@ -92,9 +92,9 @@ public class ProductController {
 		
 		updateProduct.setName(productModel.getName());
 		updateProduct.setDescription(productModel.getDescription());
-		updateProduct.setGroupProduct(
+		updateProduct.setGroupProduct( 	
 				groupProductServiceImpl.findOneByName(productModel.getGroupProduct().getName()));
-		updateProduct.setMeasureProduct(
+		updateProduct.setMeasureProduct( 
 				measureProductServiceImpl.findOneByMeasure(productModel.getMeasureProduct().getMeasure()));
 		updateProduct.setPrice(productModel.getPrice());
 		updateProduct.setPartner(partner);

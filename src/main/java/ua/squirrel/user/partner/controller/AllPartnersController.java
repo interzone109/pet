@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.extern.slf4j.Slf4j;
 import ua.squirrel.user.partner.entity.Partner;
 import ua.squirrel.user.partner.entity.PartnerModel;
-import ua.squirrel.web.entity.user.entity.User;
 import ua.squirrel.web.registration.user.service.UserServiceImpl;
+import ua.squirrel.web.user.entity.User;
 
 @RestController
 @RequestMapping("/partners")

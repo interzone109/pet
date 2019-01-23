@@ -1,14 +1,22 @@
 package ua.squirrel.z.util;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import ua.squirrel.user.partner.entity.Partner;
+import ua.squirrel.user.product.entity.CompositeProduct;
 import ua.squirrel.user.product.entity.Product;
 import ua.squirrel.user.product.helper.service.GroupProductServiceImpl;
 import ua.squirrel.user.product.helper.service.MeasureProductServiceImpl;
+import ua.squirrel.user.product.service.ProductServiceImpl;
+import ua.squirrel.web.user.entity.User;
 
 @Component
 public class FillDataUtil {
@@ -25,6 +33,43 @@ public class FillDataUtil {
 	private  GroupProductServiceImpl groupProductServiceImpl;
 	@Autowired
 	private  MeasureProductServiceImpl measureProductServiceImpl;
+	@Autowired
+	ProductServiceImpl productServiceImpl ;
+	
+	public Set<CompositeProduct> getCofeeProduct(User owner ){
+		Set<CompositeProduct> listCompositeProduct = new HashSet<>();
+		//List<CompositeProduct> listCompositeProduct = new ArrayList<>();
+		
+		
+		CompositeProduct compositeProduct = new CompositeProduct();
+		compositeProduct.setName("Американо");
+		compositeProduct.setUser(owner);
+		
+		//List<Product> products = new ArrayList<>();
+		// List<Integer> consumption = new ArrayList<>();
+		Map<Product, Integer> productsConsumption = new HashMap<>();
+		
+		 owner.getPartners().stream().forEach(partner->{
+			 partner.getProducts().stream().forEach(prod->{
+				 if(prod.getName().equals("Кофе Черная тара")) { productsConsumption.put(prod, 10); }
+				 else if ( prod.getName().equals("Вода")) {productsConsumption.put(prod, 30);}
+				 else if( prod.getName().equals("Сахар стик")) {productsConsumption.put(prod, 2);}
+				 else if ( prod.getName().equals("Стаканчик 0.33")) {productsConsumption.put(prod, 1);}
+				 else  if ( prod.getName().equals("Пластиковое мешало")) {productsConsumption.put(prod, 1); }
+			 });
+		 });
+		
+		// compositeProduct.setProducts(products);
+		// compositeProduct.setConsumption(consumption);
+		 compositeProduct.setProductsConsumption(productsConsumption);
+		listCompositeProduct.add(compositeProduct);
+		
+		return listCompositeProduct ;
+	}
+	
+	
+	
+	
 	
 	
 	public  List<Partner> getPartner() {
@@ -145,6 +190,8 @@ public class FillDataUtil {
 	
 	private  List<Product> getConsumbles(Partner partner) {
 		List<Product> product = new ArrayList<>();
+		
+		
 		
 		Product p = new Product();
 		p.setName("Стаканчик 0.33");

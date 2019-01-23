@@ -13,13 +13,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import lombok.extern.slf4j.Slf4j;
 import ua.squirrel.user.partner.entity.Partner;
-import ua.squirrel.web.entity.user.entity.Role;
-import ua.squirrel.web.entity.user.entity.State;
-import ua.squirrel.web.entity.user.entity.User;
-import ua.squirrel.web.entity.user.entity.UserModel;
 import ua.squirrel.web.registration.service.RoleServiceImpl;
 import ua.squirrel.web.registration.service.StateServiceImpl;
 import ua.squirrel.web.registration.user.service.UserServiceImpl;
+import ua.squirrel.web.user.entity.Role;
+import ua.squirrel.web.user.entity.State;
+import ua.squirrel.web.user.entity.User;
+import ua.squirrel.web.user.entity.UserModel;
 import ua.squirrel.z.util.FillDataUtil;
 /**
  * @author Maksim Gromko
@@ -61,7 +61,13 @@ public class RegistrationController {
 		l.get(1).setUser(user1);
 		l.get(2).setUser(user1);
 		user1.setPartners(l);
-			
+		
+		
+		//userServiceImpl.save(user1);
+		//user1.setCompositeProducts(fillDataUtil.getCofeeProduct(user1));
+		
+		
+		
 		userServiceImpl.save(user1);
 		
 		return UserModel.builder()
