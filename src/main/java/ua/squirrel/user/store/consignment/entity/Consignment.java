@@ -1,5 +1,4 @@
-package ua.squirrel.web.entity.user;
-
+package ua.squirrel.user.store.consignment.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,14 +11,12 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name="states")
-public class State {
+@Table(name = "consignments")
+public class Consignment {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "states_Id", nullable = false)
+	@Column(name = "consignment_id", nullable = false)
 	private long id;
-	@Column(name = "state_name", nullable = false)
-	private String name ;
+	
 
-    
 }

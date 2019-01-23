@@ -1,11 +1,11 @@
-package ua.squirrel.web.entity.user;
+package ua.squirrel.web.entity.user.entity;
 
 import java.util.List;
 import java.util.Set;
 import javax.persistence.*;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
-import ua.squirrel.user.partner.Partner;
+import ua.squirrel.user.partner.entity.Partner;
 
 @Entity
 @Table(name = "user")

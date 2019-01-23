@@ -1,10 +1,10 @@
-package ua.squirrel.user.partner;
+package ua.squirrel.user.partner.entity;
 
 import java.util.List;
 
 import lombok.Builder;
 import lombok.Data;
-import ua.squirrel.user.product.ProductModel;
+import ua.squirrel.user.product.entity.ProductModel;
 
 @Builder
 @Data

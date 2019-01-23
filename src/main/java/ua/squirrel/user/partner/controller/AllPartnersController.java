@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import lombok.extern.slf4j.Slf4j;
-import ua.squirrel.user.partner.Partner;
-import ua.squirrel.user.partner.PartnerModel;
-import ua.squirrel.web.entity.user.User;
+import ua.squirrel.user.partner.entity.Partner;
+import ua.squirrel.user.partner.entity.PartnerModel;
+import ua.squirrel.web.entity.user.entity.User;
 import ua.squirrel.web.registration.user.service.UserServiceImpl;
 
 @RestController

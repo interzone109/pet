@@ -1,4 +1,4 @@
-package ua.squirrel.user.product;
+package ua.squirrel.user.product.entity;
 
 import lombok.Builder;
 import lombok.Data;

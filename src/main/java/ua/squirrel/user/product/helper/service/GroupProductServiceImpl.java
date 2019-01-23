@@ -3,7 +3,7 @@ package ua.squirrel.user.product.helper.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import ua.squirrel.user.product.GroupProduct;
+import ua.squirrel.user.product.entity.GroupProduct;
 @Service
 public class GroupProductServiceImpl implements GroupProductService{
 	

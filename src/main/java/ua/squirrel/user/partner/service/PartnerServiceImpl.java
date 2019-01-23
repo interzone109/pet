@@ -5,8 +5,8 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import ua.squirrel.user.partner.Partner;
-import ua.squirrel.web.entity.user.User;
+import ua.squirrel.user.partner.entity.Partner;
+import ua.squirrel.web.entity.user.entity.User;
 
 @Service
 public class PartnerServiceImpl implements PartnerService {

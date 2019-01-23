@@ -14,14 +14,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import javassist.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
-import ua.squirrel.user.partner.Partner;
+import ua.squirrel.user.partner.entity.Partner;
 import ua.squirrel.user.partner.service.PartnerServiceImpl;
-import ua.squirrel.user.product.Product;
-import ua.squirrel.user.product.ProductModel;
+import ua.squirrel.user.product.entity.Product;
+import ua.squirrel.user.product.entity.ProductModel;
 import ua.squirrel.user.product.helper.service.GroupProductServiceImpl;
 import ua.squirrel.user.product.helper.service.MeasureProductServiceImpl;
 import ua.squirrel.user.product.service.ProductServiceImpl;
-import ua.squirrel.web.entity.user.User;
+import ua.squirrel.web.entity.user.entity.User;
 import ua.squirrel.web.registration.user.service.UserServiceImpl;
 
 @RestController

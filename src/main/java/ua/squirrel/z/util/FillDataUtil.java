@@ -5,8 +5,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import ua.squirrel.user.partner.Partner;
-import ua.squirrel.user.product.Product;
+import ua.squirrel.user.partner.entity.Partner;
+import ua.squirrel.user.product.entity.Product;
 import ua.squirrel.user.product.helper.service.GroupProductServiceImpl;
 import ua.squirrel.user.product.helper.service.MeasureProductServiceImpl;
 

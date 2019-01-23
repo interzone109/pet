@@ -3,8 +3,9 @@ package ua.squirrel.user.product.service;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ua.squirrel.user.partner.Partner;
-import ua.squirrel.user.product.Product;
+
+import ua.squirrel.user.partner.entity.Partner;
+import ua.squirrel.user.product.entity.Product;
 
 @Service
 public class ProductServiceImpl implements ProductService {

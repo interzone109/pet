@@ -1,4 +1,4 @@
-package ua.squirrel.user.product;
+package ua.squirrel.user.product.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,7 +12,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Data;
-import ua.squirrel.user.partner.Partner;
+import ua.squirrel.user.partner.entity.Partner;
 
 @Data
 @Entity

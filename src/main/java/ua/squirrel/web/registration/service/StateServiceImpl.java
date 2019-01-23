@@ -3,7 +3,7 @@ package ua.squirrel.web.registration.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import ua.squirrel.web.entity.user.State;
+import ua.squirrel.web.entity.user.entity.State;
 
 @Service
 public class StateServiceImpl implements StateService{
