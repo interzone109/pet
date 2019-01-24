@@ -12,13 +12,13 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name="products_group")
-public class GroupProduct {
+@Table(name="properties_product")
+public class PropertiesProduct {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "group_product_Id", nullable = false)
+	@Column(name = "properties_product_Id", nullable = false)
 	private long id;
-	@Column(name = "group_product_name", nullable = false , unique=true)
+	@Column(name = "properties_product_name", nullable = false , unique=true)
 	private String name ;
 	
 }

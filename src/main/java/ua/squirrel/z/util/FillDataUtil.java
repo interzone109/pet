@@ -2,10 +2,8 @@ package ua.squirrel.z.util;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -13,8 +11,8 @@ import org.springframework.stereotype.Component;
 import ua.squirrel.user.partner.entity.Partner;
 import ua.squirrel.user.product.entity.CompositeProduct;
 import ua.squirrel.user.product.entity.Product;
-import ua.squirrel.user.product.helper.service.GroupProductServiceImpl;
 import ua.squirrel.user.product.helper.service.MeasureProductServiceImpl;
+import ua.squirrel.user.product.helper.service.PropertiesProductServiceImpl;
 import ua.squirrel.user.product.service.ProductServiceImpl;
 import ua.squirrel.web.user.entity.User;
 
@@ -30,46 +28,77 @@ public class FillDataUtil {
 	 * */
 	
 	@Autowired
-	private  GroupProductServiceImpl groupProductServiceImpl;
+	private  PropertiesProductServiceImpl propertiesProductServiceImpl;
 	@Autowired
 	private  MeasureProductServiceImpl measureProductServiceImpl;
 	@Autowired
 	ProductServiceImpl productServiceImpl ;
 	
-	public Set<CompositeProduct> getCofeeProduct(User owner ){
-		Set<CompositeProduct> listCompositeProduct = new HashSet<>();
-		//List<CompositeProduct> listCompositeProduct = new ArrayList<>();
+	public List<CompositeProduct> getProduct(User owner ){
+		List<CompositeProduct> listCompositeProduct = new ArrayList<>();
+		
+		CompositeProduct americano = new CompositeProduct();
+		americano.setName("Американо");
+		americano.setUser(owner);
+		
+		CompositeProduct tea = new CompositeProduct();
+		tea.setName("чай");
+		tea.setUser(owner);
+		
+		CompositeProduct fries = new CompositeProduct();
+		fries.setName("картошка фри 250");
+		fries.setUser(owner);
+		
+		CompositeProduct friesBig = new CompositeProduct();
+		friesBig.setName("картошка фри 500");
+		friesBig.setUser(owner);
+	
 		
 		
-		CompositeProduct compositeProduct = new CompositeProduct();
-		compositeProduct.setName("Американо");
-		compositeProduct.setUser(owner);
 		
-		//List<Product> products = new ArrayList<>();
-		// List<Integer> consumption = new ArrayList<>();
-		Map<Product, Integer> productsConsumption = new HashMap<>();
+		Map<Long, Integer> productAmericano = new HashMap<>();
+		Map<Long, Integer> productTea = new HashMap<>();
+		Map<Long, Integer> productFries = new HashMap<>();
+		Map<Long, Integer> productFriesBig = new HashMap<>();
 		
 		 owner.getPartners().stream().forEach(partner->{
 			 partner.getProducts().stream().forEach(prod->{
-				 if(prod.getName().equals("Кофе Черная тара")) { productsConsumption.put(prod, 10); }
-				 else if ( prod.getName().equals("Вода")) {productsConsumption.put(prod, 30);}
-				 else if( prod.getName().equals("Сахар стик")) {productsConsumption.put(prod, 2);}
-				 else if ( prod.getName().equals("Стаканчик 0.33")) {productsConsumption.put(prod, 1);}
-				 else  if ( prod.getName().equals("Пластиковое мешало")) {productsConsumption.put(prod, 1); }
+				 if(prod.getName().equals("Кофе Черная тара")) { productAmericano.put(prod.getId(), 10); }
+				 else if ( prod.getName().equals("Вода")) {productAmericano.put(prod.getId(), 30);}
+				 else if( prod.getName().equals("Сахар стик")) {productAmericano.put(prod.getId(), 2);}
+				 else if ( prod.getName().equals("Стаканчик 0.33")) {productAmericano.put(prod.getId(), 1);}
+				 else  if ( prod.getName().equals("Пластиковое мешало")) {productAmericano.put(prod.getId(), 1); }
+				 
+				  if ( prod.getName().equals("Вода")) {productTea.put(prod.getId(), 50);}
+				  else if ( prod.getName().equals("Чай 1000 вопросов")) {productTea.put(prod.getId(), 5);}
+				  else if ( prod.getName().equals("Стаканчик 0.66")) {productTea.put(prod.getId(), 1);}
+				  else if ( prod.getName().equals("Пластиковое мешало")) {productTea.put(prod.getId(), 1);}
+				 
+				 
+				  if ( prod.getName().equals("Картошка")) {productFries.put(prod.getId(), 250);}
+				  else  if ( prod.getName().equals("Масло Стожор")) {productFries.put(prod.getId(), 50);}
+				  else  if ( prod.getName().equals("Соль столовая")) {productFries.put(prod.getId(), 5);}
+				  
+				  if ( prod.getName().equals("Картошка")) {productFriesBig.put(prod.getId(), 500);}
+				  else  if ( prod.getName().equals("Масло Стожор")) {productFriesBig.put(prod.getId(), 100);}
+				  else  if ( prod.getName().equals("Соль столовая")) {productFriesBig.put(prod.getId(), 10);}
 			 });
 		 });
 		
-		// compositeProduct.setProducts(products);
-		// compositeProduct.setConsumption(consumption);
-		 compositeProduct.setProductsConsumption(productsConsumption);
-		listCompositeProduct.add(compositeProduct);
+		
+		americano.setProductsConsumption(productAmericano);
+		tea.setProductsConsumption(productTea);
+		fries.setProductsConsumption(productFries);
+		friesBig.setProductsConsumption(productFriesBig);
+		
+		
+		listCompositeProduct.add(americano);
+		listCompositeProduct.add(tea);
+		listCompositeProduct.add(fries);
+		listCompositeProduct.add(friesBig);
 		
 		return listCompositeProduct ;
 	}
-	
-	
-	
-	
 	
 	
 	public  List<Partner> getPartner() {
@@ -107,45 +136,45 @@ public class FillDataUtil {
 		Product p = new Product();
 		p.setName("Вода");
 		p.setDescription("Вода питьевая");
-		p.setPrice(8350);
+		p.setGroup("воды");
 		p.setPartner(partner);									
-		p.setGroupProduct(groupProductServiceImpl.findOneByName("COMPOSITE"));
+		p.setPropertiesProduct(propertiesProductServiceImpl.findOneByName("COMPOSITE"));
 		p.setMeasureProduct(measureProductServiceImpl.findOneByMeasure("LITER"));
 		product.add(p);
 		
 		p = new Product();
 		p.setName("Кофе Черная тара");
 		p.setDescription("кофе зерновой ");
-		p.setPrice(28300);
+		p.setGroup("чаи");
 		p.setPartner(partner);
-		p.setGroupProduct(groupProductServiceImpl.findOneByName("COMPOSITE"));
+		p.setPropertiesProduct(propertiesProductServiceImpl.findOneByName("COMPOSITE"));
 		p.setMeasureProduct(measureProductServiceImpl.findOneByMeasure("KILOGRAM"));
 		product.add(p);
 		
 		p = new Product();
 		p.setName("Сахар стик");
 		p.setDescription("сахар в стиках женный");
-		p.setPrice(25);
+		p.setGroup("");
 		p.setPartner(partner);
-		p.setGroupProduct(groupProductServiceImpl.findOneByName("COMPOSITE"));
+		p.setPropertiesProduct(propertiesProductServiceImpl.findOneByName("COMPOSITE"));
 		p.setMeasureProduct(measureProductServiceImpl.findOneByMeasure("UNIT"));
 		product.add(p);
 		
 		p = new Product();
 		p.setName("Молоко");
 		p.setDescription("молоко в цетропаках");
-		p.setPrice(1935);
+		p.setGroup("молочка");
 		p.setPartner(partner);
-		p.setGroupProduct(groupProductServiceImpl.findOneByName("COMPOSITE"));
+		p.setPropertiesProduct(propertiesProductServiceImpl.findOneByName("COMPOSITE"));
 		p.setMeasureProduct(measureProductServiceImpl.findOneByMeasure("LITER"));
 		product.add(p);
 
 		p = new Product();
 		p.setName("Чай 1000 вопросов");
 		p.setDescription("Чай отвечай");
-		p.setPrice(2635);
+		p.setGroup("чаи");
 		p.setPartner(partner);
-		p.setGroupProduct(groupProductServiceImpl.findOneByName("COMPOSITE"));
+		p.setPropertiesProduct(propertiesProductServiceImpl.findOneByName("COMPOSITE"));
 		p.setMeasureProduct(measureProductServiceImpl.findOneByMeasure("UNIT"));
 		product.add(p);
 		
@@ -160,27 +189,27 @@ public class FillDataUtil {
 		Product p = new Product();
 		p.setName("Картошка");
 		p.setDescription("катошка фри мороженая");
-		p.setPrice(550);
+		p.setGroup("овощи");
 		p.setPartner(partner);
-		p.setGroupProduct(groupProductServiceImpl.findOneByName("COMPLETE_COMPOSITE"));
+		p.setPropertiesProduct(propertiesProductServiceImpl.findOneByName("COMPLETE_COMPOSITE"));
 		p.setMeasureProduct(measureProductServiceImpl.findOneByMeasure("KILOGRAM"));
 		product.add(p);
 		
 		p = new Product();
 		p.setName("Масло Стожор");
 		p.setDescription("Масло подсолнечное стожор банка 0.9л ");
-		p.setPrice(2980);
+		p.setGroup("");
 		p.setPartner(partner);
-		p.setGroupProduct(groupProductServiceImpl.findOneByName("COMPOSITE"));
+		p.setPropertiesProduct(propertiesProductServiceImpl.findOneByName("COMPOSITE"));
 		p.setMeasureProduct(measureProductServiceImpl.findOneByMeasure("LITER"));
 		product.add(p);
 		
 		p = new Product();
 		p.setName("Соль столовая");
 		p.setDescription("Сель соленая");
-		p.setPrice(830);
+		p.setGroup("");
 		p.setPartner(partner);
-		p.setGroupProduct(groupProductServiceImpl.findOneByName("COMPOSITE"));
+		p.setPropertiesProduct(propertiesProductServiceImpl.findOneByName("COMPOSITE"));
 		p.setMeasureProduct(measureProductServiceImpl.findOneByMeasure("KILOGRAM"));
 		product.add(p);
 		
@@ -196,45 +225,45 @@ public class FillDataUtil {
 		Product p = new Product();
 		p.setName("Стаканчик 0.33");
 		p.setDescription("Стаканчик 0.33");
-		p.setPrice(55);
+		p.setGroup("тара");
 		p.setPartner(partner);
-		p.setGroupProduct(groupProductServiceImpl.findOneByName("COMPOSITE"));
+		p.setPropertiesProduct(propertiesProductServiceImpl.findOneByName("COMPOSITE"));
 		p.setMeasureProduct(measureProductServiceImpl.findOneByMeasure("UNIT"));
 		product.add(p);
 		
 		p = new Product();
 		p.setName("Стаканчик 0.45");
 		p.setDescription("Стаканчик 0.45");
-		p.setPrice(65);
+		p.setGroup("тара");
 		p.setPartner(partner);
-		p.setGroupProduct(groupProductServiceImpl.findOneByName("COMPOSITE"));
+		p.setPropertiesProduct(propertiesProductServiceImpl.findOneByName("COMPOSITE"));
 		p.setMeasureProduct(measureProductServiceImpl.findOneByMeasure("UNIT"));
 		product.add(p);
 		
 		p = new Product();
 		p.setName("Стаканчик 0.66");
 		p.setDescription("Стаканчик 0.66");
-		p.setPrice(85);
+		p.setGroup("тара");
 		p.setPartner(partner);
-		p.setGroupProduct(groupProductServiceImpl.findOneByName("COMPOSITE"));
+		p.setPropertiesProduct(propertiesProductServiceImpl.findOneByName("COMPOSITE"));
 		p.setMeasureProduct(measureProductServiceImpl.findOneByMeasure("UNIT"));
 		product.add(p);
 		
 		p = new Product();
 		p.setName("Крышка для стаканов");
 		p.setDescription("Крышка для стаканов");
-		p.setPrice(25);
+		p.setGroup("тара");
 		p.setPartner(partner);
-		p.setGroupProduct(groupProductServiceImpl.findOneByName("COMPOSITE"));
+		p.setPropertiesProduct(propertiesProductServiceImpl.findOneByName("COMPOSITE"));
 		p.setMeasureProduct(measureProductServiceImpl.findOneByMeasure("UNIT"));
 		product.add(p);
 		
 		p = new Product();
 		p.setName("Пластиковое мешало");
 		p.setDescription("Мешало для кофе чай");
-		p.setPrice(15);
+		p.setGroup("тара");
 		p.setPartner(partner);
-		p.setGroupProduct(groupProductServiceImpl.findOneByName("COMPOSITE"));
+		p.setPropertiesProduct(propertiesProductServiceImpl.findOneByName("COMPOSITE"));
 		p.setMeasureProduct(measureProductServiceImpl.findOneByMeasure("UNIT"));
 		product.add(p);
 		

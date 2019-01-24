@@ -63,8 +63,10 @@ public class RegistrationController {
 		user1.setPartners(l);
 		
 		
-		//userServiceImpl.save(user1);
-		//user1.setCompositeProducts(fillDataUtil.getCofeeProduct(user1));
+		userServiceImpl.save(user1);
+		
+		
+		user1.setCompositeProducts(fillDataUtil.getProduct(user1));
 		
 		
 		

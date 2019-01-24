@@ -18,8 +18,8 @@ import ua.squirrel.user.partner.entity.Partner;
 import ua.squirrel.user.partner.service.PartnerServiceImpl;
 import ua.squirrel.user.product.entity.Product;
 import ua.squirrel.user.product.entity.ProductModel;
-import ua.squirrel.user.product.helper.service.GroupProductServiceImpl;
 import ua.squirrel.user.product.helper.service.MeasureProductServiceImpl;
+import ua.squirrel.user.product.helper.service.PropertiesProductServiceImpl;
 import ua.squirrel.user.product.service.ProductServiceImpl;
 import ua.squirrel.web.registration.user.service.UserServiceImpl;
 import ua.squirrel.web.user.entity.User;
@@ -36,7 +36,7 @@ public class ProductController {
 	@Autowired
 	private PartnerServiceImpl partnerServiceImpl;
 	@Autowired
-	private GroupProductServiceImpl groupProductServiceImpl;
+	private PropertiesProductServiceImpl propertiesProductServiceImpl;
 	@Autowired
 	private MeasureProductServiceImpl measureProductServiceImpl;
 	
@@ -59,11 +59,11 @@ public class ProductController {
 			Product addProduct = new Product();
 			addProduct.setDescription(obj.getDescription());
 			addProduct.setName(obj.getName());
-			addProduct.setGroupProduct( 
-					groupProductServiceImpl.findOneByName(obj.getGroupProduct().getName()));
+			addProduct.setPropertiesProduct( 
+					propertiesProductServiceImpl.findOneByName(obj.getPropertiesProduct().getName()));
 			addProduct.setMeasureProduct(
 					measureProductServiceImpl.findOneByMeasure(obj.getMeasureProduct().getMeasure()));
-			addProduct.setPrice(obj.getPrice());
+			addProduct.setGroup(obj.getGroup());
 			addProduct.setPartner(partner);
 
 			partner.getProducts().add(addProduct);
@@ -92,11 +92,11 @@ public class ProductController {
 		
 		updateProduct.setName(productModel.getName());
 		updateProduct.setDescription(productModel.getDescription());
-		updateProduct.setGroupProduct( 	
-				groupProductServiceImpl.findOneByName(productModel.getGroupProduct().getName()));
+		updateProduct.setPropertiesProduct( 	
+				propertiesProductServiceImpl.findOneByName(productModel.getPropertiesProduct().getName()));
 		updateProduct.setMeasureProduct( 
 				measureProductServiceImpl.findOneByMeasure(productModel.getMeasureProduct().getMeasure()));
-		updateProduct.setPrice(productModel.getPrice());
+		updateProduct.setGroup(productModel.getGroup());
 		updateProduct.setPartner(partner);
 		productServiceImpl.save(updateProduct);
 		

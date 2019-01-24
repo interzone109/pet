@@ -1,5 +1,6 @@
 package ua.squirrel.user.product.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import ua.squirrel.user.partner.entity.Partner;
@@ -9,4 +10,5 @@ public interface ProductService {
 	 void save(Product productToSave);
 	 
 	 Optional<Product> findOneByIdAndPartner(Long id ,Partner partner);
+	 List<Product> findAllById(Iterable<Long> ids );
 }

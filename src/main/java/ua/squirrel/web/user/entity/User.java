@@ -3,7 +3,6 @@ package ua.squirrel.web.user.entity;
 import java.util.List;
 import java.util.Set;
 import javax.persistence.*;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 import ua.squirrel.user.partner.entity.Partner;
 import ua.squirrel.user.product.entity.CompositeProduct;
@@ -35,12 +34,10 @@ public class User {
 	@JoinTable(name = "user_state", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "state_id"))
 	private Set<State> states;
 
-	@JsonManagedReference
 	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<Partner> partners;
 	
-	@JsonManagedReference
 	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private Set<CompositeProduct> compositeProducts;
+	private List<CompositeProduct> compositeProducts;
 
 }

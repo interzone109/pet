@@ -10,8 +10,8 @@ public class ProductModel {
 	private long id;
 	private String name;
 	private String description;
-	private long price;
-	private GroupProduct groupProduct;
+	private String group;
+	private PropertiesProduct propertiesProduct;
 	private MeasureProduct measureProduct;
 
 }

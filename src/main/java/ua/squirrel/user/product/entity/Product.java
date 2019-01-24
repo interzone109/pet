@@ -11,7 +11,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Data;
 import ua.squirrel.user.partner.entity.Partner;
 
@@ -31,22 +30,17 @@ public class Product {
 	private String description;
 	
 	@Column(name = "unit_price")
-	private long price;
+	private String group;
 	
 	@OneToOne
-	private GroupProduct groupProduct;
+	private PropertiesProduct propertiesProduct;
 	
 	@OneToOne
 	private MeasureProduct measureProduct;
 
-	@JsonBackReference
 	@ManyToOne(fetch = FetchType.LAZY, cascade=CascadeType.ALL)
 	@JoinColumn(name = "product_partner_id", nullable = false)
 	private Partner partner;
 
-	
-	/*@JsonBackReference
-	@ManyToMany(mappedBy = "products",fetch = FetchType.LAZY)
-	private List<CompositeProduct> compositeProduct;*/
 	
 }

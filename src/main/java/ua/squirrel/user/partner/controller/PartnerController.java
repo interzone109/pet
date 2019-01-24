@@ -55,8 +55,8 @@ public class PartnerController {
 					.id(obj.getId())
 					.name(obj.getName())
 					.description(obj.getDescription())
-					.price(obj.getPrice())
-					.groupProduct(obj.getGroupProduct())
+					.group(obj.getGroup())
+					.propertiesProduct(obj.getPropertiesProduct())
 					.measureProduct(obj.getMeasureProduct())
 					.build());
 		});

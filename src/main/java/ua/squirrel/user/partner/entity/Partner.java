@@ -26,11 +26,11 @@ public class Partner {
 	@Column(name = "partner_mail")
 	private String partnerMail;
 
-	@JsonManagedReference
+	//@JsonManagedReference
 	@OneToMany(mappedBy = "partner", fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.ALL)
 	private List<Product> products;
 
-	@JsonBackReference
+	//@JsonBackReference
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_owner_id", nullable = false)
 	private User user;
