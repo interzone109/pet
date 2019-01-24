@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javassist.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
-import ua.squirrel.user.partner.entity.PartnerModel;
 import ua.squirrel.user.product.entity.CompositeProduct;
 import ua.squirrel.user.product.entity.CompositeProductModel;
 import ua.squirrel.user.product.entity.ProductModel;
