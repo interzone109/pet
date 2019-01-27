@@ -66,6 +66,8 @@ public class ProductController {
 			addProduct.setGroup(obj.getGroup());
 			addProduct.setPartner(partner);
 
+			addProduct.setUser(userCurrentSesion);
+			
 			partner.getProducts().add(addProduct);
 		});
 

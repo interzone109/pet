@@ -15,5 +15,5 @@ public class CompositeProductModel {
 
 	private Map<Long, Integer> productsConsumption;
 	
-	private Map<ProductModel, Integer> productsComposite;
+	private Map<ProductModel, Integer> products;
 }

@@ -56,7 +56,7 @@ public class RegistrationController {
 		user1.setStates(state);
 		
 		
-		List<Partner> l = fillDataUtil.getPartner();
+		List<Partner> l = fillDataUtil.getPartner(user1);
 		l.get(0).setUser(user1);
 		l.get(1).setUser(user1);
 		l.get(2).setUser(user1);

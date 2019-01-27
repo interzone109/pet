@@ -30,9 +30,9 @@ public class Partner {
 	@OneToMany(mappedBy = "partner", fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.ALL)
 	private List<Product> products;
 
-	//@JsonBackReference
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "user_owner_id", nullable = false)
+	
+	@ManyToOne(fetch = FetchType.LAZY, cascade=CascadeType.ALL)
+	@JoinColumn(name = "partner_user_id", nullable = false)
 	private User user;
 
 }

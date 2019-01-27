@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import ua.squirrel.user.partner.entity.Partner;
 import ua.squirrel.user.product.entity.Product;
+import ua.squirrel.web.user.entity.User;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -25,7 +26,12 @@ public class ProductServiceImpl implements ProductService {
 		return productRepository.findOneByIdAndPartner(id, partner);
 	}
 	
-	public List<Product> findAllById(Iterable<Long> ids ){
+	public  List<Product> findAllById(Iterable<Long> ids){
 		return productRepository.findAllById(ids);
+	}
+	
+	
+	public  List<Product> findAllByIdAndUser(Iterable<Long> ids ,User user ){
+		return productRepository.findAllByIdAndUser(ids ,user);
 	}
 }

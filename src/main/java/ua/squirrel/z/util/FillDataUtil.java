@@ -101,36 +101,39 @@ public class FillDataUtil {
 	}
 	
 	
-	public  List<Partner> getPartner() {
+	public  List<Partner> getPartner(User owner) {
 		List<Partner> partner = new ArrayList<>();
 		
 	
 			Partner p = new Partner();
 			p.setCompany("Кофеиновый делец");
 			p.setPartnerMail("cofee@mail.com");
-			p.setProducts(getCofee(p));
+			p.setProducts(getCofee(p , owner));
 			p.setPhonNumber("21-313-213");
+			p.setUser(owner);
 			partner.add(p);
 			
 			p = new Partner();
 			p.setCompany("Картошечный флибустьер");
 			p.setPartnerMail("potato@mail.com");
-			p.setProducts(getPotato(p));
+			p.setProducts(getPotato(p,owner));
 			p.setPhonNumber("21-313-288");
+			p.setUser(owner);
 			partner.add(p);
 			
 			p = new Partner();
 			p.setCompany("Армейские Расходники Компани");
 			p.setPartnerMail("consumbles@mail.com");
-			p.setProducts(getConsumbles(p));
+			p.setProducts(getConsumbles(p,owner));
 			p.setPhonNumber("27-385-288");
+			p.setUser(owner);
 			partner.add(p);
 		
 	
 		return partner;
 	}
 
-	private  List<Product> getCofee(Partner partner) {
+	private  List<Product> getCofee(Partner partner,User owner) {
 		List<Product> product = new ArrayList<>();
 		
 		Product p = new Product();
@@ -140,6 +143,7 @@ public class FillDataUtil {
 		p.setPartner(partner);									
 		p.setPropertiesProduct(propertiesProductServiceImpl.findOneByName("COMPOSITE"));
 		p.setMeasureProduct(measureProductServiceImpl.findOneByMeasure("LITER"));
+		p.setUser(owner);
 		product.add(p);
 		
 		p = new Product();
@@ -149,6 +153,7 @@ public class FillDataUtil {
 		p.setPartner(partner);
 		p.setPropertiesProduct(propertiesProductServiceImpl.findOneByName("COMPOSITE"));
 		p.setMeasureProduct(measureProductServiceImpl.findOneByMeasure("KILOGRAM"));
+		p.setUser(owner);
 		product.add(p);
 		
 		p = new Product();
@@ -158,6 +163,7 @@ public class FillDataUtil {
 		p.setPartner(partner);
 		p.setPropertiesProduct(propertiesProductServiceImpl.findOneByName("COMPOSITE"));
 		p.setMeasureProduct(measureProductServiceImpl.findOneByMeasure("UNIT"));
+		p.setUser(owner);
 		product.add(p);
 		
 		p = new Product();
@@ -167,6 +173,7 @@ public class FillDataUtil {
 		p.setPartner(partner);
 		p.setPropertiesProduct(propertiesProductServiceImpl.findOneByName("COMPOSITE"));
 		p.setMeasureProduct(measureProductServiceImpl.findOneByMeasure("LITER"));
+		p.setUser(owner);
 		product.add(p);
 
 		p = new Product();
@@ -176,13 +183,14 @@ public class FillDataUtil {
 		p.setPartner(partner);
 		p.setPropertiesProduct(propertiesProductServiceImpl.findOneByName("COMPOSITE"));
 		p.setMeasureProduct(measureProductServiceImpl.findOneByMeasure("UNIT"));
+		p.setUser(owner);
 		product.add(p);
 		
 		
 		return product;
 	}
 	
-	private  List<Product> getPotato(Partner partner) {
+	private  List<Product> getPotato(Partner partner,User owner) {
 		List<Product> product = new ArrayList<>();
 		
 		
@@ -193,6 +201,7 @@ public class FillDataUtil {
 		p.setPartner(partner);
 		p.setPropertiesProduct(propertiesProductServiceImpl.findOneByName("COMPLETE_COMPOSITE"));
 		p.setMeasureProduct(measureProductServiceImpl.findOneByMeasure("KILOGRAM"));
+		p.setUser(owner);
 		product.add(p);
 		
 		p = new Product();
@@ -202,6 +211,7 @@ public class FillDataUtil {
 		p.setPartner(partner);
 		p.setPropertiesProduct(propertiesProductServiceImpl.findOneByName("COMPOSITE"));
 		p.setMeasureProduct(measureProductServiceImpl.findOneByMeasure("LITER"));
+		p.setUser(owner);
 		product.add(p);
 		
 		p = new Product();
@@ -211,13 +221,14 @@ public class FillDataUtil {
 		p.setPartner(partner);
 		p.setPropertiesProduct(propertiesProductServiceImpl.findOneByName("COMPOSITE"));
 		p.setMeasureProduct(measureProductServiceImpl.findOneByMeasure("KILOGRAM"));
+		p.setUser(owner);
 		product.add(p);
 		
 		
 		return product ;
 		}
 	
-	private  List<Product> getConsumbles(Partner partner) {
+	private  List<Product> getConsumbles(Partner partner,User owner) {
 		List<Product> product = new ArrayList<>();
 		
 		
@@ -229,6 +240,7 @@ public class FillDataUtil {
 		p.setPartner(partner);
 		p.setPropertiesProduct(propertiesProductServiceImpl.findOneByName("COMPOSITE"));
 		p.setMeasureProduct(measureProductServiceImpl.findOneByMeasure("UNIT"));
+		p.setUser(owner);
 		product.add(p);
 		
 		p = new Product();
@@ -238,6 +250,7 @@ public class FillDataUtil {
 		p.setPartner(partner);
 		p.setPropertiesProduct(propertiesProductServiceImpl.findOneByName("COMPOSITE"));
 		p.setMeasureProduct(measureProductServiceImpl.findOneByMeasure("UNIT"));
+		p.setUser(owner);
 		product.add(p);
 		
 		p = new Product();
@@ -247,6 +260,7 @@ public class FillDataUtil {
 		p.setPartner(partner);
 		p.setPropertiesProduct(propertiesProductServiceImpl.findOneByName("COMPOSITE"));
 		p.setMeasureProduct(measureProductServiceImpl.findOneByMeasure("UNIT"));
+		p.setUser(owner);
 		product.add(p);
 		
 		p = new Product();
@@ -256,6 +270,7 @@ public class FillDataUtil {
 		p.setPartner(partner);
 		p.setPropertiesProduct(propertiesProductServiceImpl.findOneByName("COMPOSITE"));
 		p.setMeasureProduct(measureProductServiceImpl.findOneByMeasure("UNIT"));
+		p.setUser(owner);
 		product.add(p);
 		
 		p = new Product();
@@ -265,6 +280,7 @@ public class FillDataUtil {
 		p.setPartner(partner);
 		p.setPropertiesProduct(propertiesProductServiceImpl.findOneByName("COMPOSITE"));
 		p.setMeasureProduct(measureProductServiceImpl.findOneByMeasure("UNIT"));
+		p.setUser(owner);
 		product.add(p);
 		
 		return product ;

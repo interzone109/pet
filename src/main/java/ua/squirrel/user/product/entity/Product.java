@@ -13,6 +13,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import lombok.Data;
 import ua.squirrel.user.partner.entity.Partner;
+import ua.squirrel.web.user.entity.User;
 
 @Data
 @Entity
@@ -41,6 +42,10 @@ public class Product {
 	@ManyToOne(fetch = FetchType.LAZY, cascade=CascadeType.ALL)
 	@JoinColumn(name = "product_partner_id", nullable = false)
 	private Partner partner;
+	
+	@ManyToOne(fetch = FetchType.LAZY, cascade=CascadeType.ALL)
+	@JoinColumn(name = "product_user_id", nullable = false)
+	private User user;
 
 	
 }

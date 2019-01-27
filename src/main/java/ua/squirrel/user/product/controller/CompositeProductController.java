@@ -2,6 +2,7 @@ package ua.squirrel.user.product.controller;
 
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ import javassist.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import ua.squirrel.user.product.entity.CompositeProduct;
 import ua.squirrel.user.product.entity.CompositeProductModel;
+import ua.squirrel.user.product.entity.Product;
 import ua.squirrel.user.product.entity.ProductModel;
 import ua.squirrel.user.product.service.CompositeProductServiceImpl;
 import ua.squirrel.user.product.service.ProductServiceImpl;
@@ -49,7 +51,39 @@ public class CompositeProductController {
 
 		User userCurrentSesion = userServiceImpl.findOneByLogin("test1").get();
 
+		return getCompositeProductModel(id, userCurrentSesion);
+	}
+
+	@PutMapping
+	public CompositeProductModel updateCompositeProduct(@PathVariable("id") Long id,
+			@RequestBody Map<Long, Integer> composites ,Authentication authentication) throws NotFoundException {
+		log.info("LOGGER: update curent composite product");
+		User userCurrentSesion = userServiceImpl.findOneByLogin("test1").get();
 		CompositeProduct compositeProduct = getCompositeProduct(id, userCurrentSesion);
+		List <Product> pList = productServiceImpl.findAllByIdAndUser(composites.keySet(), userCurrentSesion);
+		
+		pList.stream().forEach(product->{
+			compositeProduct.getProductsConsumption().put(product.getId(), composites.get(product.getId()));
+		});
+
+		return getCompositeProductModel(id, userCurrentSesion);
+	}
+
+	@DeleteMapping
+	public void getDeleteCompositeProduct(@PathVariable("id") Long id, Authentication authentication)
+			throws NotFoundException {
+		log.info("LOGGER: delete curent partners");
+
+	}
+
+	private CompositeProduct getCompositeProduct(Long id , User currentUser) throws NotFoundException {
+		return compositeProductServiceImpl.findByIdAndUser(id, currentUser)
+				.orElseThrow(() -> new NotFoundException("Composite product not found"));
+	}
+	
+	private CompositeProductModel getCompositeProductModel(Long id , User currentUser) throws NotFoundException {
+		
+		CompositeProduct compositeProduct = getCompositeProduct(id, currentUser);
 		
 		Map<ProductModel, Integer> composites = new HashMap<>();
 		//делаем выборку всех Product у обьекта CompositeProduct
@@ -71,41 +105,17 @@ public class CompositeProductController {
 		return CompositeProductModel.builder()
 				.id(compositeProduct.getId())
 				.name(compositeProduct.getName())
-				.productsComposite(composites)
+				.products(composites)
 				.build();
 	}
-
-	@PutMapping
-	public CompositeProductModel updateCompositeProduct(@PathVariable("id") Long id,
-			@RequestBody Map<Long, Integer> composites ,Authentication authentication) throws NotFoundException {
-		log.info("LOGGER: update curent composite product");
-		User userCurrentSesion = userServiceImpl.findOneByLogin("test1").get();
-		CompositeProduct compositeProduct = getCompositeProduct(id, userCurrentSesion);
-		productServiceImpl.findAllById(composites.keySet());
-
-		return null;
-	}
-
-	@DeleteMapping
-	public void getDeleteCompositeProduct(@PathVariable("id") Long id, Authentication authentication)
-			throws NotFoundException {
-		log.info("LOGGER: delete curent partners");
-
-	}
-
-	private CompositeProduct getCompositeProduct(Long id , User currentUser) throws NotFoundException {
-		return compositeProductServiceImpl.findByIdAndUser(id, currentUser)
-				.orElseThrow(() -> new NotFoundException("Composite product not found"));
-	}
+	
 	
 	/*
 	тестовый джейсон 
 	{
-   "id": 4,
-   "name": "картошка фри 500",
-   "productsConsumption": null,
+   "name": "картошка фри 5000",
    "productsComposite": {
-      "ProductModel(id=6, name=Картошка, description=катошка фри мороженая, group=овощи, propertiesProduct=PropertiesProduct(id=3, name=COMPLETE_COMPOSITE), measureProduct=MeasureProduct(id=2, measure=KILOGRAM))": 500,
+      "ProductModel(id=6, name=Картошка, description=катошка фри мороженая, group=овощи, propertiesProduct=PropertiesProduct(id=3, name=COMPLETE_COMPOSITE), measureProduct=MeasureProduct(id=2, measure=KILOGRAM))": 5000,
       "ProductModel(id=7, name=Масло Стожор, description=Масло подсолнечное стожор банка 0.9л , group=, propertiesProduct=PropertiesProduct(id=1, name=COMPOSITE), measureProduct=MeasureProduct(id=1, measure=LITER))": 100,
       "ProductModel(id=8, name=Соль столовая, description=Сель соленая, group=, propertiesProduct=PropertiesProduct(id=1, name=COMPOSITE), measureProduct=MeasureProduct(id=2, measure=KILOGRAM))": 10
    }
