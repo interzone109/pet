@@ -9,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import lombok.Data;
 import ua.squirrel.web.entity.user.User;
@@ -31,5 +32,9 @@ public class Store {
 	@ManyToOne(fetch = FetchType.LAZY, cascade=CascadeType.ALL)
 	@JoinColumn(name = "store_user_id", nullable = false)
 	private User user;
+	
+	@OneToOne(mappedBy = "store", cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY, optional = false)
+	private StoreAssortment storeAssortment;
 
 }
