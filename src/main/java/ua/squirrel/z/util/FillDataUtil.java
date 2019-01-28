@@ -8,14 +8,15 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import ua.squirrel.user.partner.entity.Partner;
-import ua.squirrel.user.partner.service.PartnerServiceImpl;
-import ua.squirrel.user.product.entity.CompositeProduct;
-import ua.squirrel.user.product.entity.Product;
-import ua.squirrel.user.product.helper.service.MeasureProductServiceImpl;
-import ua.squirrel.user.product.helper.service.PropertiesProductServiceImpl;
-import ua.squirrel.user.product.service.ProductServiceImpl;
-import ua.squirrel.web.user.entity.User;
+import ua.squirrel.user.entity.partner.Partner;
+import ua.squirrel.user.entity.product.CompositeProduct;
+import ua.squirrel.user.entity.product.Product;
+import ua.squirrel.user.service.partner.PartnerServiceImpl;
+import ua.squirrel.user.service.product.CompositeProductServiceImpl;
+import ua.squirrel.user.service.product.ProductServiceImpl;
+import ua.squirrel.user.service.product.helper.MeasureProductServiceImpl;
+import ua.squirrel.user.service.product.helper.PropertiesProductServiceImpl;
+import ua.squirrel.web.entity.user.User;
 
 @Component
 public class FillDataUtil {
@@ -35,6 +36,8 @@ public class FillDataUtil {
 	private  MeasureProductServiceImpl measureProductServiceImpl;
 	@Autowired
 	private ProductServiceImpl productServiceImpl ;
+	@Autowired
+	private CompositeProductServiceImpl compositeProductServiceImpl;
 	
 	public List<CompositeProduct> getProduct(User owner ){
 		List<CompositeProduct> listCompositeProduct = new ArrayList<>();
@@ -101,7 +104,7 @@ public class FillDataUtil {
 		listCompositeProduct.add(fries);
 		listCompositeProduct.add(friesBig);
 		
-		return listCompositeProduct ;
+		 return compositeProductServiceImpl.saveAll(listCompositeProduct);
 	}
 	
 	
