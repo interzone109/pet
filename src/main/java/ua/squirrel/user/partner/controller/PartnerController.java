@@ -31,9 +31,6 @@ public class PartnerController {
 	@Autowired
 	private UserServiceImpl userServiceImpl;
 
-	
-	
-
 	/**
 	 * метод находит по id и текущему User партнера и возращает информацию о нем и о
 	 * его товаре
@@ -46,28 +43,11 @@ public class PartnerController {
 
 		User userCurrentSesion = userServiceImpl.findOneByLogin("test1").get();
 
-		Partner partner = getCurrentPartner(id, userCurrentSesion);
-
-		List<ProductModel> productsModel = new ArrayList<>();
-
-		partner.getProducts().stream().forEach(obj -> {
-			productsModel.add(ProductModel.builder()
-					.id(obj.getId())
-					.name(obj.getName())
-					.description(obj.getDescription())
-					.group(obj.getGroup())
-					.propertiesProduct(obj.getPropertiesProduct())
-					.measureProduct(obj.getMeasureProduct())
-					.build());
-		});
-
-		return PartnerModel.builder().id(partner.getId()).company(partner.getCompany())
-				.partnerMail(partner.getPartnerMail()).phonNumber(partner.getPhonNumber()).productsModel(productsModel)
-				.build();
+		return getPartnerModel(id, userCurrentSesion);
 	}
 
 	@PutMapping
-	public Partner updatePartnerInfo(@PathVariable("partner_id") Long id, @RequestBody PartnerModel partnerModel,
+	public PartnerModel updatePartnerInfo(@PathVariable("partner_id") Long id, @RequestBody PartnerModel partnerModel,
 			Authentication authentication) throws NotFoundException {
 		log.info("LOGGER: update curent partners");
 		User userCurrentSesion = userServiceImpl.findOneByLogin("test1").get();
@@ -79,7 +59,7 @@ public class PartnerController {
 		currentPartner.setCompany(partnerModel.getCompany());
 		partnerServiceImpl.save(currentPartner);
 
-		return currentPartner;
+		return getPartnerModel(currentPartner.getId(), userCurrentSesion);
 	}
 
 	@DeleteMapping
@@ -87,14 +67,41 @@ public class PartnerController {
 			throws NotFoundException {
 		log.info("LOGGER: delete curent partners");
 
-		// User userCurrentSesion = userServiceImpl.findOneByLogin("test1").get();
+		User userCurrentSesion = userServiceImpl.findOneByLogin("test1").get();
+
+		partnerServiceImpl.delete(getCurrentPartner(id, userCurrentSesion));
+		
 	}
 
-	private Partner getCurrentPartner(Long id , User currentUser) throws NotFoundException {
+	
+	private Partner getCurrentPartner(Long id, User currentUser) throws NotFoundException {
 		return partnerServiceImpl.findByIdAndUser(id, currentUser)
 				.orElseThrow(() -> new NotFoundException("Partner not found"));
 	}
 
+	private PartnerModel getPartnerModel(Long id, User user) throws NotFoundException {
+		Partner partner = getCurrentPartner(id, user);
+
+		List<ProductModel> productsModel = new ArrayList<>();
+
+		partner.getProducts().stream().forEach(obj -> {
+			productsModel.add(ProductModel.builder().id(obj.getId()).name(obj.getName())
+					.description(obj.getDescription()).group(obj.getGroup())
+					.propertiesProduct(obj.getPropertiesProduct()).measureProduct(obj.getMeasureProduct()).build());
+		});
+
+		return PartnerModel.builder().id(partner.getId()).company(partner.getCompany())
+				.partnerMail(partner.getPartnerMail()).phonNumber(partner.getPhonNumber()).productsModel(productsModel)
+				.build();
+	}
+
+	/*
+	  тестовый джесон 
+	  
+	  { "company": "куриные братишки eeee",
+	   "phonNumber":"8-800-555-444",
+	    "partnerMail": "curina@potatomail.com" 
+	   }
+	 */
+
 }
-
-

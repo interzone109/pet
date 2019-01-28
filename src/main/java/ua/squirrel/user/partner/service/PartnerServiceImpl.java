@@ -1,5 +1,6 @@
 package ua.squirrel.user.partner.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,10 +31,17 @@ public class PartnerServiceImpl implements PartnerService {
 	}
 
 	@Override
-	public void deleteByIdAndUser(Partner partner, User user) {
-		partnerRepository.deleteByIdAndUser(partner, user);
+	public void delete(Partner partner) {
+		partnerRepository.delete(partner);
 
 	}
 	
+	@Override
+	public List<Partner> findAllByUser( User user) {
+		return partnerRepository.findAllByUser( user);
+	}
 	
+	public List<Partner> saveAll( Iterable<Partner> entities) {
+		return partnerRepository.saveAll( entities);
+	}
 }

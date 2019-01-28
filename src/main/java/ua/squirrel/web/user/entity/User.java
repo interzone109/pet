@@ -1,11 +1,9 @@
 package ua.squirrel.web.user.entity;
 
-import java.util.List;
+
 import java.util.Set;
 import javax.persistence.*;
 import lombok.Data;
-import ua.squirrel.user.partner.entity.Partner;
-import ua.squirrel.user.product.entity.CompositeProduct;
 
 @Entity
 @Table(name = "user")
@@ -33,11 +31,5 @@ public class User {
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "user_state", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "state_id"))
 	private Set<State> states;
-
-	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private List<Partner> partners;
-	
-	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private List<CompositeProduct> compositeProducts;
 
 }

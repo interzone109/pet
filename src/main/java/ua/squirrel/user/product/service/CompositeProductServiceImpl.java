@@ -1,6 +1,7 @@
 package ua.squirrel.user.product.service;
 
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,9 @@ public class CompositeProductServiceImpl implements CompositeProductService {
 		return CompositeProductRepository.findByIdAndUser(id, user);
 	}
 
-	
+	@Override
+	public List<CompositeProduct> findAllByUser(User user) {
+		return CompositeProductRepository.findAllByUser(user);
+	}
 
 }

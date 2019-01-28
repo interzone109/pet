@@ -15,4 +15,6 @@ public interface ProductService {
 	Optional<Product> findOneByIdAndPartner(Long id, Partner partner);
 
 	List<Product> findAllByIdAndUser(Iterable<Long> ids, User user);
+	
+	List<Product> saveAll(Iterable<Product> productToSave);
 }

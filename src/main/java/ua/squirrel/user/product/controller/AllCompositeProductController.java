@@ -17,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import ua.squirrel.user.product.entity.CompositeProduct;
 import ua.squirrel.user.product.entity.CompositeProductModel;
 import ua.squirrel.user.product.entity.Product;
+import ua.squirrel.user.product.service.CompositeProductServiceImpl;
 import ua.squirrel.user.product.service.ProductServiceImpl;
 import ua.squirrel.web.registration.user.service.UserServiceImpl;
 import ua.squirrel.web.user.entity.User;
@@ -31,7 +32,8 @@ public class AllCompositeProductController {
 	private UserServiceImpl userServiceImpl;
 	@Autowired
 	private ProductServiceImpl productServiceImpl;
-
+	@Autowired
+	private CompositeProductServiceImpl compositeProductServiceImpl;
 	/**
 	 * метод получает зарегисрированого пользователя берет у него список композитных
 	 * продуктов и перезаписывает их в List<CompositeProductModel>, после чего
@@ -70,8 +72,7 @@ public class AllCompositeProductController {
 		compositeProduct.setUser(user);
 		compositeProduct.setProductsConsumption(consumption);
 
-		user.getCompositeProducts().add(compositeProduct);
-		userServiceImpl.save(user);
+		compositeProductServiceImpl.save(compositeProduct);
 
 		return getAllCompositProduct(user);
 	}
@@ -79,7 +80,7 @@ public class AllCompositeProductController {
 	private List<CompositeProductModel> getAllCompositProduct(User user) {
 		List<CompositeProductModel> compositeProductModels = new ArrayList<>();
 
-		user.getCompositeProducts().stream().forEach(obj -> {
+		compositeProductServiceImpl.findAllByUser(user).stream().forEach(obj -> {
 			compositeProductModels.add(CompositeProductModel.builder().id(obj.getId()).name(obj.getName())
 					.productsConsumption(obj.getProductsConsumption()).build());
 		});

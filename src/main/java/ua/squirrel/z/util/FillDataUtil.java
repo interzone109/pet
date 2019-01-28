@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import ua.squirrel.user.partner.entity.Partner;
+import ua.squirrel.user.partner.service.PartnerServiceImpl;
 import ua.squirrel.user.product.entity.CompositeProduct;
 import ua.squirrel.user.product.entity.Product;
 import ua.squirrel.user.product.helper.service.MeasureProductServiceImpl;
@@ -26,13 +27,14 @@ public class FillDataUtil {
 	 * данными о партнерах и их продуктах
 	 * 
 	 * */
-	
+	@Autowired
+	private PartnerServiceImpl partnerServiceImpl;
 	@Autowired
 	private  PropertiesProductServiceImpl propertiesProductServiceImpl;
 	@Autowired
 	private  MeasureProductServiceImpl measureProductServiceImpl;
 	@Autowired
-	ProductServiceImpl productServiceImpl ;
+	private ProductServiceImpl productServiceImpl ;
 	
 	public List<CompositeProduct> getProduct(User owner ){
 		List<CompositeProduct> listCompositeProduct = new ArrayList<>();
@@ -40,7 +42,8 @@ public class FillDataUtil {
 		CompositeProduct americano = new CompositeProduct();
 		americano.setName("Американо");
 		americano.setUser(owner);
-		
+
+
 		CompositeProduct tea = new CompositeProduct();
 		tea.setName("чай");
 		tea.setUser(owner);
@@ -61,7 +64,8 @@ public class FillDataUtil {
 		Map<Long, Integer> productFries = new HashMap<>();
 		Map<Long, Integer> productFriesBig = new HashMap<>();
 		
-		 owner.getPartners().stream().forEach(partner->{
+		
+		partnerServiceImpl.findAllByUser(owner).stream().forEach(partner->{
 			 partner.getProducts().stream().forEach(prod->{
 				 if(prod.getName().equals("Кофе Черная тара")) { productAmericano.put(prod.getId(), 10); }
 				 else if ( prod.getName().equals("Вода")) {productAmericano.put(prod.getId(), 30);}
@@ -108,28 +112,30 @@ public class FillDataUtil {
 			Partner p = new Partner();
 			p.setCompany("Кофеиновый делец");
 			p.setPartnerMail("cofee@mail.com");
+			p.setUser(owner);
 			p.setProducts(getCofee(p , owner));
 			p.setPhonNumber("21-313-213");
-			p.setUser(owner);
 			partner.add(p);
 			
 			p = new Partner();
 			p.setCompany("Картошечный флибустьер");
 			p.setPartnerMail("potato@mail.com");
+			p.setUser(owner);
 			p.setProducts(getPotato(p,owner));
 			p.setPhonNumber("21-313-288");
-			p.setUser(owner);
 			partner.add(p);
 			
 			p = new Partner();
 			p.setCompany("Армейские Расходники Компани");
 			p.setPartnerMail("consumbles@mail.com");
+			p.setUser(owner);
 			p.setProducts(getConsumbles(p,owner));
 			p.setPhonNumber("27-385-288");
-			p.setUser(owner);
 			partner.add(p);
 		
 	
+			partnerServiceImpl.saveAll(partner);
+			
 		return partner;
 	}
 
@@ -186,7 +192,7 @@ public class FillDataUtil {
 		p.setUser(owner);
 		product.add(p);
 		
-		
+		productServiceImpl.saveAll(product);
 		return product;
 	}
 	
@@ -224,7 +230,7 @@ public class FillDataUtil {
 		p.setUser(owner);
 		product.add(p);
 		
-		
+		productServiceImpl.saveAll(product);
 		return product ;
 		}
 	
@@ -282,6 +288,8 @@ public class FillDataUtil {
 		p.setMeasureProduct(measureProductServiceImpl.findOneByMeasure("UNIT"));
 		p.setUser(owner);
 		product.add(p);
+		
+		productServiceImpl.saveAll(product);
 		
 		return product ;
 	}

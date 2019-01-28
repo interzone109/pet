@@ -2,8 +2,6 @@ package ua.squirrel.user.partner.entity;
 
 import java.util.List;
 import javax.persistence.*;
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 import ua.squirrel.user.product.entity.Product;
 import ua.squirrel.web.user.entity.User;
@@ -26,8 +24,9 @@ public class Partner {
 	@Column(name = "partner_mail")
 	private String partnerMail;
 
-	//@JsonManagedReference
-	@OneToMany(mappedBy = "partner", fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.ALL)
+	
+	@OneToMany(mappedBy = "partner", fetch = FetchType.LAZY 
+			,orphanRemoval = true, cascade = CascadeType.ALL)
 	private List<Product> products;
 
 	

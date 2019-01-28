@@ -34,4 +34,8 @@ public class ProductServiceImpl implements ProductService {
 	public  List<Product> findAllByIdAndUser(Iterable<Long> ids ,User user ){
 		return productRepository.findAllByIdAndUser(ids ,user);
 	}
+	
+	public List<Product> saveAll(Iterable<Product> productToSave) {
+		return productRepository.saveAll(productToSave);
+	}
 }

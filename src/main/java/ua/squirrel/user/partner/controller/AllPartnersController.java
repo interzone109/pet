@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.extern.slf4j.Slf4j;
 import ua.squirrel.user.partner.entity.Partner;
 import ua.squirrel.user.partner.entity.PartnerModel;
+import ua.squirrel.user.partner.service.PartnerServiceImpl;
 import ua.squirrel.web.registration.user.service.UserServiceImpl;
 import ua.squirrel.web.user.entity.User;
 
@@ -23,7 +24,8 @@ public class AllPartnersController {
 	
 	@Autowired
 	private UserServiceImpl userServiceImpl;
-	
+	@Autowired
+	private PartnerServiceImpl partnerServiceImpl;
 	
 	
 	/**
@@ -36,7 +38,7 @@ public class AllPartnersController {
 		
 		User user = userServiceImpl.findOneByLogin("test1").get();
 		
-		List<Partner> userPartnersList = user.getPartners();
+		List<Partner> userPartnersList = partnerServiceImpl.findAllByUser(user);
 		newPartners.stream().forEach(obj->{
 			Partner addPartner = new Partner();
 			addPartner.setCompany(obj.getCompany());
@@ -64,11 +66,9 @@ public class AllPartnersController {
 		
 		User user = userServiceImpl.findOneByLogin("test1").get();
 		
-		List<Partner> partners = user.getPartners();
-		
 		List<PartnerModel> partnersModel = new ArrayList<>();
 		
-		partners.stream().forEach(obj->{
+		partnerServiceImpl.findAllByUser(user).stream().forEach(obj->{
 			partnersModel.add(PartnerModel.builder()
 					.id(obj.getId())
 					.company(obj.getCompany())

@@ -1,5 +1,6 @@
 package ua.squirrel.user.partner.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import ua.squirrel.user.partner.entity.Partner;
@@ -10,6 +11,10 @@ public interface PartnerService {
 
 	Optional<Partner> findByIdAndUser(Long id, User user);
 
-	void deleteByIdAndUser(Partner partner, User user);
+	
+	public List<Partner> findAllByUser( User user);
+	
+	List<Partner> saveAll( Iterable<Partner> entities);
 
+	void delete(Partner partner);
 }

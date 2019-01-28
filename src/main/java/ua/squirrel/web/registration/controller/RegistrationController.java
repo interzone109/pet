@@ -60,13 +60,13 @@ public class RegistrationController {
 		l.get(0).setUser(user1);
 		l.get(1).setUser(user1);
 		l.get(2).setUser(user1);
-		user1.setPartners(l);
+		//user1.setPartners(l);
 		
 		
 		userServiceImpl.save(user1);
 		
 		
-		user1.setCompositeProducts(fillDataUtil.getProduct(user1));
+		fillDataUtil.getProduct(user1);
 		
 		
 		

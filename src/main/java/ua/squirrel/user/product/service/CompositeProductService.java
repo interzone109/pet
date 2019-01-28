@@ -10,4 +10,6 @@ public interface CompositeProductService {
 	CompositeProduct save(CompositeProduct compositeProduct);
 
 	Optional<CompositeProduct> findByIdAndUser(Long id, User user);
+	
+	List<CompositeProduct> findAllByUser(User user);
 }
