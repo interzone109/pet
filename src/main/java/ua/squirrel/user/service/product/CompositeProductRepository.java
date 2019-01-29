@@ -5,7 +5,7 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import ua.squirrel.user.entity.product.CompositeProduct;
+import ua.squirrel.user.entity.product.composite.CompositeProduct;
 import ua.squirrel.web.entity.user.User;
 
 public interface CompositeProductRepository extends JpaRepository<CompositeProduct, Long> {

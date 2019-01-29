@@ -15,8 +15,8 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import lombok.Data;
 import ua.squirrel.user.entity.employee.Employee;
-import ua.squirrel.user.entity.product.CompositeProduct;
 import ua.squirrel.user.entity.product.Product;
+import ua.squirrel.user.entity.product.composite.CompositeProduct;
 
 @Entity
 @Table(name = "store_assortment")

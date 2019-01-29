@@ -4,8 +4,8 @@ import java.util.List;
 
 import lombok.Builder;
 import lombok.Data;
-import ua.squirrel.user.entity.product.CompositeProductModel;
 import ua.squirrel.user.entity.product.ProductModel;
+import ua.squirrel.user.entity.product.composite.CompositeProductModel;
 
 @Builder
 @Data

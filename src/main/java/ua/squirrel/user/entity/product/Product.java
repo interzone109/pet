@@ -30,13 +30,15 @@ public class Product {
 	@Column(name = "description")
 	private String description;
 	
-	@Column(name = "unit_price")
+	@Column(name = "product_group")
 	private String group;
 	
-	@OneToOne
+	@OneToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "properties_id")
 	private PropertiesProduct propertiesProduct;
 	
-	@OneToOne
+	@OneToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "measure_id")
 	private MeasureProduct measureProduct;
 
 	@ManyToOne(fetch = FetchType.LAZY, cascade=CascadeType.ALL)

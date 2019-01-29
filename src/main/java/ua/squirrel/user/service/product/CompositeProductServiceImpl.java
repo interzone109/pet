@@ -7,7 +7,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import ua.squirrel.user.entity.product.CompositeProduct;
+import ua.squirrel.user.entity.product.composite.CompositeProduct;
 import ua.squirrel.web.entity.user.User;
 
 @Service

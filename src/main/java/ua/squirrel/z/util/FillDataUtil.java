@@ -1,16 +1,14 @@
 package ua.squirrel.z.util;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import ua.squirrel.user.entity.partner.Partner;
-import ua.squirrel.user.entity.product.CompositeProduct;
 import ua.squirrel.user.entity.product.Product;
+import ua.squirrel.user.entity.product.composite.CompositeProduct;
 import ua.squirrel.user.service.partner.PartnerServiceImpl;
 import ua.squirrel.user.service.product.CompositeProductServiceImpl;
 import ua.squirrel.user.service.product.ProductServiceImpl;
@@ -39,64 +37,76 @@ public class FillDataUtil {
 	@Autowired
 	private CompositeProductServiceImpl compositeProductServiceImpl;
 	
+	
+	/**
+	 * метод создает продукт из ингрииентов
+	 * */
 	public List<CompositeProduct> getProduct(User owner ){
 		List<CompositeProduct> listCompositeProduct = new ArrayList<>();
 		
 		CompositeProduct americano = new CompositeProduct();
 		americano.setName("Американо");
+		americano.setPropertiesProduct(propertiesProductServiceImpl.findOneByName("PRODUCT_FINAL"));
+		americano.setGroup("горячие напитки");
 		americano.setUser(owner);
 
 
 		CompositeProduct tea = new CompositeProduct();
 		tea.setName("чай");
+		tea.setPropertiesProduct(propertiesProductServiceImpl.findOneByName("PRODUCT_FINAL"));
+		tea.setGroup("горячие напитки");
 		tea.setUser(owner);
 		
 		CompositeProduct fries = new CompositeProduct();
 		fries.setName("картошка фри 250");
+		fries.setPropertiesProduct(propertiesProductServiceImpl.findOneByName("PRODUCT_FINAL"));
+		fries.setGroup("горячие блюда");
 		fries.setUser(owner);
 		
 		CompositeProduct friesBig = new CompositeProduct();
 		friesBig.setName("картошка фри 500");
+		friesBig.setPropertiesProduct(propertiesProductServiceImpl.findOneByName("PRODUCT_FINAL"));
+		friesBig.setGroup("горячие блюда");
 		friesBig.setUser(owner);
 	
 		
 		
-		
-		Map<Long, Integer> productAmericano = new HashMap<>();
-		Map<Long, Integer> productTea = new HashMap<>();
-		Map<Long, Integer> productFries = new HashMap<>();
-		Map<Long, Integer> productFriesBig = new HashMap<>();
-		
+		StringBuilder productAmericano = new StringBuilder();
+		StringBuilder productTea = new StringBuilder();
+		StringBuilder productFries = new StringBuilder();
+		StringBuilder productFriesBig = new StringBuilder();
 		
 		partnerServiceImpl.findAllByUser(owner).stream().forEach(partner->{
 			 partner.getProducts().stream().forEach(prod->{
-				 if(prod.getName().equals("Кофе Черная тара")) { productAmericano.put(prod.getId(), 10); }
-				 else if ( prod.getName().equals("Вода")) {productAmericano.put(prod.getId(), 30);}
-				 else if( prod.getName().equals("Сахар стик")) {productAmericano.put(prod.getId(), 2);}
-				 else if ( prod.getName().equals("Стаканчик 0.33")) {productAmericano.put(prod.getId(), 1);}
-				 else  if ( prod.getName().equals("Пластиковое мешало")) {productAmericano.put(prod.getId(), 1); }
-				 
-				  if ( prod.getName().equals("Вода")) {productTea.put(prod.getId(), 50);}
-				  else if ( prod.getName().equals("Чай 1000 вопросов")) {productTea.put(prod.getId(), 5);}
-				  else if ( prod.getName().equals("Стаканчик 0.66")) {productTea.put(prod.getId(), 1);}
-				  else if ( prod.getName().equals("Пластиковое мешало")) {productTea.put(prod.getId(), 1);}
-				 
-				 
-				  if ( prod.getName().equals("Картошка")) {productFries.put(prod.getId(), 250);}
-				  else  if ( prod.getName().equals("Масло Стожор")) {productFries.put(prod.getId(), 50);}
-				  else  if ( prod.getName().equals("Соль столовая")) {productFries.put(prod.getId(), 5);}
+
 				  
-				  if ( prod.getName().equals("Картошка")) {productFriesBig.put(prod.getId(), 500);}
-				  else  if ( prod.getName().equals("Масло Стожор")) {productFriesBig.put(prod.getId(), 100);}
-				  else  if ( prod.getName().equals("Соль столовая")) {productFriesBig.put(prod.getId(), 10);}
+				  if(prod.getName().equals("Кофе Черная тара")) { productAmericano.append(prod.getId()+":"+ 10+"end"); }
+					 else if ( prod.getName().equals("Вода")) {productAmericano.append(prod.getId()+":"+ 30+"end");}
+					 else if( prod.getName().equals("Сахар стик")) {productAmericano.append(prod.getId()+":"+ 2+"end");}
+					 else if ( prod.getName().equals("Стаканчик 0.33")) {productAmericano.append(prod.getId()+":"+ 1+"end");}
+					 else  if ( prod.getName().equals("Пластиковое мешало")) {productAmericano.append(prod.getId()+":"+ 1+"end"); }
+					 
+					  if ( prod.getName().equals("Вода")) {productTea.append(prod.getId()+":"+ 50+"end");}
+					  else if ( prod.getName().equals("Чай 1000 вопросов")) {productTea.append(prod.getId()+":"+ 5+"end");}
+					  else if ( prod.getName().equals("Стаканчик 0.66")) {productTea.append(prod.getId()+":"+ 1+"end");}
+					  else if ( prod.getName().equals("Пластиковое мешало")) {productTea.append(prod.getId()+":"+ 1+"end");}
+					 
+					 
+					  if ( prod.getName().equals("Картошка")) {productFries.append(prod.getId()+":"+ 250+"end");}
+					  else  if ( prod.getName().equals("Масло Стожор")) {productFries.append(prod.getId()+":"+ 50+"end");}
+					  else  if ( prod.getName().equals("Соль столовая")) {productFries.append(prod.getId()+":"+ 5+"end");}
+					  
+					  if ( prod.getName().equals("Картошка")) {productFriesBig.append(prod.getId()+":"+ 500+"end");}
+					  else  if ( prod.getName().equals("Масло Стожор")) {productFriesBig.append(prod.getId()+":"+ 100+"end");}
+					  else  if ( prod.getName().equals("Соль столовая")) {productFriesBig.append(prod.getId()+":"+ 10+"end");}
+				  
 			 });
 		 });
 		
-		
-		americano.setProductsConsumption(productAmericano);
-		tea.setProductsConsumption(productTea);
-		fries.setProductsConsumption(productFries);
-		friesBig.setProductsConsumption(productFriesBig);
+		americano.setProductExpend(productAmericano.toString());
+		tea.setProductExpend(productTea.toString());
+		fries.setProductExpend(productFries.toString());
+		friesBig.setProductExpend(productFriesBig.toString());
 		
 		
 		listCompositeProduct.add(americano);
@@ -107,7 +117,9 @@ public class FillDataUtil {
 		 return compositeProductServiceImpl.saveAll(listCompositeProduct);
 	}
 	
-	
+	/**
+	 * метод создает поставщиков
+	 * */
 	public  List<Partner> getPartner(User owner) {
 		List<Partner> partner = new ArrayList<>();
 		
@@ -150,7 +162,7 @@ public class FillDataUtil {
 		p.setDescription("Вода питьевая");
 		p.setGroup("воды");
 		p.setPartner(partner);									
-		p.setPropertiesProduct(propertiesProductServiceImpl.findOneByName("COMPOSITE"));
+		p.setPropertiesProduct(propertiesProductServiceImpl.findOneByName("INGREDIENS"));
 		p.setMeasureProduct(measureProductServiceImpl.findOneByMeasure("LITER"));
 		p.setUser(owner);
 		product.add(p);
@@ -160,7 +172,7 @@ public class FillDataUtil {
 		p.setDescription("кофе зерновой ");
 		p.setGroup("чаи");
 		p.setPartner(partner);
-		p.setPropertiesProduct(propertiesProductServiceImpl.findOneByName("COMPOSITE"));
+		p.setPropertiesProduct(propertiesProductServiceImpl.findOneByName("INGREDIENS"));
 		p.setMeasureProduct(measureProductServiceImpl.findOneByMeasure("KILOGRAM"));
 		p.setUser(owner);
 		product.add(p);
@@ -170,7 +182,7 @@ public class FillDataUtil {
 		p.setDescription("сахар в стиках женный");
 		p.setGroup("");
 		p.setPartner(partner);
-		p.setPropertiesProduct(propertiesProductServiceImpl.findOneByName("COMPOSITE"));
+		p.setPropertiesProduct(propertiesProductServiceImpl.findOneByName("CONSUMABLES"));
 		p.setMeasureProduct(measureProductServiceImpl.findOneByMeasure("UNIT"));
 		p.setUser(owner);
 		product.add(p);
@@ -180,7 +192,7 @@ public class FillDataUtil {
 		p.setDescription("молоко в цетропаках");
 		p.setGroup("молочка");
 		p.setPartner(partner);
-		p.setPropertiesProduct(propertiesProductServiceImpl.findOneByName("COMPOSITE"));
+		p.setPropertiesProduct(propertiesProductServiceImpl.findOneByName("INGREDIENS"));
 		p.setMeasureProduct(measureProductServiceImpl.findOneByMeasure("LITER"));
 		p.setUser(owner);
 		product.add(p);
@@ -190,7 +202,7 @@ public class FillDataUtil {
 		p.setDescription("Чай отвечай");
 		p.setGroup("чаи");
 		p.setPartner(partner);
-		p.setPropertiesProduct(propertiesProductServiceImpl.findOneByName("COMPOSITE"));
+		p.setPropertiesProduct(propertiesProductServiceImpl.findOneByName("INGREDIENS"));
 		p.setMeasureProduct(measureProductServiceImpl.findOneByMeasure("UNIT"));
 		p.setUser(owner);
 		product.add(p);
@@ -198,7 +210,9 @@ public class FillDataUtil {
 		productServiceImpl.saveAll(product);
 		return product;
 	}
-	
+	/**
+	 * метод заполняет продукт у поставщика
+	 * */
 	private  List<Product> getPotato(Partner partner,User owner) {
 		List<Product> product = new ArrayList<>();
 		
@@ -208,7 +222,7 @@ public class FillDataUtil {
 		p.setDescription("катошка фри мороженая");
 		p.setGroup("овощи");
 		p.setPartner(partner);
-		p.setPropertiesProduct(propertiesProductServiceImpl.findOneByName("COMPLETE_COMPOSITE"));
+		p.setPropertiesProduct(propertiesProductServiceImpl.findOneByName("INGREDIENS"));
 		p.setMeasureProduct(measureProductServiceImpl.findOneByMeasure("KILOGRAM"));
 		p.setUser(owner);
 		product.add(p);
@@ -218,7 +232,7 @@ public class FillDataUtil {
 		p.setDescription("Масло подсолнечное стожор банка 0.9л ");
 		p.setGroup("");
 		p.setPartner(partner);
-		p.setPropertiesProduct(propertiesProductServiceImpl.findOneByName("COMPOSITE"));
+		p.setPropertiesProduct(propertiesProductServiceImpl.findOneByName("INGREDIENS"));
 		p.setMeasureProduct(measureProductServiceImpl.findOneByMeasure("LITER"));
 		p.setUser(owner);
 		product.add(p);
@@ -228,7 +242,7 @@ public class FillDataUtil {
 		p.setDescription("Сель соленая");
 		p.setGroup("");
 		p.setPartner(partner);
-		p.setPropertiesProduct(propertiesProductServiceImpl.findOneByName("COMPOSITE"));
+		p.setPropertiesProduct(propertiesProductServiceImpl.findOneByName("INGREDIENS"));
 		p.setMeasureProduct(measureProductServiceImpl.findOneByMeasure("KILOGRAM"));
 		p.setUser(owner);
 		product.add(p);
@@ -247,7 +261,7 @@ public class FillDataUtil {
 		p.setDescription("Стаканчик 0.33");
 		p.setGroup("тара");
 		p.setPartner(partner);
-		p.setPropertiesProduct(propertiesProductServiceImpl.findOneByName("COMPOSITE"));
+		p.setPropertiesProduct(propertiesProductServiceImpl.findOneByName("CONSUMABLES"));
 		p.setMeasureProduct(measureProductServiceImpl.findOneByMeasure("UNIT"));
 		p.setUser(owner);
 		product.add(p);
@@ -257,7 +271,7 @@ public class FillDataUtil {
 		p.setDescription("Стаканчик 0.45");
 		p.setGroup("тара");
 		p.setPartner(partner);
-		p.setPropertiesProduct(propertiesProductServiceImpl.findOneByName("COMPOSITE"));
+		p.setPropertiesProduct(propertiesProductServiceImpl.findOneByName("CONSUMABLES"));
 		p.setMeasureProduct(measureProductServiceImpl.findOneByMeasure("UNIT"));
 		p.setUser(owner);
 		product.add(p);
@@ -267,7 +281,7 @@ public class FillDataUtil {
 		p.setDescription("Стаканчик 0.66");
 		p.setGroup("тара");
 		p.setPartner(partner);
-		p.setPropertiesProduct(propertiesProductServiceImpl.findOneByName("COMPOSITE"));
+		p.setPropertiesProduct(propertiesProductServiceImpl.findOneByName("CONSUMABLES"));
 		p.setMeasureProduct(measureProductServiceImpl.findOneByMeasure("UNIT"));
 		p.setUser(owner);
 		product.add(p);
@@ -277,7 +291,7 @@ public class FillDataUtil {
 		p.setDescription("Крышка для стаканов");
 		p.setGroup("тара");
 		p.setPartner(partner);
-		p.setPropertiesProduct(propertiesProductServiceImpl.findOneByName("COMPOSITE"));
+		p.setPropertiesProduct(propertiesProductServiceImpl.findOneByName("CONSUMABLES"));
 		p.setMeasureProduct(measureProductServiceImpl.findOneByMeasure("UNIT"));
 		p.setUser(owner);
 		product.add(p);
@@ -287,7 +301,7 @@ public class FillDataUtil {
 		p.setDescription("Мешало для кофе чай");
 		p.setGroup("тара");
 		p.setPartner(partner);
-		p.setPropertiesProduct(propertiesProductServiceImpl.findOneByName("COMPOSITE"));
+		p.setPropertiesProduct(propertiesProductServiceImpl.findOneByName("CONSUMABLES"));
 		p.setMeasureProduct(measureProductServiceImpl.findOneByMeasure("UNIT"));
 		p.setUser(owner);
 		product.add(p);

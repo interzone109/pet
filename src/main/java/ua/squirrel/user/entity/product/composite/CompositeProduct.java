@@ -1,10 +1,6 @@
-package ua.squirrel.user.entity.product;
+package ua.squirrel.user.entity.product.composite;
 
-import java.util.Map;
-
-import javax.persistence.CollectionTable;
 import javax.persistence.Column;
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -12,11 +8,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.MapKeyColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 
 import lombok.Data;
+import ua.squirrel.user.entity.product.PropertiesProduct;
 import ua.squirrel.web.entity.user.User;
 
 /**
@@ -37,12 +34,15 @@ public class CompositeProduct {
 	@Column(name = "name", unique = true)
 	private String name;
 	
-	@ElementCollection
-    @MapKeyColumn(name="product_id")
-    @Column(name="quantity")
-    @CollectionTable(name="merchandise_consumption", joinColumns=@JoinColumn(name="consuption_id"))
-	private Map<Long, Integer> productsConsumption;
+	@Column(name = "expend_product_id")
+	private String productExpend ;
 	
+	@Column(name = "product_group")
+	private String group;
+	
+	@OneToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "properties_id")
+	private PropertiesProduct propertiesProduct;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_owner_id", nullable = false)

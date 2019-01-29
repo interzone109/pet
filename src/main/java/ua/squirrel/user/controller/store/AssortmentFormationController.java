@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javassist.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
-import ua.squirrel.user.entity.product.CompositeProductModel;
 import ua.squirrel.user.entity.product.ProductModel;
+import ua.squirrel.user.entity.product.composite.CompositeProductModel;
 import ua.squirrel.user.entity.store.Store;
 import ua.squirrel.user.entity.store.StoreAssortment;
 import ua.squirrel.user.entity.store.StoreAssortmentModel;
@@ -84,7 +84,7 @@ public class AssortmentFormationController {
 		store.getCompositeProduct().stream().forEach(composite->{
 			compositeProductModels.add(CompositeProductModel.builder()
 					.name(composite.getName())
-					.productsConsumption(composite.getProductsConsumption())
+					//.productsConsumption(composite.getProductsConsumption())
 					.build()
 					);});
 		

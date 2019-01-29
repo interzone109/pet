@@ -3,7 +3,7 @@ package ua.squirrel.user.service.product;
 import java.util.List;
 import java.util.Optional;
 
-import ua.squirrel.user.entity.product.CompositeProduct;
+import ua.squirrel.user.entity.product.composite.CompositeProduct;
 import ua.squirrel.web.entity.user.User;
 
 public interface CompositeProductService {

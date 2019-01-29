@@ -12,5 +12,5 @@ public interface ProductRepository extends JpaRepository<Product, Long>{
 	
 		Optional<Product> findOneByIdAndPartner(Long id ,Partner partner);
 
-		 List<Product> findAllByIdAndUser(Iterable<Long> ids ,User user );
+		 List<Product> findAllByUserAndIdIn(User user,Iterable<Long> id );
 }
