@@ -1,4 +1,4 @@
-package ua.squirrel.user.service.product.helper;
+package ua.squirrel.user.service.product.properties;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

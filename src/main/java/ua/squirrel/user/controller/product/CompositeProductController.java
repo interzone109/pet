@@ -102,6 +102,7 @@ public class CompositeProductController {
 				String[] parse = productExpends[i].split(":");
 				idsExpends.put(Long.parseLong(parse[0]), Integer.parseInt(parse[1]));
 			}
+			
 			updateDeteleModel.getComposites().forEach((key, value) -> {
 				if (idsExpends.containsKey(key)) {
 					idsExpends.put(key, updateDeteleModel.getComposites().get(key));
@@ -201,6 +202,8 @@ public class CompositeProductController {
       2
    ]
 }
+
+	String[] result = product.getProductExpend().split(":[0-9]+end");
 	 */
 
 }

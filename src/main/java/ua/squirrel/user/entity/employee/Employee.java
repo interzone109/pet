@@ -12,6 +12,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import lombok.Data;
 import ua.squirrel.user.entity.store.Store;
+import ua.squirrel.web.entity.user.User;
 
 @Data
 @Entity
@@ -29,6 +30,10 @@ public class Employee {
 	private long salary;
 	
 	@ManyToOne(fetch = FetchType.LAZY, cascade=CascadeType.ALL)
-	@JoinColumn(name = "store_employee_id", nullable = false)
+	@JoinColumn(name = "store_employee_id", nullable = true)
 	private Store store;
+	
+	@ManyToOne(fetch = FetchType.LAZY, cascade=CascadeType.ALL)
+	@JoinColumn(name = "employee_user_id", nullable = false)
+	private User user;
 }

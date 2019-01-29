@@ -22,7 +22,7 @@ import ua.squirrel.web.service.registration.user.UserServiceImpl;
 @RestController
 @RequestMapping("/stores")
 @Slf4j
-public class StoreConrtoller {
+public class AllStoreConrtoller {
 
 	@Autowired
 	private StoreServiceImpl storeServiceImpl;
@@ -62,7 +62,8 @@ public class StoreConrtoller {
 	private List<StoreModel> getAllStore(User user) {
 		List<StoreModel> storeModels = new ArrayList<>();
 		storeServiceImpl.findAllByUser(user).stream().forEach(store -> {
-			storeModels.add(StoreModel.builder().id(store.getId()).address(store.getAddress())
+			storeModels.add(StoreModel.builder().id(store.getId())
+					.address(store.getAddress())
 					.description(store.getDescription()).build());
 		});
 		return storeModels;

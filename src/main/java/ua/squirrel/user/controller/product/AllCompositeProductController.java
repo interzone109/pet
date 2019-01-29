@@ -15,7 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import ua.squirrel.user.entity.product.composite.CompositeProduct;
 import ua.squirrel.user.entity.product.composite.CompositeProductModel;
 import ua.squirrel.user.service.product.CompositeProductServiceImpl;
-import ua.squirrel.user.service.product.helper.PropertiesProductServiceImpl;
+import ua.squirrel.user.service.product.properties.PropertiesProductServiceImpl;
 import ua.squirrel.web.entity.user.User;
 import ua.squirrel.web.service.registration.user.UserServiceImpl;
 

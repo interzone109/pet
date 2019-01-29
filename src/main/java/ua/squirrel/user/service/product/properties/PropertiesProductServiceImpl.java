@@ -1,4 +1,4 @@
-package ua.squirrel.user.service.product.helper;
+package ua.squirrel.user.service.product.properties;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

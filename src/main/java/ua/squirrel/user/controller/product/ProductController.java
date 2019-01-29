@@ -19,8 +19,8 @@ import ua.squirrel.user.entity.product.Product;
 import ua.squirrel.user.entity.product.ProductModel;
 import ua.squirrel.user.service.partner.PartnerServiceImpl;
 import ua.squirrel.user.service.product.ProductServiceImpl;
-import ua.squirrel.user.service.product.helper.MeasureProductServiceImpl;
-import ua.squirrel.user.service.product.helper.PropertiesProductServiceImpl;
+import ua.squirrel.user.service.product.properties.MeasureProductServiceImpl;
+import ua.squirrel.user.service.product.properties.PropertiesProductServiceImpl;
 import ua.squirrel.web.entity.user.User;
 import ua.squirrel.web.service.registration.user.UserServiceImpl;
 

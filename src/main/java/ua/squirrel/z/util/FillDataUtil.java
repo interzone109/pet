@@ -12,8 +12,8 @@ import ua.squirrel.user.entity.product.composite.CompositeProduct;
 import ua.squirrel.user.service.partner.PartnerServiceImpl;
 import ua.squirrel.user.service.product.CompositeProductServiceImpl;
 import ua.squirrel.user.service.product.ProductServiceImpl;
-import ua.squirrel.user.service.product.helper.MeasureProductServiceImpl;
-import ua.squirrel.user.service.product.helper.PropertiesProductServiceImpl;
+import ua.squirrel.user.service.product.properties.MeasureProductServiceImpl;
+import ua.squirrel.user.service.product.properties.PropertiesProductServiceImpl;
 import ua.squirrel.web.entity.user.User;
 
 @Component
@@ -158,7 +158,7 @@ public class FillDataUtil {
 		List<Product> product = new ArrayList<>();
 		
 		Product p = new Product();
-		p.setName("Вода");
+		p.setName("Вода 20л");
 		p.setDescription("Вода питьевая");
 		p.setGroup("воды");
 		p.setPartner(partner);									
@@ -166,6 +166,37 @@ public class FillDataUtil {
 		p.setMeasureProduct(measureProductServiceImpl.findOneByMeasure("LITER"));
 		p.setUser(owner);
 		product.add(p);
+		
+		p = new Product();
+		p.setName("Сок 0,33 яблоко");
+		p.setDescription("Сок стекло яблоко");
+		p.setGroup("сок");
+		p.setPartner(partner);									
+		p.setPropertiesProduct(propertiesProductServiceImpl.findOneByName("PRODUCT_COMPOSITE"));
+		p.setMeasureProduct(measureProductServiceImpl.findOneByMeasure("LITER"));
+		p.setUser(owner);
+		product.add(p);
+		
+		p = new Product();
+		p.setName("Сок 0,33 груша");
+		p.setDescription("Сок стекло груша");
+		p.setGroup("сок");
+		p.setPartner(partner);									
+		p.setPropertiesProduct(propertiesProductServiceImpl.findOneByName("PRODUCT_COMPOSITE"));
+		p.setMeasureProduct(measureProductServiceImpl.findOneByMeasure("LITER"));
+		p.setUser(owner);
+		product.add(p);
+		
+		p = new Product();
+		p.setName("Сок 0,33 кефир");
+		p.setDescription("Сок стекло кефир");
+		p.setGroup("сок");
+		p.setPartner(partner);									
+		p.setPropertiesProduct(propertiesProductServiceImpl.findOneByName("PRODUCT_COMPOSITE"));
+		p.setMeasureProduct(measureProductServiceImpl.findOneByMeasure("LITER"));
+		p.setUser(owner);
+		product.add(p);
+		
 		
 		p = new Product();
 		p.setName("Кофе Черная тара");

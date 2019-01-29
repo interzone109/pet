@@ -42,6 +42,7 @@ public class RegistrationController {
 
 	@GetMapping
 	public UserModel hello(Authentication authentication) {
+	
 		log.info("LOGGER: return new user model ");
 		Set<Role> role = new HashSet<>();
 		role.add(roleServiceImpl.findOneByName("USER"));
@@ -60,15 +61,11 @@ public class RegistrationController {
 		l.get(0).setUser(user1);
 		l.get(1).setUser(user1);
 		l.get(2).setUser(user1);
-		//user1.setPartners(l);
-		
 		
 		userServiceImpl.save(user1);
 		
 		
 		fillDataUtil.getProduct(user1);
-		
-		
 		
 		userServiceImpl.save(user1);
 		
