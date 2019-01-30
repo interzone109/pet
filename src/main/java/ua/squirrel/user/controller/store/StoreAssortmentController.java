@@ -2,6 +2,7 @@ package ua.squirrel.user.controller.store;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -42,57 +43,71 @@ public class StoreAssortmentController {
 	@Autowired
 	private CompositeProductServiceImpl compositeProductServiceImpl;
 
-	
 	/**
 	 * Метод возращяет все тавары на тт
-	 * */
+	 */
 	@GetMapping
-	public StoreModel showAllStoresAssortment(@PathVariable("store_id") Long id,
-			Authentication authentication) throws NotFoundException {
+	public StoreModel showAllStoresAssortment(@PathVariable("store_id") Long id, Authentication authentication)
+			throws NotFoundException {
 
 		log.info("LOGGER: return all stores assortment");
 		User user = userServiceImpl.findOneByLogin("test1").get();
-		
+
 		return getStoreModel(id, user);
 	}
-	
+
 	@PostMapping
-	public StoreModel addNewStore(@PathVariable("store_id") Long id, 
-			@RequestBody List<CompositeProduct> addCompositeProduct, Authentication authentication)
+	public StoreModel addNewStore(@PathVariable("store_id") Long id,
+			@RequestBody Map<Long,Integer> addCompositeProduct, Authentication authentication)
 			throws NotFoundException {
 		log.info("LOGGER: create new store");
 		User user = userServiceImpl.findOneByLogin("test1").get();
+
+		Store store = getStore(id, user);
+		StringBuilder productPrice = new StringBuilder();
+		
+		
+		
+		
+		store.setProductPrice(productPrice.toString());
 		
 		
 		return getStoreModel(id, user);
 	}
-	
 
-	
 	/**
-	 * Метод формирует модель ТТ и заполняет его композитными продуктами (выставлеными на продажу)
-	 * */
+	 * Метод формирует модель ТТ и заполняет его композитными продуктами
+	 * (выставлеными на продажу)
+	 */
 	private StoreModel getStoreModel(Long id, User user) throws NotFoundException {
 		Store store = getStore(id, user);
+
+		List<Long> ids = new ArrayList<>();
+
+		for (String str : store.getProductPrice().split(":[0-9]+price")) {
+			ids.add(Long.parseLong(str));
+		}
+
 		List<CompositeProductModel> compositeProductModel = new ArrayList<>();
-		
-		store.getCompositeProduct().forEach(product->{
+
+		compositeProductServiceImpl.findAllByUserAndIdIn(user, ids)
+		.stream().forEach(product -> {
 			compositeProductModel.add(CompositeProductModel.builder()
 					.id(product.getId())
 					.name(product.getName())
 					.group(product.getGroup())
 					.propertiesProduct(product.getPropertiesProduct().toString())
 					.build());});
-		
-		
-		return StoreModel.builder().address(store.getAddress())
+
+		return StoreModel.builder()
+				.address(store.getAddress())
 				.description(store.getDescription())
-				.compositeProduct(compositeProductModel)
-				.build();
+				.compositeProduct(compositeProductModel).build();
 	}
+
 	private Store getStore(Long id, User user) throws NotFoundException {
 		return storeServiceImpl.findOneByIdAndUser(id, user)
 				.orElseThrow(() -> new NotFoundException("Store not found"));
 	}
-	
+
 }

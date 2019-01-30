@@ -80,25 +80,25 @@ public class FillDataUtil {
 			 partner.getProducts().stream().forEach(prod->{
 
 				  
-				  if(prod.getName().equals("Кофе Черная тара")) { productAmericano.append(prod.getId()+":"+ 10+"end"); }
-					 else if ( prod.getName().equals("Вода")) {productAmericano.append(prod.getId()+":"+ 30+"end");}
-					 else if( prod.getName().equals("Сахар стик")) {productAmericano.append(prod.getId()+":"+ 2+"end");}
-					 else if ( prod.getName().equals("Стаканчик 0.33")) {productAmericano.append(prod.getId()+":"+ 1+"end");}
-					 else  if ( prod.getName().equals("Пластиковое мешало")) {productAmericano.append(prod.getId()+":"+ 1+"end"); }
+				  if(prod.getName().equals("Кофе Черная тара")) { productAmericano.append(prod.getId()+":"+ 10+"rate"); }
+					 else if ( prod.getName().equals("Вода")) {productAmericano.append(prod.getId()+":"+ 30+"rate");}
+					 else if( prod.getName().equals("Сахар стик")) {productAmericano.append(prod.getId()+":"+ 2+"rate");}
+					 else if ( prod.getName().equals("Стаканчик 0.33")) {productAmericano.append(prod.getId()+":"+ 1+"rate");}
+					 else  if ( prod.getName().equals("Пластиковое мешало")) {productAmericano.append(prod.getId()+":"+ 1+"rate"); }
 					 
-					  if ( prod.getName().equals("Вода")) {productTea.append(prod.getId()+":"+ 50+"end");}
-					  else if ( prod.getName().equals("Чай 1000 вопросов")) {productTea.append(prod.getId()+":"+ 5+"end");}
-					  else if ( prod.getName().equals("Стаканчик 0.66")) {productTea.append(prod.getId()+":"+ 1+"end");}
-					  else if ( prod.getName().equals("Пластиковое мешало")) {productTea.append(prod.getId()+":"+ 1+"end");}
+					  if ( prod.getName().equals("Вода")) {productTea.append(prod.getId()+":"+ 50+"rate");}
+					  else if ( prod.getName().equals("Чай 1000 вопросов")) {productTea.append(prod.getId()+":"+ 5+"rate");}
+					  else if ( prod.getName().equals("Стаканчик 0.66")) {productTea.append(prod.getId()+":"+ 1+"rate");}
+					  else if ( prod.getName().equals("Пластиковое мешало")) {productTea.append(prod.getId()+":"+ 1+"rate");}
 					 
 					 
-					  if ( prod.getName().equals("Картошка")) {productFries.append(prod.getId()+":"+ 250+"end");}
-					  else  if ( prod.getName().equals("Масло Стожор")) {productFries.append(prod.getId()+":"+ 50+"end");}
-					  else  if ( prod.getName().equals("Соль столовая")) {productFries.append(prod.getId()+":"+ 5+"end");}
+					  if ( prod.getName().equals("Картошка")) {productFries.append(prod.getId()+":"+ 250+"rate");}
+					  else  if ( prod.getName().equals("Масло Стожор")) {productFries.append(prod.getId()+":"+ 50+"rate");}
+					  else  if ( prod.getName().equals("Соль столовая")) {productFries.append(prod.getId()+":"+ 5+"rate");}
 					  
-					  if ( prod.getName().equals("Картошка")) {productFriesBig.append(prod.getId()+":"+ 500+"end");}
-					  else  if ( prod.getName().equals("Масло Стожор")) {productFriesBig.append(prod.getId()+":"+ 100+"end");}
-					  else  if ( prod.getName().equals("Соль столовая")) {productFriesBig.append(prod.getId()+":"+ 10+"end");}
+					  if ( prod.getName().equals("Картошка")) {productFriesBig.append(prod.getId()+":"+ 500+"rate");}
+					  else  if ( prod.getName().equals("Масло Стожор")) {productFriesBig.append(prod.getId()+":"+ 100+"rate");}
+					  else  if ( prod.getName().equals("Соль столовая")) {productFriesBig.append(prod.getId()+":"+ 10+"rate");}
 				  
 			 });
 		 });

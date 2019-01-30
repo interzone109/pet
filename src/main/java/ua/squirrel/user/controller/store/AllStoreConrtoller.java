@@ -62,7 +62,8 @@ public class AllStoreConrtoller {
 	private List<StoreModel> getAllStore(User user) {
 		List<StoreModel> storeModels = new ArrayList<>();
 		storeServiceImpl.findAllByUser(user).stream().forEach(store -> {
-			storeModels.add(StoreModel.builder().id(store.getId())
+			storeModels.add(StoreModel.builder()
+					.id(store.getId())
 					.address(store.getAddress())
 					.description(store.getDescription()).build());
 		});

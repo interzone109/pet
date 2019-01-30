@@ -85,13 +85,21 @@ public class PartnerController {
 		List<ProductModel> productsModel = new ArrayList<>();
 
 		partner.getProducts().stream().forEach(obj -> {
-			productsModel.add(ProductModel.builder().id(obj.getId()).name(obj.getName())
-					.description(obj.getDescription()).group(obj.getGroup())
-					.propertiesProduct(obj.getPropertiesProduct()).measureProduct(obj.getMeasureProduct()).build());
+			productsModel.add(ProductModel.builder()
+					.id(obj.getId())
+					.name(obj.getName())
+					.description(obj.getDescription())
+					.group(obj.getGroup())
+					.propertiesProduct(obj.getPropertiesProduct())
+					.measureProduct(obj.getMeasureProduct()).build());
 		});
 
-		return PartnerModel.builder().id(partner.getId()).company(partner.getCompany())
-				.partnerMail(partner.getPartnerMail()).phonNumber(partner.getPhonNumber()).productsModel(productsModel)
+		return PartnerModel.builder()
+				.id(partner.getId())
+				.company(partner.getCompany())
+				.partnerMail(partner.getPartnerMail())
+				.phonNumber(partner.getPhonNumber())
+				.productsModel(productsModel)
 				.build();
 	}
 

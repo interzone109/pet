@@ -28,7 +28,7 @@ import ua.squirrel.web.entity.user.User;
 import ua.squirrel.web.service.registration.user.UserServiceImpl;
 
 @RestController
-@RequestMapping("/partners/composites/{id}/edit")
+@RequestMapping("/partners/composites/{id}/info")
 @Slf4j
 //@Secured("USER")
 public class CompositeProductController {
@@ -65,12 +65,12 @@ public class CompositeProductController {
 
 		// сохраняю все ид и затраты в сет
 		CompositeProduct compositeProduct = getCompositeProduct(id, userCurrentSesion);
-		for (String idsExpends : compositeProduct.getProductExpend().split("end")) {
-			ids.add(idsExpends + "end");
+		for (String idsExpends : compositeProduct.getProductExpend().split("rate")) {
+			ids.add(idsExpends + "rate");
 		}
 
 		productServiceImpl.findAllByUserAndIdIn(userCurrentSesion, composites.keySet()).stream().forEach(prod -> {
-			ids.add(prod.getId() + ":" + composites.get(prod.getId()) + "end");
+			ids.add(prod.getId() + ":" + composites.get(prod.getId()) + "rate");
 		});
 
 		StringBuilder productExpend = new StringBuilder();
@@ -85,7 +85,7 @@ public class CompositeProductController {
 	}
 
 	/**
-	 * метод одновляет расход ингридиентов и удаляет продукты
+	 * метод обновляет расход ингридиентов и удаляет продукты
 	 * */
 	@PutMapping
 	public CompositeProductModel updateDeleteProduct(@PathVariable("id") Long id, Authentication authentication,
@@ -95,7 +95,7 @@ public class CompositeProductController {
 		CompositeProduct compositeProduct = getCompositeProduct(id, userCurrentSesion);
 		if (updateDeteleModel.getComposites() != null) {
 			
-			String[] productExpends = compositeProduct.getProductExpend().split("end");
+			String[] productExpends = compositeProduct.getProductExpend().split("rate");
 
 			Map<Long, Integer> idsExpends = new HashMap<>();
 			for (int i = 0; i < productExpends.length; i++) {
@@ -112,7 +112,7 @@ public class CompositeProductController {
 			StringBuilder str = new StringBuilder();
 
 			idsExpends.forEach((key, value) -> {
-				str.append((key + ":" + value + "end"));
+				str.append((key + ":" + value + "rate"));
 			});
 
 			compositeProduct.setProductExpend(str.toString());
@@ -124,10 +124,12 @@ public class CompositeProductController {
 		return getCompositeProductModel(id, userCurrentSesion);
 	}
 
+	
+
 	private void deleteCompositeProduct(Long id, List<Long> composites, CompositeProduct compositeProduct) throws NotFoundException {
 		log.info("LOGGER: delete  product");
 
-		String[] productExpends = compositeProduct.getProductExpend().split("end");
+		String[] productExpends = compositeProduct.getProductExpend().split("rate");
 
 		Map<Long, Integer> idsExpends = new HashMap<>();
 
@@ -145,7 +147,7 @@ public class CompositeProductController {
 		StringBuilder str = new StringBuilder();
 
 		idsExpends.forEach((key, value) -> {
-			str.append((key + ":" + value + "end"));
+			str.append((key + ":" + value + "rate"));
 		});
 
 		compositeProduct.setProductExpend(str.toString());
@@ -161,7 +163,7 @@ public class CompositeProductController {
 
 		CompositeProduct compositeProduct = getCompositeProduct(id, currentUser);
 
-		String[] productExpends = compositeProduct.getProductExpend().split("end");
+		String[] productExpends = compositeProduct.getProductExpend().split("rate");
 
 		Map<Long, Integer> idsExpends = new HashMap<>();
 
@@ -203,7 +205,7 @@ public class CompositeProductController {
    ]
 }
 
-	String[] result = product.getProductExpend().split(":[0-9]+end");
+	String[] result = product.getProductExpend().split(":[0-9]+rate");
 	 */
 
 }

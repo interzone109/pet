@@ -77,6 +77,7 @@ public class AllCompositeProductController {
 			compositeProductModels.add(CompositeProductModel.builder()
 					.id(obj.getId())
 					.name(obj.getName())
+					.propertiesProduct(obj.getPropertiesProduct().toString())
 					.group(obj.getGroup())
 					.build());
 		});
