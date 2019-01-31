@@ -37,6 +37,9 @@ public class CompositeProduct {
 	@Column(name = "expend_product_id")
 	private String productExpend ;
 	
+	@Column(name = "expend_update_id", length=1024)
+	private String expendUpdate ;
+	
 	@Column(name = "product_group")
 	private String group;
 	

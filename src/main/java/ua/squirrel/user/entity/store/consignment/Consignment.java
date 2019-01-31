@@ -24,9 +24,9 @@ public class Consignment {
 	private long id;
 
 	
-	
-	
-	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.LAZY, cascade=CascadeType.ALL)
 	@JoinColumn(name = "storage_id", nullable = false)
-	private Storage storage;
+	private Storage storage ;
+	
+	
 }

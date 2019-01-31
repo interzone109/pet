@@ -11,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -29,13 +30,13 @@ public class Storage {
 	private long id;
 	
 	
-	@OneToOne(mappedBy = "post", cascade = CascadeType.ALL,
+	@OneToOne(mappedBy = "storege", cascade = CascadeType.ALL,
             fetch = FetchType.LAZY, optional = false)
 	private Store store;
 	
 	
-	@ManyToOne(fetch = FetchType.LAZY, cascade=CascadeType.ALL)
-	@JoinColumn(name = "consignment_store_id", nullable = false)
+	@OneToMany(mappedBy = "storage", fetch = FetchType.LAZY 
+			,orphanRemoval = true, cascade = CascadeType.ALL)
 	private List<Consignment> consignment ;
 	
 	@ManyToOne(fetch = FetchType.LAZY, cascade=CascadeType.ALL)
