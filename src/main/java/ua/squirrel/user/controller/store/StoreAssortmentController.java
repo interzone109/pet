@@ -1,6 +1,7 @@
 package ua.squirrel.user.controller.store;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -9,105 +10,119 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javassist.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
-import ua.squirrel.user.entity.product.composite.CompositeProduct;
+import ua.squirrel.user.entity.product.Product;
 import ua.squirrel.user.entity.product.composite.CompositeProductModel;
 import ua.squirrel.user.entity.store.Store;
-import ua.squirrel.user.entity.store.StoreModel;
+import ua.squirrel.user.entity.store.storage.StorageModel;
 import ua.squirrel.user.service.product.CompositeProductServiceImpl;
-import ua.squirrel.user.service.product.ProductServiceImpl;
 import ua.squirrel.user.service.store.StoreServiceImpl;
 import ua.squirrel.web.entity.user.User;
 import ua.squirrel.web.service.registration.user.UserServiceImpl;
 
-/**
- * Контроллер формирует ассортимент на тт
- * 
- */
-
 @RestController
-@RequestMapping("/stores/{store_id}/assortment")
+@RequestMapping("/stores/{id}/storage")
 @Slf4j
 public class StoreAssortmentController {
+
 	@Autowired
 	private StoreServiceImpl storeServiceImpl;
 	@Autowired
 	private UserServiceImpl userServiceImpl;
 	@Autowired
-	private ProductServiceImpl productServiceImpl;
-	@Autowired
-	private CompositeProductServiceImpl compositeProductServiceImpl;
+	private CompositeProductServiceImpl compositeService; 
 
 	/**
-	 * Метод возращяет все тавары на тт
+	 * Метод возращает список всех торговых точек
 	 */
 	@GetMapping
-	public StoreModel showAllStoresAssortment(@PathVariable("store_id") Long id, Authentication authentication)
-			throws NotFoundException {
+	public Map<CompositeProductModel ,Integer> showAllStoreStorage(@PathVariable Long id ,Authentication authentication) throws NotFoundException {
 
-		log.info("LOGGER: return all stores assortment");
+		log.info("LOGGER: return all product and price for current store");
 		User user = userServiceImpl.findOneByLogin("test1").get();
+		return getStorageModel(user, getStore(user, id).getStorage().getProductPrice()); 
 
-		return getStoreModel(id, user);
+		
 	}
-
-	@PostMapping
-	public StoreModel addNewStore(@PathVariable("store_id") Long id,
-			@RequestBody Map<Long,Integer> addCompositeProduct, Authentication authentication)
-			throws NotFoundException {
-		log.info("LOGGER: create new store");
-		User user = userServiceImpl.findOneByLogin("test1").get();
-
-		Store store = getStore(id, user);
-		StringBuilder productPrice = new StringBuilder();
-		
-		
-		
-		
-		store.setProductPrice(productPrice.toString());
-		
-		
-		return getStoreModel(id, user);
-	}
-
+	
 	/**
-	 * Метод формирует модель ТТ и заполняет его композитными продуктами
-	 * (выставлеными на продажу)
+	 * Метод добавляет продукты и цену к текущему магазину 
 	 */
-	private StoreModel getStoreModel(Long id, User user) throws NotFoundException {
-		Store store = getStore(id, user);
+	@PostMapping
+	public Map<CompositeProductModel ,Integer> addProductToStorage(@PathVariable Long id ,Authentication authentication,
+			@RequestBody Map<Long, Integer> newIdsPrice) throws NotFoundException {
 
-		List<Long> ids = new ArrayList<>();
-
-		for (String str : store.getProductPrice().split(":[0-9]+price")) {
-			ids.add(Long.parseLong(str));
+		log.info("LOGGER:add new product and price to current store");
+		User user = userServiceImpl.findOneByLogin("test1").get();
+		
+		StringBuilder strBuilder = new StringBuilder();
+		compositeService.findAllByUserAndIdIn(user, newIdsPrice.keySet()).stream().forEach(product->{
+			strBuilder.append(product.getId()+":"+newIdsPrice.get(product.getId())+"price");
+		});
+		Store store = getStore(user, id);
+		String productPrice = store.getStorage().getProductPrice();
+		
+		if(productPrice == null) {
+			store.getStorage().setProductPrice(strBuilder.toString());
+		}else {
+			store.getStorage().getProductPrice().concat(strBuilder.toString());
 		}
+		storeServiceImpl.save(store);
+		
+		return getStorageModel(user, getStore(user, id).getStorage().getProductPrice()); 
+	}
+	
+	/**
+	 * Метод возращает список всех торговых точек
+	 */
+	@PutMapping
+	public Map<CompositeProductModel ,Integer> updateDeleteStorageProduct(@PathVariable Long id ,Authentication authentication,
+			@RequestBody StorageModel storageModel) throws NotFoundException {
 
-		List<CompositeProductModel> compositeProductModel = new ArrayList<>();
+		log.info("LOGGER: update or delete product-price for current store");
+		User user = userServiceImpl.findOneByLogin("test1").get();
+		
+		
+		return getStorageModel(user, getStore(user, id).getStorage().getProductPrice()); 
+	}
+	
+	
+	
 
-		compositeProductServiceImpl.findAllByUserAndIdIn(user, ids)
-		.stream().forEach(product -> {
-			compositeProductModel.add(CompositeProductModel.builder()
-					.id(product.getId())
-					.name(product.getName())
-					.group(product.getGroup())
-					.propertiesProduct(product.getPropertiesProduct().toString())
-					.build());});
-
-		return StoreModel.builder()
-				.address(store.getAddress())
-				.description(store.getDescription())
-				.compositeProduct(compositeProductModel).build();
+	//метод создает модель продукт-цена для текущего склада
+	private Map<CompositeProductModel ,Integer> getStorageModel(User user, String productPrice) {
+		//получаю ид - цена из текущего склада и записываю их в Мар
+		Map<Long, Integer> idsPrice = new HashMap<>();
+		for(String str: productPrice.split("price")) {
+			String[]args = str.split(":");
+			idsPrice.put(Long.parseLong(args[0]),Integer.parseInt(args[1]));
+		}
+		//создаю Мар по продукту и его цене и по ид создаю модель продукта
+		Map<CompositeProductModel, Integer> productPriceMap = new HashMap<>();
+		compositeService.findAllByUserAndIdIn(user, idsPrice.keySet()).stream().forEach(prod->{
+			productPriceMap.put(CompositeProductModel.builder()
+					.id(prod.getId())
+					.name(prod.getName())
+					.group(prod.getGroup())
+					.propertiesProduct(prod.getPropertiesProduct().toString()).build()
+					, idsPrice.get(prod.getId()));
+			
+		});
+		 
+		return productPriceMap;
 	}
 
-	private Store getStore(Long id, User user) throws NotFoundException {
-		return storeServiceImpl.findOneByIdAndUser(id, user)
+
+	private Store getStore(User user, Long id) throws NotFoundException {
+		return  storeServiceImpl.findOneByIdAndUser(id, user)
 				.orElseThrow(() -> new NotFoundException("Store not found"));
 	}
-
+	
+	
 }

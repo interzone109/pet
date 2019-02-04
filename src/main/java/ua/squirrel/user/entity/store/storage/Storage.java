@@ -1,4 +1,4 @@
-package ua.squirrel.user.entity.storage;
+package ua.squirrel.user.entity.store.storage;
 
 import java.util.List;
 
@@ -10,37 +10,35 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+
 import lombok.Data;
 import ua.squirrel.user.entity.store.Store;
 import ua.squirrel.user.entity.store.consignment.Consignment;
-import ua.squirrel.web.entity.user.User;
 
 @Entity
-@Table(name = "Storags")
+@Table(name = "storages")
 @Data
 public class Storage {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "store_id", nullable = false)
 	private long id;
-	
-	
-	@OneToOne(mappedBy = "storege", cascade = CascadeType.ALL,
-            fetch = FetchType.LAZY, optional = false)
+
+	@Column(name = "comosite_product_price_id", length = 40000)
+	private String productPrice;
+
+	@Column(name = "price_update_id", length = 4000)
+	private String priceUpdate;
+
+	@OneToMany(mappedBy = "storage", fetch = FetchType.LAZY, 
+			orphanRemoval = true, cascade = CascadeType.ALL)
+	private List<Consignment> consignment;
+
+	@OneToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "store_id")
 	private Store store;
-	
-	
-	@OneToMany(mappedBy = "storage", fetch = FetchType.LAZY 
-			,orphanRemoval = true, cascade = CascadeType.ALL)
-	private List<Consignment> consignment ;
-	
-	@ManyToOne(fetch = FetchType.LAZY, cascade=CascadeType.ALL)
-	@JoinColumn(name = "user_id", nullable = false)
-	private User user;
-	
 }

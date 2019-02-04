@@ -20,7 +20,7 @@ import ua.squirrel.web.entity.user.User;
 import ua.squirrel.web.service.registration.user.UserServiceImpl;
 
 @RestController
-@RequestMapping("/partners/composites")
+@RequestMapping("/partners/composites" )
 @Slf4j
 //@Secured("USER")
 public class AllCompositeProductController {

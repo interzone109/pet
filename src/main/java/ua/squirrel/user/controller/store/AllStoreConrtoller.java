@@ -15,6 +15,7 @@ import javassist.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import ua.squirrel.user.entity.store.Store;
 import ua.squirrel.user.entity.store.StoreModel;
+import ua.squirrel.user.entity.store.storage.Storage;
 import ua.squirrel.user.service.store.StoreServiceImpl;
 import ua.squirrel.web.entity.user.User;
 import ua.squirrel.web.service.registration.user.UserServiceImpl;
@@ -29,45 +30,64 @@ public class AllStoreConrtoller {
 	@Autowired
 	private UserServiceImpl userServiceImpl;
 
+
 	/**
 	 * Метод возращает список всех торговых точек
-	 * */
+	 */
 	@GetMapping
 	public List<StoreModel> showAllStores(Authentication authentication) throws NotFoundException {
 
 		log.info("LOGGER: return all stores current user");
 		User userCurrentSesion = userServiceImpl.findOneByLogin("test1").get();
 		return getAllStore(userCurrentSesion);
+		
 	}
+
 	/**
 	 * Метод добавляет новую торговую точку
-	 * */
+	 */
 	@PostMapping
-	public List<StoreModel> addNewStore(@RequestBody StoreModel storeModel, Authentication authentication)
+	public StoreModel addNewStore(@RequestBody StoreModel storeModel, Authentication authentication)
 			throws NotFoundException {
-		log.info("LOGGER: create new store");
-		User userCurrentSesion = userServiceImpl.findOneByLogin("test1").get();
+		log.info("LOGGER: create new store with composite product");
+		User user = userServiceImpl.findOneByLogin("test1").get();
 
+		//создаем новый склад и прязываем его к магазину
+		Storage storage = new Storage();
+		storage.setProductPrice(new String());
+		//storageServiceImpl.save(storage);
+		
 		Store newStore = new Store();
 		newStore.setAddress(storeModel.getAddress());
 		newStore.setDescription(storeModel.getDescription());
-		newStore.setUser(userCurrentSesion);
+		newStore.setUser(user);
+		newStore.setStorage(storage);
 		storeServiceImpl.save(newStore);
 		
-		return getAllStore(userCurrentSesion);
+		storeModel.setId(newStore.getId());
+		
+		return storeModel;
 	}
-
-	
 
 	private List<StoreModel> getAllStore(User user) {
 		List<StoreModel> storeModels = new ArrayList<>();
 		storeServiceImpl.findAllByUser(user).stream().forEach(store -> {
-			storeModels.add(StoreModel.builder()
-					.id(store.getId())
+			
+			storeModels.add(StoreModel.builder().id(store.getId())
 					.address(store.getAddress())
 					.description(store.getDescription()).build());
 		});
 		return storeModels;
 	}
+	
 
+	/*
+	 * test json Post
+	  
+{
+   "address": "test 1",
+   "description": "test 1"
+}
+
+	 */
 }

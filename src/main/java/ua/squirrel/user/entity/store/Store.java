@@ -16,7 +16,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import lombok.Data;
 import ua.squirrel.user.entity.employee.Employee;
-import ua.squirrel.user.entity.storage.Storage;
+import ua.squirrel.user.entity.store.storage.Storage;
 import ua.squirrel.web.entity.user.User;
 
 @Entity
@@ -34,22 +34,15 @@ public class Store {
 	@Column(name = "description")
 	private String description;
 	
-	@Column(name = "product_composite_price")
-	private String productPrice;
-
-	
-	@OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "storege_id")
-	private Storage storege ;
+	@OneToOne(mappedBy = "store", cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY, optional = false)
+	private Storage storage ;
 	
 	@OneToMany( fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<Employee> employee;
-	
 	
 	@ManyToOne(fetch = FetchType.LAZY, cascade=CascadeType.ALL)
 	@JoinColumn(name = "store_user_id", nullable = false)
 	private User user;
 	
-	
-
 }

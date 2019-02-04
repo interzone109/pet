@@ -12,7 +12,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import lombok.Data;
-import ua.squirrel.user.entity.storage.Storage;
+import ua.squirrel.user.entity.store.storage.Storage;
 
 @Data
 @Entity

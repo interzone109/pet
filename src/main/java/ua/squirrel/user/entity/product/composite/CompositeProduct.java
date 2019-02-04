@@ -34,7 +34,7 @@ public class CompositeProduct {
 	@Column(name = "name", unique = true)
 	private String name;
 	
-	@Column(name = "expend_product_id")
+	@Column(name = "expend_product_id", length=512)
 	private String productExpend ;
 	
 	@Column(name = "expend_update_id", length=1024)
