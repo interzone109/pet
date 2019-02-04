@@ -55,7 +55,6 @@ public class AllStoreConrtoller {
 		//создаем новый склад и прязываем его к магазину
 		Storage storage = new Storage();
 		storage.setProductPrice(new String());
-		//storageServiceImpl.save(storage);
 		
 		Store newStore = new Store();
 		newStore.setAddress(storeModel.getAddress());

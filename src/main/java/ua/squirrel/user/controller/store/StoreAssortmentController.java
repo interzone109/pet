@@ -1,6 +1,5 @@
 package ua.squirrel.user.controller.store;
 
-
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -20,7 +19,7 @@ import javassist.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import ua.squirrel.user.entity.product.composite.CompositeProductModel;
 import ua.squirrel.user.entity.store.Store;
-import ua.squirrel.user.entity.store.storage.StorageModel;
+import ua.squirrel.user.entity.store.storage.UpdateDeleteStorageModel;
 import ua.squirrel.user.service.product.CompositeProductServiceImpl;
 import ua.squirrel.user.service.store.StoreServiceImpl;
 import ua.squirrel.web.entity.user.User;
@@ -38,17 +37,17 @@ public class StoreAssortmentController {
 	@Autowired
 	private CompositeProductServiceImpl compositeService;
 
+
 	/**
 	 * Метод возращает список всех продуктов на тт
 	 */
 	@GetMapping
-	public Map<CompositeProductModel, Integer> showAllStoreStorage
+	public  Map<CompositeProductModel, Integer> showAllStoreStorage
 	(@PathVariable Long id, Authentication authentication)throws NotFoundException {
 
 		log.info("LOGGER: return all product and price for current store");
 		User user = userServiceImpl.findOneByLogin("test1").get();
 		return getStorageModel(user, getStore(user, id).getStorage().getProductPrice());
-
 	}
 
 	/**
@@ -82,8 +81,8 @@ public class StoreAssortmentController {
 	 * Метод возращает список всех торговых точек
 	 */
 	@PutMapping
-	public Map<CompositeProductModel, Integer> updateDeleteStorageProduct(@PathVariable Long id,
-			Authentication authentication, @RequestBody StorageModel storageModel) throws NotFoundException {
+	public  Map<CompositeProductModel, Integer> updateDeleteStorageProduct(@PathVariable Long id,
+			Authentication authentication, @RequestBody UpdateDeleteStorageModel storageModel) throws NotFoundException {
 
 		log.info("LOGGER: update or delete product-price for current store");
 		User user = userServiceImpl.findOneByLogin("test1").get();
@@ -91,13 +90,13 @@ public class StoreAssortmentController {
 		if (storageModel.getIdsPrice() != null) {
 			updateStorage(user, id, storageModel.getIdsPrice());
 		}
-
 		if (storageModel.getRemoveProduct() != null) {
 			removeProduct(user, id, storageModel.getRemoveProduct());
 		}
 
 		return getStorageModel(user, getStore(user, id).getStorage().getProductPrice());
 	}
+	
 	/**
 	 * метод удаляет указаные продукты
 	 * 
@@ -123,17 +122,14 @@ public class StoreAssortmentController {
 				currentIdsPrice.forEach((key, value) -> {
 					newPrice.append(key + ":" + value + "price");
 				});
+				store.getStorage().setProductPrice(newPrice.toString());
 				
-				String oldDelete = store.getStorage().getProductDelete();
-				if (oldDelete != null) {
-					oldDelete.concat(remove.toString());
-				} else {
-					oldDelete = remove.toString();
+				if(store.getStorage().getProductDelete() != null) {
+					remove.append(store.getStorage().getProductDelete());
 				}
-				store.getStorage().setPriceUpdate(oldDelete);
+				store.getStorage().setProductDelete(remove.toString());
 
-				storeServiceImpl.save(store);
-				
+				storeServiceImpl.save(store);		
 	}
 
 	/**
@@ -157,23 +153,18 @@ public class StoreAssortmentController {
 					prod.getId() + ":" + currentIdsPrice.get(prod.getId()) + "price" + curentDate.getTime() + "date");
 			currentIdsPrice.put(prod.getId(), idsPrice.get(prod.getId()));
 		});
-
+		
 		StringBuilder newPrice = new StringBuilder();
 		currentIdsPrice.forEach((key, value) -> {
 			newPrice.append(key + ":" + value + "price");
 		});
 		store.getStorage().setProductPrice(newPrice.toString());
-
-		String priceUpdate = store.getStorage().getPriceUpdate();
-		if (priceUpdate != null) {
-			priceUpdate.concat(oldPrice.toString());
-		} else {
-			priceUpdate = oldPrice.toString();
+		
+		if(store.getStorage().getPriceUpdate() != null) {
+			oldPrice.append(store.getStorage().getPriceUpdate());
 		}
-		store.getStorage().setPriceUpdate(priceUpdate);
-
+		store.getStorage().setPriceUpdate(oldPrice.toString());
 		storeServiceImpl.save(store);
-
 	}
 
 	/**
@@ -204,4 +195,19 @@ public class StoreAssortmentController {
 				.orElseThrow(() -> new NotFoundException("Store not found"));
 	}
 
+	/*test POST
+	 {
+   "1": 2
+	}
+
+test PUT
+	{
+   "idsPrice": {
+      "1": 1
+   },
+   "removeProduct": [
+      1
+   ]
+}
+	 */
 }

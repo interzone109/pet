@@ -17,7 +17,5 @@ public class StorageModel {
 
 	private List<ConsignmentModel> consignment;
 	
-	private Map<Long, Integer> idsPrice ;
 	
-	private List<Long> removeProduct ;
 }
