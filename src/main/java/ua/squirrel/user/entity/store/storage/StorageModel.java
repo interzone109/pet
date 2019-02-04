@@ -12,13 +12,12 @@ import ua.squirrel.user.entity.store.consignment.ConsignmentModel;
 @Builder
 @Data
 public class StorageModel {
-	private long id;
-
-	private Map<Long, Integer> idsPrice ;
 	
 	private Map<CompositeProductModel, Integer> productPrice ;
 
 	private List<ConsignmentModel> consignment;
+	
+	private Map<Long, Integer> idsPrice ;
 	
 	private List<Long> removeProduct ;
 }
