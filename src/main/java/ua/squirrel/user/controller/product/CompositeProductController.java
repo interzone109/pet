@@ -49,7 +49,7 @@ public class CompositeProductController {
 			throws NotFoundException {
 		log.info("LOGGER: return curent composite product");
 		User userCurrentSesion = userServiceImpl.findOneByLogin("test1").get();
-		// вызывается приветный метод возращающий модель коспозитного продукта
+		// вызывается привaтный метод возращающий модель коспозитного продукта
 		return getCompositeProductModel(id, userCurrentSesion);
 
 	}
@@ -193,9 +193,13 @@ public class CompositeProductController {
 		Map<ProductModel, Integer> composites = new HashMap<>();
 
 		productServiceImpl.findAllById(idsExpends.keySet()).stream().forEach(product -> {
-			ProductModel prodModel = ProductModel.builder().id(product.getId()).name(product.getName())
-					.description(product.getDescription()).group(product.getGroup())
-					.measureProduct(product.getMeasureProduct()).propertiesProduct(product.getPropertiesProduct())
+			ProductModel prodModel = ProductModel.builder()
+					.id(product.getId())
+					.name(product.getName())
+					.description(product.getDescription())
+					.group(product.getGroup())
+					.measureProduct(product.getMeasureProduct().toString())
+					.propertiesProduct(product.getPropertiesProduct().toString())
 					.build();
 			composites.put(prodModel, idsExpends.get(product.getId()));
 

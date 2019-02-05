@@ -16,6 +16,5 @@ public class StorageModel {
 	private Map<CompositeProductModel, Integer> productPrice ;
 
 	private List<ConsignmentModel> consignment;
-	
-	
+
 }

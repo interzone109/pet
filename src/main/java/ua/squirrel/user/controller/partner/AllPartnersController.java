@@ -27,6 +27,32 @@ public class AllPartnersController {
 	@Autowired
 	private PartnerServiceImpl partnerServiceImpl;
 	
+	/**
+	 * метод получает зарегисрированого пользователя 
+	 * берет у него список партнеров и перезаписывает их
+	 * в List<PartnerModel>, после чего возращает данные
+	 * 
+	 * */
+	@GetMapping
+	public List<PartnerModel> getAllPartner(Authentication authentication) {
+		log.info("LOGGER: show all partners ");
+		
+		User user = userServiceImpl.findOneByLogin("test1").get();
+		
+		List<PartnerModel> partnersModel = new ArrayList<>();
+		
+		partnerServiceImpl.findAllByUser(user).stream().forEach(obj->{
+			partnersModel.add(PartnerModel.builder()
+					.id(obj.getId())
+					.company(obj.getCompany())
+					.partnerMail(obj.getPartnerMail())
+					.phonNumber(obj.getPhonNumber()).build());
+		});
+
+		return partnersModel;
+	}
+	
+	
 	
 	/**
 	 * метод получает список новых партнеров List <PartnerModel> newPartners,
@@ -54,30 +80,7 @@ public class AllPartnersController {
 		}
 	
 	
-	/**
-	 * метод получает зарегисрированого пользователя 
-	 * берет у него список партнеров и перезаписывает их
-	 * в List<PartnerModel>, после чего возращает данные
-	 * 
-	 * */
-	@GetMapping
-	public List<PartnerModel> getAllPartner(Authentication authentication) {
-		log.info("LOGGER: show all partners ");
-		
-		User user = userServiceImpl.findOneByLogin("test1").get();
-		
-		List<PartnerModel> partnersModel = new ArrayList<>();
-		
-		partnerServiceImpl.findAllByUser(user).stream().forEach(obj->{
-			partnersModel.add(PartnerModel.builder()
-					.id(obj.getId())
-					.company(obj.getCompany())
-					.partnerMail(obj.getPartnerMail())
-					.phonNumber(obj.getPhonNumber()).build());
-		});
-
-		return partnersModel;
-	}
+	
 	/*тестовый джесон
 [
    {

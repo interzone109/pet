@@ -11,7 +11,7 @@ public class ProductModel {
 	private String name;
 	private String description;
 	private String group;
-	private PropertiesProduct propertiesProduct;
-	private MeasureProduct measureProduct;
+	private String propertiesProduct;
+	private String measureProduct;
 
 }

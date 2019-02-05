@@ -83,15 +83,15 @@ public class PartnerController {
 		Partner partner = getCurrentPartner(id, user);
 
 		List<ProductModel> productsModel = new ArrayList<>();
-
+		
 		partner.getProducts().stream().forEach(obj -> {
 			productsModel.add(ProductModel.builder()
 					.id(obj.getId())
 					.name(obj.getName())
 					.description(obj.getDescription())
 					.group(obj.getGroup())
-					.propertiesProduct(obj.getPropertiesProduct())
-					.measureProduct(obj.getMeasureProduct()).build());
+					.propertiesProduct(obj.getPropertiesProduct().getName())
+					.measureProduct(obj.getMeasureProduct().getMeasure()).build());
 		});
 
 		return PartnerModel.builder()
@@ -104,12 +104,10 @@ public class PartnerController {
 	}
 
 	/*
-	  тестовый джесон 
-	  
-	  { "company": "куриные братишки eeee",
-	   "phonNumber":"8-800-555-444",
-	    "partnerMail": "curina@potatomail.com" 
-	   }
+	 * тестовый джесон
+	 * 
+	 * { "company": "куриные братишки eeee", "phonNumber":"8-800-555-444",
+	 * "partnerMail": "curina@potatomail.com" }
 	 */
 
 }

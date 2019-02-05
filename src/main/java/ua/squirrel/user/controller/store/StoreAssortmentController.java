@@ -1,7 +1,5 @@
 package ua.squirrel.user.controller.store;
 
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -20,6 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 import ua.squirrel.user.entity.product.composite.CompositeProductModel;
 import ua.squirrel.user.entity.store.Store;
 import ua.squirrel.user.entity.store.storage.UpdateDeleteStorageModel;
+import ua.squirrel.user.entity.store.storage.util.StorageUtils;
 import ua.squirrel.user.service.product.CompositeProductServiceImpl;
 import ua.squirrel.user.service.store.StoreServiceImpl;
 import ua.squirrel.web.entity.user.User;
@@ -36,18 +35,19 @@ public class StoreAssortmentController {
 	private UserServiceImpl userServiceImpl;
 	@Autowired
 	private CompositeProductServiceImpl compositeService;
-
+	@Autowired
+	private StorageUtils storageUtils;
 
 	/**
 	 * Метод возращает список всех продуктов на тт
 	 */
 	@GetMapping
-	public  Map<CompositeProductModel, Integer> showAllStoreStorage
-	(@PathVariable Long id, Authentication authentication)throws NotFoundException {
+	public Map<CompositeProductModel, Integer> showAllStoreStorage(@PathVariable Long id, Authentication authentication)
+			throws NotFoundException {
 
 		log.info("LOGGER: return all product and price for current store");
 		User user = userServiceImpl.findOneByLogin("test1").get();
-		return getStorageModel(user, getStore(user, id).getStorage().getProductPrice());
+		return getStorageProcut(user, getStore(user, id));
 	}
 
 	/**
@@ -56,7 +56,6 @@ public class StoreAssortmentController {
 	@PostMapping
 	public Map<CompositeProductModel, Integer> addProductToStorage(@PathVariable Long id, Authentication authentication,
 			@RequestBody Map<Long, Integer> newIdsPrice) throws NotFoundException {
-
 		log.info("LOGGER:add new product and price to current store");
 		User user = userServiceImpl.findOneByLogin("test1").get();
 
@@ -74,15 +73,16 @@ public class StoreAssortmentController {
 		}
 		storeServiceImpl.save(store);
 
-		return getStorageModel(user, getStore(user, id).getStorage().getProductPrice());
+		return getStorageProcut(user, getStore(user, id));
 	}
 
 	/**
 	 * Метод возращает список всех торговых точек
 	 */
 	@PutMapping
-	public  Map<CompositeProductModel, Integer> updateDeleteStorageProduct(@PathVariable Long id,
-			Authentication authentication, @RequestBody UpdateDeleteStorageModel storageModel) throws NotFoundException {
+	public Map<CompositeProductModel, Integer> updateDeleteStorageProduct(@PathVariable Long id,
+			Authentication authentication, @RequestBody UpdateDeleteStorageModel storageModel)
+			throws NotFoundException {
 
 		log.info("LOGGER: update or delete product-price for current store");
 		User user = userServiceImpl.findOneByLogin("test1").get();
@@ -94,100 +94,41 @@ public class StoreAssortmentController {
 			removeProduct(user, id, storageModel.getRemoveProduct());
 		}
 
-		return getStorageModel(user, getStore(user, id).getStorage().getProductPrice());
+		return getStorageProcut(user, getStore(user, id));
 	}
-	
+
 	/**
 	 * метод удаляет указаные продукты
 	 * 
 	 */
 	private void removeProduct(User user, Long id, List<Long> removeProduct) throws NotFoundException {
 		Store store = getStore(user, id);
-
-		Map<Long, Integer> currentIdsPrice = new HashMap<>();
-		for (String str : store.getStorage().getProductPrice().split("price")) {
-			String[] args = str.split(":");
-			currentIdsPrice.put(Long.parseLong(args[0]), Integer.parseInt(args[1]));
-		}
-		
-		// удаляем записи
-				StringBuilder remove = new StringBuilder();
-				Date curentDate = new Date();
-				compositeService.findAllByUserAndIdIn(user, removeProduct).stream().forEach(prod -> {
-					remove.append(prod.getId() + ":" + currentIdsPrice.get(prod.getId()) + "price" + curentDate.getTime() + "date");
-					currentIdsPrice.remove(prod.getId());
-				});
-				
-				StringBuilder newPrice = new StringBuilder();
-				currentIdsPrice.forEach((key, value) -> {
-					newPrice.append(key + ":" + value + "price");
-				});
-				store.getStorage().setProductPrice(newPrice.toString());
-				
-				if(store.getStorage().getProductDelete() != null) {
-					remove.append(store.getStorage().getProductDelete());
-				}
-				store.getStorage().setProductDelete(remove.toString());
-
-				storeServiceImpl.save(store);		
+		storeServiceImpl.save(storageUtils.deleteIdsPrice(store, removeProduct,
+				compositeService.findAllByUserAndIdIn(user, removeProduct)));
 	}
 
 	/**
-	 * метод обновляем цену у указаных продуктов
-	 * 
-	 * @throws NotFoundException
+	 * метод обновляет цену у указаных продуктов
 	 */
-	private void updateStorage(User user, Long id, Map<Long, Integer> idsPrice) throws NotFoundException {
+	private void updateStorage(User user, Long id, Map<Long, Integer> newIdsPrice) throws NotFoundException {
 		Store store = getStore(user, id);
+		// вызываем метод по обновлению цены на композитный продукт в магазине
+		// метод обновляет цену на новую, старую цену и дату обновления сохраняет
+		// результат сохраняем в бд
+		storeServiceImpl.save(storageUtils.updateIdsPrice(store, newIdsPrice,
+				compositeService.findAllByUserAndIdIn(user, newIdsPrice.keySet())));
 
-		Map<Long, Integer> currentIdsPrice = new HashMap<>();
-		for (String str : store.getStorage().getProductPrice().split("price")) {
-			String[] args = str.split(":");
-			currentIdsPrice.put(Long.parseLong(args[0]), Integer.parseInt(args[1]));
-		}
-		// обновляем записи
-		StringBuilder oldPrice = new StringBuilder();
-		Date curentDate = new Date();
-		compositeService.findAllByUserAndIdIn(user, idsPrice.keySet()).stream().forEach(prod -> {
-			oldPrice.append(
-					prod.getId() + ":" + currentIdsPrice.get(prod.getId()) + "price" + curentDate.getTime() + "date");
-			currentIdsPrice.put(prod.getId(), idsPrice.get(prod.getId()));
-		});
-		
-		StringBuilder newPrice = new StringBuilder();
-		currentIdsPrice.forEach((key, value) -> {
-			newPrice.append(key + ":" + value + "price");
-		});
-		store.getStorage().setProductPrice(newPrice.toString());
-		
-		if(store.getStorage().getPriceUpdate() != null) {
-			oldPrice.append(store.getStorage().getPriceUpdate());
-		}
-		store.getStorage().setPriceUpdate(oldPrice.toString());
-		storeServiceImpl.save(store);
 	}
 
 	/**
 	 * метод создает модель продукт-цена для текущего склада
 	 */
-	private Map<CompositeProductModel, Integer> getStorageModel(User user, String productPrice) {
+	private Map<CompositeProductModel, Integer> getStorageProcut(User user, Store store) {
 		// получаю ид - цена из текущего склада и записываю их в Мар
-		Map<Long, Integer> idsPrice = new HashMap<>();
-		for (String str : productPrice.split("price")) {
-			String[] args = str.split(":");
-			idsPrice.put(Long.parseLong(args[0]), Integer.parseInt(args[1]));
-		}
+		Map<Long, Integer> idsPrice = storageUtils.getIdPrice(store.getStorage().getProductPrice());
 		// создаю Мар по продукту и его цене и по ид создаю модель продукта
-		Map<CompositeProductModel, Integer> productPriceMap = new HashMap<>();
-		compositeService.findAllByUserAndIdIn(user, idsPrice.keySet()).stream().forEach(prod -> {
-			productPriceMap.put(
-					CompositeProductModel.builder().id(prod.getId()).name(prod.getName()).group(prod.getGroup())
-							.propertiesProduct(prod.getPropertiesProduct().toString()).build(),
-					idsPrice.get(prod.getId()));
-
-		});
-
-		return productPriceMap;
+		return storageUtils.getCompositeProductModel(
+				compositeService.findAllByUserAndIdIn(user, idsPrice.keySet()), store);
 	}
 
 	private Store getStore(User user, Long id) throws NotFoundException {
@@ -195,19 +136,9 @@ public class StoreAssortmentController {
 				.orElseThrow(() -> new NotFoundException("Store not found"));
 	}
 
-	/*test POST
-	 {
-   "1": 2
-	}
-
-test PUT
-	{
-   "idsPrice": {
-      "1": 1
-   },
-   "removeProduct": [
-      1
-   ]
-}
+	/*
+	 * test POST { "1": 2 }
+	 * 
+	 * test PUT { "idsPrice": { "1": 1 }, "removeProduct": [ 1 ] }
 	 */
 }

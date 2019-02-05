@@ -33,6 +33,7 @@ public class Storage {
 
 	@Column(name = "price_update_id", length = 4000)
 	private String priceUpdate;
+	
 	@Column(name = "product_delete_id", length = 4000)
 	private String productDelete;
 

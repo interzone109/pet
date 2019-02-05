@@ -21,4 +21,5 @@ public class CompositeProductModel {
 	private String group;
 	
 	private String propertiesProduct;
+	
 }

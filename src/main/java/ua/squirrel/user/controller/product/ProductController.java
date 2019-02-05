@@ -60,9 +60,9 @@ public class ProductController {
 			addProduct.setDescription(obj.getDescription());
 			addProduct.setName(obj.getName());
 			addProduct.setPropertiesProduct( 
-					propertiesProductServiceImpl.findOneByName(obj.getPropertiesProduct().getName()));
+					propertiesProductServiceImpl.findOneByName(obj.getPropertiesProduct()));
 			addProduct.setMeasureProduct(
-					measureProductServiceImpl.findOneByMeasure(obj.getMeasureProduct().getMeasure()));
+					measureProductServiceImpl.findOneByMeasure(obj.getMeasureProduct()));
 			addProduct.setGroup(obj.getGroup());
 			addProduct.setPartner(partner);
 
@@ -95,9 +95,9 @@ public class ProductController {
 		updateProduct.setName(productModel.getName());
 		updateProduct.setDescription(productModel.getDescription());
 		updateProduct.setPropertiesProduct( 	
-				propertiesProductServiceImpl.findOneByName(productModel.getPropertiesProduct().getName()));
+				propertiesProductServiceImpl.findOneByName(productModel.getPropertiesProduct()));
 		updateProduct.setMeasureProduct( 
-				measureProductServiceImpl.findOneByMeasure(productModel.getMeasureProduct().getMeasure()));
+				measureProductServiceImpl.findOneByMeasure(productModel.getMeasureProduct()));
 		updateProduct.setGroup(productModel.getGroup());
 		updateProduct.setPartner(partner);
 		productServiceImpl.save(updateProduct);
