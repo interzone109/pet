@@ -15,9 +15,9 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-
 import lombok.Data;
 import ua.squirrel.user.entity.store.Store;
+import ua.squirrel.web.entity.user.User;
 
 @Entity
 @Table(name = "spends")
@@ -27,24 +27,28 @@ public class Spend {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "store_id", nullable = false)
 	private long id;
-	
+
 	@Column(name = "name_id", nullable = false)
-	private String name ;
-	
-	@Column(name = "cost_id", nullable = false)
-	private Integer cost ;
-	
+	private String name;
+
+	@Column(name = "cost", nullable = false)
+	private Integer cost;
+
 	@Column(name = "is_regular_spend", nullable = false)
-	private Boolean isRegular ;
-	
+	private Boolean isRegular;
+
+	@Column(name = "interval", nullable = false)
+	private Integer interval;
+
 	@Temporal(TemporalType.TIMESTAMP)
-	private Date startDate;
-	
-	@Column(name = "status_id")
-	private Integer status ;
-	
-	@ManyToOne(fetch = FetchType.LAZY, cascade=CascadeType.ALL)
-	@JoinColumn(name = "store_user_id", nullable = false)
+	private Date date;
+
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinColumn(name = "store_id", nullable = true)
 	private Store store;
-	
+
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinColumn(name = "user_id", nullable = false)
+	private User user;
+
 }
