@@ -1,9 +1,9 @@
 package ua.squirrel.z.util;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -12,6 +12,7 @@ import ua.squirrel.user.entity.partner.Partner;
 import ua.squirrel.user.entity.product.Product;
 import ua.squirrel.user.entity.product.composite.CompositeProduct;
 import ua.squirrel.user.entity.store.Store;
+import ua.squirrel.user.entity.store.spending.Spend;
 import ua.squirrel.user.entity.store.storage.Storage;
 import ua.squirrel.user.service.partner.PartnerServiceImpl;
 import ua.squirrel.user.service.product.CompositeProductServiceImpl;
@@ -19,6 +20,7 @@ import ua.squirrel.user.service.product.ProductServiceImpl;
 import ua.squirrel.user.service.product.properties.MeasureProductServiceImpl;
 import ua.squirrel.user.service.product.properties.PropertiesProductServiceImpl;
 import ua.squirrel.user.service.store.StoreServiceImpl;
+import ua.squirrel.user.service.store.spending.SpendServiceImpl;
 import ua.squirrel.user.service.store.storage.StorageServiceImpl;
 import ua.squirrel.web.entity.user.User;
 
@@ -42,6 +44,50 @@ public class FillDataUtil {
 	private ProductServiceImpl productServiceImpl ;
 	@Autowired
 	private CompositeProductServiceImpl compositeProductServiceImpl;
+	@Autowired
+	private SpendServiceImpl spendServiceImpl;
+	
+	
+	@SuppressWarnings("deprecation")
+	public void setSpend(User user) {
+		Spend spend = new Spend();
+		spend.setName("аренда за магазин 1");
+		spend.setDescription("аренда");
+		spend.setCost(10000);
+		spend.setInterval(15);
+		spend.setIsRegular(true);
+		spend.setUser(user);
+		spend.setStore(storeServiceImpl.findOneByIdAndUser(1l, user).get());
+		Calendar date = new GregorianCalendar(2019, 2, 2);
+		
+		spend.setDate(date);
+		spendServiceImpl.save(spend);
+		
+		spend = new Spend();
+		spend.setName("аренда за оборудования");
+		spend.setDescription("печь, каса, столы");
+		spend.setCost(20000);
+		spend.setInterval(15);
+		spend.setIsRegular(true);
+		spend.setUser(user);
+		spend.setStore(storeServiceImpl.findOneByIdAndUser(1l, user).get());
+		date = new GregorianCalendar(2019, 3, 20);
+		spend.setDate(date);
+		spendServiceImpl.save(spend);
+		
+		spend = new Spend();
+		spend.setName("ремонт");
+		spend.setDescription("кухня и проч");
+		spend.setCost(100000);
+		spend.setInterval(15);
+		spend.setIsRegular(false);
+		spend.setUser(user);
+		spend.setStore(storeServiceImpl.findOneByIdAndUser(1l, user).get());
+		 date = new GregorianCalendar(2019, 5,5);
+		spend.setDate(date);
+		spendServiceImpl.save(spend);
+	}
+	
 	
 	
 	/**

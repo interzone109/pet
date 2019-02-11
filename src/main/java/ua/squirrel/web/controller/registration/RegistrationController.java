@@ -68,6 +68,8 @@ public class RegistrationController {
 		
 		fillDataUtil.getStore(user1);
 		
+		fillDataUtil.setSpend(user1);
+		
 		return UserModel.builder()
 				.login(user1.getLogin())
 				.mail(user1.getMail())

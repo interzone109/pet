@@ -1,6 +1,6 @@
 package ua.squirrel.user.service.store.spending;
 
-import java.util.Date;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,7 +36,7 @@ public class SpendServiceImpl implements SpendService {
 		return spendRepository.findOneByUserAndIdOrderByDateAsc(user, id);
 	}
 
-	public List<Spend> findByUserAndDateBetween(User user, Date from, Date to){
+	public List<Spend> findByUserAndDateBetween(User user, Calendar from, Calendar to){
 		return spendRepository.findByUserAndDateBetween(user, from, to);
 	}
 	

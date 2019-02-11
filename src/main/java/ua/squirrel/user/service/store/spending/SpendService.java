@@ -1,6 +1,6 @@
 package ua.squirrel.user.service.store.spending;
 
-import java.util.Date;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,6 +18,6 @@ public interface SpendService {
 
 	Spend save(Spend spend);
 	
-	List<Spend> findByUserAndDateBetween(User user, Date from, Date to);
+	List<Spend> findByUserAndDateBetween(User user, Calendar from, Calendar to);
 }
 

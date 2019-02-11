@@ -1,6 +1,6 @@
 package ua.squirrel.user.entity.store.spending;
 
-import java.util.Date;
+import java.util.Calendar;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -25,12 +25,15 @@ import ua.squirrel.web.entity.user.User;
 public class Spend {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "store_id", nullable = false)
+	@Column(name = "spend_id", nullable = false)
 	private long id;
 
-	@Column(name = "name_id", nullable = false)
+	@Column(name = "name", nullable = false)
 	private String name;
 
+	@Column(name = "description")
+	private String description;
+	
 	@Column(name = "cost", nullable = false)
 	private Integer cost;
 
@@ -41,7 +44,7 @@ public class Spend {
 	private Integer interval;
 
 	@Temporal(TemporalType.TIMESTAMP)
-	private Date date;
+	private Calendar date;
 
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "store_id", nullable = true)

@@ -1,7 +1,7 @@
 package ua.squirrel.user.entity.store.spending;
 
 
-import java.util.Date;
+import java.util.Calendar;
 
 import lombok.Builder;
 import lombok.Data;
@@ -14,13 +14,15 @@ public class SpendModel {
 	
 	private String name ;
 	
+	private String description;
+	
 	private int cost ;
 	
 	private int interval ;
 	
 	private boolean isRegular ;
 
-	private Date date;
+	private Calendar date;
 	
 	private long storId;
 
