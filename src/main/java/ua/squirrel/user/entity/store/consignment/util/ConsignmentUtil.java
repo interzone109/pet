@@ -6,7 +6,7 @@ import ua.squirrel.user.entity.store.storage.Storage;
 
 @Component
 public class ConsignmentUtil {
-	public void createStartConsignment(Storage storage) {
+	public void updateConsignment(Storage storage) {
 		
 	}
 }

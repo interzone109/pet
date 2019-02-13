@@ -17,6 +17,7 @@ import javassist.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import ua.squirrel.user.entity.product.composite.CompositeProductModel;
 import ua.squirrel.user.entity.store.Store;
+import ua.squirrel.user.entity.store.consignment.util.ConsignmentUtil;
 import ua.squirrel.user.entity.store.storage.UpdateDeleteStorageModel;
 import ua.squirrel.user.entity.store.storage.util.StorageUtils;
 import ua.squirrel.user.service.product.CompositeProductServiceImpl;
@@ -37,6 +38,8 @@ public class StoreAssortmentController {
 	private CompositeProductServiceImpl compositeService;
 	@Autowired
 	private StorageUtils storageUtils;
+	@Autowired
+	private ConsignmentUtil consignmentUtil;
 
 	/**
 	 * Метод возращает список всех продуктов на тт
@@ -63,14 +66,14 @@ public class StoreAssortmentController {
 		compositeService.findAllByUserAndIdIn(user, newIdsPrice.keySet()).stream().forEach(product -> {
 			strBuilder.append(product.getId() + ":" + newIdsPrice.get(product.getId()) + "price");
 		});
-		
+
 		Store store = getStore(user, id);
 		String productPrice = store.getStorage().getProductPrice();
-		
+
 		if (productPrice != null) {
 			strBuilder.append(productPrice);
 		}
-		
+
 		store.getStorage().setProductPrice(strBuilder.toString());
 		storeServiceImpl.save(store);
 
@@ -94,8 +97,10 @@ public class StoreAssortmentController {
 		if (storageModel.getRemoveProduct() != null) {
 			removeProduct(user, id, storageModel.getRemoveProduct());
 		}
+		Store store = getStore(user, id);
 
-		return getStorageProcut(user, getStore(user, id));
+		consignmentUtil.updateConsignment(store.getStorage());
+		return getStorageProcut(user, store);
 	}
 
 	/**
@@ -128,8 +133,8 @@ public class StoreAssortmentController {
 		// получаю ид - цена из текущего склада и записываю их в Мар
 		Map<Long, Integer> idsPrice = storageUtils.getIdPrice(store.getStorage().getProductPrice());
 		// создаю Мар по продукту и его цене и по ид создаю модель продукта
-		return storageUtils.getCompositeProductModel(
-				compositeService.findAllByUserAndIdIn(user, idsPrice.keySet()), store);
+		return storageUtils.getCompositeProductModel(compositeService.findAllByUserAndIdIn(user, idsPrice.keySet()),
+				store);
 	}
 
 	private Store getStore(User user, Long id) throws NotFoundException {
