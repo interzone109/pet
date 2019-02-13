@@ -75,13 +75,17 @@ public class StoreAssortmentController {
 		}
 
 		store.getStorage().setProductPrice(strBuilder.toString());
+		
+		consignmentUtil.updateConsignment(store);// обновляем данные по партии
+		
 		storeServiceImpl.save(store);
+		
 
 		return getStorageProcut(user, getStore(user, id));
 	}
 
 	/**
-	 * Метод возращает список всех торговых точек
+	 * Метод обновляет или удаляет товары с ТТ
 	 */
 	@PutMapping
 	public Map<CompositeProductModel, Integer> updateDeleteStorageProduct(@PathVariable Long id,
@@ -97,10 +101,9 @@ public class StoreAssortmentController {
 		if (storageModel.getRemoveProduct() != null) {
 			removeProduct(user, id, storageModel.getRemoveProduct());
 		}
-		Store store = getStore(user, id);
+		
 
-		consignmentUtil.updateConsignment(store.getStorage());
-		return getStorageProcut(user, store);
+		return getStorageProcut(user, getStore(user, id));
 	}
 
 	/**
