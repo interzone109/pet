@@ -63,14 +63,15 @@ public class StoreAssortmentController {
 		compositeService.findAllByUserAndIdIn(user, newIdsPrice.keySet()).stream().forEach(product -> {
 			strBuilder.append(product.getId() + ":" + newIdsPrice.get(product.getId()) + "price");
 		});
+		
 		Store store = getStore(user, id);
 		String productPrice = store.getStorage().getProductPrice();
-
-		if (productPrice == null) {
-			store.getStorage().setProductPrice(strBuilder.toString());
-		} else {
-			store.getStorage().getProductPrice().concat(strBuilder.toString());
+		
+		if (productPrice != null) {
+			strBuilder.append(productPrice);
 		}
+		
+		store.getStorage().setProductPrice(strBuilder.toString());
 		storeServiceImpl.save(store);
 
 		return getStorageProcut(user, getStore(user, id));

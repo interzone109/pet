@@ -48,7 +48,7 @@ public class FillDataUtil {
 	private SpendServiceImpl spendServiceImpl;
 	
 	
-	@SuppressWarnings("deprecation")
+	
 	public void setSpend(User user) {
 		Spend spend = new Spend();
 		spend.setName("аренда за магазин 1");

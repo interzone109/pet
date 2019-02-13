@@ -1,6 +1,7 @@
 package ua.squirrel.user.entity.store.storage.util;
 
-import java.util.Date;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,8 +11,6 @@ import org.springframework.stereotype.Component;
 import ua.squirrel.user.entity.product.composite.CompositeProduct;
 import ua.squirrel.user.entity.product.composite.CompositeProductModel;
 import ua.squirrel.user.entity.store.Store;
-
-
 
 @Component
 public class StorageUtils {
@@ -68,7 +67,8 @@ public class StorageUtils {
 		//переменная хранит старые записи
 		StringBuilder oldPrice = new StringBuilder();
 		// дата изменения цены
-		Date curentDate = new Date();
+		//Date curentDate = new Date();
+		Calendar curentDate = new GregorianCalendar();
 		//для каждого совпадения из compositeProductList 
 		compositeProductList.stream().forEach(prod -> {
 			//проверяем если продукт с новой ценой числиться за текущей торговой точкой
@@ -77,7 +77,7 @@ public class StorageUtils {
 			// записываем id продукта его старую
 			// цену и дату изменения
 			oldPrice.append(prod.getId() + ":" + currentIdsPrice.get(prod.getId()) 
-			+ "price" + curentDate.getTime()+ "date");
+			+ "price" + curentDate.getTimeInMillis()+ "date");
 			// записываем новую цену продукта мапу отображающую асортемент-цена текущей ТТ
 			currentIdsPrice.put(prod.getId(), updateIdsPrice.get(prod.getId()));
 			}
@@ -114,10 +114,11 @@ public class StorageUtils {
 		
 		// обьект будех хранить id-цена удаленного товара
 		StringBuilder remove = new StringBuilder();
-		Date curentDate = new Date();
+		//Date curentDate = new Date();
+		Calendar curentDate = new GregorianCalendar();
 		compositeProductList.stream().forEach(prod -> {
 			// записываем данные по удаленному продукту
-			remove.append(prod.getId() + ":" + currentIdsPrice.get(prod.getId()) + "price" + curentDate.getTime() + "date");
+			remove.append(prod.getId() + ":" + currentIdsPrice.get(prod.getId()) + "price" + curentDate.getTimeInMillis() + "date");
 			//по ключу удаляем продукт из текущей ТТ
 			currentIdsPrice.remove(prod.getId());
 		});
