@@ -33,7 +33,7 @@ public class Consignment {
 	private Calendar date;
 
 	// Id и количество товара
-	@Column(name = "start_consignment", nullable = false)
+	@Column(name = "start_consignment", nullable = false, length = 2048)
 	private String startConsignment;
 
 	// служебные данные

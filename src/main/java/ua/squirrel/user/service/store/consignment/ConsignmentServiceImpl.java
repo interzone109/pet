@@ -28,8 +28,8 @@ public class ConsignmentServiceImpl implements ConsignmentService {
 		return consignmentRepository.findOneByDateAndStorage(date, storage);
 	}
 
-	public List<Consignment> findByUserAndDateBetween(Storage storage, Calendar from, Calendar to) {
-		return consignmentRepository.findByUserAndDateBetween(storage, from, to);
+	public List<Consignment> findByStorageAndDateBetween(Storage storage, Calendar from, Calendar to) {
+		return consignmentRepository.findByStorageAndDateBetween(storage, from, to);
 	}
 
 }

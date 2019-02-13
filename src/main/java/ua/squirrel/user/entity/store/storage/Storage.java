@@ -38,7 +38,7 @@ public class Storage {
 	private String productDelete;
 
 	@OneToMany(mappedBy = "storage", fetch = FetchType.LAZY, 
-			orphanRemoval = true, cascade = CascadeType.ALL)
+			 cascade = CascadeType.ALL)
 	private List<Consignment> consignment;
 
 	@OneToOne(fetch = FetchType.LAZY)

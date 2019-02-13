@@ -1,5 +1,6 @@
 package ua.squirrel.user.entity.store.consignment.util;
 
+import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.List;
@@ -15,16 +16,11 @@ import ua.squirrel.user.service.store.consignment.status.ConsignmentStatusServic
 
 @Component
 public class ConsignmentUtil {
-
-	private CompositeProductServiceImpl compositeProductServiceImpl;
-	private ConsignmentStatusServiceImpl consignmentStatusServiceImpl;
 	
 	@Autowired
-	public ConsignmentUtil(CompositeProductServiceImpl compositeProductServiceImpl,
-			ConsignmentStatusServiceImpl consignmentStatusServiceImpl ) {
-		this.consignmentStatusServiceImpl = consignmentStatusServiceImpl;
-		this.compositeProductServiceImpl = compositeProductServiceImpl;
-	}
+	private CompositeProductServiceImpl compositeProductServiceImpl;
+	@Autowired
+	private ConsignmentStatusServiceImpl consignmentStatusServiceImpl;
 
 	/**
 	 * метод служит для добавления новых расходных товаров в партию
@@ -36,7 +32,7 @@ public class ConsignmentUtil {
 		
 		//проверяем если список пуст то создаем новую партию 
 		//поступления продуктов текущей датой
-		if (listConsignment == null) {
+		if (listConsignment == null ||listConsignment.size()==0 ) {
 			//set в котором будут храниться все продукты на продажу
 			Set<Long> idComposite = new HashSet<>();
 			//разбиваем ProductPrice который содержит ID композитных продуктов
@@ -59,8 +55,9 @@ public class ConsignmentUtil {
 			// по умолчанию количество и общая цена устонавливается в ноль
 			StringBuilder strBuilder = new StringBuilder();
 			idProduct.forEach(id -> {
-				strBuilder.append(id+":"+0+"quant"+0+"totalP");
+				strBuilder.append(id+":"+0+"quant"+0+"totalPrice"+0);
 			});
+	
 			
 			//создаем обьект партии
 			//в данном случае это будет первая партия при создании ТТ
@@ -70,9 +67,16 @@ public class ConsignmentUtil {
 			consignment.setConsignmentEmpty(true);//помечаем партию пустой (без количества и цены)
 			consignment.setConsignmentStatus(consignmentStatusServiceImpl.findOneByName("ARRIVAL").get());// устанавливаем статус как приход
 			consignment.setDate(new GregorianCalendar());//устонавливаем текущую дату для партии
-			consignment.setStorage(store.getStorage());// привязываем данную партию к магазину
+			consignment.setStorage(store.getStorage());//устанавливаем склад которому принадлежит партия
 			consignment.setMeta("new consignment");// служебная информация
+			
+			
+			//создаем новый список партий
+			//добавляем в него начальную партию 
+			//и привязываем ко складу
+			listConsignment = new ArrayList<>();
+			listConsignment.add(consignment);
+			store.getStorage().setConsignment(listConsignment);
 		}
-		
 	}
 }

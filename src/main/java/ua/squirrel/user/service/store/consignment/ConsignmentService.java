@@ -13,5 +13,5 @@ public interface ConsignmentService {
 	
 	Optional<Consignment> findOneByDateAndStorage(Calendar date, Storage storage);
 	
-	List<Consignment> findByUserAndDateBetween(Storage storage, Calendar from, Calendar to);
+	List<Consignment> findByStorageAndDateBetween(Storage storage, Calendar from, Calendar to);
 }
