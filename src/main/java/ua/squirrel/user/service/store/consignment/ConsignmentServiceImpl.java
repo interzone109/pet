@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import ua.squirrel.user.entity.store.consignment.Consignment;
+import ua.squirrel.user.entity.store.consignment.ConsignmentStatus;
 import ua.squirrel.user.entity.store.storage.Storage;
 
 @Service
@@ -28,6 +29,10 @@ public class ConsignmentServiceImpl implements ConsignmentService {
 		return consignmentRepository.findOneByDateAndStorage(date, storage);
 	}
 
+	public Optional<Consignment> findOneByDateAndStorageAndConsignmentStatus(Calendar date, Storage storage, ConsignmentStatus consignmentStatus) {
+		return consignmentRepository.findOneByDateAndStorageAndConsignmentStatus(date, storage,consignmentStatus);
+	}
+	
 	public List<Consignment> findByStorageAndDateBetween(Storage storage, Calendar from, Calendar to) {
 		return consignmentRepository.findByStorageAndDateBetween(storage, from, to);
 	}

@@ -15,12 +15,16 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javassist.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
+import ua.squirrel.user.entity.product.Product;
+import ua.squirrel.user.entity.product.composite.CompositeProduct;
 import ua.squirrel.user.entity.product.composite.CompositeProductModel;
 import ua.squirrel.user.entity.store.Store;
+import ua.squirrel.user.entity.store.consignment.Consignment;
 import ua.squirrel.user.entity.store.consignment.util.ConsignmentUtil;
 import ua.squirrel.user.entity.store.storage.UpdateDeleteStorageModel;
 import ua.squirrel.user.entity.store.storage.util.StorageUtils;
 import ua.squirrel.user.service.product.CompositeProductServiceImpl;
+import ua.squirrel.user.service.product.ProductServiceImpl;
 import ua.squirrel.user.service.store.StoreServiceImpl;
 import ua.squirrel.web.entity.user.User;
 import ua.squirrel.web.service.registration.user.UserServiceImpl;
@@ -35,7 +39,9 @@ public class StoreAssortmentController {
 	@Autowired
 	private UserServiceImpl userServiceImpl;
 	@Autowired
-	private CompositeProductServiceImpl compositeService;
+	private CompositeProductServiceImpl compositeServiceImpl;
+	@Autowired
+	private ProductServiceImpl productServiceImpl;
 	@Autowired
 	private StorageUtils storageUtils;
 	@Autowired
@@ -63,20 +69,22 @@ public class StoreAssortmentController {
 		User user = userServiceImpl.findOneByLogin("test1").get();
 
 		StringBuilder strBuilder = new StringBuilder();
-		compositeService.findAllByUserAndIdIn(user, newIdsPrice.keySet()).stream().forEach(product -> {
+		List<CompositeProduct> compositeProducts = compositeServiceImpl.findAllByUserAndIdIn(user, newIdsPrice.keySet());
+		compositeProducts.stream().forEach(product -> {
 			strBuilder.append(product.getId() + ":" + newIdsPrice.get(product.getId()) + "price");
 		});
 
 		Store store = getStore(user, id);
 		String productPrice = store.getStorage().getProductPrice();
-
 		if (productPrice != null) {
 			strBuilder.append(productPrice);
 		}
-
 		store.getStorage().setProductPrice(strBuilder.toString());
 		
-		consignmentUtil.updateConsignment(store);// обновляем данные по партии
+		List<Product> storeProducts = productServiceImpl.findAllByUserAndIdIn(user, storageUtils.parseCompositeProductIds(compositeProducts));
+			
+		Consignment consignment = consignmentUtil.updateConsignment(store,storeProducts);
+		
 		
 		storeServiceImpl.save(store);
 		
@@ -113,7 +121,7 @@ public class StoreAssortmentController {
 	private void removeProduct(User user, Long id, List<Long> removeProduct) throws NotFoundException {
 		Store store = getStore(user, id);
 		storeServiceImpl.save(storageUtils.deleteIdsPrice(store, removeProduct,
-				compositeService.findAllByUserAndIdIn(user, removeProduct)));
+				compositeServiceImpl.findAllByUserAndIdIn(user, removeProduct)));
 	}
 
 	/**
@@ -125,7 +133,7 @@ public class StoreAssortmentController {
 		// метод обновляет цену на новую, старую цену и дату обновления сохраняет
 		// результат сохраняем в бд
 		storeServiceImpl.save(storageUtils.updateIdsPrice(store, newIdsPrice,
-				compositeService.findAllByUserAndIdIn(user, newIdsPrice.keySet())));
+				compositeServiceImpl.findAllByUserAndIdIn(user, newIdsPrice.keySet())));
 
 	}
 
@@ -136,7 +144,7 @@ public class StoreAssortmentController {
 		// получаю ид - цена из текущего склада и записываю их в Мар
 		Map<Long, Integer> idsPrice = storageUtils.getIdPrice(store.getStorage().getProductPrice());
 		// создаю Мар по продукту и его цене и по ид создаю модель продукта
-		return storageUtils.getCompositeProductModel(compositeService.findAllByUserAndIdIn(user, idsPrice.keySet()),
+		return storageUtils.getCompositeProductModel(compositeServiceImpl.findAllByUserAndIdIn(user, idsPrice.keySet()),
 				store);
 	}
 

@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import ua.squirrel.user.entity.store.consignment.Consignment;
+import ua.squirrel.user.entity.store.consignment.ConsignmentStatus;
 import ua.squirrel.user.entity.store.storage.Storage;
 
 public interface ConsignmentService {
@@ -14,4 +15,7 @@ public interface ConsignmentService {
 	Optional<Consignment> findOneByDateAndStorage(Calendar date, Storage storage);
 	
 	List<Consignment> findByStorageAndDateBetween(Storage storage, Calendar from, Calendar to);
+	
+	Optional<Consignment> findOneByDateAndStorageAndConsignmentStatus(Calendar date, Storage storage,
+			ConsignmentStatus consignmentStatus);
 }
