@@ -13,6 +13,8 @@ import org.springframework.stereotype.Component;
 import ua.squirrel.user.entity.product.Product;
 import ua.squirrel.user.entity.store.Store;
 import ua.squirrel.user.entity.store.consignment.Consignment;
+import ua.squirrel.user.entity.store.consignment.ConsignmentModel;
+import ua.squirrel.user.service.product.ProductServiceImpl;
 import ua.squirrel.user.service.store.consignment.ConsignmentServiceImpl;
 import ua.squirrel.user.service.store.consignment.status.ConsignmentStatusServiceImpl;
 
@@ -23,13 +25,13 @@ public class ConsignmentUtil {
 	private ConsignmentServiceImpl consignmentServiceImpl;
 	@Autowired
 	private ConsignmentStatusServiceImpl consignmentStatusServiceImpl;
-
-	/**
-	 * метод служит добавления в партии новых продуктов 
-	 * 
-	 */
+	@Autowired
+	private ProductServiceImpl productServiceImpl;
 	
-	public Consignment updateConsignment(Store store , List<Product> storeProducts) {
+	/**
+	 * метод служит для добавления в партии новых продуктов 
+	 */
+		public Consignment updateConsignment(Store store , List<Product> storeProducts) {
 		
 		Consignment consignment ;
 		//получаем сегодняшнюю дату
@@ -107,4 +109,16 @@ public class ConsignmentUtil {
 		}
 		return consignment;
 	}
+
+	
+	/**
+	 * метод созает ConsignmentModel на основе полученого списка
+	 */
+	public List<ConsignmentModel> createListModel(List<Consignment> Consignments) {
+
+
+		return null;
+	}
+
+
 }

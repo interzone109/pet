@@ -15,7 +15,8 @@ public interface ConsignmentRepository extends JpaRepository<Consignment, Long> 
 
 	Optional<Consignment> findOneByDateAndStorage(Calendar date, Storage storage);
 	
-	List<Consignment> findByStorageAndDateBetween(Storage storage, Calendar from, Calendar to);
+	List<Consignment> findByStorageAndConsignmentStatusAndDateBetween(Storage storage,
+			ConsignmentStatus consignmentStatus, Calendar from, Calendar to);
 
 	Optional<Consignment> findOneByDateAndStorageAndConsignmentStatus(Calendar date, Storage storage,
 			ConsignmentStatus consignmentStatus);
