@@ -1,5 +1,6 @@
 package ua.squirrel.user.controller.store;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -81,10 +82,12 @@ public class StoreAssortmentController {
 		}
 		store.getStorage().setProductPrice(strBuilder.toString());
 		
-		List<Product> storeProducts = productServiceImpl.findAllByUserAndIdIn(user, storageUtils.parseCompositeProductIds(compositeProducts));
+		List<Product> storeProducts = productServiceImpl.findAllByUserAndIdIn(user
+				, storageUtils.parseCompositeProductIds(compositeProducts));
 			
 		Consignment consignment = consignmentUtil.updateConsignment(store,storeProducts);
 		
+		store.getStorage().getConsignment().add(consignment);
 		
 		storeServiceImpl.save(store);
 		
@@ -141,11 +144,15 @@ public class StoreAssortmentController {
 	 * метод создает модель продукт-цена для текущего склада
 	 */
 	private Map<CompositeProductModel, Integer> getStorageProcut(User user, Store store) {
+		String strProductPrice = store.getStorage().getProductPrice();
+		if( strProductPrice.length()!=0) {
 		// получаю ид - цена из текущего склада и записываю их в Мар
-		Map<Long, Integer> idsPrice = storageUtils.getIdPrice(store.getStorage().getProductPrice());
+		Map<Long, Integer> idsPrice = storageUtils.getIdPrice(strProductPrice);
 		// создаю Мар по продукту и его цене и по ид создаю модель продукта
 		return storageUtils.getCompositeProductModel(compositeServiceImpl.findAllByUserAndIdIn(user, idsPrice.keySet()),
 				store);
+		}
+		return new HashMap<CompositeProductModel, Integer>();
 	}
 
 	private Store getStore(User user, Long id) throws NotFoundException {
@@ -154,8 +161,10 @@ public class StoreAssortmentController {
 	}
 
 	/*
-	 * test POST { "1": 2 }
+	 * test POST { "1": 2, "2": 2, "3": 2, "4": 2 }
 	 * 
-	 * test PUT { "idsPrice": { "1": 1 }, "removeProduct": [ 1 ] }
+	 * test PUT { "idsPrice": { "1": 1 }, 
+	 * 
+	 * {"removeProduct": [ 1,2,3,4 ] }
 	 */
 }

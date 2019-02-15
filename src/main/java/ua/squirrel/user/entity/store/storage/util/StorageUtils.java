@@ -113,7 +113,7 @@ public class StorageUtils {
 
 		// обьект будех хранить id-цена удаленного товара
 		StringBuilder remove = new StringBuilder();
-		// Date curentDate = new Date();
+
 		Calendar curentDate = new GregorianCalendar();
 		compositeProductList.stream().forEach(prod -> {
 			// записываем данные по удаленному продукту
