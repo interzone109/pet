@@ -35,7 +35,7 @@ public class AllPartnersController {
 	 * */
 	@GetMapping
 	public List<PartnerModel> getAllPartner(Authentication authentication) {
-		log.info("LOGGER: show all partners ");
+		log.info("LOGGER: retirn all partners for current user");
 		
 		User user = userServiceImpl.findOneByLogin("test1").get();
 		

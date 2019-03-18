@@ -12,7 +12,8 @@
 <link rel="stylesheet"
 	href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
 <!-- Our Custom CSS -->
-<link rel="stylesheet" href="../static/css/style.css"  th:href="@{/css/style.css}"  type="text/css" media="screen">
+<link rel="stylesheet" href="../static/css/style.css"
+	th:href="@{/css/style.css}" type="text/css" media="screen">
 <!-- Font Awesome JS -->
 <script defer
 	src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js"></script>
@@ -24,19 +25,26 @@
 
 	<div class="wrapper">
 		<!-- left side menu -->
-		<div  class="wrapper" th:insert="~{template/leftBar :: left_bar}"></div>
+		<div class="wrapper" th:insert="~{template/leftBar :: left_bar}"></div>
 
 		<!-- Content conteiner -->
 		<div id="content">
 			<div th:insert="~{template/topBar :: top_bar}"></div>
 
+			<!-- <div id="partnerCardContainer" ></div> -->
+
+			<div  class="container">
+				<div id="partnerRow" class="row"></div>
+				
+			</div>
 			<div class="line"></div>
 		</div>
 	</div>
 
+		<div th:insert="~{template/newPartnerForm :: partner_form}"></div>
+		<div th:insert="~{template/updatePartnerForm :: update_partner_form}"></div>
 
-	
-	<script th:src="@{/js/partner.js}"></script>
-	<script th:src="@{/js/sidebar.js}"></script>
+		<script th:src="@{/js/partner.js}"></script>
+		<script th:src="@{/js/sidebar.js}"></script>
 </body>
 </html>
