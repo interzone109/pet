@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+
+</head>
+<body>
+
+	<!-- Sidebar  -->
+	<nav id="sidebar" th:fragment="left_bar">
+		<div class="sidebar-header">
+			<a th:href="@{/user}">
+				<h3>Small One</h3> <strong>S1</strong>
+			</a>
+		</div>
+		<ul class="list-unstyled components">
+			<li><a href="#storeSubmenu" data-toggle="collapse"
+				aria-expanded="false" class="dropdown-toggle"> <i
+					class="fas fa-home"></i> Магазины
+			</a>
+				<ul class="collapse list-unstyled" id="storeSubmenu">
+					<li><a href="#">Создать заказ</a></li>
+					<li><a href="#">Текущие продажи</a></li>
+					<li><a href="#">Каталог</a></li>
+					<li><a href="#">Создать новый</a></li>
+				</ul></li>
+
+			<li><a href="#partnerSubmenu" data-toggle="collapse"
+				aria-expanded="false" class="dropdown-toggle"> <i
+					class="fas fa-address-book"></i> Партнеры
+			</a>
+				<ul class="collapse list-unstyled" id="partnerSubmenu">
+					<li><a th:href="@{/contacts}">Контакты</a></li>
+					<li><a href="#">Товары</a></li>
+					<li><a href="#">Расчеты</a></li>
+				</ul></li>
+
+			<li><a href="#employeeSubmenu" data-toggle="collapse"
+				aria-expanded="false" class="dropdown-toggle"> <i
+					class="fas fa-users"></i> Сотрудники
+			</a>
+				<ul class="collapse list-unstyled" id="employeeSubmenu">
+					<li><a href="#">Карточки</a></li>
+					<li><a href="#">Расчеты</a></li>
+				</ul></li>
+
+			<li><a href="#analiticSubmenu" data-toggle="collapse"
+				aria-expanded="false" class="dropdown-toggle"> <i
+					class="fas fa-chart-line"></i> Аналитика
+			</a>
+				<ul class="collapse list-unstyled" id="analiticSubmenu">
+					<li><a href="#">Показатели</a></li>
+					<li><a href="#">Прогноз</a></li>
+				</ul></li>
+
+			<li><a href="#calendarSubmenu" data-toggle="collapse"
+				aria-expanded="false" class="dropdown-toggle"> <i
+					class="fas fa-calendar-alt"></i> Календарь
+			</a>
+				<ul class="collapse list-unstyled" id="calendarSubmenu">
+					<li><a href="#">Заметки</a></li>
+					<li><a href="#">Расходы</a></li>
+				</ul></li>
+
+			<li><a href="#cashBoxSubmenu" data-toggle="collapse"
+				aria-expanded="false" class="dropdown-toggle"> <i
+					class="fas fa-cogs"></i> Касса
+			</a>
+				<ul class="collapse list-unstyled" id="cashBoxSubmenu">
+					<li><a href="#">Интерфейс</a></li>
+					<li><a href="#">Настройка</a></li>
+				</ul></li>
+		</ul>
+
+		<ul class="list-unstyled CTAs">
+			<li><a href="#" class="article">О программе</a></li>
+			<li><a href="#" class="article">FAQ</a></li>
+		</ul>
+
+		<!-- jQuery CDN - Slim version (=without AJAX) -->
+		<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+		<!-- Popper.JS -->
+		<script
+			src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+		<!-- Bootstrap JS -->
+		<script
+			src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+
+	</nav>
+
+
+
+</body>
+</html>

@@ -63,10 +63,10 @@ public class AllPartnersController {
 		log.info("LOGGER: save new partners from model " );
 		
 		User user = userServiceImpl.findOneByLogin("test1").get();
-		
-		List<Partner> userPartnersList = partnerServiceImpl.findAllByUser(user);
+		System.out.println();
+		List<Partner> userPartnersList = new ArrayList<>();;
 		newPartners.stream().forEach(obj->{
-			Partner addPartner = new Partner();
+ 			Partner addPartner = new Partner();
 			addPartner.setCompany(obj.getCompany());
 			addPartner.setPartnerMail(obj.getPartnerMail());
 			addPartner.setPhonNumber(obj.getPhonNumber());
@@ -74,7 +74,7 @@ public class AllPartnersController {
 			userPartnersList.add(addPartner); 
 		});
 		
-		userServiceImpl.save(user);
+		partnerServiceImpl.saveAll(userPartnersList);
 
 		return  newPartners;
 		}

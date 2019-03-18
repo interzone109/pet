@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
+
 @Configuration
 public class SquirrelSecurityConfig extends WebSecurityConfigurerAdapter {
 
@@ -24,6 +25,7 @@ public class SquirrelSecurityConfig extends WebSecurityConfigurerAdapter {
          http.authorizeRequests().anyRequest().permitAll();
      }
 	
-	
+    
+    
 	
 }

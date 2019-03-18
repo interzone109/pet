@@ -26,7 +26,7 @@ import ua.squirrel.z.util.FillDataUtil;
  * контролер регистрации пользователя
  * */
 @RestController
-@RequestMapping("/")
+@RequestMapping("/test")
 @Slf4j
 public class RegistrationController {
 	
