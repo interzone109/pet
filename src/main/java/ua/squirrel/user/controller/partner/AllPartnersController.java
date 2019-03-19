@@ -64,7 +64,7 @@ public class AllPartnersController {
 		
 		User user = userServiceImpl.findOneByLogin("test1").get();
 		System.out.println();
-		List<Partner> userPartnersList = new ArrayList<>();;
+		List<Partner> userPartnersList = new ArrayList<>();
 		newPartners.stream().forEach(obj->{
  			Partner addPartner = new Partner();
 			addPartner.setCompany(obj.getCompany());
@@ -75,8 +75,18 @@ public class AllPartnersController {
 		});
 		
 		partnerServiceImpl.saveAll(userPartnersList);
-
-		return  newPartners;
+		
+		List<PartnerModel> responsPartners = new ArrayList<PartnerModel>();
+		userPartnersList.forEach(obj->{
+			responsPartners.add(PartnerModel.builder()
+					.id(obj.getId())
+					.company(obj.getCompany())
+					.partnerMail(obj.getPartnerMail())
+					.phonNumber(obj.getPhonNumber()).build());
+		});
+		
+		
+		return  responsPartners;
 		}
 	
 	

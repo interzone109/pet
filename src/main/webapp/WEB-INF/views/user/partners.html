@@ -31,20 +31,32 @@
 		<div id="content">
 			<div th:insert="~{template/topBar :: top_bar}"></div>
 
-			<!-- <div id="partnerCardContainer" ></div> -->
-
-			<div  class="container">
-				<div id="partnerRow" class="row"></div>
-				
+			<input id="searchOnPageTable" type="text" placeholder="Поиск..">
+			<div class="line"></div>
+			<div class="well">
+				<table class="table">
+					<thead>
+						<tr>
+							<th>Компания</th>
+							<th>Телефон</th>
+							<th>Почта</th>
+							<th>Изменить</th>
+						</tr>
+					</thead>
+					<tbody id="partnerTable">
+					</tbody>
+				</table>
 			</div>
+
 			<div class="line"></div>
 		</div>
 	</div>
 
-		<div th:insert="~{template/newPartnerForm :: partner_form}"></div>
-		<div th:insert="~{template/updatePartnerForm :: update_partner_form}"></div>
+	<div th:insert="~{template/newPartnerForm :: partner_form}"></div>
+	<div th:insert="~{template/updatePartnerForm :: update_partner_form}"></div>
 
-		<script th:src="@{/js/partner.js}"></script>
-		<script th:src="@{/js/sidebar.js}"></script>
+	<script th:src="@{/js/searchOnPage.js}"></script>
+	<script th:src="@{/js/partner.js}"></script>
+	<script th:src="@{/js/sidebar.js}"></script>
 </body>
 </html>
