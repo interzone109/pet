@@ -10,7 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import ua.squirrel.web.entity.user.UserModel;
 
 @RestController
-@RequestMapping("/login")
+@RequestMapping("/rest/login")
 @Slf4j
 public class LoginController {
 	

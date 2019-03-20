@@ -23,7 +23,7 @@ import ua.squirrel.web.entity.user.User;
 import ua.squirrel.web.service.registration.user.UserServiceImpl;
 
 @RestController
-@RequestMapping("/partners/{partner_id}/info")
+@RequestMapping("/user/partners/{partner_id}/info")
 @Slf4j
 public class PartnerController {
 	@Autowired
@@ -39,27 +39,32 @@ public class PartnerController {
 	public PartnerModel getPartnerInfo(Authentication authentication, @PathVariable("partner_id") Long id)
 			throws NotFoundException {
 
-		log.info("LOGGER: return curent partner product");
+		log.info("LOGGER: return current partner product: /user/partners/{partner_id}/info ");
 
 		User userCurrentSesion = userServiceImpl.findOneByLogin("test1").get();
-
+		// вызываем медот преобразования сущности в модель
 		return getPartnerModel(id, userCurrentSesion);
 	}
 
 	@PutMapping
 	public PartnerModel updatePartnerInfo(@PathVariable("partner_id") Long id, @RequestBody PartnerModel partnerModel,
 			Authentication authentication) throws NotFoundException {
-		log.info("LOGGER: update curent partners");
+		log.info("LOGGER: update curent partners data : /user/partners/{partner_id}/info");
 		User userCurrentSesion = userServiceImpl.findOneByLogin("test1").get();
-
+		// получаем из базы Partner по ид и текущему пользователю
 		Partner currentPartner = getCurrentPartner(id, userCurrentSesion);
-
+		//обновляем данные и сохраняем в базу
 		currentPartner.setPartnerMail(partnerModel.getPartnerMail());
 		currentPartner.setPhonNumber(partnerModel.getPhonNumber());
 		currentPartner.setCompany(partnerModel.getCompany());
 		partnerServiceImpl.save(currentPartner);
-
-		return getPartnerModel(currentPartner.getId(), userCurrentSesion);
+		// возращаем обновленные данные без списка продуктов
+		return PartnerModel.builder()
+				.id(currentPartner.getId())
+				.company(currentPartner.getCompany())
+				.partnerMail(currentPartner.getPartnerMail())
+				.phonNumber(currentPartner.getPhonNumber())
+				.build();
 	}
 
 	@DeleteMapping
@@ -80,10 +85,11 @@ public class PartnerController {
 	}
 
 	private PartnerModel getPartnerModel(Long id, User user) throws NotFoundException {
+		// получаем из базы Partner по ид и текущему пользователю
 		Partner partner = getCurrentPartner(id, user);
-
+		// создаем список моделей  ProductModel 
 		List<ProductModel> productsModel = new ArrayList<>();
-		
+		// заполняем список данными партнера
 		partner.getProducts().stream().forEach(obj -> {
 			productsModel.add(ProductModel.builder()
 					.id(obj.getId())
@@ -93,7 +99,8 @@ public class PartnerController {
 					.propertiesProduct(obj.getPropertiesProduct().getName())
 					.measureProduct(obj.getMeasureProduct().getMeasure()).build());
 		});
-
+		
+		// строим и возращаем PartnerModel 
 		return PartnerModel.builder()
 				.id(partner.getId())
 				.company(partner.getCompany())

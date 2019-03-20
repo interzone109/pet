@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-<title>партнеры</title>
+<title>товары</title>
 
 <!-- Bootstrap CSS CDN -->
 <link rel="stylesheet"
@@ -30,37 +30,39 @@
 		<!-- Content conteiner -->
 		<div id="content">
 			<div th:insert="~{template/topBar :: top_bar}"></div>
-
 			<div class="collapse" id="collapseInfo">
-				<div class="card card-body">Раздел отображает контактные данные поставщиков.
-				 Здесь вы можете  добавлять и редактировать данные о них.</div>
+				<div class="card card-body">Раздел отображает данные о товарах
+					которые заказываются у поставщика. На данной странице можно их редактировать и добавлять.</div>
 			</div>
-			<br>
-			<input id="searchOnPageTable" type="text" placeholder="Поиск..">
-
+			<br> <input id="searchOnPageTable" type="text"
+				placeholder="Поиск..">
 			<div class="line"></div>
-
-			<table class="table">
-				<thead>
-					<tr>
-						<th>Компания</th>
-						<th>Телефон</th>
-						<th>Почта</th>
-						<th>Изменить</th>
-					</tr>
-				</thead>
-				<tbody id="partnerTable">
-				</tbody>
-			</table>
+			<div class="well">
+				<table class="table">
+					<thead>
+						<tr>
+							<th>Название</th>
+							<th>Описание</th>
+							<th>Группа</th>
+							<th>Поставщик</th>
+							<th>Применение</th>
+							<th>Мера</th>
+						</tr>
+					</thead>
+					<tbody id="productTable">
+					</tbody>
+				</table>
+			</div>
 
 			<div class="line"></div>
 		</div>
 	</div>
 
-	<div th:insert="~{template/newPartnerForm :: partner_form}"></div>
-	<div th:insert="~{template/updatePartnerForm :: update_partner_form}"></div>
+	<!-- <div th:insert="~{template/newPartnerForm :: partner_form}"></div>
+	<div th:insert="~{template/updatePartnerForm :: update_partner_form}"></div> -->
 
+
+	<script th:src="@{/js/products.js}"></script>
 	<script th:src="@{/js/info.js}"></script>
-	<script th:src="@{/js/partner.js}"></script>
 </body>
 </html>

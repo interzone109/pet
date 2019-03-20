@@ -11,14 +11,19 @@ public class AppController {
 	public String index() {
 		return "index";
 	}
-		
+	
 	@RequestMapping(path = "/user", method = RequestMethod.GET)
 	public String getUserPage() {
 		return "user/userHome";
 	}
 	
-	@RequestMapping(path = "/contacts", method = RequestMethod.GET)
+	@RequestMapping(path = "/user/contacts", method = RequestMethod.GET)
 	public String getUserPartners() {
 		return "user/partners";
+	}
+	
+	@RequestMapping(path = "/user/products", method = RequestMethod.GET)
+	public String getUserProducts() {
+		return "user/products";
 	}
 }

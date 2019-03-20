@@ -1,6 +1,7 @@
 //кнопка добавления нового партнера
 var addLink = document.createElement('a');
-addLink.className ="nav-link"
+addLink.className ="nav-link";
+addLink.href="#";
 addLink.innerText = "Добавить поставщика";
 addLink.id = "addPartnerButtonId";
 addLink.dataset.target = "#modalPartnerForm";
@@ -21,10 +22,11 @@ $("#comfirePartnerButton").on("focus", addNewPartner);
 // добавления функции обновления поставщика на кнопку "updatePartnerButton"
 //функция отправляет PUT запрос для обновления данных о партнере
 $("#updatePartnerButton").on("focus", updatePartnerData);
+/******************** PUT function ****************************/
 function updatePartnerData(){
 	  var requestPUT = new XMLHttpRequest();
 
-	  requestPUT.open("PUT", 'http://localhost:8080/partners/'+$("#partnerId").text()+'/info', true);
+	  requestPUT.open("PUT", 'http://localhost:8080/user/partners/'+$("#partnerId").text()+'/info', true);
 	  requestPUT.setRequestHeader("Content-Type", "application/json");
 	  requestPUT.onreadystatechange = function () {
 	      if (requestPUT.readyState === 4 && requestPUT.status === 200) {
@@ -45,12 +47,14 @@ function updatePartnerData(){
 	  console.log(data);
 	  requestPUT.send(data);
 }
+/******************** PUT function ****************************/
 
+/******************** POST function ****************************/
 // функция отправляет данные на POST метод сервера
 function addNewPartner(){
   var requestPOST = new XMLHttpRequest();
 
-requestPOST.open("POST", 'http://localhost:8080/partners', true);
+requestPOST.open("POST", 'http://localhost:8080/user/partners', true);
 requestPOST.setRequestHeader("Content-Type", "application/json");
 requestPOST.onreadystatechange = function () {
     if (requestPOST.readyState === 4 && requestPOST.status === 200) {
@@ -63,25 +67,31 @@ requestPOST.onreadystatechange = function () {
     }
 };
 
-var data = JSON.stringify([{
+var data = JSON.stringify({
 	"company": $("#inputCompanyName").val(),
     "phonNumber": $("#inputCompanyPhon").val(),
     "partnerMail":$("#inputCompanyMail").val()
-}]);
+});
 requestPOST.send(data);
 
 $("#inputCompanyName").val("");
 $("#inputCompanyPhon").val("");
 $("#inputCompanyMail").val("");
 };
+/******************** POST function ****************************/
+
 
 // добавление строк партнеров на страницу
 function addPartnerData( dataJSON){
-	
+	if(Array.isArray(dataJSON)){
 	dataJSON.forEach(partner => {
 	  document.getElementById('partnerTable').appendChild( createPartnerElement( partner));
 	  document.getElementById("partner_id_"+partner.id).addEventListener("click",updateModelDialog);
 		});
+	}else{
+		document.getElementById('partnerTable').appendChild( createPartnerElement( dataJSON));
+		  document.getElementById("partner_id_"+dataJSON.id).addEventListener("click",updateModelDialog);
+	}
 	}
 
 // верстка строк партнеров
@@ -121,9 +131,10 @@ function updateParnterRow( data){
 	tr.previousElementSibling.previousElementSibling.innerText = data.phonNumber;
 	tr.previousElementSibling.innerText = data.partnerMail;
 }
+/******************** GET function ****************************/
 //заполняет страницу данными
 var requestGET = new XMLHttpRequest();
-requestGET.open('GET', 'http://localhost:8080/partners', true);
+requestGET.open('GET', 'http://localhost:8080/user/partners', true);
     requestGET.onload = function () {
     
       var dataJSON = JSON.parse(this.response);
@@ -136,3 +147,25 @@ requestGET.open('GET', 'http://localhost:8080/partners', true);
     }
     
     requestGET.send();
+/******************** GET function ****************************/ 
+    
+/******************** search function ****************************/
+    $(document).ready(function(){
+    	  $("#searchOnPageTable").on("keyup", function() {
+    	    var value = $(this).val().toLowerCase();
+    	    $("#partnerTable tr").filter(function() {
+    	      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    	    });
+    	  });
+    	});
+/******************** search function ****************************/
+    
+/******************** sidebar function ****************************/
+    $(document).ready(function () {
+        $('#sidebarCollapse').on('click', function () {
+            $('#sidebar').toggleClass('active');
+        });
+    });
+/******************** sidebar function ****************************/    
+
+    

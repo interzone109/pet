@@ -27,7 +27,6 @@ import ua.squirrel.web.service.registration.user.UserServiceImpl;
 @RestController
 @RequestMapping("/partners/{partner_id}/info/{product_id}/edit")
 @Slf4j
-//@Secured("USER")
 public class ProductController {
 	@Autowired
 	private ProductServiceImpl productServiceImpl;

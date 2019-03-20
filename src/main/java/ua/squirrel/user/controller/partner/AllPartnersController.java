@@ -18,7 +18,7 @@ import ua.squirrel.web.entity.user.User;
 import ua.squirrel.web.service.registration.user.UserServiceImpl;
 
 @RestController
-@RequestMapping("/partners")
+@RequestMapping("/user/partners")
 @Slf4j
 public class AllPartnersController {
 	
@@ -35,12 +35,11 @@ public class AllPartnersController {
 	 * */
 	@GetMapping
 	public List<PartnerModel> getAllPartner(Authentication authentication) {
-		log.info("LOGGER: retirn all partners for current user");
+		log.info("LOGGER: retгrn all partners for current user: /user/partners");
 		
 		User user = userServiceImpl.findOneByLogin("test1").get();
 		
 		List<PartnerModel> partnersModel = new ArrayList<>();
-		
 		partnerServiceImpl.findAllByUser(user).stream().forEach(obj->{
 			partnersModel.add(PartnerModel.builder()
 					.id(obj.getId())
@@ -48,45 +47,32 @@ public class AllPartnersController {
 					.partnerMail(obj.getPartnerMail())
 					.phonNumber(obj.getPhonNumber()).build());
 		});
-
+		
 		return partnersModel;
 	}
 	
 	
 	
 	/**
-	 * метод получает список новых партнеров List <PartnerModel> newPartners,
+	 * метод получает модель newPartners,
 	 * после чего переписывает данные из поделей в сущности и сохраняет их в базу
 	 * */
 	@PostMapping
-	public List <PartnerModel> addNewPartner(@RequestBody List <PartnerModel> newPartners ,Authentication authentication) {
-		log.info("LOGGER: save new partners from model " );
-		
+	public PartnerModel addNewPartner(@RequestBody PartnerModel newPartners ,Authentication authentication) {
+		log.info("LOGGER: save new partners from model: /user/partners" );
 		User user = userServiceImpl.findOneByLogin("test1").get();
-		System.out.println();
-		List<Partner> userPartnersList = new ArrayList<>();
-		newPartners.stream().forEach(obj->{
+
  			Partner addPartner = new Partner();
-			addPartner.setCompany(obj.getCompany());
-			addPartner.setPartnerMail(obj.getPartnerMail());
-			addPartner.setPhonNumber(obj.getPhonNumber());
+			addPartner.setCompany(newPartners.getCompany());
+			addPartner.setPartnerMail(newPartners.getPartnerMail());
+			addPartner.setPhonNumber(newPartners.getPhonNumber());
 			addPartner.setUser(user);
-			userPartnersList.add(addPartner); 
-		});
 		
-		partnerServiceImpl.saveAll(userPartnersList);
+		partnerServiceImpl.save(addPartner);
 		
-		List<PartnerModel> responsPartners = new ArrayList<PartnerModel>();
-		userPartnersList.forEach(obj->{
-			responsPartners.add(PartnerModel.builder()
-					.id(obj.getId())
-					.company(obj.getCompany())
-					.partnerMail(obj.getPartnerMail())
-					.phonNumber(obj.getPhonNumber()).build());
-		});
-		
-		
-		return  responsPartners;
+		newPartners.setId(addPartner.getId());
+
+		return  newPartners;
 		}
 	
 	

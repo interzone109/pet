@@ -31,7 +31,6 @@ import ua.squirrel.web.service.registration.user.UserServiceImpl;
 @RestController
 @RequestMapping("/partners/composites/{id}/info")
 @Slf4j
-//@Secured("USER")
 public class CompositeProductController {
 	@Autowired
 	private CompositeProductServiceImpl compositeProductServiceImpl;
