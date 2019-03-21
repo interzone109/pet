@@ -36,13 +36,13 @@ function addPartnerData( dataJSON){
 	if( Array.isArray(dataJSON)){
 	dataJSON.forEach(partner => {
 	  document.getElementById('partnerTable').appendChild( createPartnerElement( partner));
-	  document.getElementById("partner_id_"+partner.id).addEventListener("click",updateModelDialog);
-	  document.getElementById("partner_product_id_"+partner.id).addEventListener("click",showProducts);
-		});
+	  $("#partner_id_"+partner.id).on('click',updateModelDialog);
+	  $("#partner_product_id_"+partner.id).on('click',showProducts);
+	 	});
 	}else{
 		document.getElementById('partnerTable').appendChild( createPartnerElement( dataJSON));
-		  document.getElementById("partner_id_"+dataJSON.id).addEventListener("click",updateModelDialog);
-		  document.getElementById("partner_product_id_"+dataJSON.id).addEventListener("click",showProducts);
+		 $("#partner_id_"+dataJSON.id).on('click',updateModelDialog);
+		 $("#partner_product_id_"+dataJSON.id).on('click',showProducts);
 	}
 	}
 
@@ -57,7 +57,7 @@ function createPartnerElement( partner){
 		 + "<td id=\"partner_id_"+partner.id+"\" data-toggle=\"modal\" data-target=\"#updateModalPartnerForm\"> " 
 		 +"<i class=\"fas fa-edit\" ></i> </td>"
 		 +"<td id=\"partner_product_id_"+partner.id+"\"><i class=\"fas fa-barcode\" ></i> </td>"
-		 + "<td hidden>"+partner.id+"</td>"
+		 + "<td hidden>"+partner.id+"</td>";
 		 
 		return partnerCol;
 }
@@ -73,24 +73,87 @@ function showProducts(){
 
 function displayProductData(result){
 	var products = result.productsModel;
-	console.log(result);
 	if(products!=null &&products.length != 0 ){
-	console.log(products.length );
-	} else{
+	products.forEach(product => {
+		$("#productTable").append(displayProductRow(product));
+	});
+	} 
+	//если продутов нет, добавляем новый
+	else{
 	$("#productContent").append(
-	 "<caption>" 
+	 "<caption id=\"productCaption\">" 
 	 +"<ul class=\"nav navbar-nav ml-auto\">"
      +"<li class=\"nav-item\"> <a class=\"nav-link\" href=\"#\">Добавить продукт</a> </li>"
      +"<li class=\"nav-item \">"
-     +"<a class=\"nav-link\" href=\"#\" > " +result.company+" </a>"
+     +"<a class=\"nav-link\" href=\"#\" onclick=\"hideProduct()\" title=\"вернуться к поставщикам\"> " +result.company+" </a>"
      +"</li> </ul>"
      +"</caption>");
-	
-		console.log(result);
 	}
 	
 	$("#productContent").show();
 }
+
+function displayProductRow(product){
+	console.log(productRow);
+	var productRow = document.createElement('tr');
+	  productRow.id = "product_row_id_"+product.id;
+	  
+	  productRow.innerHTML = "<td>"+product.group+"</td>"
+		 + "<td>"+product.name+"</td>"
+		 + "<td>"+product.description+"</td>"
+		 +"<td>"+displayProductProperties(product.propertiesProduct,1)+"</td>"
+		 +"<td>"+displayProductMeasure(product.measureProduct,1)+"</td>"
+		 +"<td><i class=\"fas fa-barcode\" onclick=\"hideProduct()\" id=\"return_partner_"+product.id+"\" title=\"вернуться к поставщикам\"></i> " 
+		 +"<i class=\"fas fa-edit\" title=\"редактировать\"  data-toggle=\"modal\" data-target=\"#updateProductModal\"></i> " 
+		 +" <i class=\"fas fa-plus-circle\" title=\"добавить товар\ data-target=\"#addProductModal\"></i></td>"
+		 + "<td hidden>"+product.id+"</td>";
+		  
+		  return productRow;
+} 
+
+function hideProduct(){
+	$("#partnerContent").show();
+	$("#productContent").hide();
+	$("#productTable").empty();
+	$("#productCaption").remove();
+}
+
+
+
+function displayProductMeasure (measure ,convert){
+	switch(measure) {
+	case "LITER": 
+		return (convert === 1)?"литр": "LITER";
+	case "KILOGRAM":
+		return  (convert === 1)?"кило": "KILOGRAM";
+	case "UNIT":
+		return (convert === 1)?"един.": "UNIT";
+	}	
+}
+
+
+
+
+function displayProductProperties(properties,convert){
+	switch(properties) {
+	case 'INGREDIENS':  
+		return (convert === 1)?"ингридиент": "INGREDIENS";
+	case 'CONSUMABLES':  
+		return (convert === 1)?"расходник": "CONSUMABLES";
+	case 'PRODUCT_FINAL':
+		return (convert === 1)?"кон. продукт": "PRODUCT_FINAL";
+	case 'PRODUCT_COMPOSITE':
+		return (convert === 1)?"универс": "PRODUCT_COMPOSITE";
+	}	
+}
+
+
+
+
+
+
+
+
 
 //передача данных о партнере в модальное окно для обновления
 function updateModelDialog(){
@@ -100,6 +163,10 @@ function updateModelDialog(){
 	$("#partnerId").text(this.nextElementSibling.nextElementSibling.innerText);
 	
 }
+
+
+
+
 
 //очистить модальное окно по добавлению партнера при закрытии
 document.getElementById("closeNewPartner").addEventListener("focus", cleanNewPartner);
@@ -111,6 +178,12 @@ function cleanNewPartner(){
 	$("#inputCompanyMail").val("");
 }
 
+
+
+
+
+
+
 // обновления строчки данных о партнере
 function updateParnterRow( data){
 	var tr = document.getElementById("partner_id_"+data.id);
@@ -118,6 +191,11 @@ function updateParnterRow( data){
 	tr.previousElementSibling.previousElementSibling.innerText = data.phonNumber;
 	tr.previousElementSibling.innerText = data.partnerMail;
 }
+
+
+
+
+
 
 
 
@@ -131,6 +209,11 @@ function updatePartnerData(){
 	  request('PUT', 'http://localhost:8080/user/partners/'+$("#partnerId").text()+'/info',updateParnterRow ,data);
 }
 /******************** PUT function ****************************/
+
+
+
+
+
 
 
 /******************** POST function ****************************/
@@ -153,7 +236,14 @@ function addNewPartner(){
 
 /******************** POST function ****************************/
 
+
+
+
+
+
+
 /****************** request method *****************************/
+
 function request(type , url,method , json){
 	var httpRequest = new XMLHttpRequest();
 	httpRequest.open(type,  url, true);
@@ -186,8 +276,12 @@ function request(type , url,method , json){
 	}
 
 }
+
 /****************** request method *****************************/
     
+
+
+
 
 /******************** search function ****************************/
     $(document).ready(function(){
