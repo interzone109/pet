@@ -32,27 +32,44 @@
 			<div th:insert="~{template/topBar :: top_bar}"></div>
 
 			<div class="collapse" id="collapseInfo">
-				<div class="card card-body">Раздел отображает контактные данные поставщиков.
-				 Здесь вы можете  добавлять и редактировать данные о них.</div>
+				<div class="card card-body">Раздел отображает контактные
+					данные поставщиков. Здесь вы можете добавлять и редактировать
+					данные о них.</div>
 			</div>
-			<br>
-			<input id="searchOnPageTable" type="text" placeholder="Поиск..">
+			<br> <input id="searchOnPageTable" type="text"
+				placeholder="Поиск..">
 
 			<div class="line"></div>
 
-			<table class="table">
-				<thead>
-					<tr>
-						<th>Компания</th>
-						<th>Телефон</th>
-						<th>Почта</th>
-						<th>Изменить</th>
-					</tr>
-				</thead>
-				<tbody id="partnerTable">
-				</tbody>
-			</table>
-
+			
+				<table class="table" id="partnerContent">
+					<thead>
+						<tr>
+							<th>Компания</th>
+							<th>Телефон</th>
+							<th>Почта</th>
+							<th>Изменить</th>
+							<th>Товары</th>
+						</tr>
+					</thead>
+					<tbody id="partnerTable">
+					</tbody>
+				</table>
+				
+				<table class="table" id="productContent"  >
+					<thead>
+						<tr>
+							<th>Группа</th>
+							<th>Название</th>
+							<th>Описание</th>
+							<th>Применение</th>
+							<th>Мера</th>
+							<th>Изменить</th>
+						</tr>
+					</thead>
+					<tbody id="productTable">
+					</tbody>
+				</table>
 			<div class="line"></div>
 		</div>
 	</div>

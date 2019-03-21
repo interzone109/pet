@@ -1,3 +1,11 @@
+
+/******************** GET function ****************************/
+//заполняет страницу данными
+request('GET', 'http://localhost:8080/user/partners',addPartnerData);
+/******************** GET function ****************************/ 
+
+//прячем таблицу с продуктами поставщика
+$("#productContent").hide();
 //кнопка добавления нового партнера
 var addLink = document.createElement('a');
 addLink.className ="nav-link";
@@ -22,75 +30,19 @@ $("#comfirePartnerButton").on("focus", addNewPartner);
 // добавления функции обновления поставщика на кнопку "updatePartnerButton"
 //функция отправляет PUT запрос для обновления данных о партнере
 $("#updatePartnerButton").on("focus", updatePartnerData);
-/******************** PUT function ****************************/
-function updatePartnerData(){
-	  var requestPUT = new XMLHttpRequest();
-
-	  requestPUT.open("PUT", 'http://localhost:8080/user/partners/'+$("#partnerId").text()+'/info', true);
-	  requestPUT.setRequestHeader("Content-Type", "application/json");
-	  requestPUT.onreadystatechange = function () {
-	      if (requestPUT.readyState === 4 && requestPUT.status === 200) {
-	         var json = JSON.parse(requestPUT.responseText);
-	         console.log("PUT update partner data on server");
-	         updateParnterRow(json);
-	      }else {
-	        console.log('error send data');
-	      }
-	  };
-
-	  var data = JSON.stringify({
-	    "company": $("#updateCompanyName").val(),
-	    "phonNumber": $("#updateCompanyPhon").val(),
-	    "partnerMail":$("#updateCompanyMail").val()
-	  });
-	  
-	  console.log(data);
-	  requestPUT.send(data);
-}
-/******************** PUT function ****************************/
-
-/******************** POST function ****************************/
-// функция отправляет данные на POST метод сервера
-function addNewPartner(){
-  var requestPOST = new XMLHttpRequest();
-
-requestPOST.open("POST", 'http://localhost:8080/user/partners', true);
-requestPOST.setRequestHeader("Content-Type", "application/json");
-requestPOST.onreadystatechange = function () {
-    if (requestPOST.readyState === 4 && requestPOST.status === 200) {
-        var json = JSON.parse(requestPOST.responseText);
-       console.log("send new partner data to server");
-       console.log(json);
-       addPartnerData(json);
-    }else {
-      console.log('error send data');
-    }
-};
-
-var data = JSON.stringify({
-	"company": $("#inputCompanyName").val(),
-    "phonNumber": $("#inputCompanyPhon").val(),
-    "partnerMail":$("#inputCompanyMail").val()
-});
-requestPOST.send(data);
-
-$("#inputCompanyName").val("");
-$("#inputCompanyPhon").val("");
-$("#inputCompanyMail").val("");
-};
-/******************** POST function ****************************/
-
 
 // добавление строк партнеров на страницу
 function addPartnerData( dataJSON){
-	if(Array.isArray(dataJSON)){
+	if( Array.isArray(dataJSON)){
 	dataJSON.forEach(partner => {
 	  document.getElementById('partnerTable').appendChild( createPartnerElement( partner));
 	  document.getElementById("partner_id_"+partner.id).addEventListener("click",updateModelDialog);
+	  document.getElementById("partner_product_id_"+partner.id).addEventListener("click",showProducts);
 		});
 	}else{
 		document.getElementById('partnerTable').appendChild( createPartnerElement( dataJSON));
 		  document.getElementById("partner_id_"+dataJSON.id).addEventListener("click",updateModelDialog);
+		  document.getElementById("partner_product_id_"+dataJSON.id).addEventListener("click",showProducts);
 	}
 	}
 
@@ -104,51 +56,139 @@ function createPartnerElement( partner){
 		 + "<td>"+partner.partnerMail+"</td>"
 		 + "<td id=\"partner_id_"+partner.id+"\" data-toggle=\"modal\" data-target=\"#updateModalPartnerForm\"> " 
 		 +"<i class=\"fas fa-edit\" ></i> </td>"
+		 +"<td id=\"partner_product_id_"+partner.id+"\"><i class=\"fas fa-barcode\" ></i> </td>"
 		 + "<td hidden>"+partner.id+"</td>"
 		 
 		return partnerCol;
 }
+
+
+//функция запрашивает данные о продуктах данного поставщика
+function showProducts(){
+	$("#partnerContent").hide();
+	 request('GET' ,'http://localhost:8080/user/partners/'+this.nextElementSibling.innerText+'/info',displayProductData);
+
+}
+
+
+function displayProductData(result){
+	var products = result.productsModel;
+	console.log(result);
+	if(products!=null &&products.length != 0 ){
+	console.log(products.length );
+	} else{
+	$("#productContent").append(
+	 "<caption>" 
+	 +"<ul class=\"nav navbar-nav ml-auto\">"
+     +"<li class=\"nav-item\"> <a class=\"nav-link\" href=\"#\">Добавить продукт</a> </li>"
+     +"<li class=\"nav-item \">"
+     +"<a class=\"nav-link\" href=\"#\" > " +result.company+" </a>"
+     +"</li> </ul>"
+     +"</caption>");
+	
+		console.log(result);
+	}
+	
+	$("#productContent").show();
+}
+
 //передача данных о партнере в модальное окно для обновления
 function updateModelDialog(){
 	$("#updateCompanyName").val(this.previousElementSibling.previousElementSibling.previousElementSibling.innerText);
 	$("#updateCompanyPhon").val(this.previousElementSibling.previousElementSibling.innerText);
 	$("#updateCompanyMail").val(this.previousElementSibling.innerText);
-	$("#partnerId").text(this.nextElementSibling.innerText);
+	$("#partnerId").text(this.nextElementSibling.nextElementSibling.innerText);
 	
 }
+
 //очистить модальное окно по добавлению партнера при закрытии
 document.getElementById("closeNewPartner").addEventListener("focus", cleanNewPartner);
+
+//очистить модальное окно по обновлению партнера при закрытии
 function cleanNewPartner(){
 	$("#inputCompanyName").val("");
 	$("#inputCompanyPhon").val("");
 	$("#inputCompanyMail").val("");
 }
-//очистить модальное окно по обновлению партнера при закрытии
 
+// обновления строчки данных о партнере
 function updateParnterRow( data){
 	var tr = document.getElementById("partner_id_"+data.id);
 	tr.previousElementSibling.previousElementSibling.previousElementSibling.innerText = data.company ;
 	tr.previousElementSibling.previousElementSibling.innerText = data.phonNumber;
 	tr.previousElementSibling.innerText = data.partnerMail;
 }
-/******************** GET function ****************************/
-//заполняет страницу данными
-var requestGET = new XMLHttpRequest();
-requestGET.open('GET', 'http://localhost:8080/user/partners', true);
-    requestGET.onload = function () {
+
+
+
+/******************** PUT function ****************************/
+function updatePartnerData(){
+	  var data = JSON.stringify({
+	    "company": $("#updateCompanyName").val(),
+	    "phonNumber": $("#updateCompanyPhon").val(),
+	    "partnerMail":$("#updateCompanyMail").val()
+	  });
+	  request('PUT', 'http://localhost:8080/user/partners/'+$("#partnerId").text()+'/info',updateParnterRow ,data);
+}
+/******************** PUT function ****************************/
+
+
+/******************** POST function ****************************/
+
+// функция отправляет данные на POST метод сервера
+function addNewPartner(){
+
+	var data = JSON.stringify({
+		"company": $("#inputCompanyName").val(),
+	    "phonNumber": $("#inputCompanyPhon").val(),
+	    "partnerMail":$("#inputCompanyMail").val()
+	});
+
+	request('POST', 'http://localhost:8080/user/partners',addPartnerData ,data);
+
+	$("#inputCompanyName").val("");
+	$("#inputCompanyPhon").val("");
+	$("#inputCompanyMail").val("");
+};
+
+/******************** POST function ****************************/
+
+/****************** request method *****************************/
+function request(type , url,method , json){
+	var httpRequest = new XMLHttpRequest();
+	httpRequest.open(type,  url, true);
+	if(type==='GET'){
+	httpRequest.onload = function () {
+	      var dataJSON = JSON.parse(this.response);
+	      if (httpRequest.status >= 200 && httpRequest.status < 400) {
+	    	  method(dataJSON);
+	      } else {
+	        console.log('error '+type+' method '+url);
+	      }
+	    }
+	httpRequest.send();
+	}
+	if(type==='PUT' ||type==='POST' ){
+		httpRequest.setRequestHeader("Content-Type", "application/json");
+		httpRequest.onreadystatechange = function () {
+		    if (httpRequest.readyState === 4 && httpRequest.status === 200) {
+		        var json = JSON.parse(httpRequest.responseText);
+		       console.log('type '+type+' method '+url);
+		       console.log(json);
+		       method(json);
+		    }else {
+		      console.log('error send data');
+		    }
+		};
+		
+		console.log(json);
+		httpRequest.send(json);
+	}
+
+}
+/****************** request method *****************************/
     
-      var dataJSON = JSON.parse(this.response);
-      if (requestGET.status >= 200 && requestGET.status < 400) {
-        addPartnerData(dataJSON);
-        
-      } else {
-        console.log('error GET method');
-      }
-    }
-    
-    requestGET.send();
-/******************** GET function ****************************/ 
-    
+
 /******************** search function ****************************/
     $(document).ready(function(){
     	  $("#searchOnPageTable").on("keyup", function() {
@@ -159,6 +199,7 @@ requestGET.open('GET', 'http://localhost:8080/user/partners', true);
     	  });
     	});
 /******************** search function ****************************/
+    
     
 /******************** sidebar function ****************************/
     $(document).ready(function () {
