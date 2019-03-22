@@ -3,3 +3,12 @@
     $('#collapseInfo').collapse(status);
     this.title= (status ==="show")?"activ":"";
     });
+    
+    /******************** sidebar function ****************************/
+    $(document).ready(function () {
+        $('#sidebarCollapse').on('click', function () {
+            $('#sidebar').toggleClass('active');
+        });
+    });
+/******************** sidebar function ****************************/    
+    

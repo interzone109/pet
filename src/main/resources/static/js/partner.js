@@ -37,14 +37,12 @@ function addPartnerData( dataJSON){
 	dataJSON.forEach(partner => {
 	  document.getElementById('partnerTable').appendChild( createPartnerElement( partner));
 	  $("#partner_id_"+partner.id).on('click',updateModelDialog);
-	  $("#partner_product_id_"+partner.id).on('click',showProducts);
 	 	});
 	}else{
 		document.getElementById('partnerTable').appendChild( createPartnerElement( dataJSON));
 		 $("#partner_id_"+dataJSON.id).on('click',updateModelDialog);
-		 $("#partner_product_id_"+dataJSON.id).on('click',showProducts);
 	}
-	}
+}
 
 // верстка строк партнеров
 function createPartnerElement( partner){
@@ -54,9 +52,9 @@ function createPartnerElement( partner){
 	  partnerCol.innerHTML = "<td>"+partner.company+"</td>"
 		 + "<td>"+partner.phonNumber+"</td>"
 		 + "<td>"+partner.partnerMail+"</td>"
-		 + "<td id=\"partner_id_"+partner.id+"\" data-toggle=\"modal\" data-target=\"#updateModalPartnerForm\"> " 
-		 +"<i class=\"fas fa-edit\" ></i> </td>"
-		 +"<td id=\"partner_product_id_"+partner.id+"\"><i class=\"fas fa-barcode\" ></i> </td>"
+		 + "<td  > <i id=\"partner_id_"+partner.id+"\" data-toggle=\"modal\" data-target=\"#updateModalPartnerForm\">"
+		 +" <i class=\"fas fa-edit\"  title=\"добавить товар\"></i></i> "
+		 +"<i class=\"fas fa-barcode\" title=\"товары поставщика\"  onclick=\"showProducts("+partner.id+")\"></i> </td>"
 		 + "<td hidden>"+partner.id+"</td>";
 		 
 		return partnerCol;
@@ -64,9 +62,9 @@ function createPartnerElement( partner){
 
 
 //функция запрашивает данные о продуктах данного поставщика
-function showProducts(){
+function showProducts(id){
 	$("#partnerContent").hide();
-	 request('GET' ,'http://localhost:8080/user/partners/'+this.nextElementSibling.innerText+'/info',displayProductData);
+	 request('GET' ,'http://localhost:8080/user/partners/'+id+'/info',displayProductData);
 
 }
 
@@ -105,7 +103,7 @@ function displayProductRow(product){
 		 +"<td>"+displayProductMeasure(product.measureProduct,1)+"</td>"
 		 +"<td><i class=\"fas fa-barcode\" onclick=\"hideProduct()\" id=\"return_partner_"+product.id+"\" title=\"вернуться к поставщикам\"></i> " 
 		 +"<i class=\"fas fa-edit\" title=\"редактировать\"  data-toggle=\"modal\" data-target=\"#updateProductModal\"></i> " 
-		 +" <i class=\"fas fa-plus-circle\" title=\"добавить товар\ data-target=\"#addProductModal\"></i></td>"
+		 +"<i class=\"fas fa-plus-circle\" title=\"добавить товар\ data-target=\"#addProductModal\"></i></td>"
 		 + "<td hidden>"+product.id+"</td>";
 		  
 		  return productRow;
@@ -117,6 +115,7 @@ function hideProduct(){
 	$("#productTable").empty();
 	$("#productCaption").remove();
 }
+
 
 
 
@@ -157,10 +156,11 @@ function displayProductProperties(properties,convert){
 
 //передача данных о партнере в модальное окно для обновления
 function updateModelDialog(){
-	$("#updateCompanyName").val(this.previousElementSibling.previousElementSibling.previousElementSibling.innerText);
-	$("#updateCompanyPhon").val(this.previousElementSibling.previousElementSibling.innerText);
-	$("#updateCompanyMail").val(this.previousElementSibling.innerText);
-	$("#partnerId").text(this.nextElementSibling.nextElementSibling.innerText);
+	var parent = this.parentNode;
+	$("#updateCompanyName").val(parent.previousElementSibling.previousElementSibling.previousElementSibling.innerText);
+	$("#updateCompanyPhon").val(parent.previousElementSibling.previousElementSibling.innerText);
+	$("#updateCompanyMail").val(parent.previousElementSibling.innerText);
+	$("#partnerId").text(parent.nextElementSibling.innerText);
 	
 }
 
@@ -186,10 +186,10 @@ function cleanNewPartner(){
 
 // обновления строчки данных о партнере
 function updateParnterRow( data){
-	var tr = document.getElementById("partner_id_"+data.id);
-	tr.previousElementSibling.previousElementSibling.previousElementSibling.innerText = data.company ;
-	tr.previousElementSibling.previousElementSibling.innerText = data.phonNumber;
-	tr.previousElementSibling.innerText = data.partnerMail;
+	var parent = document.getElementById("partner_id_"+data.id).parentNode;
+	parent.previousElementSibling.previousElementSibling.previousElementSibling.innerText = data.company ;
+	parent.previousElementSibling.previousElementSibling.innerText = data.phonNumber;
+	parent.previousElementSibling.innerText = data.partnerMail;
 }
 
 
@@ -206,7 +206,10 @@ function updatePartnerData(){
 	    "phonNumber": $("#updateCompanyPhon").val(),
 	    "partnerMail":$("#updateCompanyMail").val()
 	  });
-	  request('PUT', 'http://localhost:8080/user/partners/'+$("#partnerId").text()+'/info',updateParnterRow ,data);
+	  
+	  console.log($("#updateCompanyName").val());
+	  
+	 // request('PUT', 'http://localhost:8080/user/partners/'+$("#partnerId").text()+'/info',updateParnterRow ,data);
 }
 /******************** PUT function ****************************/
 

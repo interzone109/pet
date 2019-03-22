@@ -40,44 +40,117 @@
 				placeholder="Поиск..">
 
 			<div class="line"></div>
-
+			<!-- ---------------- Partner table  ------------------------------- -->
 			
+				<div class="collapse" id="collapsePartnerBody">
+				<div class="card card-body">
+				<!-- ---------------- Create new partner form  ------------------------------- -->
+				<div>
+					<div class="form-row">
+						<div class="col">
+							<label for="inputCompanyName" class="sr-only">Компания</label>
+							 <input type="text" id="inputCompanyName" class="form-control" placeholder="Компания">
+						</div>
+						<div class="col">
+							<label for="inputCompanyPhon" class="sr-only">Телефон</label> 
+							<input 	type="text" id="inputCompanyPhon" class="form-control" placeholder="Телефон">
+						</div>
+						<div class="col">
+							<label for="inputCompanyMail" class="sr-only">Почта</label> 
+							<input type="text" id="inputCompanyMail" class="form-control" placeholder="Почта">
+						</div>
+						<div class="col-2">
+							<button class="btn btn-info"  onclick="postNewPartnerForm()"  >Добавить</button>
+						</div>
+					</div>
+				</div>
+				<!-- ---------------- Create new partner form  ------------------------------- -->
+				<br>
+				
+
 				<table class="table" id="partnerContent">
 					<thead>
 						<tr>
 							<th>Компания</th>
 							<th>Телефон</th>
 							<th>Почта</th>
-							<th>Изменить</th>
-							<th>Товары</th>
+							<th>Опции</th>
 						</tr>
 					</thead>
 					<tbody id="partnerTable">
 					</tbody>
 				</table>
+				</div>
+			</div>
+			<!-- ---------------- Partner table  ------------------------------- -->
+
+
+			<!-- ---------------- product table  ------------------------------- -->
+			
+			<div class="collapse" id="collapseProductBody">
+			<div class="card card-body">
+			
+			
+					<div class="form-row">
+						<div class="col">
+							<label for="inputProductGroup" class="sr-only">Группа</label>
+							 <input type="text" id="inputProductGroup" class="form-control" placeholder="Группа">
+						</div>
+						<div class="col">
+							<label for="inputProductName" class="sr-only">Название</label> 
+							<input 	type="text" id="inputProductName" class="form-control" placeholder="Название">
+						</div>
+						<div class="col">
+							<label for="inputProductDescription" class="sr-only">Описание</label> 
+							<input type="text" id="inputProductDescription" class="form-control" placeholder="Описание">
+						</div>
+						<div class="col"> 
+						<select class="form-control" id="propertieSelect">
+  							<option selected >ингридиент</option>
+  							<option>расходник</option>
+  							<option>универсальный</option>
+  							<option>конечный продукт</option>
+						</select>
+						</div>
+						<div class="col"> 
+						<select class="form-control" id="measureSelect">
+  							<option selected >шт.</option>
+  							<option>кило</option>
+  							<option>литр</option>
+						</select>
+						</div>
+						<div class="col-2">
+							<button class="btn btn-info" id="sendUpdateProduct" >Добавить</button>
+						</div>
+					</div>
 				
-				<table class="table" id="productContent"  >
+				<br>
+				<table class="table" id="productContent">
 					<thead>
 						<tr>
 							<th>Группа</th>
 							<th>Название</th>
 							<th>Описание</th>
-							<th>Применение</th>
+							<th>Свойство</th>
 							<th>Мера</th>
-							<th>Инструменты</th>
+							<th>Опции</th>
 						</tr>
 					</thead>
 					<tbody id="productTable">
 					</tbody>
 				</table>
+				</div>
+			</div>
+			<!-- ---------------- product table  ------------------------------- -->
+
 			<div class="line"></div>
 		</div>
 	</div>
 
-	<div th:insert="~{template/newPartnerForm :: partner_form}"></div>
+	<!-- <div th:insert="~{template/updateProductForm :: update_partner_form}"></div> -->
 	<div th:insert="~{template/updatePartnerForm :: update_partner_form}"></div>
 
 	<script th:src="@{/js/info.js}"></script>
-	<script th:src="@{/js/partner.js}"></script>
+	<script th:src="@{/js/partners.js}"></script>
 </body>
 </html>

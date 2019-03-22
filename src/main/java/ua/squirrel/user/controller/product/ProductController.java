@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -25,7 +26,7 @@ import ua.squirrel.web.entity.user.User;
 import ua.squirrel.web.service.registration.user.UserServiceImpl;
 
 @RestController
-@RequestMapping("/partners/{partner_id}/info/{product_id}/edit")
+@RequestMapping("/user/partners/{partner_id}/edit")
 @Slf4j
 public class ProductController {
 	@Autowired
@@ -39,6 +40,10 @@ public class ProductController {
 	@Autowired
 	private MeasureProductServiceImpl measureProductServiceImpl;
 	
+	@GetMapping
+	public String s() {
+		return "s";
+	}
 	
 	/**
 	 * мeтод получает список новых продуктов и добавляет их 
@@ -80,6 +85,7 @@ public class ProductController {
 	 * */
 	
 	@PutMapping
+	//@RequestMapping("/{product_id}")
 	public ProductModel updateProduct(Authentication authentication, @PathVariable("partner_id") Long id,
 			@PathVariable("product_id") Long productId ,@RequestBody ProductModel productModel) throws NotFoundException {
 		log.info("LOGGER: update current product");
@@ -117,34 +123,7 @@ public class ProductController {
 				.orElseThrow(() -> new NotFoundException("Partner not found"));
 	}
 	
-	/*
-	 [
-   {
-      
-      "name": "картошечка",
-      "description": "очень укусная картошечка фри",
-      "price": 1.25,
-      "groupProduct": {
-         "name": "CONSUMABLES"
-      },
-      "measureProduct": {
-         "measure": "UNIT"
-      }
-   },
-   {
-      "name": "картошечка",
-      "description": "очень укусная картошечка фри",
-      "price": 1.25,
-      "groupProduct": {
-         "name": "CONSUMABLES"
-      },
-      "measureProduct": {
-         "measure": "UNIT"
-      }
-   }
-]
-	 
-	 */
+
 
 
 }
