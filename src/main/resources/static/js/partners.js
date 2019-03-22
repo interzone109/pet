@@ -3,7 +3,8 @@
 // заполняет страницу данными после загрузки страницы
 request('GET', 'http://localhost:8080/user/partners', addPartnerData);
 /** ****************** GET function *************************** */ 
-$("#collapsePartnerBody").show();
+//$("#collapsePartnerBody").show(); !!!!!
+$("#collapsePartnerBody").collapse("show");
 
 
 /** ****************** display product row functions *************************** */
@@ -11,16 +12,12 @@ $("#collapsePartnerBody").show();
 
 // метод срабатывает при нажатии кнопки списка у поставщика
 function loadProductData(id){
-	$("#collapsePartnerBody").hide();// скрываем таблицу с поставщиками
-	 request('GET' ,'http://localhost:8080/user/partners/'+id+'/info',displayProductData);// делаем
-																							// запрос
-																							// к
-																							// серверу
-																							// на
-																							// получение
-																							// списка
-																							// продуктов
-	 $("#collapseProductBody").show();// показываем таблицу с продуктами
+	//$("#collapsePartnerBody").hide();// скрываем таблицу с поставщиками
+	 $("#collapsePartnerBody").collapse("hide");
+	// делаем запрос к серверу на получение списка продуктов
+	request('GET' ,'http://localhost:8080/user/partners/'+id+'/info',displayProductData);
+	 //$("#collapseProductBody").show();// показываем таблицу с продуктами   !!!!!!!
+	 $("#collapseProductBody").collapse("show");
 };
 
 
@@ -30,7 +27,6 @@ function displayProductData(dataJSON){
 	
 	var productList = dataJSON.productsModel ;
 	
-	console.log(dataJSON.length);
 	if(productList !== null && productList.length !== 0){
 	 if( Array.isArray(productList)){
 		 displayNewProductRow(productList);
@@ -46,14 +42,15 @@ function displayProductData(dataJSON){
 			     +"</li> </ul>"
 			     +"</caption>");
 				}
-				
-	$("#productContent").show();
+			
+	 $("#productContent").collapse("show");
+	//$("#productContent").show(); !!!!!!!!!!!!
 	$("#sendUpdateProduct").on("click",postNewProductForm );
 	$('#sendUpdateProduct').prop('title', dataJSON.id);
 	}
 	
 
-
+//метод формирует строку для таблицы продуктов
 function displayProductRow(product){
 	var productRow = document.createElement('tr');
 	  productRow.id = "product_row_id_"+product.id;
@@ -67,7 +64,8 @@ function displayProductRow(product){
 		 +"<i class=\"fas fa-list-alt\" onclick=\"hideProduct()\"  title=\"вернуться к поставщикам\"></i> </td>"
 		
 		  return productRow;
-};
+}
+
 // метод добавляет одну строку
 function displayNewProductRow(productList){
 	productList.forEach(product => {
@@ -77,12 +75,14 @@ function displayNewProductRow(productList){
 
 function updateProduct(){
 	console.log("update product");
-};
+}
 
 
 function hideProduct(){
-	$("#collapsePartnerBody").show();// покахываем список поставщиков
-	$("#collapseProductBody").hide();// прячес список продуктов
+	 $("#collapsePartnerBody").collapse("show");
+	//$("#collapsePartnerBody").show();// покахываем список поставщиков !!!!!!!!!!!!
+	//$("#collapseProductBody").hide();// прячес список продуктов !!!!!!!!!!
+	 $("#collapseProductBody").collapse("hide");
 	$("#productTable").empty();// чистим строки в таблице с продуктами
 	$("#productCaption").remove();// удаляем заголовок списка, если такой есть
 };
@@ -233,7 +233,7 @@ function postNewProductForm(){
 // срадабывает при нажатии кнопки реактирования
 // функция вызывает модальное окно для обновленния данных о поставщике
 function updatePartnerRow(id){
-	$('#updateModalPartnerForm').modal('show');
+	$('#updateModalPartnerForm').modal('show'); 
 	$("#updateCompanyName").val($("#partner_company_id_"+id).text());
 	$("#updateCompanyPhon").val($("#partner_phon_id_"+id).text());
 	$("#updateCompanyMail").val($("#partner_mail_id_"+id).text());
