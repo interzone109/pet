@@ -85,7 +85,7 @@ public class ProductController {
 	 * */
 	
 	@PutMapping
-	//@RequestMapping("/{product_id}")
+	@RequestMapping("/{product_id}")
 	public ProductModel updateProduct(Authentication authentication, @PathVariable("partner_id") Long id,
 			@PathVariable("product_id") Long productId ,@RequestBody ProductModel productModel) throws NotFoundException {
 		log.info("LOGGER: update current product");
