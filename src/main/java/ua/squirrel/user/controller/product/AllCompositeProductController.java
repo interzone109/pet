@@ -20,7 +20,7 @@ import ua.squirrel.web.entity.user.User;
 import ua.squirrel.web.service.registration.user.UserServiceImpl;
 
 @RestController
-@RequestMapping("/partners/composites" )
+@RequestMapping("/user/composites" )
 @Slf4j
 //@Secured("USER")
 public class AllCompositeProductController {
@@ -52,7 +52,7 @@ public class AllCompositeProductController {
 	 * сущности и сохраняет их в базу
 	 */
 	@PostMapping
-	public List<CompositeProductModel> addNewCompositeProduct(Authentication authentication,
+	public CompositeProductModel addNewCompositeProduct(Authentication authentication,
 			@RequestBody CompositeProductModel newCompositeProductModels) {
 		log.info("LOGGER: save new Composite ProductModel from model ");
 
@@ -61,13 +61,13 @@ public class AllCompositeProductController {
 		compositeProduct.setName(newCompositeProductModels.getName());
 		compositeProduct.setGroup(newCompositeProductModels.getGroup());
 		compositeProduct.setPropertiesProduct(propertiesProductServiceImpl.findOneByName("PRODUCT_FINAL"));
-		compositeProduct.setProductExpend(newCompositeProductModels.getProductExpend());
 		
 		compositeProduct.setUser(user);
 		compositeProductServiceImpl.save(compositeProduct);
-	
+		
+		newCompositeProductModels.setId(compositeProduct.getId());
 
-		return getAllCompositProduct(user);
+		return newCompositeProductModels;
 	}
 
 	private List<CompositeProductModel> getAllCompositProduct(User user) {

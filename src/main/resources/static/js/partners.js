@@ -1,9 +1,10 @@
 
 /** ****************** GET function *************************** */
 // заполняет страницу данными после загрузки страницы
-request('GET', 'http://localhost:8080/user/partners', addPartnerData);
+var connectUrl = "http://localhost:8080" ;
+
+request('GET', connectUrl+'/user/partners', addPartnerData);
 /** ****************** GET function *************************** */ 
-//$("#collapsePartnerBody").show(); !!!!!
 $("#collapsePartnerBody").collapse("show");
 
 
@@ -12,26 +13,28 @@ $("#collapsePartnerBody").collapse("show");
 
 // метод срабатывает при нажатии кнопки списка у поставщика
 function loadProductData(id){
-	//$("#collapsePartnerBody").hide();// скрываем таблицу с поставщиками
-	 $("#collapsePartnerBody").collapse("hide");
+	 $("#collapsePartnerBody").collapse("hide");// скрываем таблицу с поставщиками
 	// делаем запрос к серверу на получение списка продуктов
-	request('GET' ,'http://localhost:8080/user/partners/'+id+'/info',displayProductData);
-	 //$("#collapseProductBody").show();// показываем таблицу с продуктами   !!!!!!!
-	 $("#collapseProductBody").collapse("show");
+	request('GET' ,connectUrl+'/user/partners/'+id+'/info',displayProductDataGET);
+	 
+	 $("#collapseProductBody").collapse("show");// показываем таблицу с продуктами 
+	 $("#curentPartnerProductList").text(id);
 };
 
 
 // метод проверяет являются ли данные масивом
-// и передает их методу формирующие строки для таблицы
-function displayProductData(dataJSON){
+// и передает их методу формирующие строки для таблицы продукты
+function displayProductDataGET(dataJSON){
 	
 	var productList = dataJSON.productsModel ;
-	
+	console.log(dataJSON);
 	if(productList !== null && productList.length !== 0){
 	 if( Array.isArray(productList)){
-		 displayNewProductRow(productList);
+		 productList.forEach(product => {
+			  $('#productTable').append(displayProductRow( product));
+			 });
 		}else{
-			$('#productTable').append(displayProductRow( dataJSON.productsModel));
+			$('#productTable').append(displayProductRow( dataJSON));
 		}
 	}else{
 		$("#productContent").append(
@@ -43,12 +46,13 @@ function displayProductData(dataJSON){
 			     +"</caption>");
 				}
 			
-	 $("#productContent").collapse("show");
-	//$("#productContent").show(); !!!!!!!!!!!!
-	$("#sendUpdateProduct").on("click",postNewProductForm );
+	$("#productContent").collapse("show");
 	$('#sendUpdateProduct').prop('title', dataJSON.id);
 	}
-	
+$("#sendUpdateProduct").on("click",postNewProductForm );
+
+
+
 
 //метод формирует строку для таблицы продуктов
 function displayProductRow(product){
@@ -60,29 +64,96 @@ function displayProductRow(product){
 		 + "<td id=\"product_description_id_"+product.id+"\">"+product.description+"</td>"
 		 +"<td id=\"product_properties_id_"+product.id+"\">"+displayProductProperties(product.propertiesProduct,1)+"</td>"
 		 +"<td id=\"product_measure_id_"+product.id+"\">"+displayProductMeasure(product.measureProduct,1)+"</td>"
-		 +"<td> <i class=\"fas fa-edit\" title=\"редактировать\" onclick=\"updateProduct()\" ></i> " 
+		 +"<td> <i class=\"fas fa-edit\" title=\"редактировать\" onclick=\"updateProduct("+product.id+")\" ></i> " 
 		 +"<i class=\"fas fa-list-alt\" onclick=\"hideProduct()\"  title=\"вернуться к поставщикам\"></i> </td>"
 		
 		  return productRow;
 }
 
-// метод добавляет одну строку
-function displayNewProductRow(productList){
-	productList.forEach(product => {
-		  $('#productTable').append(displayProductRow( product));
-		 	});
+
+/********************  PUT update product row  ****************************/
+
+
+
+
+
+
+// метод вызывает модальное окно для обновления записей о продуктах поставщика
+function updateProduct(id){
+
+	//устанавливаем в поля текущие значения
+	$('#updateModalProductForm').modal('show'); 
+	$("#updateProductGroup").val($("#product_group_id_"+id).text());
+	$("#updateProductName").val($("#product_name_id_"+id).text());
+	$("#updateProductDescription").val($("#product_description_id_"+id).text());
+	$("#updatePropertieSelect option[value="+$("#product_properties_id_"+id).text()+"]").prop('selected', true);
+	$("#updateMeasureSelect option[value="+$("#product_measure_id_"+id).text()+"]").prop('selected', true);
+	 // устонавливаем слушателя на кнопку обновления
+	$("#updateProductButton").on("click", sendUpdateProductRow);
+	$("#sendProductId").text(id);
 }
 
-function updateProduct(){
-	console.log("update product");
+// формируем жсон и отправляем его на сервер
+function sendUpdateProductRow(){
+	
+	var data = JSON.stringify({
+			 "name": $("#updateProductName").val(),
+	         "description": $("#updateProductDescription").val(),
+	         "group": $("#updateProductGroup").val(),
+	         "partner": null,
+	         "propertiesProduct":displayProductProperties( $("#updatePropertieSelect option:selected" ).text() , 2),
+	         "measureProduct":   displayProductMeasure( $("#updateMeasureSelect option:selected" ).text(), 2)
+		   }
+		);
+	
+	request('PUT', connectUrl+'/user/partners/'+$("#curentPartnerProductList").text()+'/edit/'+$("#sendProductId").text(),updateProductRow ,data);
+}
+
+// обновляет поля в таблице с продуктами
+function updateProductRow (productRow){
+
+	
+	$("#product_group_id_"+productRow.id).text(productRow.group);
+	$("#product_name_id_"+productRow.id).text(productRow.name);
+	$("#product_description_id_"+productRow.id).text(productRow.description);
+	$("#product_properties_id_"+productRow.id).text(displayProductProperties(productRow.propertiesProduct,1));
+	$("#product_measure_id_"+productRow.id).text(displayProductMeasure(productRow.measureProduct,1));
 }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+/********************  PUT update product row  ****************************/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// метод прячит таблицу с продуктами и заменяет ее таблицей с поставщиками
 function hideProduct(){
-	 $("#collapsePartnerBody").collapse("show");
-	//$("#collapsePartnerBody").show();// покахываем список поставщиков !!!!!!!!!!!!
-	//$("#collapseProductBody").hide();// прячес список продуктов !!!!!!!!!!
-	 $("#collapseProductBody").collapse("hide");
+	 $("#collapsePartnerBody").collapse("show");// покахываем список поставщиков
+	 $("#collapseProductBody").collapse("hide"); // прячес список продуктов
 	$("#productTable").empty();// чистим строки в таблице с продуктами
 	$("#productCaption").remove();// удаляем заголовок списка, если такой есть
 };
@@ -96,8 +167,8 @@ function displayProductMeasure (measure ,convert){
 		return (convert === 1)?"литр": "LITER";
 	}else if( measure ==="KILOGRAM" || measure==="кило"){
 		return  (convert === 1)?"кило": "KILOGRAM";
-	}else if( measure ==="UNIT" || measure==="един."){
-		return  (convert === 1)?"един.": "UNIT";
+	}else if( measure ==="UNIT" || measure==="шт"){
+		return  (convert === 1)?"шт": "UNIT";
 	}
 	
 };
@@ -170,7 +241,7 @@ function postNewPartnerForm(){
 	    "partnerMail":$("#inputCompanyMail").val()
 	});
 
-	request('POST', 'http://localhost:8080/user/partners',addPartnerData ,data);
+	request('POST',connectUrl+'/user/partners',addPartnerData ,data);
 
 	$("#inputCompanyName").val("");
 	$("#inputCompanyPhon").val("");
@@ -195,7 +266,7 @@ function postNewPartnerForm(){
 // и добавляет вернувшиеся данные на страницу
 function postNewProductForm(){
 	console.log("post new prod "+ this.title);
-	var data = JSON.stringify([
+	var data = JSON.stringify(
 		 {
 			 "name": $("#inputProductName").val(),
 	         "description": $("#inputProductDescription").val(),
@@ -204,9 +275,9 @@ function postNewProductForm(){
 	         "propertiesProduct":displayProductProperties( $("#propertieSelect option:selected" ).text() , 2),
 	         "measureProduct":   displayProductMeasure( $("#measureSelect option:selected" ).text(), 2)
 		   }
-		]);
+		);
 
-	request('POST', 'http://localhost:8080/user/partners/'+this.title+'/edit',displayNewProductRow ,data);
+	request('POST', connectUrl+'/user/partners/'+this.title+'/edit',displayPostProductRow ,data);
 
 	$("#inputProductName").val("");
 	$("#inputProductDescription").val("");
@@ -214,7 +285,9 @@ function postNewProductForm(){
 	
 };
 
-
+function displayPostProductRow (data){
+	$('#productTable').append(displayProductRow( data));
+}
 
 
 /**
@@ -249,7 +322,7 @@ function sendUpdatePartnerRow(id){
 		    "phonNumber": $("#updateCompanyPhon").val(),
 		    "partnerMail":$("#updateCompanyMail").val()
 		  });
-		  request('PUT', 'http://localhost:8080/user/partners/'+$("#partnerIdModalUpdate").text()+'/info',reusePartnerRow ,data);
+		  request('PUT', connectUrl+'/user/partners/'+$("#partnerIdModalUpdate").text()+'/info',reusePartnerRow ,data);
 	
 };
 

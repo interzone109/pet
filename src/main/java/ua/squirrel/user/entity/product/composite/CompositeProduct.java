@@ -34,9 +34,11 @@ public class CompositeProduct {
 	@Column(name = "name", unique = true)
 	private String name;
 	
+	//поле хранит текущай расход и id расходуемого ингридиента
 	@Column(name = "expend_product_id", length=512)
 	private String productExpend ;
 	
+	//поле хранит предыдущий расход и дату его изменения
 	@Column(name = "expend_update_id", length=1024)
 	private String expendUpdate ;
 	

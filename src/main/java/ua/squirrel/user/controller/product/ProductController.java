@@ -1,8 +1,6 @@
 package ua.squirrel.user.controller.product;
 
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -51,31 +49,34 @@ public class ProductController {
 	 * */
 	
 	@PostMapping
-	public List<ProductModel> dddProductToPartner(Authentication authentication, @PathVariable("partner_id") Long id,
-			@RequestBody List<ProductModel> productsModel) throws NotFoundException {
+	public ProductModel dddProductToPartner(Authentication authentication, @PathVariable("partner_id") Long id,
+			@RequestBody ProductModel productsModel) throws NotFoundException {
 		log.info("LOGGER: add product to current partner");
 
 		User userCurrentSesion = userServiceImpl.findOneByLogin("test1").get();
 
 		Partner partner = getCurrentPartner(id, userCurrentSesion);
 
-		productsModel.stream().forEach(obj -> {
 			Product addProduct = new Product();
-			addProduct.setDescription(obj.getDescription());
-			addProduct.setName(obj.getName());
+			addProduct.setDescription(productsModel.getDescription());
+			addProduct.setName(productsModel.getName());
 			addProduct.setPropertiesProduct( 
-					propertiesProductServiceImpl.findOneByName(obj.getPropertiesProduct()));
+					propertiesProductServiceImpl.findOneByName(productsModel.getPropertiesProduct()));
 			addProduct.setMeasureProduct(
-					measureProductServiceImpl.findOneByMeasure(obj.getMeasureProduct()));
-			addProduct.setGroup(obj.getGroup());
+					measureProductServiceImpl.findOneByMeasure(productsModel.getMeasureProduct()));
+			addProduct.setGroup(productsModel.getGroup());
 			addProduct.setPartner(partner);
 
 			addProduct.setUser(userCurrentSesion);
 			
 			partner.getProducts().add(addProduct);
-		});
+
 
 		partnerServiceImpl.save(partner);
+		productServiceImpl.save(addProduct);
+		
+		
+		productsModel.setId(addProduct.getId());
 
 		return productsModel;
 	}
@@ -107,6 +108,7 @@ public class ProductController {
 		updateProduct.setPartner(partner);
 		productServiceImpl.save(updateProduct);
 		
+		productModel.setId(updateProduct.getId());
 		return productModel;
 	}
 	

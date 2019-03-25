@@ -117,13 +117,13 @@
 						</div>
 						<div class="col"> 
 						<select class="form-control" id="measureSelect">
-  							<option selected >шт.</option>
+  							<option selected >шт</option>
   							<option>кило</option>
   							<option>литр</option>
 						</select>
 						</div>
 						<div class="col-2">
-							<button class="btn btn-info" id="sendUpdateProduct" >Добавить</button>
+							<button class="btn btn-info"  id="sendUpdateProduct" >Добавить</button>
 						</div>
 					</div>
 				
@@ -143,6 +143,7 @@
 					</tbody>
 				</table>
 				</div>
+				<div hidden id="curentPartnerProductList"></div>
 			</div>
 			<!-- ---------------- product table  ------------------------------- -->
 
@@ -150,7 +151,7 @@
 		</div>
 	</div>
 
-	<!-- <div th:insert="~{template/updateProductForm :: update_partner_form}"></div> -->
+	 <div th:insert="~{template/updateProductForm :: update_product_form}"></div>
 	<div th:insert="~{template/updatePartnerForm :: update_partner_form}"></div>
 
 	<script th:src="@{/js/info.js}"></script>

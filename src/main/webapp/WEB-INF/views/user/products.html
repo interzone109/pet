@@ -30,14 +30,54 @@
 		<!-- Content conteiner -->
 		<div id="content">
 			<div th:insert="~{template/topBar :: top_bar}"></div>
+			
+			<!-- -----------  info collapse --------------------- -->
 			<div class="collapse" id="collapseInfo">
-				<div class="card card-body">Раздел отображает данные о товарах
-					которые заказываются у поставщика. На данной странице можно их редактировать и добавлять.</div>
+				<div class="card card-body">Раздел служит для созания общего асортимента продуктов.
+				<br>
+				Возможности :
+				<br>-cоздание продукта на продажу (используя ингридиенты поставщиков);
+				<br>-yчет расхода ингридиентов при покупке единицы продукта;
+				</div>
 			</div>
+			<!-- -----------  info collapse --------------------- -->
+			
+			<!-- -----------  search  --------------------- -->
 			<br> <input id="searchOnPageTable" type="text"
 				placeholder="Поиск..">
 			<div class="line"></div>
-			<div class="well">
+			<!-- -----------  search --------------------- -->
+			
+			
+			<!-- -----------  assortment table  --------------------- -->
+			<div class="well" id="collapseCompositeProductBody">
+				<div class="card card-body">
+			
+				<!-- ---------------- Create new partner form  ------------------------------- -->
+				<div>
+					<div class="form-row">
+						<div class="col">
+							<label for="inputCompositeName" class="sr-only">Компания</label>
+							 <input type="text" id="inputCompositeName" class="form-control" placeholder="Компания">
+						</div>
+						<div class="col">
+							<label for="inputCompanyPhon" class="sr-only">Телефон</label> 
+							<input 	type="text" id="inputCompanyPhon" class="form-control" placeholder="Телефон">
+						</div>
+						<div class="col">
+							<label for="inputCompanyMail" class="sr-only">Почта</label> 
+							<input type="text" id="inputCompanyMail" class="form-control" placeholder="Почта">
+						</div>
+						<div class="col-2">
+							<button class="btn btn-info"  onclick="postNewPartnerForm()"  >Добавить</button>
+						</div>
+					</div>
+				</div>
+				<!-- ---------------- Create new partner form  ------------------------------- -->
+				<br>
+			
+			
+			
 				<table class="table">
 					<thead>
 						<tr>
@@ -52,9 +92,12 @@
 					<tbody id="productTable">
 					</tbody>
 				</table>
+				
+				<!-- -----------  assortment table  --------------------- -->	
 			</div>
 
 			<div class="line"></div>
+		</div>
 		</div>
 	</div>
 

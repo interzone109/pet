@@ -13,8 +13,6 @@ public class CompositeProductModel {
 	private long id;
 
 	private String name;
-
-	private String productExpend ;
 	
 	private Map<ProductModel, Integer> products;
 	
