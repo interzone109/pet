@@ -4,7 +4,6 @@ package ua.squirrel.user.controller.product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -23,6 +22,13 @@ import ua.squirrel.user.service.product.properties.PropertiesProductServiceImpl;
 import ua.squirrel.web.entity.user.User;
 import ua.squirrel.web.service.registration.user.UserServiceImpl;
 
+/**
+ * Controller :
+ * POST create new product, save in db  and return new product model
+ * PUT update product info by product id in current partner
+ * */
+
+
 @RestController
 @RequestMapping("/user/partners/{partner_id}/edit")
 @Slf4j
@@ -38,13 +44,9 @@ public class ProductController {
 	@Autowired
 	private MeasureProductServiceImpl measureProductServiceImpl;
 	
-	@GetMapping
-	public String s() {
-		return "s";
-	}
 	
 	/**
-	 * мeтод получает список новых продуктов и добавляет их 
+	 * мeтод получает  новый продукт и добавляет его
 	 * к текущему поставщику.
 	 * */
 	
@@ -84,7 +86,6 @@ public class ProductController {
 	/**
 	 * мeтод обновляет выбранный продукт
 	 * */
-	
 	@PutMapping
 	@RequestMapping("/{product_id}")
 	public ProductModel updateProduct(Authentication authentication, @PathVariable("partner_id") Long id,

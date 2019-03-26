@@ -1,5 +1,6 @@
 package ua.squirrel.user.controller.product;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -21,7 +22,6 @@ import javassist.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import ua.squirrel.user.entity.product.ProductModel;
 import ua.squirrel.user.entity.product.composite.CompositeProduct;
-import ua.squirrel.user.entity.product.composite.CompositeProductModel;
 import ua.squirrel.user.entity.product.composite.CompositeProductUpdateDeteleModel;
 import ua.squirrel.user.service.product.CompositeProductServiceImpl;
 import ua.squirrel.user.service.product.ProductServiceImpl;
@@ -29,7 +29,7 @@ import ua.squirrel.web.entity.user.User;
 import ua.squirrel.web.service.registration.user.UserServiceImpl;
 
 @RestController
-@RequestMapping("/partners/composites/{id}/info")
+@RequestMapping("user/composites/{id}/edit")
 @Slf4j
 public class CompositeProductController {
 	@Autowired
@@ -44,12 +44,12 @@ public class CompositeProductController {
 	 * его ингридиентах
 	 */
 	@GetMapping
-	public CompositeProductModel getCompositeProductInfo(Authentication authentication, @PathVariable("id") Long id)
+	public List<ProductModel> getCompositeProductInfo(Authentication authentication, @PathVariable("id") Long id)
 			throws NotFoundException {
 		log.info("LOGGER: return curent composite product");
 		User userCurrentSesion = userServiceImpl.findOneByLogin("test1").get();
 		// вызывается привaтный метод возращающий модель коспозитного продукта
-		return getCompositeProductModel(id, userCurrentSesion);
+		return getProductExpendsModel(id, userCurrentSesion);
 
 	}
 
@@ -57,7 +57,7 @@ public class CompositeProductController {
 	 * метод добавляет новые ингридиенты и их расход к продукту
 	 */
 	@PostMapping
-	public CompositeProductModel addToCompositeProduct(@PathVariable("id") Long id,
+	public List<ProductModel> addToCompositeProduct(@PathVariable("id") Long id,
 			@RequestBody Map<Long, Integer> composites, Authentication authentication) throws NotFoundException {
 		log.info("LOGGER: update curent composite product");
 		User userCurrentSesion = userServiceImpl.findOneByLogin("test1").get();
@@ -85,14 +85,14 @@ public class CompositeProductController {
 		// записываем строку в композитный продукт и сохраняем его в базу
 		compositeProduct.setProductExpend(productExpend.toString());
 		compositeProductServiceImpl.save(compositeProduct);
-		return getCompositeProductModel(id, userCurrentSesion);
+		return getProductExpendsModel(id, userCurrentSesion);
 	}
 
 	/**
 	 * метод обновляет расход ингридиентов и удаляет продукты
 	 */
 	@PutMapping
-	public CompositeProductModel updateDeleteProduct(@PathVariable("id") Long id, Authentication authentication,
+	public List<ProductModel> updateDeleteProduct(@PathVariable("id") Long id, Authentication authentication,
 			@RequestBody CompositeProductUpdateDeteleModel updateDeteleModel) throws NotFoundException {
 		log.info("LOGGER: update  product expends");
 		User userCurrentSesion = userServiceImpl.findOneByLogin("test1").get();
@@ -140,7 +140,7 @@ public class CompositeProductController {
 		if (updateDeteleModel.getDeleteIds() != null) {
 			deleteCompositeProduct(id, updateDeteleModel.getDeleteIds(), compositeProduct);
 		}
-		return getCompositeProductModel(id, userCurrentSesion);
+		return getProductExpendsModel(id, userCurrentSesion);
 	}
 
 	/**
@@ -176,7 +176,10 @@ public class CompositeProductController {
 				.orElseThrow(() -> new NotFoundException("Composite product not found"));
 	}
 
-	private CompositeProductModel getCompositeProductModel(Long id, User currentUser) throws NotFoundException {
+	
+	
+	
+	private List<ProductModel> getProductExpendsModel(Long id, User currentUser) throws NotFoundException {
 
 		CompositeProduct compositeProduct = getCompositeProduct(id, currentUser);
 
@@ -189,24 +192,21 @@ public class CompositeProductController {
 			idsExpends.put(Long.parseLong(parse[0]), Integer.parseInt(parse[1]));
 		}
 
-		Map<ProductModel, Integer> composites = new HashMap<>();
+		List<ProductModel> composites = new ArrayList<>();
 
 		productServiceImpl.findAllById(idsExpends.keySet()).stream().forEach(product -> {
 			ProductModel prodModel = ProductModel.builder()
 					.id(product.getId())
 					.name(product.getName())
-					.description(product.getDescription())
+					.description( idsExpends.get(product.getId()).toString())
 					.group(product.getGroup())
-					.measureProduct(product.getMeasureProduct().toString())
-					.propertiesProduct(product.getPropertiesProduct().toString())
+					.measureProduct(product.getMeasureProduct().getMeasure())
 					.build();
-			composites.put(prodModel, idsExpends.get(product.getId()));
+			composites.add(prodModel);
 
 		});
 
-		return CompositeProductModel.builder().id(compositeProduct.getId()).name(compositeProduct.getName())
-				.products(composites).group(compositeProduct.getGroup())
-				.propertiesProduct(compositeProduct.getPropertiesProduct().toString()).build();
+		return composites ;
 	}
 
 	/*

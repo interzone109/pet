@@ -99,6 +99,7 @@ public class FillDataUtil {
 		CompositeProduct americano = new CompositeProduct();
 		americano.setName("Американо");
 		americano.setPropertiesProduct(propertiesProductServiceImpl.findOneByName("PRODUCT_FINAL"));
+		americano.setMeasureProduct(measureProductServiceImpl.findOneByMeasure("UNIT"));
 		americano.setGroup("горячие напитки");
 		americano.setUser(owner);
 
@@ -106,18 +107,21 @@ public class FillDataUtil {
 		CompositeProduct tea = new CompositeProduct();
 		tea.setName("чай");
 		tea.setPropertiesProduct(propertiesProductServiceImpl.findOneByName("PRODUCT_FINAL"));
+		tea.setMeasureProduct(measureProductServiceImpl.findOneByMeasure("UNIT"));
 		tea.setGroup("горячие напитки");
 		tea.setUser(owner);
 		
 		CompositeProduct fries = new CompositeProduct();
 		fries.setName("картошка фри 250");
 		fries.setPropertiesProduct(propertiesProductServiceImpl.findOneByName("PRODUCT_FINAL"));
+		fries.setMeasureProduct(measureProductServiceImpl.findOneByMeasure("UNIT"));
 		fries.setGroup("горячие блюда");
 		fries.setUser(owner);
 		
 		CompositeProduct friesBig = new CompositeProduct();
 		friesBig.setName("картошка фри 500");
 		friesBig.setPropertiesProduct(propertiesProductServiceImpl.findOneByName("PRODUCT_FINAL"));
+		friesBig.setMeasureProduct(measureProductServiceImpl.findOneByMeasure("UNIT"));
 		friesBig.setGroup("горячие блюда");
 		friesBig.setUser(owner);
 	

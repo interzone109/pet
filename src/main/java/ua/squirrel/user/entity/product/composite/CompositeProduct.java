@@ -13,6 +13,7 @@ import javax.persistence.Table;
 
 
 import lombok.Data;
+import ua.squirrel.user.entity.product.MeasureProduct;
 import ua.squirrel.user.entity.product.PropertiesProduct;
 import ua.squirrel.web.entity.user.User;
 
@@ -48,6 +49,10 @@ public class CompositeProduct {
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "properties_id")
 	private PropertiesProduct propertiesProduct;
+	
+	@OneToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "measure_id")
+	private MeasureProduct measureProduct;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_owner_id", nullable = false)

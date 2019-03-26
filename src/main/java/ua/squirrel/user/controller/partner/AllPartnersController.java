@@ -16,7 +16,12 @@ import ua.squirrel.user.entity.partner.PartnerModel;
 import ua.squirrel.user.service.partner.PartnerServiceImpl;
 import ua.squirrel.web.entity.user.User;
 import ua.squirrel.web.service.registration.user.UserServiceImpl;
-
+/**
+ * Controller :
+ * GET return partners list 
+ * POST create new partner, save in db  and return new partner model
+ * 
+ * */
 @RestController
 @RequestMapping("/user/partners")
 @Slf4j

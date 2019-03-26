@@ -43,65 +43,102 @@
 			<!-- -----------  info collapse --------------------- -->
 			
 			<!-- -----------  search  --------------------- -->
-			<br> <input id="searchOnPageTable" type="text"
+			<br> <input id="searchCompositeTable" type="text"
 				placeholder="Поиск..">
 			<div class="line"></div>
 			<!-- -----------  search --------------------- -->
 			
 			
 			<!-- -----------  assortment table  --------------------- -->
-			<div class="well" id="collapseCompositeProductBody">
+			<div class="collapse" id="collapseCompositeProductBody">
 				<div class="card card-body">
 			
-				<!-- ---------------- Create new partner form  ------------------------------- -->
+				<!-- ---------------- Create new composite form  ------------------------------- -->
 				<div>
 					<div class="form-row">
 						<div class="col">
-							<label for="inputCompositeName" class="sr-only">test</label>
-							 <input type="text" id="inputCompositeName" class="form-control" placeholder="Компания">
+							<label for="inputCompositeName" class="sr-only">Название</label>
+							 <input type="text" id="inputCompositeName" class="form-control" placeholder="Название">
 						</div>
 						<div class="col">
-							<label for="inputCompanyPhon" class="sr-only">Телефон</label> 
-							<input 	type="text" id="inputCompanyPhon" class="form-control" placeholder="Телефон">
+							<label for="inputCompositeGroup" class="sr-only">Группа</label> 
+							<input 	type="text" id="inputCompositeGroup" class="form-control" placeholder="Группа">
 						</div>
-						<div class="col">
-							<label for="inputCompanyMail" class="sr-only">Почта</label> 
-							<input type="text" id="inputCompanyMail" class="form-control" placeholder="Почта">
+						<div class="col"> 
+						<select class="form-control" id="measureSelect">
+  							<option selected value="шт">шт</option>
+  							<option>кило</option>
+  							<option>литр</option>
+						</select>
 						</div>
 						<div class="col-2">
-							<button class="btn btn-info"  onclick="postNewPartnerForm()"  >Добавить</button>
+							<button class="btn btn-info"  onclick="postNewCompositeProduct()"  >Добавить</button>
 						</div>
 					</div>
 				</div>
-				<!-- ---------------- Create new partner form  ------------------------------- -->
+				<!-- ---------------- Create new composite form  ------------------------------- -->
 				<br>
 			
-			
+			<!-- -----------  composite table  --------------------- -->	
 			
 				<table class="table">
 					<thead>
 						<tr>
+						    <th>Группа</th>
 							<th>Название</th>
-							<th>Описание</th>
-							<th>Группа</th>
-							<th>Поставщик</th>
-							<th>Применение</th>
 							<th>Мера</th>
+							<th>Опции</th>
 						</tr>
 					</thead>
-					<tbody id="productTable">
+					<tbody id="productTableBody">
 					</tbody>
 				</table>
 				
-				<!-- -----------  assortment table  --------------------- -->	
+				<!-- -----------  composite table  --------------------- -->	
 			</div>
 
 			<div class="line"></div>
 		</div>
+		
+		
+		<!------------------------------  ingridients body   -------------------------------------->
+		
+		<div class="collapse" id="collapseCompositeIngridientBody">
+				<div class="card card-body">
+
+				<br>
+			
+			<!-- -----------  composite table  --------------------- -->	
+			
+				<table class="table" id="ingridientTableHeader">
+					<thead>
+						<tr>
+						    <th>Группа</th>
+							<th>Название</th>
+							<th>Расход</th>
+							<th>Опции</th>
+						</tr>
+					</thead>
+					<tbody id="ingridientTableBody">
+					</tbody>
+				</table>
+				
+				<!-- -----------  composite table  --------------------- -->	
+			</div>
+
+			<div class="line"></div>
+		</div>
+		
+		
+		<!------------------------------  ingridients body   -------------------------------------->
+		
 		</div>
 	</div>
 
-	<script th:src="@{/js/products.js}"></script>
+
+<div th:insert="~{template/updateCompositeProductForm:: update_composite_product_form}"></div>
+
+	<script th:src="@{/js/compositeProducts.js}"></script>
 	<script th:src="@{/js/info.js}"></script>
 </body>
 </html>

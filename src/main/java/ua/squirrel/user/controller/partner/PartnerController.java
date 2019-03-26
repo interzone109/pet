@@ -22,6 +22,15 @@ import ua.squirrel.user.service.partner.PartnerServiceImpl;
 import ua.squirrel.web.entity.user.User;
 import ua.squirrel.web.service.registration.user.UserServiceImpl;
 
+
+
+/**
+ * Controller :
+ * GET return partner and list of his product 
+ * PUT update info about partner
+ * 
+ * */
+
 @RestController
 @RequestMapping("/user/partners/{partner_id}/info")
 @Slf4j
@@ -49,7 +58,7 @@ public class PartnerController {
 	@PutMapping
 	public PartnerModel updatePartnerInfo(@PathVariable("partner_id") Long id, @RequestBody PartnerModel partnerModel,
 			Authentication authentication) throws NotFoundException {
-		log.info("LOGGER: update curent partners data : /user/partners/{partner_id}/info");
+		log.info("LOGGER: update curent partners info : /user/partners/{partner_id}/info");
 		User userCurrentSesion = userServiceImpl.findOneByLogin("test1").get();
 		// получаем из базы Partner по ид и текущему пользователю
 		Partner currentPartner = getCurrentPartner(id, userCurrentSesion);
