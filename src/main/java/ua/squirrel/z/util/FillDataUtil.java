@@ -148,7 +148,7 @@ public class FillDataUtil {
 					  else if ( prod.getName().equals("Пластиковое мешало")) {productTea.append(prod.getId()+":"+ 1+"rate");}
 					 
 					 
-					  if ( prod.getName().equals("Картошка")) {productFries.append(prod.getId()+":"+ 250+"rate");}
+					  if ( prod.getName().equals("Картошка")) {productFries.append(prod.getId()+":"+ 22250+"rate");}
 					  else  if ( prod.getName().equals("Масло Стожор")) {productFries.append(prod.getId()+":"+ 50+"rate");}
 					  else  if ( prod.getName().equals("Соль столовая")) {productFries.append(prod.getId()+":"+ 5+"rate");}
 					  

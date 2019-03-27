@@ -32,7 +32,7 @@ public class CompositeProduct {
 	@Column(name = "сomposite_product_id", nullable = false)
 	private long id;
 	
-	@Column(name = "name", unique = true)
+	@Column(name = "name", nullable = false)
 	private String name;
 	
 	//поле хранит текущай расход и id расходуемого ингридиента

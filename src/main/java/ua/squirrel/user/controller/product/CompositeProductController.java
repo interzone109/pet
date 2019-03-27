@@ -182,7 +182,9 @@ public class CompositeProductController {
 	private List<ProductModel> getProductExpendsModel(Long id, User currentUser) throws NotFoundException {
 
 		CompositeProduct compositeProduct = getCompositeProduct(id, currentUser);
-
+		
+		List<ProductModel> composites = new ArrayList<>();
+		if(compositeProduct.getProductExpend()!=null) {
 		String[] productExpends = compositeProduct.getProductExpend().split("rate");
 
 		Map<Long, Integer> idsExpends = new HashMap<>();
@@ -191,8 +193,8 @@ public class CompositeProductController {
 			String[] parse = productExpends[i].split(":");
 			idsExpends.put(Long.parseLong(parse[0]), Integer.parseInt(parse[1]));
 		}
-
-		List<ProductModel> composites = new ArrayList<>();
+		
+		
 
 		productServiceImpl.findAllById(idsExpends.keySet()).stream().forEach(product -> {
 			ProductModel prodModel = ProductModel.builder()
@@ -205,7 +207,7 @@ public class CompositeProductController {
 			composites.add(prodModel);
 
 		});
-
+		}
 		return composites ;
 	}
 

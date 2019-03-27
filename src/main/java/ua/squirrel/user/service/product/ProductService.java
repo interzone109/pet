@@ -17,4 +17,6 @@ public interface ProductService {
 	 List<Product> findAllByUserAndIdIn(User user,Iterable<Long> id );
 	
 	List<Product> saveAll(Iterable<Product> productToSave);
+	
+	List<Product> findAllByUser(User user );
 }

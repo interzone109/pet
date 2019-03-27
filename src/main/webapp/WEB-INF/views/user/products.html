@@ -23,6 +23,9 @@
 </head>
 <body>
 
+
+
+
 	<div class="wrapper">
 		<!-- left side menu -->
 		<div class="wrapper" th:insert="~{template/leftBar :: left_bar}"></div>
@@ -56,13 +59,13 @@
 				<!-- ---------------- Create new composite form  ------------------------------- -->
 				<div>
 					<div class="form-row">
+					<div class="col">
+							<label for="inputCompositeGroup" class="sr-only">Группа</label> 
+							<input 	type="text" id="inputCompositeGroup" class="form-control" placeholder="Группа">
+						</div>
 						<div class="col">
 							<label for="inputCompositeName" class="sr-only">Название</label>
 							 <input type="text" id="inputCompositeName" class="form-control" placeholder="Название">
-						</div>
-						<div class="col">
-							<label for="inputCompositeGroup" class="sr-only">Группа</label> 
-							<input 	type="text" id="inputCompositeGroup" class="form-control" placeholder="Группа">
 						</div>
 						<div class="col"> 
 						<select class="form-control" id="measureSelect">
@@ -105,7 +108,15 @@
 		
 		<div class="collapse" id="collapseCompositeIngridientBody">
 				<div class="card card-body">
-
+<!-- ---------------- Create new composite form  ------------------------------- -->
+				<div>
+					<div class="form-row">
+							<div class="col-2">
+							<button class="btn btn-info"  onclick="addIngridients()"  >Добавить ингридиент</button>
+						</div>
+					</div>
+				</div>
+				<!-- ---------------- Create new composite form  ------------------------------- -->
 				<br>
 			
 			<!-- -----------  composite table  --------------------- -->	
@@ -123,6 +134,7 @@
 					</tbody>
 				</table>
 				
+				<div hidden id="listIngridientsId"></div>
 				<!-- -----------  composite table  --------------------- -->	
 			</div>
 
@@ -137,6 +149,7 @@
 
 
 <div th:insert="~{template/updateCompositeProductForm:: update_composite_product_form}"></div>
+<div th:insert="~{template/updateCompositeIngridientForm:: update_composite_ingridient_form}"></div>
 
 	<script th:src="@{/js/compositeProducts.js}"></script>
 	<script th:src="@{/js/info.js}"></script>

@@ -106,24 +106,27 @@ function postNewCompositeProduct(){
 
 
 
+
+
+
+
+/************************ GET create ingridient table ***************************************/
+
+
+//прячем таблицу композитного продукта, делаем запрос к серверу и отображаем данные в новой таблицу
 function loadProductData (id){
 	$("#collapseCompositeProductBody").collapse("hide");
-	
- request("GET", connectUrl+"/user/composites/"+id+"/edit", displayIngridientsRow);
-	
-	
+	request("GET", connectUrl+"/user/composites/"+id+"/edit", displayIngridientsRow);
 	$("#collapseCompositeIngridientBody").collapse("show");
 	
 }
 
 
 
+//формирует таблицу с ингридиентами
 function displayIngridientsRow(ingridietsMap){
-	
-	console.log(ingridietsMap);
 
-	
-	if (Array.isArray(ingridietsMap)){
+	if (ingridietsMap.length !== 0 && Array.isArray(ingridietsMap) ){
 		ingridietsMap.forEach(ingridient => {
 			$('#ingridientTableBody').append(createIngridientsRow(ingridient));
 		});
@@ -139,22 +142,27 @@ function displayIngridientsRow(ingridietsMap){
 	}
 }
 
+
+
+//формирует строку с ингридиентами
 function createIngridientsRow(ingridiet){
 	var ingridietCol = document.createElement('tr');
 	ingridietCol.id="ingridiet_row_id_"+ingridiet.id;
 	ingridietCol.innerHTML =
 		   "<td id=\"ingridiet_group_id_"+ingridiet.id+"\">"+ingridiet.group+"</td>"
 		 +"<td id=\"ingridiet_name_id_"+ingridiet.id+"\">"+ingridiet.name+"</td>"
-		 + "<td id=\"ingridiet_description_id_"+ingridiet.id+"\">"+ingridiet.description+" "+ingridiet.measureProduct+"</td>"
+		 + "<td id=\"ingridiet_description_id_"+ingridiet.id+"\">"+createMeasureProduct(ingridiet.description, ingridiet.measureProduct)+"</td>"
 		 + "<td>  <i class=\"fas fa-edit\"  title=\"редактировать расход\"  onclick=\"updateIngridieteRow("+ingridiet.id+")\"  ></i>"
 		 +"<i class=\"fas fa-list-alt\" title=\"вернуться к продуктам\"  onclick=\"hideProduct()\"></i> </td>";
 		 	 
+		$("#listIngridientsId").append(document.createTextNode(ingridiet.id+","));
+		
 		return ingridietCol;
 }
 
 
 
-
+// метод скрывает таблицу с ингрилдиентами и развертывает таблицу с конечным продуктом
 function hideProduct(){
 	
 $("#collapseCompositeProductBody").collapse("show");
@@ -162,21 +170,70 @@ $("#collapseCompositeProductBody").collapse("show");
 $("#collapseCompositeIngridientBody").collapse("hide");
 $("#ingridientTableBody").empty();// чистим строки в таблице с продуктами
 $("#ingridientCaption").remove();// удаляем заголовок списка, если такой есть
+
+$("#listIngridientsId").text("");
+
 }
 
 
 
 
+// метод преобразовывает количество ингридиента например 100 = 0.100 кг
+function createMeasureProduct(expend, measure){
+	
+	var result ;
+	if(measure ==="UNIT"){
+		result = expend+" шт";
+	}else {
+		var meas = " "+ displayProductMeasure(measure ,1);
+		
+		if(expend.length < 2){
+		result = "0.00" + expend + meas ;
+		}else if(expend.length < 3){
+		result = "0.0" + expend + meas ;
+		}else if(expend.length <4){
+		result = "0." + expend + meas ;
+		}
+		else{
+		
+		var strStart = expend.substring(0,expend.length-3);
+		var strEnd = expend.substring(expend.length-3 ,expend.length);
+		result = strStart+"."+strEnd + meas ;
+		}
+		
+	} 
+	
+	return result
+}
 
 
 
+function updateIngridieteRow (id){
+	console.log(id);
+}
+
+
+function addIngridients(){
+	
+	$("#ingridientModalBody").modal("show");
+	
+	var ids = document.getElementById("listIngridientsId").innerText.split(',');
+	if( ids.length > 0){
+	request("GET", connectUrl+"/user/products_list", displayAvalbleProducts);
+	}else{
+	var data = JSON.stringify(ids);
+	request("POST", connectUrl+"/user/products_list", displayAvalbleProducts, data);
+	}
+}
 
 
 
+function displayAvalbleProducts(product){
+	console.log(product);
+}
 
 
-
-
+/************************ GET create ingridient table ***************************************/
 
 
 
@@ -249,10 +306,10 @@ $(document).ready(function () {
 
 function displayProductMeasure (measure ,convert){
 	 
-	if( measure ==="LITER" || measure==="литр"){
-		return (convert === 1)?"литр": "LITER";
-	}else if( measure ==="KILOGRAM" || measure==="кило"){
-		return  (convert === 1)?"кило": "KILOGRAM";
+	if( measure ==="LITER" || measure==="л"){
+		return (convert === 1)?"л": "LITER";
+	}else if( measure ==="KILOGRAM" || measure==="кг"){
+		return  (convert === 1)?"кг": "KILOGRAM";
 	}else if( measure ==="UNIT" || measure==="шт"){
 		return  (convert === 1)?"шт": "UNIT";
 	}
