@@ -171,6 +171,15 @@ $("#collapseCompositeIngridientBody").collapse("hide");
 $("#ingridientTableBody").empty();// чистим строки в таблице с продуктами
 $("#ingridientCaption").remove();// удаляем заголовок списка, если такой есть
 
+
+var ids = document.getElementById("listIngridientsId").innerText.split(',');
+if( ids.length > 0){
+	ids.forEach(id => {
+		$('#option_ingridient_id_'+id).show()
+	});
+}
+
+
 $("#listIngridientsId").text("");
 
 }
@@ -208,29 +217,8 @@ function createMeasureProduct(expend, measure){
 
 
 
-function updateIngridieteRow (id){
-	console.log(id);
-}
 
 
-function addIngridients(){
-	
-	$("#ingridientModalBody").modal("show");
-	
-	var ids = document.getElementById("listIngridientsId").innerText.split(',');
-	if( ids.length > 0){
-	request("GET", connectUrl+"/user/products_list", displayAvalbleProducts);
-	}else{
-	var data = JSON.stringify(ids);
-	request("POST", connectUrl+"/user/products_list", displayAvalbleProducts, data);
-	}
-}
-
-
-
-function displayAvalbleProducts(product){
-	console.log(product);
-}
 
 
 /************************ GET create ingridient table ***************************************/
