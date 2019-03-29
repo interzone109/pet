@@ -54,7 +54,7 @@
 			
 			<!-- -----------  assortment table  --------------------- -->
 			<div class="collapse" id="collapseCompositeProductBody">
-				<div class="card card-body">
+				<div >
 			
 				<!-- ---------------- Create new composite form  ------------------------------- -->
 				<div>
@@ -107,7 +107,7 @@
 		<!------------------------------  ingridients body   -------------------------------------->
 		
 		<div class="collapse" id="collapseCompositeIngridientBody">
-				<div class="card card-body">
+				<div >
 <!-- ---------------- Create new composite form  ------------------------------- -->
 				<div>
 					<div class="form-row">
@@ -135,6 +135,7 @@
 				</table>
 				
 				<div hidden id="listIngridientsId"></div>
+				<div hidden id="currentProductId"></div>
 				<!-- -----------  composite table  --------------------- -->	
 			</div>
 
@@ -148,8 +149,10 @@
 	</div>
 
 
-<div th:insert="~{template/updateCompositeProductForm:: update_composite_product_form}"></div>
-<div th:insert="~{template/updateCompositeIngridientForm:: update_composite_ingridient_form}"></div>
+<div th:insert="~{template/modal/updateCompositeProductForm:: update_composite_product_form}"></div>
+<div th:insert="~{template/modal/updateCompositeIngridientForm:: update_composite_ingridient_form}"></div>
+<div th:insert="~{template/modal/updateIngridientQuantityForm:: update_quantity_ingridient_form}"></div>
+
 
 	<script th:src="@{/js/compositeProducts.js}"></script>
 	<script th:src="@{/js/compositeingridient.js}"></script>

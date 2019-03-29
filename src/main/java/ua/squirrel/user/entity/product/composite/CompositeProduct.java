@@ -43,6 +43,10 @@ public class CompositeProduct {
 	@Column(name = "expend_update_id", length=1024)
 	private String expendUpdate ;
 	
+	//поле хранит дату и ид удаленного ингридиента
+	@Column(name = "delete_ingridient_date_id", length=1024)
+	private String ingridientDelete ;
+	
 	@Column(name = "product_group")
 	private String group;
 	

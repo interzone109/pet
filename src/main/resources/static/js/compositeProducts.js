@@ -116,6 +116,7 @@ function postNewCompositeProduct(){
 //прячем таблицу композитного продукта, делаем запрос к серверу и отображаем данные в новой таблицу
 function loadProductData (id){
 	$("#collapseCompositeProductBody").collapse("hide");
+	$("#currentProductId").text(id);
 	request("GET", connectUrl+"/user/composites/"+id+"/edit", displayIngridientsRow);
 	$("#collapseCompositeIngridientBody").collapse("show");
 	
@@ -153,7 +154,8 @@ function createIngridientsRow(ingridiet){
 		 +"<td id=\"ingridiet_name_id_"+ingridiet.id+"\">"+ingridiet.name+"</td>"
 		 + "<td id=\"ingridiet_description_id_"+ingridiet.id+"\">"+createMeasureProduct(ingridiet.description, ingridiet.measureProduct)+"</td>"
 		 + "<td>  <i class=\"fas fa-edit\"  title=\"редактировать расход\"  onclick=\"updateIngridieteRow("+ingridiet.id+")\"  ></i>"
-		 +"<i class=\"fas fa-list-alt\" title=\"вернуться к продуктам\"  onclick=\"hideProduct()\"></i> </td>";
+		 +"<i class=\"fas fa-list-alt\" title=\"вернуться к продуктам\"  onclick=\"hideProduct()\"></i> " 
+		 +"<i class=\"fas fa-trash-alt\" title=\"удалить\"  onclick=\"removeIngridient("+ingridiet.id+")\"></i></td>";
 		 	 
 		$("#listIngridientsId").append(document.createTextNode(ingridiet.id+","));
 		

@@ -2,20 +2,6 @@
 $('#erroreIngridient').collapse("hide");
 
 
-
-
-//при закрытии модального окна возращаем в изначальное состояние
-// данные об ингридиентах
-$("#ingridientModalBody").on("hidden.bs.modal", function () {
-	 $('#selectedIngridientGroupId').children().each(function (){
-		 var id = $(this).val();
-		 $('#option_ingridient_id_'+id).prop( "disabled", false );
-		 $(this).remove();
-	 });
-	});
-
-
-
 //заполняем таблицу ингридиентов данными с сервера
 function fillAvailableFild(productList){
 	
@@ -45,6 +31,7 @@ function createIngridientRow(prod){
 	}
 	ingridient.value = prod.id;
 	ingridient.innerText = name; 
+	ingridient.classList.add(prod.measureProduct);
 	ingridient.setAttribute('title', prod.group +" : "+prod.name);
 	return ingridient;
 	
@@ -55,6 +42,15 @@ function createIngridientRow(prod){
 // и выводит список ингридиентов доступных для добавления
 function addIngridients(){
 	$("#ingridientModalBody").modal("show");
+	
+	//при открытии модального окна возращаем в изначальное состояние
+	// данные об ингридиентах
+	 $('#selectedIngridientGroupId').children().each(function (){
+		 var id = $(this).val();
+		 $('#option_ingridient_id_'+id).prop( "disabled", false );
+		 $(this).remove();
+	 });
+	
 	
 	$('#selectedIngridientGroupId').empty();
 	$('#erroreIngridient').collapse("hide");
@@ -102,7 +98,6 @@ function moveIngridient(direction){
 	 clone.attr('id', "clone_ingridient_id_"+selectedIngridient.val());// устанавливаем ему id
 	 $('#selectedIngridientGroupId').append(clone);// переносим клон в selectedIngridientGroupId
 	 $(selectedIngridient).prop( "disabled", true );// прячем выбраный елемент
-	 $(quantity).val("");// обнуляем поле ввода
 	 $(selectedIngridient).prop('selected' , false);
 	 $(clone).prop('selected' , false);
 	 $('#erroreIngridient').collapse("hide");
@@ -122,24 +117,65 @@ function moveIngridient(direction){
 
 
 
-function updateIngridieteRow (id){
-	console.log(id+" update");
+function updateIngridieteRow (id){	
+	$('#updateModalIngridientQuantityForm').modal("show");
+
+	$('#sendIngridientId').text(id);
 }
 
 
-$('#addIngridientLins').on("focus",sendNewIngridient);
 
 
+$('#updateRateButton').on("click", sendUpdateIngridientRate);
+
+function sendUpdateIngridientRate (){
+	var value = $('#updateRate').val();	
+	request("PUT", connectUrl+"/user/composites/"+$("#currentProductId").text()+"/edit/"+$('#sendIngridientId').text(),
+			updateIngridientsRateRow,  JSON.stringify(value) );
+}
+
+
+function updateIngridientsRateRow(data){
+	
+	var prevStr = $('#ingridiet_description_id_'+data.id).text().split(" ");	
+	prevStr[0]= data.description ;
+	
+	$('#ingridiet_description_id_'+data.id).text(prevStr[0]+" "+prevStr[1])
+}
+
+
+
+function removeIngridient (id){
+	
+	$('#ingridiet_group_id_'+id).text("удалить");
+}
+
+
+
+
+
+
+
+$('#addIngridientLins').on("click",sendNewIngridient);
 function sendNewIngridient(){
-	console.log('sendNewIngridient');
-	let map = new Map();
+	
+	
+	var requestStr ="{" ;
+	
 	 $('#selectedIngridientGroupId').children().each(function (){
-		 //console.log("id=" $(this).val() +"  quantity"+ $(this).attr('title'));
+
+		var r = $(this).val() ;
+		var t = $(this).hasClass('UNIT') ? parseFloat($(this).attr('title')) :   parseFloat($(this).attr('title'))*1000 ;
+		requestStr += "\""+r+"\"" + ":" + t +",";
 		
-		map.set( $(this).val(), $(this).attr('title'));
-		console.log(map);
-		 
 	 });
+	 console.log(requestStr);
+	 var json = requestStr.substring(0, requestStr.length - 1);
+	 json += "}";
+	 
+	console.log(json);
+	request("POST", connectUrl+"/user/composites/"+$("#currentProductId").text()+"/edit", displayIngridientsRow, json );
+	
 }
 
 

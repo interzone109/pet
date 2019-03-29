@@ -46,7 +46,7 @@
 			<!-- ---------------- Partner table  ------------------------------- -->
 			
 				<div class="collapse" id="collapsePartnerBody">
-				<div class="card card-body">
+				<div >
 				<!-- ---------------- Create new partner form  ------------------------------- -->
 				<div>
 					<div class="form-row">
@@ -91,7 +91,7 @@
 			<!-- ---------------- product table  ------------------------------- -->
 			
 			<div class="collapse" id="collapseProductBody">
-			<div class="card card-body">
+			<div >
 			
 			
 					<div class="form-row">
@@ -151,8 +151,8 @@
 		</div>
 	</div>
 
-	 <div th:insert="~{template/updateProductForm :: update_product_form}"></div>
-	<div th:insert="~{template/updatePartnerForm :: update_partner_form}"></div>
+	 <div th:insert="~{template/modal/updateProductForm :: update_product_form}"></div>
+	<div th:insert="~{template/modal/updatePartnerForm :: update_partner_form}"></div>
 
 	<script th:src="@{/js/info.js}"></script>
 	<script th:src="@{/js/partners.js}"></script>

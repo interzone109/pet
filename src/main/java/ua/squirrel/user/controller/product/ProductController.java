@@ -70,11 +70,7 @@ public class ProductController {
 			addProduct.setPartner(partner);
 
 			addProduct.setUser(userCurrentSesion);
-			
-			partner.getProducts().add(addProduct);
 
-
-		partnerServiceImpl.save(partner);
 		productServiceImpl.save(addProduct);
 		
 		

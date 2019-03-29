@@ -66,6 +66,7 @@ public class AllProductController {
 		return ProductModel.builder()
 				.id(product.getId())
 				.name(product.getName())
+				.measureProduct(product.getMeasureProduct().getMeasure())
 				.group(product.getGroup())
 				.build();
 	}
