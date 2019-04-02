@@ -13,7 +13,6 @@ import ua.squirrel.user.entity.product.Product;
 import ua.squirrel.user.entity.product.composite.CompositeProduct;
 import ua.squirrel.user.entity.store.Store;
 import ua.squirrel.user.entity.store.spending.Spend;
-import ua.squirrel.user.entity.store.storage.Storage;
 import ua.squirrel.user.service.partner.PartnerServiceImpl;
 import ua.squirrel.user.service.product.CompositeProductServiceImpl;
 import ua.squirrel.user.service.product.ProductServiceImpl;
@@ -21,7 +20,6 @@ import ua.squirrel.user.service.product.properties.MeasureProductServiceImpl;
 import ua.squirrel.user.service.product.properties.PropertiesProductServiceImpl;
 import ua.squirrel.user.service.store.StoreServiceImpl;
 import ua.squirrel.user.service.store.spending.SpendServiceImpl;
-import ua.squirrel.user.service.store.storage.StorageServiceImpl;
 import ua.squirrel.web.entity.user.User;
 
 @Component
@@ -404,8 +402,6 @@ public class FillDataUtil {
 	 * */
 	@Autowired
 	private StoreServiceImpl storeServiceImpl;
-	@Autowired
-	private StorageServiceImpl storageServiceImpl;
 	
 	public void getStore(User owner) {
 		
@@ -414,16 +410,25 @@ public class FillDataUtil {
 		compositeProductServiceImpl.findAllByUser(owner).stream().forEach(obj->{
 			idsPrice.append(obj.getId()+":"+ 3000+"price");
 		});
-		Storage storage = new Storage();
-		storage.setProductPrice(idsPrice.toString());
-		storageServiceImpl.save(storage);
+		
 		
 		
 		Store newStore = new Store();
 		newStore.setAddress("Тираспольский грук 15.Б");
-		newStore.setDescription("Кофейня под зонтом");
+		newStore.setPhone("545-254-54");
+		newStore.setProductPrice(idsPrice.toString());
+		newStore.setMail("test@mail.com");
 		newStore.setUser(owner);
-		newStore.setStorage(storage);
+		
+
+		storeServiceImpl.save(newStore);
+		
+		 newStore = new Store();
+		newStore.setAddress("Test");
+		newStore.setPhone("545-254-54");
+		newStore.setProductPrice(idsPrice.toString());
+		newStore.setMail("test@mail.com");
+		newStore.setUser(owner);
 		
 
 		storeServiceImpl.save(newStore);

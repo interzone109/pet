@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-<title>user page</title>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -153,9 +152,9 @@
 <div th:insert="~{template/modal/updateCompositeIngridientForm:: update_composite_ingridient_form}"></div>
 <div th:insert="~{template/modal/updateIngridientQuantityForm:: update_quantity_ingridient_form}"></div>
 
-
+<script th:src="@{/js/info.js}"></script>
 	<script th:src="@{/js/compositeProducts.js}"></script>
 	<script th:src="@{/js/compositeingridient.js}"></script>
-	<script th:src="@{/js/info.js}"></script>
+	
 </body>
 </html>

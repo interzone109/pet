@@ -12,11 +12,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import lombok.Data;
 import ua.squirrel.user.entity.employee.Employee;
-import ua.squirrel.user.entity.store.storage.Storage;
+import ua.squirrel.user.entity.store.consignment.Consignment;
 import ua.squirrel.web.entity.user.User;
 
 @Entity
@@ -31,12 +30,24 @@ public class Store {
 	@Column(name = "address", unique = true, nullable = false)
 	private String address;
 	
-	@Column(name = "description")
-	private String description;
+	@Column(name = "phone")
+	private String phone;
 	
-	@OneToOne(mappedBy = "store", cascade = CascadeType.ALL,
-            fetch = FetchType.LAZY, optional = false)
-	private Storage storage ;
+	@Column(name = "mail")
+	private String mail;
+	
+	@Column(name = "comosite_product_price_id", length = 40000)
+	private String productPrice;
+
+	@Column(name = "price_update_id", length = 4000)
+	private String priceUpdate;
+	
+	@Column(name = "product_delete_id", length = 4000)
+	private String productDelete;
+
+	@OneToMany(mappedBy = "store", fetch = FetchType.LAZY, 
+			 cascade = CascadeType.ALL)
+	private List<Consignment> consignment;
 	
 	@OneToMany( fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<Employee> employee;

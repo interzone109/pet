@@ -7,9 +7,9 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import ua.squirrel.user.entity.store.Store;
 import ua.squirrel.user.entity.store.consignment.Consignment;
 import ua.squirrel.user.entity.store.consignment.ConsignmentStatus;
-import ua.squirrel.user.entity.store.storage.Storage;
 
 @Service
 public class ConsignmentServiceImpl implements ConsignmentService {
@@ -25,16 +25,18 @@ public class ConsignmentServiceImpl implements ConsignmentService {
 		return consignmentRepository.save(consignment);
 	}
 
-	public Optional<Consignment> findOneByDateAndStorage(Calendar date, Storage storage) {
-		return consignmentRepository.findOneByDateAndStorage(date, storage);
+	public Optional<Consignment> findOneByDateAndStore(Calendar date, Store store) {
+		return consignmentRepository.findOneByDateAndStore(date, store);
 	}
 
-	public Optional<Consignment> findOneByDateAndStorageAndConsignmentStatus(Calendar date, Storage storage, ConsignmentStatus consignmentStatus) {
-		return consignmentRepository.findOneByDateAndStorageAndConsignmentStatus(date, storage,consignmentStatus);
+	public List<Consignment> findByStoreAndConsignmentStatusAndDateBetween(Store store,
+			ConsignmentStatus consignmentStatus, Calendar from, Calendar to) {
+		return consignmentRepository.findByStoreAndConsignmentStatusAndDateBetween(store, consignmentStatus, from, to);
 	}
-	
-	public List<Consignment> findByStorageAndConsignmentStatusAndDateBetween(Storage storage,ConsignmentStatus consignmentStatus, Calendar from, Calendar to) {
-		return consignmentRepository.findByStorageAndConsignmentStatusAndDateBetween(storage,consignmentStatus, from, to);
+
+	public Optional<Consignment> findOneByDateAndStoreAndConsignmentStatus(Calendar date, Store store,
+			ConsignmentStatus consignmentStatus) {
+		return consignmentRepository.findOneByDateAndStoreAndConsignmentStatus(date, store, consignmentStatus);
 	}
 
 }

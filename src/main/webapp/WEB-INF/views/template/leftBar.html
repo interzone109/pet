@@ -20,20 +20,19 @@
 					class="fas fa-home"></i> Магазины
 			</a>
 				<ul class="collapse list-unstyled" id="storeSubmenu">
-					<li><a href="#">Торговые точки</a></li>
-					<li><a href="#">Остатки</a></li>
-					<li><a href="#">Заказы</a></li>
+					<li><a th:href="@{/user/store}">Торговые точки</a></li>
+					<li><a href="#">Движение товара</a></li>
 					<li><a href="#">Ветрина</a></li>
 				</ul></li>
 
 			<li><a href="#partnerSubmenu" data-toggle="collapse"
 				aria-expanded="false" class="dropdown-toggle"> <i
-					class="fas fa-address-book"></i> Данные
+					class="fas fa-address-book"></i> Товар
 			</a>
 				<ul class="collapse list-unstyled" id="partnerSubmenu">
 					<li><a th:href="@{/user/contacts}">Партнеры</a></li>
-					<li><a th:href="@{/user/products}">Продукты</a></li>
-					<li><a href="#">Накладные</a></li>
+					<li><a th:href="@{/user/products}">Мой товар</a></li>
+					<li><a href="#">Заказы</a></li>
 				</ul></li>
 
 			<li><a href="#employeeSubmenu" data-toggle="collapse"

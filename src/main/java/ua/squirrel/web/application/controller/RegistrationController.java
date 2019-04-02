@@ -1,4 +1,4 @@
-package ua.squirrel.web.controller.registration;
+package ua.squirrel.web.application.controller;
 
 
 import java.util.HashSet;

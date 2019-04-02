@@ -1,4 +1,4 @@
-package ua.squirrel.web.controller.registration;
+package ua.squirrel.web.application.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,5 +25,10 @@ public class AppController {
 	@RequestMapping(path = "/user/products", method = RequestMethod.GET)
 	public String getUserProducts() {
 		return "user/products";
+	}
+	
+	@RequestMapping(path = "/user/store", method = RequestMethod.GET)
+	public String getStore() {
+		return "user/store";
 	}
 }

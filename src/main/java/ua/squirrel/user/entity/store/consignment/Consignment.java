@@ -17,7 +17,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import lombok.Data;
-import ua.squirrel.user.entity.store.storage.Storage;
+import ua.squirrel.user.entity.store.Store;
 
 @Data
 @Entity
@@ -56,7 +56,7 @@ public class Consignment {
 	private ConsignmentStatus consignmentStatus;
 
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JoinColumn(name = "storage_id", nullable = false)
-	private Storage storage;
+	@JoinColumn(name = "store_id", nullable = false)
+	private Store store;
 
 }

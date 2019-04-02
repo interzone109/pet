@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>Торговые точки</title>
+<!-- Bootstrap CSS CDN -->
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+<!-- Our Custom CSS -->
+<link rel="stylesheet" href="../static/css/style.css"
+	th:href="@{/css/style.css}" type="text/css" media="screen">
+<!-- Font Awesome JS -->
+<script defer
+	src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js"></script>
+<script defer
+	src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js"></script>
+
+</head>
+<body>
+	<div class="wrapper">
+<!-- left side menu -->
+		<div class="wrapper" th:insert="~{template/leftBar :: left_bar}"></div>
+<!-- left side menu -->		
+<!-- Content conteiner -->
+			<div id="content">
+				<div th:insert="~{template/topBar :: top_bar}"></div>
+<!-- -----------  info collapse --------------------- -->
+					<div class="collapse" id="collapseInfo">
+						<div class="card card-body">Раздел служит торговых точек.
+						<br> Возможности :
+						<br>-создание торговой точки;
+						<br>-редактирование торговой точки;
+					</div>
+				</div>
+<!-- -----------  info collapse --------------------- -->
+
+<!-- ----------------------     content    store  start  --------------------------- -->
+<div class="collapse" id="collapseStoreBody">
+<!-- ---------------- Create new partner form  ------------------------------- -->
+				<div>
+					<div class="form-row">
+						<div class="col">
+							<label for="inputStoreAddress" class="sr-only">Адрес</label>
+							 <input type="text" id="inputStoreAddress" class="form-control" placeholder="Адрес">
+						</div>
+						<div class="col">
+							<label for="inputStorePhone" class="sr-only">Телефон</label> 
+							<input 	type="text" id="inputStorePhone" class="form-control" placeholder="Телефон">
+						</div>
+						<div class="col">
+							<label for="inputStoreMail" class="sr-only">Почта</label> 
+							<input type="text" id="inputStoreMail" class="form-control" placeholder="Почта">
+						</div>
+						<div class="col-2">
+							<button class="btn btn-info"  onclick="postNewStoreForm()"  >Добавить</button>
+						</div>
+					</div>
+				</div>
+<!-- ---------------- Create new partner form  ------------------------------- -->
+	<br>
+<!-- ----------------    store table start ----------------  -->
+<table class="table" id="storeContent">
+	<thead>
+		<tr>
+			<th>Адрес</th>
+			<th>Телефон</th>
+			<th>Почта</th>
+			<th>Опции</th>
+		</tr>
+	</thead>
+		<tbody id="storeTable">
+		</tbody>
+	</table>
+<!-- ----------------  store table end   ----------------  -->	
+</div>
+<!-- ----------------------     content    store  end  --------------------------- -->	
+	
+	
+<!-- ----------------------     content    product  start  --------------------------- -->	
+<div class="collapse" id="collapseProductStoreBody">
+<div>
+<!-- ---------------- Create new partner form  ------------------------------- -->
+				<div>
+					<div class="form-row">
+						<div class="col-2">
+							<button class="btn btn-info"  onclick="postNewProductStoreForm()"  >Добавить продукт</button>
+						</div>
+					</div>
+				</div>
+<!-- ---------------- Create new partner form  ------------------------------- -->
+	 <br> 
+	<div hidden id="compositeStoreId"></div>
+<!-- ----------------    store table start ----------------  -->
+<table class="table" id="storeProductContent">
+	<thead>
+		<tr>
+			<th>Группа</th>
+			<th>Название</th>
+			<th>Цена</th>
+			<th>Опции</th>
+		</tr>
+	</thead>
+	<tbody id="storeProductTable">
+	</tbody>
+</table>
+<!-- ----------------  store table end   ----------------  -->	
+</div>
+</div>
+<!-- ----------------------     content    product  end  --------------------------- -->		
+	
+	
+	
+<!-- ----------------------     content  end    --------------------------- -->
+	</div>
+<!-- Content conteiner -->
+</div>
+<div th:insert="~{template/store/updateStoreModal :: update_store_form}"></div>
+<div th:insert="~{template/store/newProductStoreModal :: new_product_store_form}"></div>
+
+<script th:src="@{/js/info.js}"></script>
+<script th:src="@{/js/store/storeTable.js}"></script>	
+<script th:src="@{/js/store/storeProductTable.js}"></script>
+
+</body>
+</html>
