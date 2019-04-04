@@ -72,11 +72,12 @@ public class CompositeProductController {
 		// проверяющий принадлежит ли он данному пользователю
 		CompositeProduct compositeProduct = getCompositeProduct(compositeId, userCurrentSesion);	
 		// заполнение данными из композитного продуктами -"1:20rate2:1rate"
+		if(compositeProduct.getProductExpend()!=null) {
 		for (String idsExpends : compositeProduct.getProductExpend().split("rate")) {	
 			composites.remove(Long.parseLong(idsExpends.split(":[0-9]")[0])) ;//удаляем дубликаты id если такие имеются во входящем объекте composites
 			ids.add(idsExpends + "rate");
 		}
-
+		}
 		//колекция для хранения новых ингридиентов
 		List<ProductModel> ingridientsModel = new ArrayList<>();
 

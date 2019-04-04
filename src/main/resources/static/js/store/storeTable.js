@@ -88,8 +88,14 @@ function updateStoreTable(data){
 }
 
 
-
-
+// скрываем все таблици и показываем таблицу с магазинами
+function showStoreTable(){
+	$("#collapseStoreBody").collapse("show");
+	$("#collapseProductStoreBody").collapse("hide");//скрываем таблицу с продукт -цена
+	$("#storeProductTable").empty();// чистим строки в таблице с продуктами
+	$("#productPriceIds").text(" ");// обнуляем список с Ids продуктов
+	
+}
 
 
 

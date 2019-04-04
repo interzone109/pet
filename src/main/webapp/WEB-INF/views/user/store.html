@@ -92,6 +92,7 @@
 <!-- ---------------- Create new partner form  ------------------------------- -->
 	 <br> 
 	<div hidden id="compositeStoreId"></div>
+	<div hidden id="productPriceIds"></div>
 <!-- ----------------    store table start ----------------  -->
 <table class="table" id="storeProductContent">
 	<thead>
@@ -99,11 +100,20 @@
 			<th>Группа</th>
 			<th>Название</th>
 			<th>Цена</th>
+			<th>Мера</th>
 			<th>Опции</th>
 		</tr>
 	</thead>
 	<tbody id="storeProductTable">
 	</tbody>
+	
+		<caption id="productCaption">
+		<ul class="nav navbar-nav ml-auto"><li class="nav-item ">
+			<a class="nav-link" href="#" onclick="showStoreTable()"> Вернуться к магазинам 
+			</a>
+			</li> 
+			</ul>
+			</caption>
 </table>
 <!-- ----------------  store table end   ----------------  -->	
 </div>
@@ -118,6 +128,7 @@
 </div>
 <div th:insert="~{template/store/updateStoreModal :: update_store_form}"></div>
 <div th:insert="~{template/store/newProductStoreModal :: new_product_store_form}"></div>
+<div th:insert="~{template/store/updateProductPrice :: update_product_price_form}"></div>
 
 <script th:src="@{/js/info.js}"></script>
 <script th:src="@{/js/store/storeTable.js}"></script>	

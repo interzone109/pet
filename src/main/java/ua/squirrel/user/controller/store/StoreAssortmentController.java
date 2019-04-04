@@ -1,11 +1,15 @@
 package ua.squirrel.user.controller.store;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -43,6 +47,25 @@ public class StoreAssortmentController {
 		return storeUtil.getCompositeProductPrice( user ,  getCurrentStore(user ,storeId).getProductPrice());
 		
 	}
+	
+	@PostMapping
+	public List<CompositeProductModel> addToStoreProduct(@PathVariable("store_id") Long storeId ,
+			@RequestBody Map<Long, Integer> productPrice, Authentication authentication) throws NotFoundException {
+		log.info("LOGGER: add new product price to store");
+		User user = userServiceImpl.findOneByLogin("test1").get();
+		
+		return storeUtil.addCompositeProductPrice(user, productPrice , getCurrentStore(user ,storeId)) ;
+	}
+	
+	@PutMapping
+	public List<CompositeProductModel> updateToStoreProduct(@PathVariable("store_id") Long storeId ,
+			@RequestBody Map<Long, Integer> productPrice, Authentication authentication) throws NotFoundException {
+		log.info("LOGGER: update product price to store");
+		User user = userServiceImpl.findOneByLogin("test1").get();
+		
+		return storeUtil.updateCompositeProductPrice(user, productPrice , getCurrentStore(user ,storeId)) ;
+	}
+	
 	
 	
 	

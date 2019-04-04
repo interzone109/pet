@@ -406,9 +406,9 @@ public class FillDataUtil {
 	public void getStore(User owner) {
 		
 		StringBuilder idsPrice = new StringBuilder();
-		
+		int price = 2999 ;
 		compositeProductServiceImpl.findAllByUser(owner).stream().forEach(obj->{
-			idsPrice.append(obj.getId()+":"+ 3000+"price");
+			idsPrice.append(obj.getId()+":"+ (price+obj.getId())+"price");
 		});
 		
 		
