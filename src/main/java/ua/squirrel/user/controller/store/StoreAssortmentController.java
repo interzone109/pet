@@ -48,15 +48,22 @@ public class StoreAssortmentController {
 		
 	}
 	
+	/**
+	 * Метод добавляет продукт на магазин 
+	 * также добавляет к магазину ингридиенты из которых состоит продукт
+	 */
 	@PostMapping
 	public List<CompositeProductModel> addToStoreProduct(@PathVariable("store_id") Long storeId ,
 			@RequestBody Map<Long, Integer> productPrice, Authentication authentication) throws NotFoundException {
 		log.info("LOGGER: add new product price to store");
 		User user = userServiceImpl.findOneByLogin("test1").get();
 		
-		return storeUtil.addCompositeProductPrice(user, productPrice , getCurrentStore(user ,storeId)) ;
+		return storeUtil.addCompositeProductPrice( productPrice , getCurrentStore(user ,storeId)) ;
 	}
 	
+	/**
+	 * Метод обноляет цену на продукт
+	 */
 	@PutMapping
 	public List<CompositeProductModel> updateToStoreProduct(@PathVariable("store_id") Long storeId ,
 			@RequestBody Map<Long, Integer> productPrice, Authentication authentication) throws NotFoundException {

@@ -27,8 +27,8 @@ public class AppController {
 		return "user/products";
 	}
 	
-	@RequestMapping(path = "/user/store", method = RequestMethod.GET)
+	@RequestMapping(path = "/user/storePrice", method = RequestMethod.GET)
 	public String getStore() {
-		return "user/store";
+		return "user/storePrice";
 	}
 }

@@ -42,6 +42,9 @@ public class Store {
 	@Column(name = "price_update_id", length = 4000)
 	private String priceUpdate;
 	
+	@Column(name = "product_leftovers", length = 4000)
+	private String productLeftovers;
+	
 	@Column(name = "product_delete_id", length = 4000)
 	private String productDelete;
 

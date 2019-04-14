@@ -3,8 +3,10 @@ package ua.squirrel.user.entity.store.util;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -52,36 +54,60 @@ public class StoreUtil {
 	}
 	
 	// метод добавляет новые продукты с ценой к текущему магазину
-	public List<CompositeProductModel> addCompositeProductPrice(User user,Map<Long, Integer> newProductPrice, Store store){
+	public List<CompositeProductModel> addCompositeProductPrice(Map<Long, Integer> newProductPrice, Store store){
 		List<CompositeProductModel> compositeProducts = new ArrayList<>();
 		
 		
 		Map<Long, Integer> idsPrice = new HashMap<>();
+		boolean isStoreEmpty = (store.getProductPrice() == null || store.getProductPrice().isEmpty());
+		if(!isStoreEmpty) {
 		String[] productPrice = store.getProductPrice().split("price");
 		for (int i = 0; i < productPrice.length; i++) {
 			String[] parse = productPrice[i].split(":");
 			idsPrice.put(Long.parseLong(parse[0]), Integer.parseInt(parse[1]));
 		}
+		
+		}
+		
 		//удаляем дублиат из входных данных 
 		newProductPrice.keySet().forEach(id->{
-			if(idsPrice.containsKey(id)) {
-				newProductPrice.remove(id);
+			if(idsPrice.containsKey(id)) {//если в магазине есть продукт с таким же айди 
+				newProductPrice.remove(id);// то удаляем его из нового списка 
 			}
 		});
-		
+		//формируем строку с новыми композитными продуктами и их ценой
 		StringBuilder str = new StringBuilder();
 		if(newProductPrice.keySet().size() > 0) {
 			newProductPrice.keySet().forEach(id->{
 				str.append(id +":"+newProductPrice.get(id)+"price");
 			});
 		}
+		// добавляем сформировоную строку в магазин
+		if(!isStoreEmpty) {
+			str.append( store.getProductPrice());
+		}
 		
-		str.append( store.getProductPrice());
 		store.setProductPrice(str.toString());
+		
+		
+		
+		Set<Long> idsSet = new HashSet<>();// список все ингридиентов которые используются в композитных продуктах
+		compositeProductServiceImpl.findAllByUserAndIdIn(store.getUser(), newProductPrice.keySet()).forEach(compositeProd->{
+			String [] ids = compositeProd.getProductExpend().split(":[0-9]+rate|rate*");
+			for (String id : ids) {
+				idsSet.add(Long.parseLong(id));
+			}
+		});
+		// метод добавляет ингридиенты продукта к остаткам магазина
+		String storeRes = addLeftoversToStore(idsSet, store.getProductLeftovers());
+		store.setProductLeftovers(storeRes);
+		
+		
+		
 		
 		storeServiceImpl.save(store);
 		
-		compositeProductServiceImpl.findAllByUserAndIdIn(user, newProductPrice.keySet()).forEach(compositeProd->{
+		compositeProductServiceImpl.findAllByUserAndIdIn(store.getUser(), newProductPrice.keySet()).forEach(compositeProd->{
 			compositeProducts.add(CompositeProductModel.builder()
 					.id(compositeProd.getId())
 					.name(compositeProd.getName())
@@ -149,6 +175,32 @@ public class StoreUtil {
 	
 	
 	
+	private String addLeftoversToStore(Set<Long> productId, String sotreLeftovers) {
+		
+		Map<Long, Integer> currentIdsQuantity = new HashMap<>();
+		
+		if(sotreLeftovers != null && !sotreLeftovers.isEmpty()) {// если на магазине имеются остатки то преобразуем их в значения 
+			String [] leftovers = sotreLeftovers.split("quantity");//рвзбиваем строку на подстроки - 1:12
+			
+			for (int i = 0; i < leftovers.length; i++) {//проходимся по каждой подстроке
+				String[] elem = leftovers[i].split(":");//рвзбиваем строку на масив из двух еслементон  elem[0] - id  elem[1] - quantity
+				currentIdsQuantity.put(Long.parseLong(elem[0]), Integer.parseInt(elem[1]));// ложим все данные в мапу
+			}
+
+		}
+		productId.stream().forEach(id->{
+			if(!currentIdsQuantity.containsKey(id)) {
+				currentIdsQuantity.put(id, 0);
+			}
+		});
+		
+		StringBuilder productRes = new StringBuilder();
+		currentIdsQuantity.keySet().forEach(id->{
+			productRes.append(id+":"+currentIdsQuantity.get(id)+"quantity");
+		});
+		
+		return productRes.toString();
+	}
 	
 	
 	
