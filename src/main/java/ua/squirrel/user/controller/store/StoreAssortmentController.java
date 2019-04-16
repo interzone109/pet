@@ -70,7 +70,7 @@ public class StoreAssortmentController {
 		log.info("LOGGER: update product price to store");
 		User user = userServiceImpl.findOneByLogin("test1").get();
 		
-		return storeUtil.updateCompositeProductPrice(user, productPrice , getCurrentStore(user ,storeId)) ;
+		return storeUtil.updateCompositeProductPrice( productPrice , getCurrentStore(user ,storeId)) ;
 	}
 	
 	

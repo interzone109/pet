@@ -63,6 +63,18 @@ function addIngridients(){
 }
 
 
+
+
+//устанавливаем название последнего выбраного елемента
+function setIngridientName(){
+	selectedIngridient = $('#avalbleIngridientGroupId option:selected').text()!==""?
+			$('#avalbleIngridientGroupId option:selected').text() :$('#selectedIngridientGroupId option:selected').text();
+ $('#displayChooseIngridient').text( selectedIngridient.length >4?selectedIngridient.substring(0,4) :selectedIngridient);
+}
+
+
+
+
 // переносим елементы между колонками 
 function moveIngridient(direction){
 	var selectedIngridient ;
@@ -169,11 +181,12 @@ function sendNewIngridient(){
 		requestStr += "\""+r+"\"" + ":" + t +",";
 		
 	 });
-	 console.log(requestStr);
 	 var json = requestStr.substring(0, requestStr.length - 1);
 	 json += "}";
 	 
 	console.log(json);
+	if(json.length > 2){
 	request("POST", connectUrl+"/user/composites/"+$("#currentProductId").text()+"/edit", displayIngridientsRow, json );
+	}
 	
 }

@@ -21,8 +21,9 @@
        <div class="container">
 		<div class="row">
  			 <div class="col-sm-4">
-				<select name="AvailableFields" id="ingridientFields"  size="10">
-    				<optgroup label="12345678911" id="avalbleIngridientGroupId">
+				<select name="AvailableFields" id="ingridientFields"  size="10" onchange="setIngridientName()">
+    				<optgroup label="Доступные" id="avalbleIngridientGroupId">
+    								 
    					</optgroup>
    				</select>
 			</div>
@@ -36,13 +37,14 @@
            		<br>
            		
            			 <button class="btn btn-info" title="добавить ингридиент" onclick="moveIngridient(1)" > <i class="fas fa-angle-double-right"></i> </button>
+           			<b id ="displayChooseIngridient">-----</b>
            			 <button class="btn btn-info" title="удалить ингридиент"  onclick="moveIngridient(2)" > <i class="fas fa-angle-double-left"></i> </button>
 			
 			 </div>
 			 
  			 <div class="col-sm-4">
-				<select name="AvailableFields" id="selectedFields"  size="10">
-    				<optgroup label="12345678911" id="selectedIngridientGroupId">
+				<select name="AvailableFields" id="selectedFields"  size="10" onchange="setIngridientName()">
+    				<optgroup label="Выбраные" id="selectedIngridientGroupId">
    					</optgroup>
    				</select>
 			</div>

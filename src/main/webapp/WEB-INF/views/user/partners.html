@@ -33,115 +33,118 @@
 
 			<div class="collapse" id="collapseInfo">
 				<div class="card card-body">Раздел отображает контактные
-					данные поставщиков. Здесь вы можете добавлять и редактировать
-					данные о них.</div>
+					данные поставщиков. Здесь вы можете редактировать данные о них, а
+					так же данные о приобретаемых у них товарах.</div>
 			</div>
-			<br>
-
-			
-			 <input id="searchOnPageTable" type="text"
-				placeholder="Поиск..">
-				<br>
-				<br>
+			<br> <input id="searchOnPageTable" type="text"
+				placeholder="Поиск.."> <br> <br>
 			<!-- ---------------- Partner table  ------------------------------- -->
-			
-				<div class="collapse" id="collapsePartnerBody">
-				<div >
-				<!-- ---------------- Create new partner form  ------------------------------- -->
+
+			<div class="collapse" id="collapsePartnerBody">
 				<div>
-					<div class="form-row">
-						<div class="col">
-							<label for="inputCompanyName" class="sr-only">Компания</label>
-							 <input type="text" id="inputCompanyName" class="form-control" placeholder="Компания">
-						</div>
-						<div class="col">
-							<label for="inputCompanyPhon" class="sr-only">Телефон</label> 
-							<input 	type="text" id="inputCompanyPhon" class="form-control" placeholder="Телефон">
-						</div>
-						<div class="col">
-							<label for="inputCompanyMail" class="sr-only">Почта</label> 
-							<input type="text" id="inputCompanyMail" class="form-control" placeholder="Почта">
-						</div>
-						<div class="col-2">
-							<button class="btn btn-info"  onclick="postNewPartnerForm()"  >Добавить</button>
+					<!-- ---------------- Create new partner form  ------------------------------- -->
+					<div>
+						<div class="form-row">
+							<div class="col">
+								<label for="inputCompanyName" class="sr-only">Компания</label> <input
+									type="text" id="inputCompanyName" class="form-control"
+									placeholder="Компания">
+							</div>
+							<div class="col">
+								<label for="inputCompanyPhon" class="sr-only">Телефон</label> <input
+									type="text" id="inputCompanyPhon" class="form-control"
+									placeholder="Телефон">
+							</div>
+							<div class="col">
+								<label for="inputCompanyMail" class="sr-only">Почта</label> <input
+									type="text" id="inputCompanyMail" class="form-control"
+									placeholder="Почта">
+							</div>
+							<div class="col-2">
+								<button class="btn btn-info" onclick="postNewPartnerForm()">Добавить</button>
+							</div>
 						</div>
 					</div>
-				</div>
-				<!-- ---------------- Create new partner form  ------------------------------- -->
-				<br>
-				
+					<!-- ---------------- Create new partner form  ------------------------------- -->
+					<br>
 
-				<table class="table" id="partnerContent">
-					<thead>
-						<tr>
-							<th>Компания</th>
-							<th>Телефон</th>
-							<th>Почта</th>
-							<th>Опции</th>
-						</tr>
-					</thead>
-					<tbody id="partnerTable">
-					</tbody>
-				</table>
+
+					<table class="table" id="partnerContent">
+						<thead>
+							<tr>
+								<th>Компания</th>
+								<th>Телефон</th>
+								<th>Почта</th>
+								<th>Опции</th>
+							</tr>
+						</thead>
+						<tbody id="partnerTable">
+						</tbody>
+					</table>
 				</div>
 			</div>
 			<!-- ---------------- Partner table  ------------------------------- -->
 
 
 			<!-- ---------------- product table  ------------------------------- -->
-			
+
 			<div class="collapse" id="collapseProductBody">
-			<div >
-			
-			
+				<div>
+
+
 					<div class="form-row">
 						<div class="col">
-							<label for="inputProductGroup" class="sr-only">Группа</label>
-							 <input type="text" id="inputProductGroup" class="form-control" placeholder="Группа">
+							<label for="inputProductGroup" class="sr-only">Группа</label> 
+							<input type="text" id="inputProductGroup" class="form-control" placeholder="Группа">
 						</div>
 						<div class="col">
 							<label for="inputProductName" class="sr-only">Название</label> 
-							<input 	type="text" id="inputProductName" class="form-control" placeholder="Название">
+							<input  type="text" id="inputProductName" class="form-control" placeholder="Название">
 						</div>
 						<div class="col">
-							<label for="inputProductDescription" class="sr-only">Описание</label> 
+							<label for="inputProductDescription" class="sr-only">Описание</label>
 							<input type="text" id="inputProductDescription" class="form-control" placeholder="Описание">
 						</div>
-						<div class="col"> 
-						<select class="form-control" id="propertieSelect">
-  							<option selected >ингридиент</option>
-  							<option>расходник</option>
-  							<option>универсальный</option>
-  							<option>конечный продукт</option>
-						</select>
+						<div class="col">
+							<select class="form-control" id="propertieSelect">
+								<option selected>ингридиент</option>
+								<option>расходник</option>
+								<option>универсальный</option>
+								<option>конечный продукт</option>
+							</select>
 						</div>
-						<div class="col"> 
-						<select class="form-control" id="measureSelect">
-  							<option selected >шт</option>
-  							<option>кило</option>
-  							<option>литр</option>
-						</select>
+						<div class="col">
+							<select class="form-control" id="measureSelect">
+								<option selected>шт</option>
+								<option>кило</option>
+								<option>литр</option>
+							</select>
 						</div>
 						<div class="col-2">
-							<button class="btn btn-info"  id="sendUpdateProduct" >Добавить</button>
+							<button class="btn btn-info" id="sendUpdateProduct">Добавить</button>
 						</div>
 					</div>
-				
-				<br>
-				<table class="table" id="productContent">
-					<thead>
-						<tr>
-							<th>Группа</th>
-							<th>Название</th>
-							<th>Описание</th>
-							<th>Свойство</th>
-							<th>Мера</th>
-							<th>Опции</th>
-						</tr>
-					</thead>
-					<tbody id="productTable">
-					</tbody>
-				</table>
+
+					<br>
+					<table class="table" id="productContent">
+
+						<thead>
+							<tr>
+								<th>Группа</th>
+								<th>Название</th>
+								<th>Описание</th>
+								<th>Свойство</th>
+								<th>Мера</th>
+								<th>Опции</th>
+							</tr>
+						</thead>
+						<tbody id="productTable">
+						</tbody>
+					</table>
+					<ul class="nav navbar-nav ml-auto">
+								<li class="nav-item "><a class="nav-link" href="#"
+									onclick="hideProduct()"> Вернуться к поставщикам </a></li>
+							</ul>
 				</div>
 				<div hidden id="curentPartnerProductList"></div>
 			</div>
@@ -151,9 +154,8 @@
 		</div>
 	</div>
 
-	 <div th:insert="~{template/modal/updateProductForm :: update_product_form}"></div>
+	<div th:insert="~{template/modal/updateProductForm :: update_product_form}"></div>
 	<div th:insert="~{template/modal/updatePartnerForm :: update_partner_form}"></div>
-
 	<script th:src="@{/js/info.js}"></script>
 	<script th:src="@{/js/partners.js}"></script>
 </body>

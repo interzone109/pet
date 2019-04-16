@@ -32,7 +32,7 @@ public class Consignment {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Calendar date;
 
-	// Id и количество товара
+	// Id, количество ингридиентов и входная цена
 	@Column(name = "consignment_data", nullable = true, length = 2048)
 	private String consignmentData;
 
@@ -44,11 +44,6 @@ public class Consignment {
 	// если парти не подтверждена то она не выбираеться при аналитике
 	@Column(name = "is_approved", nullable = false)
 	private boolean isApproved;
-
-	// поле отвечает за остатки товара в партии
-	// если ВЕСЬ товар закончился принимает значение true
-	@Column(name = "is_consignment_empty", nullable = false)
-	private boolean isConsignmentEmpty;
 
 	// статус партии
 	@OneToOne(fetch = FetchType.LAZY)

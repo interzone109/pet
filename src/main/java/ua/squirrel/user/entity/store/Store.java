@@ -36,18 +36,23 @@ public class Store {
 	@Column(name = "mail")
 	private String mail;
 	
+	//композитный продукт (id) - цена для магазина
 	@Column(name = "comosite_product_price_id", length = 40000)
 	private String productPrice;
-
+	
+	//композитный продукт (id) -старая цена для магазина и дата изменения цены
 	@Column(name = "price_update_id", length = 4000)
 	private String priceUpdate;
 	
+	//удаленные продукты и дата удаления
+	@Column(name = "product_delete_id", length = 4000)
+	private String productDelete;
+	
+	//остатки ингридиентов (id) и их количество ("quantity")  на магазине
 	@Column(name = "product_leftovers", length = 4000)
 	private String productLeftovers;
 	
-	@Column(name = "product_delete_id", length = 4000)
-	private String productDelete;
-
+	//накладные на движения товара
 	@OneToMany(mappedBy = "store", fetch = FetchType.LAZY, 
 			 cascade = CascadeType.ALL)
 	private List<Consignment> consignment;

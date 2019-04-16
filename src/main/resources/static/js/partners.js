@@ -7,11 +7,41 @@ request('GET', connectUrl+'/user/partners', addPartnerData);
 /** ****************** GET function *************************** */ 
 $("#collapsePartnerBody").collapse("show");
 
+/** ****************** display partner row functions *************************** */ 
+//метод проверяет являются ли данные масивом
+//и передает их методу формирующие строки для таблицы
+function addPartnerData( dataJSON){
+	if( Array.isArray(dataJSON)){
+	dataJSON.forEach(partner => {
+	  $('#partnerTable').append(displayPartnerRow( partner));
+	 	});
+	}else{
+		$('#partnerTable').append(displayPartnerRow( dataJSON));
+	}
+};
+
+//метод формирует строку для таблицы с партнерами
+function displayPartnerRow( partner){
+
+	var partnerCol = document.createElement('tr');
+	  partnerCol.id="partner_row_id_"+partner.id;
+	  partnerCol.innerHTML = "<td id=\"partner_company_id_"+partner.id+"\">"+partner.company+"</td>"
+		 + "<td id=\"partner_phon_id_"+partner.id+"\">"+partner.phonNumber+"</td>"
+		 + "<td id=\"partner_mail_id_"+partner.id+"\">"+partner.partnerMail+"</td>"
+		 + "<td>  <i class=\"fas fa-edit\"  title=\"редактировать\"  onclick=\"updatePartnerRow("+partner.id+")\"  ></i>"
+		 +"<i class=\"fas fa-list-alt\" title=\"просмотреть товары поставщика\"  onclick=\"loadProductData("+partner.id+")\"></i> </td>";
+		 
+		 
+		return partnerCol;
+};
+/** ****************** display partner row functions *************************** */ 
+
+
 
 /** ****************** display product row functions *************************** */
 
 
-// метод срабатывает при нажатии кнопки списка у поставщика
+// метод срабатывает при нажатии кнопки списка продуктов у поставщика
 function loadProductData(id){
 	 $("#collapsePartnerBody").collapse("hide");// скрываем таблицу с поставщиками
 	// делаем запрос к серверу на получение списка продуктов
@@ -27,7 +57,6 @@ function loadProductData(id){
 function displayProductDataGET(dataJSON){
 	
 	var productList = dataJSON.productsModel ;
-	console.log(dataJSON);
 	if(productList !== null && productList.length !== 0){
 	 if( Array.isArray(productList)){
 		 productList.forEach(product => {
@@ -36,19 +65,12 @@ function displayProductDataGET(dataJSON){
 		}else{
 			$('#productTable').append(displayProductRow( dataJSON));
 		}
-	}else{
-		$("#productContent").append(
-				 "<caption id=\"productCaption\">" 
-				 +"<ul class=\"nav navbar-nav ml-auto\">"
-			     +"<li class=\"nav-item \">"
-			     +"<a class=\"nav-link\" href=\"#\" onclick=\"hideProduct()\" > Вернуться к поставщикам </a>"
-			     +"</li> </ul>"
-			     +"</caption>");
-				}
+	}
 			
 	$("#productContent").collapse("show");
 	$('#sendUpdateProduct').prop('title', dataJSON.id);
 	}
+
 $("#sendUpdateProduct").on("click",postNewProductForm );
 
 
@@ -194,39 +216,6 @@ function displayProductProperties(properties,convert){
 
 
 
-
-
-/** ****************** display partner row functions *************************** */ 
-// метод проверяет являются ли данные масивом
-// и передает их методу формирующие строки для таблицы
-function addPartnerData( dataJSON){
-	if( Array.isArray(dataJSON)){
-	dataJSON.forEach(partner => {
-	  $('#partnerTable').append(displayPartnerRow( partner));
-	 	});
-	}else{
-		$('#partnerTable').append(displayPartnerRow( dataJSON));
-	}
-};
-
-function displayPartnerRow( partner){
-
-	var partnerCol = document.createElement('tr');
-	  partnerCol.id="partner_row_id_"+partner.id;
-	  partnerCol.innerHTML = "<td id=\"partner_company_id_"+partner.id+"\">"+partner.company+"</td>"
-		 + "<td id=\"partner_phon_id_"+partner.id+"\">"+partner.phonNumber+"</td>"
-		 + "<td id=\"partner_mail_id_"+partner.id+"\">"+partner.partnerMail+"</td>"
-		 + "<td>  <i class=\"fas fa-edit\"  title=\"редактировать\"  onclick=\"updatePartnerRow("+partner.id+")\"  ></i>"
-		 +"<i class=\"fas fa-list-alt\" title=\"просмотреть товары поставщика\"  onclick=\"loadProductData("+partner.id+")\"></i> </td>";
-		 
-		 
-		return partnerCol;
-};
-/** ****************** display partner row functions *************************** */ 
-
-
-
-
 /**
  * ****************** POST function create new partner json and send on server
  * ***************************
@@ -355,8 +344,6 @@ $(document).ready(function(){
 	    });
 	  });
 	});
-
-
 
 /** ****************** search function *************************** */
 
