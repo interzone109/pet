@@ -82,8 +82,9 @@ public class PartnerController {
 		log.info("LOGGER: delete curent partners");
 
 		User userCurrentSesion = userServiceImpl.findOneByLogin("test1").get();
-
-		partnerServiceImpl.delete(getCurrentPartner(id, userCurrentSesion));
+		Partner partner = getCurrentPartner(id, userCurrentSesion);
+		partner.setRemove(true);
+		partnerServiceImpl.save(partner);
 		
 	}
 

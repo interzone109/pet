@@ -25,6 +25,7 @@ import ua.squirrel.user.entity.product.ProductModel;
 import ua.squirrel.user.entity.product.composite.CompositeProduct;
 import ua.squirrel.user.service.product.CompositeProductServiceImpl;
 import ua.squirrel.user.service.product.ProductServiceImpl;
+import ua.squirrel.user.utils.CompositeProductUtil;
 import ua.squirrel.web.entity.user.User;
 import ua.squirrel.web.service.registration.user.UserServiceImpl;
 
@@ -38,6 +39,8 @@ public class CompositeProductController {
 	private UserServiceImpl userServiceImpl;
 	@Autowired
 	private ProductServiceImpl productServiceImpl;
+	@Autowired
+	private CompositeProductUtil  compositeProductUtil;
 
 
 	
@@ -63,8 +66,6 @@ public class CompositeProductController {
 			@RequestBody Map<Long, Integer> composites, Authentication authentication) throws NotFoundException {
 		log.info("LOGGER:  product add new ingridient in  curent composite product");
 		User userCurrentSesion = userServiceImpl.findOneByLogin("test1").get();
-		
-		
 		
 		// Сет хранящий значения Id продукта и его расход на 1 единицу
 		Set<String> ids = new HashSet<>();
@@ -171,21 +172,6 @@ public class CompositeProductController {
 	
 	
 
-	/**
-	 * метод удаляет ингридиенты
-	 */
-	@DeleteMapping
-	public void deleteProduct(@PathVariable("id") Long id, Authentication authentication,
-			@RequestBody  Long idIngridient) throws NotFoundException {
-		
-		
-	}
-	
-	
-	
-	
-	
-
 
 	private CompositeProduct getCompositeProduct(Long id, User currentUser) throws NotFoundException {
 		return compositeProductServiceImpl.findByIdAndUser(id, currentUser)
@@ -199,7 +185,7 @@ public class CompositeProductController {
 
 		CompositeProduct compositeProduct = getCompositeProduct(id, currentUser);
 		
-		List<ProductModel> composites = new ArrayList<>();
+		/*List<ProductModel> composites = new ArrayList<>();
 		if(compositeProduct.getProductExpend()!=null) {
 		String[] productExpends = compositeProduct.getProductExpend().split("rate");
 
@@ -210,8 +196,10 @@ public class CompositeProductController {
 			idsExpends.put(Long.parseLong(parse[0]), Integer.parseInt(parse[1]));
 		}
 		
+		*/
+		List<ProductModel> composites = new ArrayList<>();
+		Map<Long, Integer> idsExpends = compositeProductUtil.spliteIdsValue(compositeProduct.getProductExpend(), "rate");
 		
-
 		productServiceImpl.findAllById(idsExpends.keySet()).stream().forEach(product -> {
 			ProductModel prodModel = ProductModel.builder()
 					.id(product.getId())
@@ -223,7 +211,7 @@ public class CompositeProductController {
 			composites.add(prodModel);
 
 		});
-		}
+		
 		return composites ;
 	}
 

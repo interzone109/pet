@@ -23,6 +23,9 @@ public class Partner {
 
 	@Column(name = "partner_mail")
 	private String partnerMail;
+	
+	@Column(name = "is_remove")
+	private boolean remove;
 
 	
 	@OneToMany(mappedBy = "partner", fetch = FetchType.LAZY 

@@ -1,4 +1,4 @@
-package ua.squirrel.user.controller.product;
+package ua.squirrel.user.controller.ingridient;
 
 import java.util.ArrayList;
 import java.util.List;

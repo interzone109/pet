@@ -1,9 +1,8 @@
-package ua.squirrel.user.controller.product;
+package ua.squirrel.user.controller.ingridient;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -109,13 +108,6 @@ public class ProductController {
 		return productModel;
 	}
 	
-	
-	@DeleteMapping
-	public void deleteProduct(Authentication authentication, @PathVariable("partner_id") Long id,
-			@PathVariable("product_id") Long productId ) throws NotFoundException {
-		log.info("LOGGER: delete product ");
-
-	}
 	
 	private Partner getCurrentPartner(Long id , User currentUser) throws NotFoundException {
 		return partnerServiceImpl.findByIdAndUser(id, currentUser)
