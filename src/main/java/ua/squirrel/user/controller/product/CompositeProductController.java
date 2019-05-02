@@ -1,16 +1,12 @@
 package ua.squirrel.user.controller.product;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -67,48 +63,17 @@ public class CompositeProductController {
 		log.info("LOGGER:  product add new ingridient in  curent composite product");
 		User userCurrentSesion = userServiceImpl.findOneByLogin("test1").get();
 		
-		// Сет хранящий значения Id продукта и его расход на 1 единицу
-		Set<String> ids = new HashSet<>();
-		// вызываеться приватный метод возращающий композитный продукт по Id и
-		// проверяющий принадлежит ли он данному пользователю
-		CompositeProduct compositeProduct = getCompositeProduct(compositeId, userCurrentSesion);	
-		// заполнение данными из композитного продуктами -"1:20rate2:1rate"
-		if(compositeProduct.getProductExpend()!=null) {
-		for (String idsExpends : compositeProduct.getProductExpend().split("rate")) {	
-			composites.remove(Long.parseLong(idsExpends.split(":[0-9]")[0])) ;//удаляем дубликаты id если такие имеются во входящем объекте composites
-			ids.add(idsExpends + "rate");
-		}
-		}
-		//колекция для хранения новых ингридиентов
-		List<ProductModel> ingridientsModel = new ArrayList<>();
-
-		// находим все продукты по вхождению ключей и текущему пользователю
-		// далее добавляем каждое найденое знеачение в Сет преобразуя в строку
-		// id продукта получаем из запроса к бд а его расход из входных данных обьекта
-		// composites
-		productServiceImpl.findAllByUserAndIdIn(userCurrentSesion, composites.keySet()).stream().forEach(prod -> {
-			ids.add(prod.getId() + ":" + composites.get(prod.getId()) + "rate");
-			
-			ingridientsModel.add(ProductModel.builder()
-					.id(prod.getId())
-					.group(prod.getGroup())
-					.name(prod.getName())
-					.description(composites.get(prod.getId()).toString())
-					.measureProduct(prod.getMeasureProduct().getMeasure())
-					.build()
-					);
-		});
+		//получаем композитный продукт в который будем добавлять новые ингридиенты и их расход
+		CompositeProduct compositeProduct = getCompositeProduct(compositeId, userCurrentSesion);
+		Map<Long, Integer> idsExpends = compositeProductUtil.spliteIdsValue(compositeProduct.getProductExpend(), "rate");
 		
-		// преобразуем наш сет в одну строку
-		StringBuilder productExpend = new StringBuilder();
-		ids.stream().forEach(obj -> {
-			productExpend.append(obj);
-		});
-		// записываем строку в композитный продукт и сохраняем его в базу
-		compositeProduct.setProductExpend(productExpend.toString());
+		//пнроверяем входные данные на дубликаты
+		idsExpends.putAll( compositeProductUtil.removeDublicateMap(idsExpends, composites));
+		// добавляем новые ингридиенты и расход к продукту и сохраняем в базу
+		compositeProduct.setProductExpend(compositeProductUtil.concatIdsValueToString(idsExpends, "rate"));
 		compositeProductServiceImpl.save(compositeProduct);
-		System.err.println(ingridientsModel.size());
-		return ingridientsModel;
+		
+		return compositeProductUtil.convertToProductModelDescription(productServiceImpl.findAllByUserAndIdIn(userCurrentSesion, composites.keySet()), idsExpends);
 	}
 
 	
@@ -178,41 +143,13 @@ public class CompositeProductController {
 				.orElseThrow(() -> new NotFoundException("Composite product not found"));
 	}
 
-	
-	
-	
+	// метод возращает описание продукта с его расходом
 	private List<ProductModel> getProductExpendsModel(Long id, User currentUser) throws NotFoundException {
 
 		CompositeProduct compositeProduct = getCompositeProduct(id, currentUser);
+		Map<Long, Integer> idsExpends = compositeProductUtil.spliteIdsValue(compositeProduct.getProductExpend(), "rate");	
 		
-		/*List<ProductModel> composites = new ArrayList<>();
-		if(compositeProduct.getProductExpend()!=null) {
-		String[] productExpends = compositeProduct.getProductExpend().split("rate");
-
-		Map<Long, Integer> idsExpends = new HashMap<>();
-
-		for (int i = 0; i < productExpends.length; i++) {
-			String[] parse = productExpends[i].split(":");
-			idsExpends.put(Long.parseLong(parse[0]), Integer.parseInt(parse[1]));
-		}
-		
-		*/
-		List<ProductModel> composites = new ArrayList<>();
-		Map<Long, Integer> idsExpends = compositeProductUtil.spliteIdsValue(compositeProduct.getProductExpend(), "rate");
-		
-		productServiceImpl.findAllById(idsExpends.keySet()).stream().forEach(product -> {
-			ProductModel prodModel = ProductModel.builder()
-					.id(product.getId())
-					.name(product.getName())
-					.description( idsExpends.get(product.getId()).toString())
-					.group(product.getGroup())
-					.measureProduct(product.getMeasureProduct().getMeasure())
-					.build();
-			composites.add(prodModel);
-
-		});
-		
-		return composites ;
+		return compositeProductUtil.convertToProductModelDescription(productServiceImpl.findAllById(idsExpends.keySet()), idsExpends);
 	}
 
 	/*
