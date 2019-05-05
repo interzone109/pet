@@ -32,6 +32,15 @@ public class CompositeProductUtil extends SmallOneUtil{
 		return result ;
 	}
 	
-	
+	public ProductModel convertToProductModel(Product product ,  Integer value){	
+		
+		return   ProductModel.builder()
+					.id(product.getId())
+					.name(product.getName())
+					.description(value.toString())
+					.group(product.getGroup())
+					.measureProduct(product.getMeasureProduct().getMeasure())
+					.build();
+	}
 
 }

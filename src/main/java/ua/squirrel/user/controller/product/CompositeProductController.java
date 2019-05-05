@@ -1,7 +1,5 @@
 package ua.squirrel.user.controller.product;
 
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -81,58 +79,38 @@ public class CompositeProductController {
 	
 	
 	/**
-	 * метод обновляет расход ингридиентов и удаляет продукты
+	 * метод обновляет расход ингридиентa 
 	 */
 	@PutMapping("{ingridientId}")
 	public ProductModel updateProduct(@PathVariable("id") Long copositeId, @PathVariable("ingridientId") Long ingridientId, Authentication authentication,
 			@RequestBody  Integer updateRate) throws NotFoundException {
 		
 		log.info("LOGGER: update  product expends");
-		User userCurrentSesion = userServiceImpl.findOneByLogin("test1").get(); // получаем текущий композитный продукт по Id и пользователю
+		User user = userServiceImpl.findOneByLogin("test1").get();
 		
-		CompositeProduct compositeProduct = getCompositeProduct(copositeId, userCurrentSesion); // проверяем входные данные на наличие обновлений
-		 											
-			String[] productExpends = compositeProduct.getProductExpend().split("rate");
-			Map<Long, Integer> idsExpends = new HashMap<>();// разбиваем строку с Id и Расходами и сохраняем данные в Мар idsExpends
-			for (int i = 0; i < productExpends.length; i++) {
-				String[] parse = productExpends[i].split(":");
-				idsExpends.put(Long.parseLong(parse[0]), Integer.parseInt(parse[1]));
-			}
+		// получаем текущий композитный продукт по Id и пользователю
+		CompositeProduct compositeProduct = getCompositeProduct(copositeId, user); 
+		Map<Long, Integer> idsExpends = compositeProductUtil.spliteIdsValue(compositeProduct.getProductExpend(), "rate");
+		
+		if(idsExpends.containsKey(ingridientId)) {
+			String updateDate = compositeProductUtil.concatIdsValueDateToString(ingridientId, idsExpends.get(ingridientId), "rate");
+			idsExpends.put(ingridientId, updateRate);
+			
+			
+			compositeProduct.setProductExpend(compositeProductUtil.concatIdsValueToString(idsExpends, "rate"));
 			
 			//создаем новую строку с обновлениями
 			StringBuilder update = compositeProduct.getExpendUpdate() != null
 					//если старая строка пустая то создаеться новая если нет то строки конкатинируються
 					? new StringBuilder(compositeProduct.getExpendUpdate())
 					: new StringBuilder();
-			
-			
-			ProductModel result = null ;
-			if (idsExpends.containsKey(ingridientId)) {
-				//записываем Id старый расход и время когда произошло обновление
-				// получаем такой формат "5:10rate1548925801498date6:2rate1548925801498date"
-				update.append(ingridientId + ":" + idsExpends.get(ingridientId) + "rate" + new Date().getTime() + "date");
-				
-				//обновляем значение по ключю для композитного продукта
-				
-				idsExpends.put(ingridientId, updateRate);
-				result = ProductModel.builder().id(ingridientId).description(updateRate.toString()).build();
-			}
-			
-			// сохраняем данные об изменении в еxpendUpdate
-			compositeProduct.setExpendUpdate(update.toString());
-			//преобразуем все ключи и значение в строку
-			StringBuilder productExpend = new StringBuilder();
-			idsExpends.forEach((key, value) -> {
-				productExpend.append((key + ":" + value + "rate"));
-					});
-			
-			//записываем в обьект compositeProduct и сохраняем в базу
-			compositeProduct.setProductExpend(productExpend.toString());
-			compositeProductServiceImpl.save(compositeProduct);
-			
+					update.append(updateDate);
+					compositeProduct.setExpendUpdate(update.toString());
+					
+					compositeProductServiceImpl.save(compositeProduct);
+		}
 		
-		
-		return  result ;
+		return  compositeProductUtil.convertToProductModel(productServiceImpl.findOneByIdAndUser(ingridientId, user).get(), idsExpends.get(ingridientId)) ;
 	}
 	
 	

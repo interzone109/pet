@@ -22,6 +22,11 @@ public class ProductServiceImpl implements ProductService {
 	public void save(Product productToSave) {
 		productRepository.save(productToSave);
 	}
+	
+	public Optional<Product> findOneByIdAndUser(Long id ,User user){
+		return productRepository.findOneByIdAndUser(id, user);
+	}
+	
 	public Optional<Product> findOneByIdAndPartner(Long id ,Partner partner){
 		return productRepository.findOneByIdAndPartner(id, partner);
 	}

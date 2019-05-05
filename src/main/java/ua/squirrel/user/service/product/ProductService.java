@@ -10,13 +10,15 @@ import ua.squirrel.web.entity.user.User;
 public interface ProductService {
 	void save(Product productToSave);
 
-	public  List<Product> findAllById(Iterable<Long> ids);
+	public List<Product> findAllById(Iterable<Long> ids);
 
 	Optional<Product> findOneByIdAndPartner(Long id, Partner partner);
 
-	 List<Product> findAllByUserAndIdIn(User user,Iterable<Long> id );
-	
+	Optional<Product> findOneByIdAndUser(Long id, User user);
+
+	List<Product> findAllByUserAndIdIn(User user, Iterable<Long> id);
+
 	List<Product> saveAll(Iterable<Product> productToSave);
-	
-	List<Product> findAllByUser(User user );
+
+	List<Product> findAllByUser(User user);
 }

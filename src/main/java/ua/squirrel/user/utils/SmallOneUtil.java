@@ -1,5 +1,6 @@
 package ua.squirrel.user.utils;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -9,6 +10,14 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class SmallOneUtil {
+	
+	//метод формирует строку с id значением и временем обновления
+	public String concatIdsValueDateToString(Long id, Integer value, String regex) {
+		StringBuilder str = new StringBuilder();
+			str.append(id + ":" + value + regex + new Date().getTime() + "date");
+		return str.toString();
+	}
+	
 	
 	// метод формирует строку с данными Ид и значение
 		public String concatIdsValueToString(Map<Long, Integer> map, String regex) {
@@ -47,8 +56,8 @@ public class SmallOneUtil {
 	}
 
 	// метод удаляет все повторения одной Map в другой
-	public Map<Long, Integer> removeDublicateMap(Map<Long, Integer> etalon, Map<Long, Integer> dublicate) {
-		etalon.keySet().forEach(id -> {
+	public Map<Long, Integer> removeDublicateMap(Map<Long, Integer> origin, Map<Long, Integer> dublicate) {
+		origin.keySet().forEach(id -> {
 			dublicate.remove(id);
 		});
 		return dublicate;

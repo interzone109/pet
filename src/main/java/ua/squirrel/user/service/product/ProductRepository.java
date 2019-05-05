@@ -10,7 +10,9 @@ import ua.squirrel.web.entity.user.User;
 
 public interface ProductRepository extends JpaRepository<Product, Long>{
 	
-		Optional<Product> findOneByIdAndPartner(Long id ,Partner partner);
+		 Optional<Product> findOneByIdAndPartner(Long id ,Partner partner);
+		 
+		 Optional<Product> findOneByIdAndUser(Long id ,User user);
 
 		 List<Product> findAllByUserAndIdIn(User user,Iterable<Long> id );
 		 
