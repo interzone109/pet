@@ -128,31 +128,32 @@ function moveIngridient(direction){
 
 
 
-
+// функция открывает модальное окно для обновления данных о расходе ингридиента !!!!!!!!
 function updateIngridieteRow (id){	
-	$('#updateModalIngridientQuantityForm').modal("show");
-
+	$('#updateRate').val($('#ingridiet_description_id_'+id).text().split(" ")[0] );
 	$('#sendIngridientId').text(id);
+	$('#ingridientMeasyrValue').text($('#ingridiet_description_id_'+id).text().split(" ")[1]);
+	$('#updateModalIngridientQuantityForm').modal("show");
 }
 
 
 
 
 $('#updateRateButton').on("click", sendUpdateIngridientRate);
-
+// метод получает значение из поля с новым расходом для ингридиента
+//и обновляет данные
 function sendUpdateIngridientRate (){
 	var value = $('#updateRate').val();	
+	var t = $('#ingridientMeasyrValue').text()==="шт" ? parseFloat(value) :   parseFloat(value)*1000 ;
+	
 	request("PUT", connectUrl+"/user/composites/"+$("#currentProductId").text()+"/edit/"+$('#sendIngridientId').text(),
-			updateIngridientsRateRow,  JSON.stringify(value) );
+			updateIngridientsRateRow,  JSON.stringify(t) );
 }
 
-
+//метод обновляет данные о расходе в строке ингридиента
 function updateIngridientsRateRow(data){
-	
-	var prevStr = $('#ingridiet_description_id_'+data.id).text().split(" ");	
-	prevStr[0]= data.description ;
-	
-	$('#ingridiet_description_id_'+data.id).text(prevStr[0]+" "+prevStr[1])
+	// метод формирует итоговую строку
+	$('#ingridiet_description_id_'+data.id).text(createMeasureProduct(data.description, data.measureProduct));	
 }
 
 
@@ -188,5 +189,8 @@ function sendNewIngridient(){
 	if(json.length > 2){
 	request("POST", connectUrl+"/user/composites/"+$("#currentProductId").text()+"/edit", displayIngridientsRow, json );
 	}
+	
+	
+	
 	
 }
