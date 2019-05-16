@@ -45,21 +45,15 @@ public class SmallOneUtil {
 
 	// метод возращает список ид
 	public Set<Long> spliteIds(String data, String regex) {
-		Set<Long> result = new HashSet<>();
-		if (data != null && data.length() > 0) {
-			String[] daraParse = data.split(regex);
-			for (int i = 0; i < daraParse.length; i++) {
-				result.add(Long.parseLong(daraParse[0]));
-			}
-		}
-		return result;
+		return spliteIdsValue( data,  regex).keySet();
 	}
+	
 
 	// метод удаляет все повторения одной Map в другой
-	public Map<Long, Integer> removeDublicateMap(Map<Long, Integer> origin, Map<Long, Integer> dublicate) {
+	public Map<Long, Integer> removeDublicateMap(Map<Long, Integer> origin, Map<Long, Integer> dublicateRemove) {
 		origin.keySet().forEach(id -> {
-			dublicate.remove(id);
+			dublicateRemove.remove(id);
 		});
-		return dublicate;
+		return dublicateRemove;
 	}
 }

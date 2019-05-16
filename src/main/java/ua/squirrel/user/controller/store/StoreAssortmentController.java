@@ -1,7 +1,13 @@
 package ua.squirrel.user.controller.store;
 
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -17,8 +23,13 @@ import javassist.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import ua.squirrel.user.entity.product.composite.CompositeProductModel;
 import ua.squirrel.user.entity.store.Store;
-import ua.squirrel.user.entity.store.util.StoreUtil;
+import ua.squirrel.user.entity.store.consignment.Consignment;
+import ua.squirrel.user.service.product.CompositeProductServiceImpl;
+import ua.squirrel.user.service.product.ProductServiceImpl;
 import ua.squirrel.user.service.store.StoreServiceImpl;
+import ua.squirrel.user.service.store.consignment.ConsignmentServiceImpl;
+import ua.squirrel.user.service.store.consignment.status.ConsignmentStatusServiceImpl;
+import ua.squirrel.user.utils.StoreUtil;
 import ua.squirrel.web.entity.user.User;
 import ua.squirrel.web.service.registration.user.UserServiceImpl;
 
@@ -26,13 +37,18 @@ import ua.squirrel.web.service.registration.user.UserServiceImpl;
 @RequestMapping("/user/stores/assortment/{store_id}")
 @Slf4j
 public class StoreAssortmentController {
-	
+	@Autowired
+	private CompositeProductServiceImpl compositeProductServiceImpl;
 	@Autowired
 	private StoreServiceImpl storeServiceImpl;
 	@Autowired
 	private UserServiceImpl userServiceImpl;
 	@Autowired
 	private StoreUtil storeUtil;
+	@Autowired
+	private ConsignmentServiceImpl consignmentServiceImpl;
+	@Autowired
+	private ConsignmentStatusServiceImpl consignmentStatusServiceImpl;
 
 
 	/**
@@ -43,10 +59,18 @@ public class StoreAssortmentController {
 
 		log.info("LOGGER: get assortment for current user");
 		User user = userServiceImpl.findOneByLogin("test1").get();
+		// делаем мапу ид цена
+		Map<Long, Integer> idsPrice = storeUtil.spliteIdsValue(getCurrentStore(user ,storeId).getProductPrice(), "price");
 		
-		return storeUtil.getCompositeProductPrice( user ,  getCurrentStore(user ,storeId).getProductPrice());
+		return storeUtil.createProductPriceModel( compositeProductServiceImpl.findAllByUserAndIdIn(user, idsPrice.keySet()) ,idsPrice);
 		
 	}
+	
+	
+	
+	
+	
+	
 	
 	/**
 	 * Метод добавляет продукт на магазин 
@@ -54,12 +78,51 @@ public class StoreAssortmentController {
 	 */
 	@PostMapping
 	public List<CompositeProductModel> addToStoreProduct(@PathVariable("store_id") Long storeId ,
-			@RequestBody Map<Long, Integer> productPrice, Authentication authentication) throws NotFoundException {
+			@RequestBody Map<Long, Integer> newProductPrice, Authentication authentication) throws NotFoundException {
 		log.info("LOGGER: add new product price to store");
 		User user = userServiceImpl.findOneByLogin("test1").get();
 		
-		return storeUtil.addCompositeProductPrice( productPrice , getCurrentStore(user ,storeId)) ;
+		Store store = getCurrentStore(user ,storeId) ;
+		// делаем мапу ид цена
+		Map<Long, Integer> idsPrice = storeUtil.spliteIdsValue(store.getProductPrice(), "price");
+		//мапа без дубликатов уже добаленых продуктов
+		Map<Long, Integer> cleanProductPrice = storeUtil.removeDublicateMap(idsPrice, newProductPrice);
+		idsPrice.putAll( cleanProductPrice);
+		store.setProductPrice(storeUtil.concatIdsValueToString(idsPrice, "price"));
+		
+		
+		Set<Long> idsIngridient = new HashSet<>();
+		compositeProductServiceImpl.findAllByUserAndIdIn(user, cleanProductPrice.keySet()).forEach(compositeProduct->{
+			idsIngridient.addAll(storeUtil.spliteIds(compositeProduct.getProductExpend(), "rate"));
+		});
+		
+		String productLeftovers = storeUtil.addDefaultValue(idsIngridient, store.getProductLeftovers(), "quantity");
+		store.setProductLeftovers(productLeftovers);
+		
+		Calendar calendar = new GregorianCalendar();
+		calendar.set(Calendar.HOUR_OF_DAY, 0);
+		calendar.set(Calendar.MINUTE, 0);
+		calendar.set(Calendar.SECOND, 0);
+		calendar.set(Calendar.MILLISECOND, 0);
+		
+		Optional<Consignment> consignmentOptional = consignmentServiceImpl.findOneByDateAndStoreAndConsignmentStatus(calendar, store, 
+				consignmentStatusServiceImpl.findOneByName("ARRIVAL").get());
+		
+		Consignment consignment = consignmentOptional.isPresent() ?consignmentOptional.get() : null ;
+		
+		storeUtil.createOrUpdateConsigment(store, idsIngridient, consignment, calendar);
+		store.getConsignment().add(consignment);
+		
+	
+		storeServiceImpl.save(store);
+		return storeUtil.createProductPriceModel( compositeProductServiceImpl.findAllByUserAndIdIn(user, cleanProductPrice.keySet())
+				,cleanProductPrice);
 	}
+	
+	
+	
+	
+	
 	
 	/**
 	 * Метод обноляет цену на продукт
@@ -68,7 +131,8 @@ public class StoreAssortmentController {
 	public List<CompositeProductModel> updateToStoreProduct(@PathVariable("store_id") Long storeId ,
 			@RequestBody Map<Long, Integer> productPrice, Authentication authentication) throws NotFoundException {
 		log.info("LOGGER: update product price to store");
-		User user = userServiceImpl.findOneByLogin("test1").get();
+		User user = userServiceImpl.findOneByLogin("test1").get(); 
+		 
 		
 		return storeUtil.updateCompositeProductPrice( productPrice , getCurrentStore(user ,storeId)) ;
 	}

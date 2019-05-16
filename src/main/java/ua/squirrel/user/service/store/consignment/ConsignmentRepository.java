@@ -13,7 +13,6 @@ import ua.squirrel.user.entity.store.consignment.ConsignmentStatus;
 
 public interface ConsignmentRepository extends JpaRepository<Consignment, Long> {
 
-	Optional<Consignment> findOneByDateAndStore(Calendar date, Store store);
 	
 	List<Consignment> findByStoreAndConsignmentStatusAndDateBetween(Store store,
 			ConsignmentStatus consignmentStatus, Calendar from, Calendar to);

@@ -25,9 +25,6 @@ public class ConsignmentServiceImpl implements ConsignmentService {
 		return consignmentRepository.save(consignment);
 	}
 
-	public Optional<Consignment> findOneByDateAndStore(Calendar date, Store store) {
-		return consignmentRepository.findOneByDateAndStore(date, store);
-	}
 
 	public List<Consignment> findByStoreAndConsignmentStatusAndDateBetween(Store store,
 			ConsignmentStatus consignmentStatus, Calendar from, Calendar to) {

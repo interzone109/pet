@@ -12,8 +12,6 @@ public interface ConsignmentService {
 
 	Consignment save(Consignment consignment);
 
-	Optional<Consignment> findOneByDateAndStore(Calendar date, Store store);
-
 	List<Consignment> findByStoreAndConsignmentStatusAndDateBetween(Store store, ConsignmentStatus consignmentStatus,
 			Calendar from, Calendar to);
 
