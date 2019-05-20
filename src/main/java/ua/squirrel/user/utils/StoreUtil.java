@@ -1,14 +1,11 @@
 package ua.squirrel.user.utils;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,20 +15,13 @@ import ua.squirrel.user.entity.product.composite.CompositeProduct;
 import ua.squirrel.user.entity.product.composite.CompositeProductModel;
 import ua.squirrel.user.entity.store.Store;
 import ua.squirrel.user.entity.store.consignment.Consignment;
-import ua.squirrel.user.service.product.CompositeProductServiceImpl;
 import ua.squirrel.user.service.store.StoreServiceImpl;
-import ua.squirrel.user.service.store.consignment.ConsignmentServiceImpl;
 import ua.squirrel.user.service.store.consignment.status.ConsignmentStatusServiceImpl;
-import ua.squirrel.web.entity.user.User;
 
 @Component
 public class StoreUtil extends SmallOneUtil{
 	@Autowired
-	private CompositeProductServiceImpl compositeProductServiceImpl;
-	@Autowired
 	private StoreServiceImpl storeServiceImpl;
-	@Autowired
-	private ConsignmentServiceImpl consignmentServiceImpl;
 	@Autowired
 	private ConsignmentStatusServiceImpl consignmentStatusServiceImpl;
 
@@ -99,7 +89,7 @@ public class StoreUtil extends SmallOneUtil{
 	}
 
 	
-	 public Consignment createOrUpdateConsigment(Store store ,Set<Long>newIdsSet , Consignment consignment, Calendar calendar) {
+	 public Consignment createOrUpdateConsigment(Store store ,Set<Long>newIdsSet , Consignment consignment, LocalDate calendar) {
 
 			if (consignment != null && consignment.isApproved()) {//если накладная проведена/подтверждена она не изменяемая
 					return consignment;

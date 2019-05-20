@@ -1,8 +1,6 @@
 package ua.squirrel.user.controller.store;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -25,7 +23,6 @@ import ua.squirrel.user.entity.product.composite.CompositeProductModel;
 import ua.squirrel.user.entity.store.Store;
 import ua.squirrel.user.entity.store.consignment.Consignment;
 import ua.squirrel.user.service.product.CompositeProductServiceImpl;
-import ua.squirrel.user.service.product.ProductServiceImpl;
 import ua.squirrel.user.service.store.StoreServiceImpl;
 import ua.squirrel.user.service.store.consignment.ConsignmentServiceImpl;
 import ua.squirrel.user.service.store.consignment.status.ConsignmentStatusServiceImpl;
@@ -99,11 +96,7 @@ public class StoreAssortmentController {
 		String productLeftovers = storeUtil.addDefaultLeftoverValue(idsIngridient, store.getProductLeftovers(), "quantity");
 		store.setProductLeftovers(productLeftovers);
 		
-		Calendar calendar = new GregorianCalendar();
-		calendar.set(Calendar.HOUR_OF_DAY, 0);
-		calendar.set(Calendar.MINUTE, 0);
-		calendar.set(Calendar.SECOND, 0);
-		calendar.set(Calendar.MILLISECOND, 0);
+		LocalDate calendar =  LocalDate.now() ;
 		
 		Optional<Consignment> consignmentOptional = consignmentServiceImpl.findOneByDateAndStoreAndConsignmentStatus(calendar, store, 
 				consignmentStatusServiceImpl.findOneByName("ARRIVAL").get());

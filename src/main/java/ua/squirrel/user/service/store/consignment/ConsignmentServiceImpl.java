@@ -1,6 +1,6 @@
 package ua.squirrel.user.service.store.consignment;
 
-import java.util.Calendar;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,11 +27,11 @@ public class ConsignmentServiceImpl implements ConsignmentService {
 
 
 	public List<Consignment> findByStoreAndConsignmentStatusAndDateBetween(Store store,
-			ConsignmentStatus consignmentStatus, Calendar from, Calendar to) {
+			ConsignmentStatus consignmentStatus, LocalDate from, LocalDate to) {
 		return consignmentRepository.findByStoreAndConsignmentStatusAndDateBetween(store, consignmentStatus, from, to);
 	}
 
-	public Optional<Consignment> findOneByDateAndStoreAndConsignmentStatus(Calendar date, Store store,
+	public Optional<Consignment> findOneByDateAndStoreAndConsignmentStatus(LocalDate date, Store store,
 			ConsignmentStatus consignmentStatus) {
 		return consignmentRepository.findOneByDateAndStoreAndConsignmentStatus(date, store, consignmentStatus);
 	}

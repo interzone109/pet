@@ -1,6 +1,6 @@
 package ua.squirrel.user.entity.store.consignment;
 
-import java.util.Calendar;
+import java.time.LocalDate;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -13,8 +13,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 import lombok.Data;
 import ua.squirrel.user.entity.store.Store;
@@ -28,9 +26,8 @@ public class Consignment {
 	@Column(name = "consignment_id", nullable = false)
 	private long id;
 
-	// дата к которой подвязываются все поступления
-	@Temporal(TemporalType.TIMESTAMP)
-	private Calendar date;
+	// дата 
+	private LocalDate date;
 
 	// Id, количество ингридиентов и входная цена
 	@Column(name = "consignment_data", nullable = true, length = 2048)
@@ -47,7 +44,7 @@ public class Consignment {
 
 	// статус партии
 	@OneToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "properties_id", nullable = false, updatable = false)
+	@JoinColumn(name = "consignment_status_id", nullable = false, updatable = false)
 	private ConsignmentStatus consignmentStatus;
 
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)

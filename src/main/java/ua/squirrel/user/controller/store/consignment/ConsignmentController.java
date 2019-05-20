@@ -4,10 +4,10 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javassist.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
@@ -23,7 +23,7 @@ import ua.squirrel.user.utils.ConsignmentUtil;
 import ua.squirrel.web.entity.user.User;
 import ua.squirrel.web.service.registration.user.UserServiceImpl;
 
-@Controller
+@RestController
 @RequestMapping("/user/stores/сonsignment")
 @Slf4j
 public class ConsignmentController {
@@ -46,11 +46,13 @@ public class ConsignmentController {
 		User user = userServiceImpl.findOneByLogin("test1").get();
 		Store store = getCurrentStore(user ,consignmentSearchModel.getStoreId()) ;
 		
+		
 		List<Consignment> resultList = consignmentServiceImpl.findByStoreAndConsignmentStatusAndDateBetween(store,
 				getConsignmentStatus(consignmentSearchModel.getConsignmentStatus()),
 				consignmentUtil.convertDate(consignmentSearchModel.getDateStart()),
 				consignmentUtil.convertDate(consignmentSearchModel.getDateFinish()));
 		
+	 
 		return consignmentUtil.createConsignmentModelList(resultList) ;
 		}
 	
@@ -62,7 +64,7 @@ public class ConsignmentController {
 	}
 	private ConsignmentStatus getConsignmentStatus(String name) throws NotFoundException {
 		return consignmentStatusServiceImpl.findOneByName(name)
-				.orElseThrow(() -> new NotFoundException("Store not found"));
+				.orElseThrow(() -> new NotFoundException("Status not found"));
 	}
 	
 	
