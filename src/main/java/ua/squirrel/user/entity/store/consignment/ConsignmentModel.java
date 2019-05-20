@@ -1,16 +1,20 @@
 package ua.squirrel.user.entity.store.consignment;
 
-import java.util.Calendar;
+
+import java.util.List;
 
 import lombok.Builder;
 import lombok.Data;
+import ua.squirrel.user.entity.product.ProductModel;
 
 @Builder
 @Data
 public class ConsignmentModel {
 	private long id;
-
-	private Calendar date;
+	
+	private String date;
+	
+	private List<ProductModel> productPrice;
 
 	private boolean isApproved;
 

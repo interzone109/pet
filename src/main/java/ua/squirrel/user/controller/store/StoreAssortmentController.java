@@ -96,7 +96,7 @@ public class StoreAssortmentController {
 			idsIngridient.addAll(storeUtil.spliteIds(compositeProduct.getProductExpend(), "rate"));
 		});
 		
-		String productLeftovers = storeUtil.addDefaultValue(idsIngridient, store.getProductLeftovers(), "quantity");
+		String productLeftovers = storeUtil.addDefaultLeftoverValue(idsIngridient, store.getProductLeftovers(), "quantity");
 		store.setProductLeftovers(productLeftovers);
 		
 		Calendar calendar = new GregorianCalendar();

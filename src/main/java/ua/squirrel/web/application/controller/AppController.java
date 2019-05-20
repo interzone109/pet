@@ -31,4 +31,9 @@ public class AppController {
 	public String getStore() {
 		return "user/storePrice";
 	}
+	
+	@RequestMapping(path = "/user/storeConsignment", method = RequestMethod.GET)
+	public String getStoreConsignment() {
+		return "user/storeConsignment";
+	}
 }

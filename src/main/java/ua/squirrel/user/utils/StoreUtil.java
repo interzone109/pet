@@ -139,7 +139,7 @@ public class StoreUtil extends SmallOneUtil{
 	// метод принимает новые айти и строку с имеющимеся остатками
 		// и добавляет новые ингридиенты к старым (остатки уже имеющихся ингридиентов не
 		// меняются)
-	public String addDefaultValue(Set<Long> ids, String strValue ,String regex) {
+	public String addDefaultLeftoverValue(Set<Long> ids, String strValue ,String regex) {
 		 Map<Long, Integer>  currentIdsQuantity = super.spliteIdsValue(strValue, regex);
 		
 		//удаляем дубликаты
