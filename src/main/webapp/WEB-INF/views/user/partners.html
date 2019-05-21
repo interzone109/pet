@@ -22,7 +22,6 @@
 
 </head>
 <body>
-
 	<div class="wrapper">
 		<!-- left side menu -->
 		<div class="wrapper" th:insert="~{template/leftBar :: left_bar}"></div>
@@ -32,42 +31,49 @@
 			<div th:insert="~{template/topBar :: top_bar}"></div>
 
 			<div class="collapse" id="collapseInfo">
-				<div class="card card-body">Раздел отображает контактные
-					данные поставщиков. Здесь вы можете редактировать данные о них, а
-					так же данные о приобретаемых у них товарах.</div>
+				<div class="card card-body">Раздел служит для создания базы поставщиков и их товаров.
+						<br> Возможности :
+						<br>-Создание/редактирование карточки поставщика;
+						<br>-Создание/редактирование товаров закупаемых у поставщика;
+				</div>
 			</div>
-			<br> <input id="searchOnPageTable" type="text"
-				placeholder="Поиск.."> <br> <br>
+			<br> 
+				<input id="searchOnPageTable" type="text" placeholder="Поиск.."> 
+			<br> 
+			<br>
 			<!-- ---------------- Partner table  ------------------------------- -->
 
 			<div class="collapse" id="collapsePartnerBody">
 				<div>
 					<!-- ---------------- Create new partner form  ------------------------------- -->
 					<div>
+						<div class="alert alert-danger collapse" id="inputPartnerFormErrore">
+								<button type="button" class="close" data-dismiss="alert">&times;</button>
+								Заполните обязательные поля
+						</div>
 						<div class="form-row">
 							<div class="col">
-								<label for="inputCompanyName" class="sr-only">Компания</label> <input
-									type="text" id="inputCompanyName" class="form-control"
-									placeholder="Компания">
+								<label for="inputCompanyName" class="sr-only">Компания</label> 
+								<input type="text" id="inputCompanyName" class="form-control" placeholder="Компания">
 							</div>
 							<div class="col">
-								<label for="inputCompanyPhon" class="sr-only">Телефон</label> <input
-									type="text" id="inputCompanyPhon" class="form-control"
-									placeholder="Телефон">
+								<label for="inputCompanyPhon" class="sr-only">Телефон</label> 
+								<input type="text" id="inputCompanyPhon" class="form-control" placeholder="Телефон">
+								
 							</div>
 							<div class="col">
-								<label for="inputCompanyMail" class="sr-only">Почта</label> <input
-									type="text" id="inputCompanyMail" class="form-control"
-									placeholder="Почта">
+								<label for="inputCompanyMail" class="sr-only">Почта</label> 
+								<input type="text" id="inputCompanyMail" class="form-control" placeholder="Почта">
 							</div>
 							<div class="col-2">
 								<button class="btn btn-info" onclick="postNewPartnerForm()">Добавить</button>
 							</div>
+							
 						</div>
 					</div>
 					<!-- ---------------- Create new partner form  ------------------------------- -->
+					
 					<br>
-
 
 					<table class="table" id="partnerContent">
 						<thead>
@@ -90,16 +96,18 @@
 
 			<div class="collapse" id="collapseProductBody">
 				<div>
-
-
+					<div class="alert alert-danger collapse" id="inputPartnerProductFormErrore">
+						<button type="button" class="close" data-dismiss="alert">&times;</button>
+						Заполните обязательные поля
+					</div>
 					<div class="form-row">
 						<div class="col">
 							<label for="inputProductGroup" class="sr-only">Группа</label> 
 							<input type="text" id="inputProductGroup" class="form-control" placeholder="Группа">
 						</div>
 						<div class="col">
-							<label for="inputProductName" class="sr-only">Название</label> 
-							<input  type="text" id="inputProductName" class="form-control" placeholder="Название">
+							  <label for="inputProductName" class="sr-only">Название</label> 
+							<input  type="text" id="inputProductName" class="form-control " placeholder="Название" required>
 						</div>
 						<div class="col">
 							<label for="inputProductDescription" class="sr-only">Описание</label>

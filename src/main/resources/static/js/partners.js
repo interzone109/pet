@@ -223,18 +223,33 @@ function displayProductProperties(properties,convert){
 // метод формирует json, отправляет данные на сервер
 // и добавляет вернувшиеся данные на страницу
 function postNewPartnerForm(){
+	var company = $("#inputCompanyName");
+    var phonNumber = $("#inputCompanyPhon");
+    var partnerMail = $("#inputCompanyMail");
+	
+	
+	if(formValidation(company, phonNumber,partnerMail)){
 
 	var data = JSON.stringify({
-		"company": $("#inputCompanyName").val(),
-	    "phonNumber": $("#inputCompanyPhon").val(),
-	    "partnerMail":$("#inputCompanyMail").val()
+		"company": $(company).val(),
+	    "phonNumber": $(phonNumber).val(),
+	    "partnerMail":$(partnerMail).val()
 	});
 
 	request('POST',connectUrl+'/user/partners',addPartnerData ,data);
 
-	$("#inputCompanyName").val("");
-	$("#inputCompanyPhon").val("");
-	$("#inputCompanyMail").val("");
+	$(company).val("");
+	$(phonNumber).val("");
+	$(partnerMail).val("");
+	
+	$(company).removeClass("is-valid");
+	$(phonNumber).removeClass("is-valid");
+	$(partnerMail).removeClass("is-valid");
+	
+	$("#inputPartnerFormErrore").collapse("hide");
+}else{
+	$("#inputPartnerFormErrore").collapse("show");
+}
 };
 
 /**
@@ -254,7 +269,8 @@ function postNewPartnerForm(){
 // метод формирует json, отправляет данные на сервер
 // и добавляет вернувшиеся данные на страницу
 function postNewProductForm(){
-	console.log("post new prod "+ this.title);
+	var name = $("#inputProductName");
+	if(formValidation(name)){
 	var data = JSON.stringify(
 		 {
 			 "name": $("#inputProductName").val(),
@@ -271,7 +287,11 @@ function postNewProductForm(){
 	$("#inputProductName").val("");
 	$("#inputProductDescription").val("");
 	$("#inputProductGroup").val("");
-	
+	$("#inputPartnerProductFormErrore").collapse("hide");
+	$("#inputProductName").removeClass("is-valid");
+	}else{
+		$("#inputPartnerProductFormErrore").collapse("show");
+	}
 };
 
 function displayPostProductRow (data){
