@@ -10,7 +10,7 @@ function fillAvailableFild(productList){
 			$('#avalbleIngridientGroupId').append(	createIngridientRow(product));
 		});
 	}else{
-		var emptyElement = document.createElement('option').innerText = "отсутствуют";
+		var emptyElement = document.createElement('optgroup').innerText = "отсутствуют";
 		$('#avalbleIngridientGroupId').append(emptyElement);
 	}
 	
@@ -143,11 +143,17 @@ $('#updateRateButton').on("click", sendUpdateIngridientRate);
 // метод получает значение из поля с новым расходом для ингридиента
 //и обновляет данные
 function sendUpdateIngridientRate (){
+	if(formValidation($('#updateRate'))){
 	var value = $('#updateRate').val();	
 	var t = $('#ingridientMeasyrValue').text()==="шт" ? parseFloat(value) :   parseFloat(value)*1000 ;
 	
 	request("PUT", connectUrl+"/user/composites/"+$("#currentProductId").text()+"/edit/"+$('#sendIngridientId').text(),
 			updateIngridientsRateRow,  JSON.stringify(t) );
+	
+	
+	$('#updateModalIngridientQuantityForm').modal("hide");
+	$('#updateRate').removeClass("is-valid");
+	}
 }
 
 //метод обновляет данные о расходе в строке ингридиента
@@ -160,7 +166,7 @@ function updateIngridientsRateRow(data){
 
 function removeIngridient (id){
 	
-	$('#ingridiet_group_id_'+id).text("удалить");
+	$('#ingridiet_group_id_'+id).text("delete");
 }
 
 
@@ -171,8 +177,8 @@ function removeIngridient (id){
 
 $('#addIngridientLins').on("click",sendNewIngridient);
 function sendNewIngridient(){
-	
-	
+	if ( $('#selectedIngridientGroupId').children().length >0){
+	//if(true){
 	var requestStr ="{" ;
 	
 	 $('#selectedIngridientGroupId').children().each(function (){
@@ -185,12 +191,10 @@ function sendNewIngridient(){
 	 var json = requestStr.substring(0, requestStr.length - 1);
 	 json += "}";
 	 
-	console.log(json);
-	if(json.length > 2){
+	if(json.length > 3){
 	request("POST", connectUrl+"/user/composites/"+$("#currentProductId").text()+"/edit", displayIngridientsRow, json );
+	
+	 $('#ingridientModalBody').modal("hide");
 	}
-	
-	
-	
-	
+	}
 }

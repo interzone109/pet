@@ -57,6 +57,7 @@ function updateCompositeRow(id){
 
 function PUTCompositeModal(){
 
+	if(formValidation($("#updateCompositeProductName"))){
 	var data = JSON.stringify({
 		"id": $("#sendCompositeId").text(),
 		"name": $("#updateCompositeProductName").val(),
@@ -66,7 +67,10 @@ function PUTCompositeModal(){
 	);
 	
 	request("PUT", connectUrl+"/user/composites/", updateCompositeRowData,data);
+	$("#updateCompositeProductName").removeClass("is-valid");// меняем рамку формы на обычкую
 	
+	$("#updateModalCompositeProductForm").modal("hide");
+	}
 }
 
 function updateCompositeRowData(data){
@@ -88,6 +92,7 @@ function updateCompositeRowData(data){
 /************************ POST new composite product ***************************************/
 
 function postNewCompositeProduct(){
+	if(formValidation($("#inputCompositeName"))){
 	var data = JSON.stringify({
 		 "name": $("#inputCompositeName").val(),
        "group": $("#inputCompositeGroup").val(),
@@ -99,6 +104,12 @@ function postNewCompositeProduct(){
 	$("#inputCompositeName").val('');
     $("#inputCompositeGroup").val('');
     $("#measureSelect option[value="+"шт"+"]").prop('selected', true);
+    
+    $('#inputCompositeFormErrore').collapse('hide'); // скрываем алерт о ошибке
+    $("#inputCompositeName").removeClass("is-valid");// меняем рамку формы на обычкую
+	}else{
+		$('#inputCompositeFormErrore').collapse('show'); // показываем алерт о ошибке
+	}
 }
 
 
@@ -115,6 +126,9 @@ function postNewCompositeProduct(){
 
 //прячем таблицу композитного продукта, делаем запрос к серверу и отображаем данные в новой таблицу
 function loadProductData (id){
+	$("#namePlaceholder").val("Продукт - "+ $("#product_name_id_"+id).text());
+	$("#namePlaceholder").collapse("show");
+	
 	$("#collapseCompositeProductBody").collapse("hide");
 	$("#currentProductId").text(id);
 	request("GET", connectUrl+"/user/composites/"+id+"/edit", displayIngridientsRow);
@@ -183,7 +197,7 @@ if( ids.length > 0){
 
 
 $("#listIngridientsId").text("");
-
+$("#namePlaceholder").collapse("hide");
 }
 
 
@@ -234,14 +248,17 @@ function createMeasureProduct(expend, measure){
 
 
 /******************** search function ****************************/
+
 $(document).ready(function(){
-  $("#searchOnPageTable").on("keyup", function() {
-    var value = $(this).val().toLowerCase();
-    $("#productTable tr").filter(function() {
-      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-    });
-  });
-});
+	  $("#searchOnPageTable").on("keyup", function() {
+	    var value = $(this).val().toLowerCase();
+	    var tableName =  ($("#collapseCompositeProductBody").is(':visible')) ?"productTableBody" :"ingridientTableBody" ;
+	    $("#"+tableName +" tr").filter(function() {
+	      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+	    });
+	  });
+	});
+
 /******************** search function ****************************/
 
 

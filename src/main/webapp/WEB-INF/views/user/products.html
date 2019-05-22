@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-<title>товары</title>
+<title>Товары</title>
 
 <!-- Bootstrap CSS CDN -->
 <link rel="stylesheet"
@@ -48,9 +48,17 @@
 			<!-- -----------  info collapse --------------------- -->
 			
 			<!-- -----------  search  --------------------- -->
-			<br> <input id="searchCompositeTable" type="text"
-				placeholder="Поиск..">
-			<div class="line"></div>
+			<!-- Search start -->
+				<div class="form-row">
+					<div class="col">
+						<input id="searchOnPageTable" type="text" placeholder="Поиск.." class="form-control"> 
+					</div>
+					<div class="col">
+						<input id="namePlaceholder" type="text" placeholder="Название продукта" class="form-control collapse" disabled>
+					</div>
+				</div>
+			<!-- Search end -->
+			<br>
 			<!-- -----------  search --------------------- -->
 			
 			
@@ -60,6 +68,9 @@
 			
 				<!-- ---------------- Create new composite form  ------------------------------- -->
 				<div>
+				<div class="alert alert-danger collapse" id="inputCompositeFormErrore">
+								Заполните обязательные поля.
+						</div>
 					<div class="form-row">
 					<div class="col">
 							<label for="inputCompositeGroup" class="sr-only">Группа</label> 

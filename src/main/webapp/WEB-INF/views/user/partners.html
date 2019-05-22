@@ -37,10 +37,18 @@
 						<br>-Создание/редактирование товаров закупаемых у поставщика;
 				</div>
 			</div>
-			<br> 
-				<input id="searchOnPageTable" type="text" placeholder="Поиск.."> 
-			<br> 
+			<!-- Search start -->
+				<div class="form-row">
+					<div class="col">
+						<input id="searchOnPageTable" type="text" placeholder="Поиск.." class="form-control"> 
+					</div>
+					<div class="col">
+						<input id="namePlaceholder" type="text" placeholder="Название компании" class="form-control collapse" disabled>
+					</div>
+				</div>
+			<!-- Search end -->
 			<br>
+			
 			<!-- ---------------- Partner table  ------------------------------- -->
 
 			<div class="collapse" id="collapsePartnerBody">
@@ -48,8 +56,7 @@
 					<!-- ---------------- Create new partner form  ------------------------------- -->
 					<div>
 						<div class="alert alert-danger collapse" id="inputPartnerFormErrore">
-								<button type="button" class="close" data-dismiss="alert">&times;</button>
-								Заполните обязательные поля
+								Заполните обязательные поля.
 						</div>
 						<div class="form-row">
 							<div class="col">
@@ -97,7 +104,6 @@
 			<div class="collapse" id="collapseProductBody">
 				<div>
 					<div class="alert alert-danger collapse" id="inputPartnerProductFormErrore">
-						<button type="button" class="close" data-dismiss="alert">&times;</button>
 						Заполните обязательные поля
 					</div>
 					<div class="form-row">

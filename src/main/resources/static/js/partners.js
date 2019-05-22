@@ -43,6 +43,9 @@ function displayPartnerRow( partner){
 
 // метод срабатывает при нажатии кнопки списка продуктов у поставщика
 function loadProductData(id){
+	$("#namePlaceholder").val("Поставщик - "+$("#partner_company_id_"+id).text());// находим название партнера по ид и устанавливаем его
+	$("#namePlaceholder").collapse("show")//показываем название компании
+	
 	 $("#collapsePartnerBody").collapse("hide");// скрываем таблицу с поставщиками
 	// делаем запрос к серверу на получение списка продуктов
 	request('GET' ,connectUrl+'/user/partners/'+id+'/info',displayProductDataGET);
@@ -117,6 +120,7 @@ function updateProduct(id){
 
 // формируем жсон и отправляем его на сервер
 function sendUpdateProductRow(){
+	if(formValidation($("#updateProductName"))){
 	
 	var data = JSON.stringify({
 			 "name": $("#updateProductName").val(),
@@ -129,8 +133,11 @@ function sendUpdateProductRow(){
 		);
 	
 	request('PUT', connectUrl+'/user/partners/'+$("#curentPartnerProductList").text()+'/edit/'+$("#sendProductId").text(),updateProductRow ,data);
+	$("#updateProductName").removeClass("is-valid");
+	$("#updateModalProductForm").modal("hide");
+	
+	} 
 }
-
 // обновляет поля в таблице с продуктами
 function updateProductRow (productRow){
 
@@ -145,28 +152,7 @@ function updateProductRow (productRow){
 
 
 
-
-
-
-
-
-
-
-
-
-
 /********************  PUT update product row  ****************************/
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -174,8 +160,9 @@ function updateProductRow (productRow){
 
 // метод прячит таблицу с продуктами и заменяет ее таблицей с поставщиками
 function hideProduct(){
+	 $("#namePlaceholder").collapse("hide"); // прячем название компании
 	 $("#collapsePartnerBody").collapse("show");// покахываем список поставщиков
-	 $("#collapseProductBody").collapse("hide"); // прячес список продуктов
+	 $("#collapseProductBody").collapse("hide"); // прячем список продуктов
 	$("#productTable").empty();// чистим строки в таблице с продуктами
 	$("#productCaption").remove();// удаляем заголовок списка, если такой есть
 };
@@ -326,13 +313,21 @@ function updatePartnerRow(id){
 
 // функция форминует json и отправляет на сервер PUT запрос
 function sendUpdatePartnerRow(id){
+	var isValid  = formValidation($("#updateCompanyName") ,$("#updateCompanyPhon") ,$("#updateCompanyMail") );
+	if(isValid){
 		  var data = JSON.stringify({
 		    "company": $("#updateCompanyName").val(),
 		    "phonNumber": $("#updateCompanyPhon").val(),
 		    "partnerMail":$("#updateCompanyMail").val()
 		  });
 		  request('PUT', connectUrl+'/user/partners/'+$("#partnerIdModalUpdate").text()+'/info',reusePartnerRow ,data);
-	
+		  
+		  
+		  $("#updateCompanyName").removeClass("is-valid");
+		  $("#updateCompanyPhon").removeClass("is-valid");
+		  $("#updateCompanyMail").removeClass("is-valid");
+			$("#updateModalPartnerForm").modal("hide");
+	}
 };
 
 // метод изменяет данные в поле на полученные данные
