@@ -433,6 +433,16 @@ public class FillDataUtil {
 
 		storeServiceImpl.save(newStore);
 		
+		 newStore = new Store();
+			newStore.setAddress("empty");
+			newStore.setPhone("545-254-54");
+			
+			newStore.setMail("empty@mail.com");
+			newStore.setUser(owner);
+			
+
+			storeServiceImpl.save(newStore);
+		
 	}
 
 }

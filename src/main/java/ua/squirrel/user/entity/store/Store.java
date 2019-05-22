@@ -27,7 +27,7 @@ public class Store {
 	@Column(name = "store_id", nullable = false)
 	private long id;
 	
-	@Column(name = "address", unique = true, nullable = false)
+	@Column(name = "address", nullable = false)
 	private String address;
 	
 	@Column(name = "phone")

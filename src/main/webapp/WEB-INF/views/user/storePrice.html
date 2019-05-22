@@ -28,18 +28,29 @@
 				<div th:insert="~{template/topBar :: top_bar}"></div>
 <!-- -----------  info collapse --------------------- -->
 					<div class="collapse" id="collapseInfo">
-						<div class="card card-body">Раздел служит торговых точек.
+						<div class="card card-body">Раздел служит для создания торговых точек.
 						<br> Возможности :
 						<br>-создание торговой точки;
 						<br>-редактирование торговой точки;
 					</div>
+					<br>
 				</div>
 <!-- -----------  info collapse --------------------- -->
-
+			<!-- Search start -->
+				<div class="form-row">
+					<div class="col">
+						<input id="namePlaceholder" type="text" placeholder="Название магазина" class="form-control collapse" disabled>
+					</div>
+				</div>
+			<!-- Search end -->
+			<br>
 <!-- ----------------------     content    store  start  --------------------------- -->
 <div class="collapse" id="collapseStoreBody">
 <!-- ---------------- Create new partner form  ------------------------------- -->
 				<div>
+					<div class="alert alert-danger collapse" id="inputStoreFormErrore">
+								Заполните обязательные поля.
+					</div>
 					<div class="form-row">
 						<div class="col">
 							<label for="inputStoreAddress" class="sr-only">Адрес</label>
@@ -82,6 +93,9 @@
 <div class="collapse" id="collapseProductStoreBody">
 <div>
 <!-- ---------------- Create new partner form  ------------------------------- -->
+				<div class="alert alert-danger collapse" id="inputStoreFormErrore">
+								Заполните обязательные поля.
+				</div>
 				<div>
 					<div class="form-row">
 						<div class="col-2">

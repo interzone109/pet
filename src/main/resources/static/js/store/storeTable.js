@@ -41,16 +41,34 @@ function createNewStoreRow(store){
 //функция создает новый объект Store и отправляет на сервер
 function postNewStoreForm(){
 	// формируем жсон и отправляем его на сервер
-		
+	var adress = $("#inputStoreAddress");
+	var phone = $("#inputStorePhone");
+	var mail =$("#inputStoreMail") ;
+		var isValid =  formValidation(adress, phone, mail);
+		if(isValid){
 		var data = JSON.stringify({
-				 "address": $("#inputStoreAddress").val(),
-		         "phone": $("#inputStorePhone").val(),
-		         "mail": $("#inputStoreMail").val()
+				 "address": $(adress).val(),
+		         "phone": $(phone).val(),
+		         "mail": $(mail).val()
 			   }
 			);
 		
 		request('POST', connectUrl+'/user/stores/',fillStoreTable ,data);
 	
+		// меняем цвет контура инпута
+		$(adress).removeClass("is-valid");
+		$(phone).removeClass("is-valid");
+		$(mail).removeClass("is-valid");
+		// чистим значения
+		$(adress).val("");
+        $(phone).val("");
+        $(mail).val("");
+        // убираем предупреждение об ошибке
+		$("#inputStoreFormErrore").collapse("hide");
+		}else{
+			// показываем предупреждение об ошибке
+			$("#inputStoreFormErrore").collapse("show");
+		}
 }
 
 
@@ -68,6 +86,11 @@ function updateStoreDataModal(id){
 
 //метод срабатывает при нажатии кнопки обновить в модальном окне
 function updateStoreData(){
+	var adress = $("#updateStoreAddress");
+	var phone = $("#updateStorePhone");
+	var mail =$("#updateStoreMail") ;
+		var isValid =  formValidation(adress, phone, mail);
+		if(isValid){
 	//формируем жсон с обновленными данными
 	var data = JSON.stringify({
 		 "address": $("#updateStoreAddress").val(),
@@ -77,6 +100,14 @@ function updateStoreData(){
 	);
 	// отправляем на сервер
 	request('PUT', connectUrl+'/user/stores/'+$("#updateStoreId").text(),updateStoreTable ,data);
+	
+	// меняем цвет контура инпута
+	$(adress).removeClass("is-valid");
+	$(phone).removeClass("is-valid");
+	$(mail).removeClass("is-valid");
+	
+	$("#updateModalStoreForm").modal("hide");
+	}
 }
 
 
@@ -94,10 +125,23 @@ function showStoreTable(){
 	$("#collapseProductStoreBody").collapse("hide");//скрываем таблицу с продукт -цена
 	$("#storeProductTable").empty();// чистим строки в таблице с продуктами
 	$("#productPriceIds").text(" ");// обнуляем список с Ids продуктов
+	$("#namePlaceholder").collapse("hide")//прячем алерт с азванием магазина
 	
 }
 
 
 
+/** ****************** search function *************************** */
 
+$(document).ready(function(){
+	  $("#searchOnPageTable").on("keyup", function() {
+	    var value = $(this).val().toLowerCase();
+	    var tableName =  ($("#collapseStoreBody").is(':visible')) ?"storeTable" :"storeProductTable" ;
+	    $("#"+tableName +" tr").filter(function() {
+	      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+	    });
+	  });
+	});
+
+/** ****************** search function *************************** */
 

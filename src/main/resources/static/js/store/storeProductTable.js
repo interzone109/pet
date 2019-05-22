@@ -8,6 +8,9 @@ function showProductPrice(storeId){
 	// запрос  на  получения списка ккомпозитных товаров
 	request('GET', connectUrl+'/user/stores/assortment/'+storeId, fillStoreProductTable);
 	
+	$("#namePlaceholder").val("Магазин - "+$("#store_address_id_"+storeId).text());// находим название магазина по ид и устанавливаем его
+	$("#namePlaceholder").collapse("show");//показываем название магазина
+	
 }
 
 // метод заполняет таблицу с продуктами
@@ -33,7 +36,7 @@ function fillStoreProductTable(dataJSON){
 			 +"<i class=\"fas fa-list-alt\" title=\"вернуться к магазинам\" onclick=\"showStoreTable()\"  ></i> </td>"
 			
 			 
-			 document.getElementById("productPriceIds").innerText+=product.id+",";
+			 document.getElementById("productPriceIds").innerText+=product.id+" ";
 			 
 			  return productRow;
  }
@@ -56,9 +59,9 @@ function displayAvailableCompositeRow(products){
 			$('#compositeProductGroup').append(addProductItem( product));
 		});
 		
-		var array =$('#productPriceIds').text().split(",");
+		var array =$('#productPriceIds').text().split(" ");
 		for (var i = 0; i < array.length; i++) {
-			$("#option_product_id_"+i).hide();
+			$("#option_product_id_"+array[i]).hide();
 		}
 }
 
@@ -100,24 +103,22 @@ function postNewProductPrice(){
 	var price = $('#updateCompositeProductPrice').val();
 	console.log(price.length);
 	var priceNumb = Number.parseFloat(price) ;
-	if( price.length === 0  && priceNumb < 0){
+	
+	if( price.length === 0  || priceNumb <= 0 ){
 		$("#updateErrorePrice").text("введите стоимость товара / услуги");
 		$("#updateErrorePrice").collapse("show");
 		price = null;
 	}else{
 		$("#updateErrorePrice").collapse("hide");
 			priceNumb *=  100;
-	}
-	
-	var storeId = $('#compositeStoreId').text();
-	
-	if(price !==null &&productId !== null ){
-		$("#newModalProductStoreForm").modal("hide");
-		
-		var data = "{\""+productId+"\":"+priceNumb+"}";
-		
-		request('POST', connectUrl+'/user/stores/assortment/'+$('#compositeStoreId').text(), fillStoreProductTable,data);
-		
+			
+			var storeId = $('#compositeStoreId').text();
+			
+			if(price !==null &&productId !== null ){
+				$("#newModalProductStoreForm").modal("hide");
+				var data = "{\""+productId+"\":"+priceNumb+"}";
+				request('POST', connectUrl+'/user/stores/assortment/'+$('#compositeStoreId').text(), fillStoreProductTable,data);
+			}
 	}
 }
 

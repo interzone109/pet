@@ -44,7 +44,7 @@ function displayPartnerRow( partner){
 // метод срабатывает при нажатии кнопки списка продуктов у поставщика
 function loadProductData(id){
 	$("#namePlaceholder").val("Поставщик - "+$("#partner_company_id_"+id).text());// находим название партнера по ид и устанавливаем его
-	$("#namePlaceholder").collapse("show")//показываем название компании
+	$("#namePlaceholder").collapse("show");//показываем название компании
 	
 	 $("#collapsePartnerBody").collapse("hide");// скрываем таблицу с поставщиками
 	// делаем запрос к серверу на получение списка продуктов

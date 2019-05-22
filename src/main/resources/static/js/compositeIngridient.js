@@ -178,16 +178,14 @@ function removeIngridient (id){
 $('#addIngridientLins').on("click",sendNewIngridient);
 function sendNewIngridient(){
 	if ( $('#selectedIngridientGroupId').children().length >0){
-	//if(true){
 	var requestStr ="{" ;
 	
 	 $('#selectedIngridientGroupId').children().each(function (){
-
 		var r = $(this).val() ;
 		var t = $(this).hasClass('UNIT') ? parseFloat($(this).attr('title')) :   parseFloat($(this).attr('title'))*1000 ;
 		requestStr += "\""+r+"\"" + ":" + t +",";
-		
 	 });
+	 
 	 var json = requestStr.substring(0, requestStr.length - 1);
 	 json += "}";
 	 
