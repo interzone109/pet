@@ -43,22 +43,27 @@
 			<!-- Search start -->
 				<div class="form-row">
 					<div class="col">
-						<input id="namePlaceholder" type="text" placeholder="Название продукта" class="form-control collapse" disabled>
+						<input id="namePlaceholder" type="text"  class="form-control collapse" disabled>
 					</div>
 				</div>
 				<br>
 			<!-- Search end -->
 <!-- ----------------------     content      start  --------------------------- -->
 <!-- ---------------- Search  form  ------------------------------- -->
+				
+<!-- ---------------- Search  form   ------------------------------- -->
+
+<div class="collapse" id="collapseConsignmentBody">
 				<div>
+					<div class="alert alert-danger collapse" id="inputConsignmentFormErrore">
+								Заполните обязательные поля.
+					</div>
 					<div class="form-row">
-					
-							<div class="col">
+						<div class="col-3">
 							<label for="dataRangeValue" class="sr-only">Период</label>	
-                				 <input id="dataRangeValue" type='text' data-range="true" placeholder="Период"
+                			<input id="dataRangeValue" type='text' data-range="true" placeholder="Период"
                 				  data-multiple-dates-separator=" - " class='datepicker-here form-control' />
-           					 </div>
-						
+           				</div>
 						<div class="col">
         						<select class="form-control" id="consignmetnStatusSelect">
   									<option value="ARRIVAL" selected="selected">приход</option>
@@ -68,40 +73,92 @@
   									<option value="WRITE-OFF">списание</option>
 								</select>
 						</div>
+						
 						<div class="col">
 							<select class="form-control" id="consignmetnStoreSelect">
   									
 								</select>
 						</div>
-						<div class="col-2">
+						<div class="col" id="consignmetnOnSelectCol">
+							<select class="form-control" id="consignmetnOnSelect" >
+  									<option value="ANY" selected="selected">Все партнеры</option>
+							</select>
+						</div>
+						<div class="col" id="consignmetnStoreDoublerSelectCol" style="display: none;">
+							<select class="form-control" id="consignmetnStoreDoublerSelect" >
+  									 
+							</select>
+						</div>
+						<div class="col">
 							<button class="btn btn-info"  onclick="postFindConsignmentByValue()"  >Найти</button>
 						</div>
 					</div>
-				</div>
-<!-- ---------------- Search  form   ------------------------------- -->
-
-<div class="collapse" id="collapseConsignmentBody">
-
-	<br>
-<!-- ----------------    store table start ----------------  -->
-<table class="table" id="consignmentTableId">
+				</div>  
+				<br>
+<!--     consignment table start   -->
+<div hidden id ="consignmentTableStoreId"></div>
+<table class="table" id="consignmentTableId" summary="0">
 	<thead>
 		<tr>
 			<th>Номер</th>
 			<th>Дата</th>
-			<th>Meta</th>
-			<th>Тип накладной</th>
+			<th>Движение</th>
+			<th>Тип </th>
 			<th>Статус</th>
 			<th>Опции</th>
 		</tr>
 	</thead>
+	<tfoot id="consignmentTableFooter">
+	 </tfoot>
+	
 		<tbody id="consignmentTableBodyId">
 		</tbody>
 	</table>
-<!-- ----------------  store table end   ----------------  -->	
+<!--     consignment table end   -->	
 </div>
-<!-- ----------------------     content    store  end  --------------------------- -->	
-	
+<!-- ----------------------     content    data  end  --------------------------- -->	
+<div class="collapse" id="collapseConsignmentDataBody">
+<!-- input data start -->
+				<div>
+					<div class="alert alert-danger collapse" id="inputConsignmentFormErrore">
+								Заполните обязательные поля.
+					</div>
+					<div class="form-row">
+						<div class="col-2">
+							<button class="btn btn-info"   id="saveDataConsignment" >Сохранить </button>
+						</div>
+						<div class="col-2">
+							<button class="btn btn-info"   id="addDataConsignment">Добавить </button>
+						</div>
+						<div class="col-2">
+							<button class="btn btn-info"  id="approvedDataConsignment">Провести </button>
+						</div>
+					</div>
+				</div>
+<!-- input data end -->
+<br>
+<!--     consignment data table start   -->
+<div hidden id ="currentConsignmentStatusId"></div>
+<div hidden id ="consignmentIngridientsId"></div>
+<table class="table" id="consignmentDataTableId">
+	<thead>
+		<tr>
+			<th>Группа</th>
+			<th>Название</th>
+			<th>Кол.</th>
+			<th>Мера</th>
+			<th>Цена/грн</th>
+			<th>Итого/грн</th>
+			<th>Опции</th>
+		</tr>
+	</thead>
+
+		<tbody id="consignmentDataTableBodyId">
+		</tbody>
+	</table>
+	<a class="nav-link" href="#" onclick="hideConsignmentData()"> Вернуться к последней выборке</a>
+<!--     consignment data table end   -->	
+</div>	
 
 	
 	
@@ -122,6 +179,7 @@
 <script th:src="@{/js/info.js}"></script>
  <script th:src="@{/js/consignment/datapiker.js}"></script>	
  <script th:src="@{/js/consignment/consignmentTable.js}"></script>	
+ <script th:src="@{/js/consignment/consignmentData.js}"></script>	
 <!--<script th:src="@{/js/store/storeProductTable.js}"></script> -->
 
 </body>

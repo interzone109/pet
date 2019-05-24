@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import ua.squirrel.user.entity.store.Store;
 import ua.squirrel.user.entity.store.consignment.Consignment;
 import ua.squirrel.user.entity.store.consignment.ConsignmentStatus;
+import ua.squirrel.web.entity.user.User;
 
 
 public interface ConsignmentRepository extends JpaRepository<Consignment, Long> {
@@ -19,4 +20,11 @@ public interface ConsignmentRepository extends JpaRepository<Consignment, Long> 
 
 	Optional<Consignment> findOneByDateAndStoreAndConsignmentStatus(LocalDate date, Store store,
 			ConsignmentStatus consignmentStatus);
+	
+	
+	
+	List<Consignment> findByStoreAndConsignmentStatusAndMetaIgnoreCaseContainingAndDateBetween(Store store,
+			ConsignmentStatus consignmentStatus,String meta,  LocalDate start, LocalDate finish);
+
+	Optional<Consignment> findOneByIdAndStore(Long consignmentId, Store store);
 }

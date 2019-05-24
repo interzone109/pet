@@ -1,66 +1,129 @@
 var connectUrl = "http://localhost:8080" ;
-// получаем список созданых магазинов
+$("#collapseConsignmentBody").collapse("show");
+
+// получаем список  магазинов
 function getStoreList(){
 	request("GET",connectUrl + "/user/stores", addStoreSearchRow );
 }
 getStoreList();
-
-
 //добавляем оптионалы для выборки по магазинам
 function addStoreSearchRow(data){
 	if (data.length < 0 ){
 		$("#consignmetnStoreSelect").append("<option value=\"0\">Создайте магазин</option>");
+		$("#consignmetnStoreDoublerSelect").append("<option value=\"0\">Создайте магазин</option>");
 	} else {
 	data.forEach(store=>{
 		$("#consignmetnStoreSelect").append("<option value=\""+store.id+"\" selected=\"selected\">"+store.address+"</option>");
+		$("#consignmetnStoreDoublerSelect").append("<option value=\""+store.id+"\" selected=\"selected\">"+store.address+"</option>");
 	});
 	$("#consignmetnStoreSelect").val(data[0].id);//устанавливаем selected первому магазину
+	//в дублируещем селекте делаем недоступным первый магазин
+	$("#consignmetnStoreDoublerSelect [value=" + data[0].id + "]").prop('disabled', 'disabled');
 	}
 }
+
+
+//получаем список  партнеров
+function getPartnerList(){
+	request("GET",connectUrl + "/user/partners", addPartnerSearchRow );
+}
+getPartnerList();
+//добавляем оптионалы для выборки по партнерам
+function addPartnerSearchRow(data){
+  if ((data.length > 0 )) {
+	data.forEach(partner=>{
+		$("#consignmetnOnSelect").append("<option value=\""+partner.id+"\">"+partner.company+"</option>");
+	});
+	}
+}
+//устанавливаем период по умолчанию
+function fillDate(){
+	var today = new Date();
+	var tomorrow = new Date();
+	tomorrow.setDate(today.getDate()+1);
+	
+	var dd = String(today.getDate()).padStart(2, '0');
+	var mm = String(today.getMonth() + 1).padStart(2, '0');
+	var yyyy = today.getFullYear();
+
+	var period = String(today.getDate()).padStart(2, '0')
+	+ '.' + String(today.getMonth() + 1).padStart(2, '0')
+	+ '.' + today.getFullYear()+"-"
+	+String(tomorrow.getDate()).padStart(2, '0')
+	+ '.' + String(tomorrow.getMonth() + 1).padStart(2, '0')
+	+ '.' + tomorrow.getFullYear();
+	$("#dataRangeValue").val(period);
+}
+fillDate();
+
 
 // функия собирает данные с инпут полей и отправляет запрос на сервер
 // для получение результатов по выборке /user/stores/сonsignment
 function postFindConsignmentByValue(){
 	var date = $("#dataRangeValue").val().split("-");
-
+	var meta = null ;
+	if($("#consignmetnStoreDoublerSelectCol").is(":visible") && !$("#consignmetnStoreDoublerSelect option:selected").is(":disabled") ){
+      meta = $("#consignmetnStoreDoublerSelect option:selected").text();
+	}
+	if($("#consignmetnOnSelectCol").is(":visible") && $("#consignmetnOnSelect option:selected").val() !=="ANY"){
+		meta = $("#consignmetnOnSelect option:selected").text();
+	}
+	var isValid =  false ;
+	if( date.length >1){
+		isValid = (date[0].length > 8 && date[1].length >8 && formValidation($("#dataRangeValue"))) ;
+	}
+	if(isValid){
 	var data = JSON.stringify({
 		 "storeId": $("#consignmetnStoreSelect").val(),
+		 "meta": meta,
         "dateStart": date[0],
         "dateFinish": date[1],
         "consignmentStatus": $("#consignmetnStatusSelect").val()
 	   }
 	);
-request('POST', connectUrl+'/user/stores/сonsignment',fillConsignmentTable ,data);
+	console.log(data);
+	request('POST', connectUrl+'/user/stores/сonsignment',fillConsignmentTable ,data);
+	
+	$("#consignmentTableStoreId").text($("#consignmetnStoreSelect").val());
+	
+	$("#inputConsignmentFormErrore").collapse("hide");
+	$("#dataRangeValue").removeClass("is-valid");
+	} else{
+		$("#dataRangeValue").addClass("is-invalid");
+		$("#inputConsignmentFormErrore").collapse("show");
+	}
 }
 
-//метод заполняет таблицу с продуктами
+//метод заполняет таблицу с накладными
 function fillConsignmentTable(data ){
-	$("#collapseConsignmentBody").collapse("show");
+	$("#consignmentTableBodyId tr").remove();//удвляем старый результат поиска
 	
-	if( Array.isArray(data)){
+	$("#collapseConsignmentBody").collapse("show");
+	if( Array.isArray(data) && data.length !== 0){
 		data.forEach(consignment => {
 			$('#consignmentTableBodyId').append(createNewConsignmentRow( consignment));
 		});
-	}else{
-		  $('#consignmentTableBodyId').append(createNewConsignmentRow( data));
-	}
+		$('#consignmentTableFooter').text("");
+	}else  {
+		$('#consignmentTableFooter').text("Накладные не найдены");
+	} 
 	
 }
 
 
 // метод создает строку для таблицы с накладными
  function createNewConsignmentRow(consignment){
-	 var productRow = document.createElement('tr');
-	 productRow.id = "consignment_row_id_"+consignment.id;
+	 var consignmentRow = document.createElement('tr');
+	 consignmentRow.id = "consignment_row_id_"+consignment.id;
 		  
-	 productRow.innerHTML = "<td id=\"consignment_id_"+consignment.id+"\">"+consignment.id+"</td>"
+	 consignmentRow.innerHTML = "<td id=\"consignment_id_"+consignment.id+"\">"+consignment.id+"</td>"
 			 + "<td id=\"consignment_date_id_"+consignment.id+"\">"+consignment.date+"</td>"
 			 + "<td id=\"consignment_meta_id_"+consignment.id+"\">"+consignment.meta+"</td>"
 			 + "<td id=\"consignment_status_id_"+consignment.id+"\">"+displayConsignmentStatus(consignment.consignmentStatus, 1)+"</td>"
-			 + "<td id=\"consignment_state_id_"+consignment.id+"\">"+displayConsignmentState(consignment.isApproved, 1)+"</td>"
-			 +"<td> <i class=\"fas fa-edit\" title=\"открыть\" onclick=\"test123("+consignment.id+")\" ></i>  </td>"
+			 + "<td id=\"consignment_state_id_"+consignment.id+"\">"+displayConsignmentState(consignment.approved, 1)+"</td>"
+			 +"<td> <i class=\"fas fa-list-alt\" title=\"открыть\" onclick=\loadConsignmentData("+consignment.id+") ></i>  </td>"
 
-			  return productRow;
+			  return consignmentRow;
  }
 
  
@@ -83,19 +146,51 @@ function fillConsignmentTable(data ){
  
  
  function displayConsignmentState(state,convert ){
-	 if( state || state==="проведено"){
+	 if(  state === "проведено" || state === true){
 	 		return (convert === 1)?"проведено": true;
-	 	}else if( !state  || state==="не проведено"){
+	 	}else {
+	 		
 	 		return  (convert === 1)?"не проведено": false;
- }
- }
- 
- function test123 (data){
-	 console.log(data);
+	 	}
  }
 
+// функция меняет данные для созданиявыборки на основе выбраного статуса накладной
+ $('#consignmetnStatusSelect').on('change', function() {
+	 var partnerSelect = $('#consignmetnOnSelectCol');
+	 var storeDoublerSelect =$('#consignmetnStoreDoublerSelectCol');
 
+		if( this.value ==="ARRIVAL" || this.value ==="RETURN" ){
+			$(partnerSelect).show();
+			$(storeDoublerSelect).hide();
+	 	}else if(this.value ==="CONSAMPTION" || this.value ==="WRITE-OFF"){
+	 		$(partnerSelect).hide();
+			$(storeDoublerSelect).hide();
+	 	}else if( this.value ==="HAULING" ){
+	 		$(partnerSelect).hide();
+			$(storeDoublerSelect).show();
+	 	} 
+	});
 
+ // метод не позволяет выбрать перемещение на один и тот же магазин - 
+ // перемещение с маг1 на маг1
+ $('#consignmetnStoreSelect').on('change', function() {
+	 if($('#consignmetnStatusSelect option:selected').val() === "HAULING"){
+	 $("#consignmetnStoreDoublerSelect option:disabled").prop('disabled', false);
+	 $("#consignmetnStoreDoublerSelect [value=" + this.value  + "]").prop('disabled', 'disabled');
+ }
+ });
 
+ /******************** search function ****************************/
 
+ $(document).ready(function(){
+ 	  $("#searchOnPageTable").on("keyup", function() {
+ 	    var value = $(this).val().toLowerCase();
+ 	    var tableName =  ($("#collapseConsignmentBody").is(':visible')) ?"consignmentTableBodyId" :"consignmentDataTableBodyId" ;
+ 	    $("#"+tableName +" tr").filter(function() {
+ 	      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+ 	    });
+ 	  });
+ 	});
+
+ /******************** search function ****************************/
 

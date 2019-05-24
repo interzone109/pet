@@ -98,7 +98,7 @@ public class StoreUtil extends SmallOneUtil{
 				consignment = new Consignment();
 				consignment.setDate(calendar);
 				consignment.setApproved(false);
-				consignment.setMeta("накладная создана - "+ new Date());
+				consignment.setMeta("Поступление новых ингридиентов "+store.getAddress());
 				consignment.setStore(store);
 				consignment.setConsignmentStatus(consignmentStatusServiceImpl.findOneByName("ARRIVAL").get());
 			}
@@ -108,7 +108,7 @@ public class StoreUtil extends SmallOneUtil{
 					:new StringBuilder();
 					
 			// удаляем дубликаты ид ингридиентов
-			super.spliteIds(consignmentData.toString(), "[price]*:*quantity[0-9]price").forEach(id->{
+			super.spliteIds(consignmentData.toString(), "[price]*:*quantity[0-9]*price").forEach(id->{
 				newIdsSet.remove(id);
 			});
 			
@@ -120,7 +120,7 @@ public class StoreUtil extends SmallOneUtil{
 			store.getConsignment().add(consignment);
 			return consignment;
 	 }
-	 //[price]*:[0-9]*quantity[0-9]price
+	 //[price]*:[0-9]*quantity[0-9]*price
 	 
 	 
 	 

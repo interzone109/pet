@@ -10,6 +10,8 @@ import lombok.Data;
 public class ConsignmentSearchModel {
 	
 	private long storeId;
+	
+	private String meta;
 
 	private String dateStart;
 	

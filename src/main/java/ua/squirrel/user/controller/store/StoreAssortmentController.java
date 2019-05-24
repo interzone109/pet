@@ -93,9 +93,10 @@ public class StoreAssortmentController {
 			idsIngridient.addAll(storeUtil.spliteIds(compositeProduct.getProductExpend(), "rate"));
 		});
 		
-		String productLeftovers = storeUtil.addDefaultLeftoverValue(idsIngridient, store.getProductLeftovers(), "quantity");
-		store.setProductLeftovers(productLeftovers);
+		//String productLeftovers = storeUtil.addDefaultLeftoverValue(idsIngridient, store.getProductLeftovers(), "quantity");
+		//store.setProductLeftovers(productLeftovers);
 		
+		//создаем прихоную накладную при добавлении нового товара на магазин
 		LocalDate calendar =  LocalDate.now() ;
 		
 		Optional<Consignment> consignmentOptional = consignmentServiceImpl.findOneByDateAndStoreAndConsignmentStatus(calendar, store, 
@@ -104,7 +105,7 @@ public class StoreAssortmentController {
 		Consignment consignment = consignmentOptional.isPresent() ?consignmentOptional.get() : null ;
 		
 		storeUtil.createOrUpdateConsigment(store, idsIngridient, consignment, calendar);
-		store.getConsignment().add(consignment);
+		store.getConsignment().add(consignment);//
 		
 	
 		storeServiceImpl.save(store);

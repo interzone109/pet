@@ -2,7 +2,6 @@ package ua.squirrel.user.utils;
 
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -10,6 +9,15 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class SmallOneUtil {
+	// формирует мапу с id в качестве ключа и строй с двумя значениями разделеными символами val
+	public Map <Long, String> spliteIdValue1Value2(String data, String regex) {
+		Map <Long, String> idsValues = new HashMap<>();
+		String [] result = data.split(regex); 
+		for (int i = 0; i < result.length; i+=3) {
+			idsValues.put(Long.parseLong(result[i]), result[i+1]+"val"+result[i+2]);
+		}
+		return idsValues;
+	}
 	
 	//метод формирует строку с id значением и временем обновления
 	public String concatIdsValueDateToString(Long id, Integer value, String regex) {

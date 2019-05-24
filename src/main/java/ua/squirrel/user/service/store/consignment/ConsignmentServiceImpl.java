@@ -11,6 +11,7 @@ import ua.squirrel.user.entity.store.Store;
 import ua.squirrel.user.entity.store.consignment.Consignment;
 import ua.squirrel.user.entity.store.consignment.ConsignmentStatus;
 
+
 @Service
 public class ConsignmentServiceImpl implements ConsignmentService {
 
@@ -25,6 +26,9 @@ public class ConsignmentServiceImpl implements ConsignmentService {
 		return consignmentRepository.save(consignment);
 	}
 
+	public Optional<Consignment> findOneById(Long id) {
+		return consignmentRepository.findById(id) ;
+	}
 
 	public List<Consignment> findByStoreAndConsignmentStatusAndDateBetween(Store store,
 			ConsignmentStatus consignmentStatus, LocalDate from, LocalDate to) {
@@ -36,4 +40,13 @@ public class ConsignmentServiceImpl implements ConsignmentService {
 		return consignmentRepository.findOneByDateAndStoreAndConsignmentStatus(date, store, consignmentStatus);
 	}
 
+	public List<Consignment> findByStoreAndConsignmentStatusAndMetaIgnoreCaseContainingAndDateBetween(Store store,
+			ConsignmentStatus consignmentStatus,String meta,  LocalDate start, LocalDate finish){
+		return consignmentRepository.findByStoreAndConsignmentStatusAndMetaIgnoreCaseContainingAndDateBetween(store, consignmentStatus, meta, start, finish);
+	}
+
+	public Optional<Consignment> findOneByIdAndStore(Long consignmentId, Store store) {
+		return consignmentRepository.findOneByIdAndStore( consignmentId,  store);
+	}
+	
 }

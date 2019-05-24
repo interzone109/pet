@@ -411,9 +411,17 @@ public class FillDataUtil {
 			idsPrice.append(obj.getId()+":"+ (price+obj.getId())+"price");
 		});
 		
-		
-		
 		Store newStore = new Store();
+			newStore.setAddress("авто тест");
+			newStore.setPhone("545-254-54");
+			
+			newStore.setMail("empty@mail.com");
+			newStore.setUser(owner);
+			
+
+			storeServiceImpl.save(newStore);
+		
+		 newStore = new Store();
 		newStore.setAddress("Тираспольский грук 15.Б");
 		newStore.setPhone("545-254-54");
 		newStore.setProductPrice(idsPrice.toString());
@@ -433,15 +441,7 @@ public class FillDataUtil {
 
 		storeServiceImpl.save(newStore);
 		
-		 newStore = new Store();
-			newStore.setAddress("empty");
-			newStore.setPhone("545-254-54");
-			
-			newStore.setMail("empty@mail.com");
-			newStore.setUser(owner);
-			
-
-			storeServiceImpl.save(newStore);
+		
 		
 	}
 
