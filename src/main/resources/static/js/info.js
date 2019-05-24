@@ -54,8 +54,6 @@
 	   var isValid = true ;
     for (var i = 0; i < arguments.length; i++) {
     	var inputElement = $(arguments[i]);
-    	var erroreId = $(inputElement).attr('id')+'Errore' ;
-    	var varningElement = $("#"+erroreId);
         if($(inputElement).val() === ""){
         	isValid = false ;
         	$(inputElement).addClass("is-invalid");
@@ -68,6 +66,23 @@
     return isValid ;
    }
     
+   function formValidationNumber (){
+	   var isValid = true ;
+    for (var i = 0; i < arguments.length; i++) {
+    	var inputElement = $(arguments[i]);
+    	var value = parseFloat($(inputElement).val());
+    	//console.log($(inputElement).val()+" - "+value);
+        if($(inputElement).val() === "" || isNaN(value) ){
+        	isValid = false ;
+        	$(inputElement).addClass("is-invalid");
+        }else{
+        	$(inputElement).removeClass("is-invalid");
+        	$(inputElement).addClass("is-valid");
+        }
+      }
+    
+    return isValid ;
+   }
 
     
     

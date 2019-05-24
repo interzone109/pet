@@ -1,6 +1,7 @@
 package ua.squirrel.user.controller.store.consignment;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -54,7 +56,7 @@ public class ConsignmentController {
 	public List<ProductModel> getСonsignmentData(Authentication authentication, @PathVariable("storeId") Long storeId ,
 			@PathVariable("consignmentId") Long consignmentId)  throws NotFoundException {
 		
-			log.info("LOGGER: get Consignment for search value");
+			log.info("LOGGER: get Consignment data");
 			User user = userServiceImpl.findOneByLogin("test1").get();
 			Store store = getCurrentStore(user, storeId);
 			
@@ -67,6 +69,19 @@ public class ConsignmentController {
 						productServiceImpl.findAllByUserAndIdIn(user, prodIds) , consignment.getConsignmentData());
 		
 	}
+	
+	
+	/**
+	 * Метод отдает результаты поиска согласно данным запроса
+	 * из обьекта ConsignmentSearchModel
+	 * */
+	@PutMapping("{storeId}/{consignmentId}")
+	public Map<Long, String> putСonsignmentData( Authentication authentication, @RequestBody Map<Long, String> consignmentData 
+			, @PathVariable("storeId") Long storeId , @PathVariable("consignmentId") Long consignmentId) throws NotFoundException {
+		
+		return consignmentData;
+	}
+	
 	
 	/**
 	 * Метод отдает результаты поиска согласно данным запроса

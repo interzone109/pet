@@ -9,13 +9,13 @@ function loadConsignmentData (consignmentId){
 	 $("#collapseConsignmentDataBody").collapse("show");
 	 
 	 var storeId = $("#consignmentTableStoreId").text();
-	 
 	 request("GET",connectUrl + "/user/stores/сonsignment/"+storeId+"/"+consignmentId, showConsignmentDataRow );
+	 
 	 $("#saveDataConsignment").val(consignmentId);
 	 $("#addDataConsignment").val(consignmentId);
 	 $("#approvedDataConsignment").val(consignmentId);
 	 
-	 $("#saveDataConsignment").on("click",test);
+	 $("#saveDataConsignment").on("click",saveCinsignmentData);
 	 $("#addDataConsignment").on("click",test);
 	 $("#approvedDataConsignment").on("click",test);
 	 
@@ -44,9 +44,7 @@ function showConsignmentDataRow(data){
 		$('#consignmentDataTableBodyId').append(createNewConsignmentDataRow(ingridient,inputStart, inputValue,inputEnd));
 	});
 }
-function test(){
-	console.log("TEST DATA "+ $(this).val());
-}
+
 //метод формирует строку для таблицы с даными из накладной
 function createNewConsignmentDataRow(ingridient, inputStart, inputValue, inputEnd){
 	 var ingridientRow = document.createElement('tr');
@@ -60,7 +58,7 @@ function createNewConsignmentDataRow(ingridient, inputStart, inputValue, inputEn
 	 		 
 			 + "<td id=\"ingridient_measureProduct_id_"+ingridient.id+"\">"+displayProductMeasure(ingridient.measureProduct,1)+"</td>"
 			 
-			 + "<td" +inputStart+ "id=\"ingridient_price_id_"+ingridient.id+inputValue+
+			 + "<td " +inputStart+ "id=\"ingridient_price_id_"+ingridient.id+inputValue+
 			 displayProductPrice(ingridient.description)+inputEnd+"</td>"
 			 
 			 + "<td id=\"ingridient_summ_id_"+ingridient.id+"\">"+
