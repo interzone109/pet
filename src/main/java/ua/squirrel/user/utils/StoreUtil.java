@@ -92,13 +92,13 @@ public class StoreUtil extends SmallOneUtil{
 	 public Consignment createOrUpdateConsigment(Store store ,Set<Long>newIdsSet , Consignment consignment, LocalDate calendar) {
 
 			if (consignment != null && consignment.isApproved()) {//если накладная проведена/подтверждена она не изменяемая
-					return consignment;
+					 consignment = null;
 				}
-			else if(consignment == null){
+			 if(consignment == null){
 				consignment = new Consignment();
 				consignment.setDate(calendar);
 				consignment.setApproved(false);
-				consignment.setMeta("Поступление новых ингридиентов "+store.getAddress());
+				consignment.setMeta("Поступление новых ингридиентов на "+store.getAddress());
 				consignment.setStore(store);
 				consignment.setConsignmentStatus(consignmentStatusServiceImpl.findOneByName("ARRIVAL").get());
 			}

@@ -35,9 +35,9 @@ public class ConsignmentServiceImpl implements ConsignmentService {
 		return consignmentRepository.findByStoreAndConsignmentStatusAndDateBetween(store, consignmentStatus, from, to);
 	}
 
-	public Optional<Consignment> findOneByDateAndStoreAndConsignmentStatus(LocalDate date, Store store,
-			ConsignmentStatus consignmentStatus) {
-		return consignmentRepository.findOneByDateAndStoreAndConsignmentStatus(date, store, consignmentStatus);
+	public Optional<Consignment> findOneByDateAndStoreAndConsignmentStatusAndIsApproved(LocalDate date, Store store,
+			ConsignmentStatus consignmentStatus,boolean isApproved) {
+		return consignmentRepository.findOneByDateAndStoreAndConsignmentStatusAndIsApproved(date, store, consignmentStatus, isApproved);
 	}
 
 	public List<Consignment> findByStoreAndConsignmentStatusAndMetaIgnoreCaseContainingAndDateBetween(Store store,

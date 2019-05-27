@@ -124,13 +124,13 @@
 								Заполните обязательные поля.
 					</div>
 					<div class="form-row">
-						<div class="col-2">
+						<div class="col-3">
 							<button class="btn btn-info"   id="saveDataConsignment" >Сохранить </button>
 						</div>
-						<div class="col-2">
+						<div class="col-3">
 							<button class="btn btn-info"   id="addDataConsignment">Добавить </button>
 						</div>
-						<div class="col-2">
+						<div class="col-3">
 							<button class="btn btn-info"  id="approvedDataConsignment">Провести и сохранить</button>
 						</div>
 					</div>
@@ -139,15 +139,16 @@
 <br>
 <!--     consignment data table start   -->
 <div hidden id ="currentConsignmentStatusId"></div>
+<div hidden id ="consignmentCurrentId"></div>
 <div hidden id ="consignmentIngridientsId"></div>
 <table class="table" id="consignmentDataTableId">
 	<thead>
 		<tr>
 			<th>Группа</th>
 			<th>Название</th>
-			<th>Кол.</th>
+			<th>Количество</th>
 			<th>Мера</th>
-			<th>Цена/грн</th>
+			<th>Цена за шт/гр/мл</th>
 			<th>Итого/грн</th>
 			<th>Опции</th>
 		</tr>
@@ -155,6 +156,17 @@
 
 		<tbody id="consignmentDataTableBodyId">
 		</tbody>
+		<tfoot>
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>К оплате</td>
+      <td id="totalSumm"></td>
+      <td><a href="#">С НДС</a></td>
+    </tr>
+  </tfoot>
 	</table>
 	<a class="nav-link" href="#" onclick="hideConsignmentData()"> Вернуться к последней выборке</a>
 <!--     consignment data table end   -->	
@@ -172,10 +184,8 @@
 
  </script> 
 
-<!-- <div th:insert="~{template/productPrice/updateStoreModal :: update_store_form}"></div>
-<div th:insert="~{template/productPrice/newProductStoreModal :: new_product_store_form}"></div>
-<div th:insert="~{template/productPrice/updateProductPrice :: update_product_price_form}"></div> -->
-
+ <div th:insert="~{template/modal/consignment/AddIngridientModal :: add_ingridient_to_consignment_modal}"></div> 
+ 
 <script th:src="@{/js/info.js}"></script>
  <script th:src="@{/js/consignment/datapiker.js}"></script>	
  <script th:src="@{/js/consignment/consignmentTable.js}"></script>	

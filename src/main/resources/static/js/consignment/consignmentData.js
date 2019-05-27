@@ -10,16 +10,15 @@ function loadConsignmentData (consignmentId){
 	 
 	 var storeId = $("#consignmentTableStoreId").text();
 	 request("GET",connectUrl + "/user/stores/сonsignment/"+storeId+"/"+consignmentId, showConsignmentDataRow );
+
 	 
-	 $("#saveDataConsignment").val(consignmentId);
-	 $("#addDataConsignment").val(consignmentId);
-	 $("#approvedDataConsignment").val(consignmentId);
+	 $("#consignmentCurrentId").text(consignmentId);
 	 
-	 $("#saveDataConsignment").on("click",saveCinsignmentData);
-	 $("#addDataConsignment").on("click",test);
-	 $("#approvedDataConsignment").on("click",test);
+	 $("#saveDataConsignment").on("click",saveConsignmentData);
+	 $("#addDataConsignment").on("click",openAddIngridientModal);
+	 $("#approvedDataConsignment").on("click",approvedDataConsignment);
 	 
-	if($("#currentConsignmentStatusId").text()=== true){
+	if($("#currentConsignmentStatusId").text()=== "true"){
 			$("#saveDataConsignment").prop("disabled","disabled");
 			$("#addDataConsignment").prop("disabled","disabled");
 			$("#approvedDataConsignment").prop("disabled","disabled");
@@ -31,7 +30,7 @@ function loadConsignmentData (consignmentId){
  }
  // методразмещает строки с данными из накладной в таблицу
 function showConsignmentDataRow(data){
-	var isAproved = $("#currentConsignmentStatusId").text()=== true;
+	var isAproved = $("#currentConsignmentStatusId").text()=== "true";
 	var inputStart = ""; 
 	var inputValue = "\">";
 	var inputEnd = "";   
@@ -43,6 +42,7 @@ function showConsignmentDataRow(data){
 	data.forEach(ingridient => {
 		$('#consignmentDataTableBodyId').append(createNewConsignmentDataRow(ingridient,inputStart, inputValue,inputEnd));
 	});
+	updateTotalSumm();
 }
 
 //метод формирует строку для таблицы с даными из накладной
@@ -83,8 +83,16 @@ function displayProductMeasure (measure ,convert){
 };
 
 // формируем цену в удобнов формате
-function displayProductPrice(price){
-		if(price < 9){
+function displayProductPrice(price){ 
+	price =  parseInt(price);
+	  if (isNaN(price)) { 
+		  return 0 ; 
+		  }
+
+	
+		if(price < 1){
+			return 0;
+		} else if(price < 9){
 			return "0.0"+price;
 		}
 		else if(price <99){
@@ -99,7 +107,7 @@ function displayProductPrice(price){
 function createMeasureProduct(expend, measure){
 	
 var result ;
-	if(measure ==="UNIT"){
+	if(measure ==="UNIT" || measure ==="шт"  ){
 		return expend ;
 	}else {
 		if(expend.length < 2){
@@ -112,7 +120,7 @@ var result ;
 		else{
 			var strStart = expend.substring(0,expend.length-3);
 			var strEnd = expend.substring(expend.length-3 ,expend.length);
-			esult = strStart+"."+strEnd  ;
+			result = strStart+"."+strEnd  ;
 		}
 	} 
 	
@@ -124,3 +132,18 @@ var result ;
 	 $("#collapseConsignmentDataBody").collapse("hide");
 	 $("#namePlaceholder").collapse("hide");
  }
+ 
+ //метод формирует итог по цене
+ function updateTotalSumm(){
+	 var ingridientIds = $("#consignmentIngridientsId").text().split(" ");
+	var summ = 0;
+	 for(var i = 1; i< ingridientIds.length ;i++){ 
+		summ+= parseFloat($("#ingridient_summ_id_"+ingridientIds[i]).text());
+		 } 
+	 
+	 $("#totalSumm").text(summ);
+ }
+ 
+ 
+ 
+ 

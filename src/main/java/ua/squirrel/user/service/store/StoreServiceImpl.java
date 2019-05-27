@@ -32,5 +32,6 @@ public class StoreServiceImpl implements StoreService {
 	public List<Store> findAllByUser(User user) {
 		return storeRepository.findAllByUser(user);
 	}
+	
 
 }

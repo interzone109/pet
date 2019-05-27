@@ -1,5 +1,6 @@
 package ua.squirrel.user.controller.store.consignment;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javassist.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
+import ua.squirrel.user.entity.product.Product;
 import ua.squirrel.user.entity.product.ProductModel;
 import ua.squirrel.user.entity.store.Store;
 import ua.squirrel.user.entity.store.consignment.Consignment;
@@ -72,14 +74,57 @@ public class ConsignmentController {
 	
 	
 	/**
-	 * Метод отдает результаты поиска согласно данным запроса
-	 * из обьекта ConsignmentSearchModel
+	 * Метод обновляет даные о количестве и цене в накладной
 	 * */
 	@PutMapping("{storeId}/{consignmentId}")
 	public Map<Long, String> putСonsignmentData( Authentication authentication, @RequestBody Map<Long, String> consignmentData 
 			, @PathVariable("storeId") Long storeId , @PathVariable("consignmentId") Long consignmentId) throws NotFoundException {
+		log.info("LOGGER: update Consignment data");
+		User user = userServiceImpl.findOneByLogin("test1").get();
+		Store store = getCurrentStore(user, storeId);
 		
+		Consignment consignment = consignmentServiceImpl.findOneByIdAndStore(consignmentId, store)
+				.orElseThrow(() -> new NotFoundException("Status not found"));
+		 List<Product> products = productServiceImpl.findAllByUserAndIdIn(user, consignmentData.keySet());
+		// если накладная не проведена то обновляем данные
+		if(!consignment.isApproved()) {
+		StringBuilder str = new StringBuilder();
+		products.forEach(prod->{
+			str.append(prod.getId()+consignmentData.get(prod.getId()));
+		});
+		consignment.setConsignmentData(str.toString());
+		consignmentServiceImpl.save(consignment);
 		return consignmentData;
+		}
+		
+		return new HashMap<>();
+	}
+	/**
+	 * Метод обновляет даные о количестве и цене в накладной
+	 * */
+	@PutMapping("{storeId}/{consignmentId}/uproved")
+	public Map<Long, String> putСonsignmentDataUproved( Authentication authentication, @RequestBody Map<Long, String> consignmentData 
+			, @PathVariable("storeId") Long storeId , @PathVariable("consignmentId") Long consignmentId) throws NotFoundException {
+		log.info("LOGGER: uproved Consignment data");
+		User user = userServiceImpl.findOneByLogin("test1").get();
+		Store store = getCurrentStore(user, storeId);
+		
+		Consignment consignment = consignmentServiceImpl.findOneByIdAndStore(consignmentId, store)
+				.orElseThrow(() -> new NotFoundException("Status not found"));
+		List<Product> products = productServiceImpl.findAllByUserAndIdIn(user, consignmentData.keySet());
+		// если накладная не проведена то обновляем данные
+		if(!consignment.isApproved()) {
+		StringBuilder str = new StringBuilder();
+		products.forEach(prod->{
+			str.append(prod.getId()+consignmentData.get(prod.getId()));
+		});
+		consignment.setApproved(true);
+		consignment.setConsignmentData(str.toString());
+		consignmentServiceImpl.save(consignment);
+		return consignmentData;
+		}
+		
+		return new HashMap<>();
 	}
 	
 	

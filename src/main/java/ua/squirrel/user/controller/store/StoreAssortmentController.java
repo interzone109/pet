@@ -99,8 +99,8 @@ public class StoreAssortmentController {
 		//создаем прихоную накладную при добавлении нового товара на магазин
 		LocalDate calendar =  LocalDate.now() ;
 		
-		Optional<Consignment> consignmentOptional = consignmentServiceImpl.findOneByDateAndStoreAndConsignmentStatus(calendar, store, 
-				consignmentStatusServiceImpl.findOneByName("ARRIVAL").get());
+		Optional<Consignment> consignmentOptional = consignmentServiceImpl.findOneByDateAndStoreAndConsignmentStatusAndIsApproved(calendar, store, 
+				consignmentStatusServiceImpl.findOneByName("ARRIVAL").get(), false);
 		
 		Consignment consignment = consignmentOptional.isPresent() ?consignmentOptional.get() : null ;
 		

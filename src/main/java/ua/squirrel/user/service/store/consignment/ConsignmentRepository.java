@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import ua.squirrel.user.entity.store.Store;
 import ua.squirrel.user.entity.store.consignment.Consignment;
 import ua.squirrel.user.entity.store.consignment.ConsignmentStatus;
-import ua.squirrel.web.entity.user.User;
+
 
 
 public interface ConsignmentRepository extends JpaRepository<Consignment, Long> {
@@ -18,8 +18,8 @@ public interface ConsignmentRepository extends JpaRepository<Consignment, Long> 
 	List<Consignment> findByStoreAndConsignmentStatusAndDateBetween(Store store,
 			ConsignmentStatus consignmentStatus, LocalDate start, LocalDate finish);
 
-	Optional<Consignment> findOneByDateAndStoreAndConsignmentStatus(LocalDate date, Store store,
-			ConsignmentStatus consignmentStatus);
+	Optional<Consignment> findOneByDateAndStoreAndConsignmentStatusAndIsApproved(LocalDate date, Store store,
+			ConsignmentStatus consignmentStatus, boolean isApproved);
 	
 	
 	

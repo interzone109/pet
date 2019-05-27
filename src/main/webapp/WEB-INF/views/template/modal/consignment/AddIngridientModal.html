@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+
+<div class="modal fade" id="addIngridientToConsignmentModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+  aria-hidden="true" th:fragment="add_ingridient_to_consignment_modal">
+  <div class="modal-dialog" role="document">
+     <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold" >Выберите товар</h4>
+        <button id="closeCompositeProduct" type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    
+     <div class="modal-body mx-3">			
+		<div class="modal-body mx-3">
+			<div class="collapse alert alert-danger "  id="updateErroreProductChose"></div>
+			<select name="AvailableFields" id="compositeProductSelect" multiple size="10">
+															  
+    			<optgroup label="выберите из списка предложенных товаров" id="compositeProductGroup">
+   				</optgroup>
+   			</select>
+		</div>
+        
+        </div>
+        <div class="modal-footer d-flex justify-content-center">
+        <div hidden id="sendIngridientId"> </div>
+        <div hidden id="ingridientMeasyrValue"> </div>
+            <button class="btn btn-info" id="addIngridientToConsignmentButton"  >Добавить</button>
+      </div>
+    </div> 
+  </div>
+</div>
+
+</body>
+</html>
