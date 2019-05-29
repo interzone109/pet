@@ -30,6 +30,7 @@ import ua.squirrel.user.service.store.consignment.ConsignmentServiceImpl;
 import ua.squirrel.user.service.store.consignment.status.ConsignmentStatusServiceImpl;
 import ua.squirrel.user.utils.ConsignmentUtil;
 import ua.squirrel.user.utils.ProductUtil;
+import ua.squirrel.user.utils.StoreUtil;
 import ua.squirrel.web.entity.user.User;
 import ua.squirrel.web.service.registration.user.UserServiceImpl;
 
@@ -52,6 +53,8 @@ public class ConsignmentController {
 	private ConsignmentUtil consignmentUtil;
 	@Autowired
 	private ProductUtil productUtil;
+	@Autowired 
+	private StoreUtil storeUtil;
 	
 	
 	@GetMapping("{storeId}/{consignmentId}")
@@ -101,6 +104,7 @@ public class ConsignmentController {
 	}
 	/**
 	 * Метод обновляет даные о количестве и цене в накладной
+	 * и закрывает накладную для редактирования
 	 * */
 	@PutMapping("{storeId}/{consignmentId}/uproved")
 	public Map<Long, String> putСonsignmentDataUproved( Authentication authentication, @RequestBody Map<Long, String> consignmentData 
@@ -121,6 +125,27 @@ public class ConsignmentController {
 		consignment.setApproved(true);
 		consignment.setConsignmentData(str.toString());
 		consignmentServiceImpl.save(consignment);
+		//обновляем остатки на магазине
+		
+		 switch (consignment.getConsignmentStatus().getName()) {
+	        case "ARRIVAL"://приход 
+	        	storeUtil.addStoreLeftovers(store, consignment.getConsignmentData()); 
+	            break;
+	        case "CONSAMPTION":// расход
+	             
+	           break;
+	        case "HAULING"://внутренее перемещение
+	             
+		           break;
+	        case "RETURN"://возрат поставщику
+	             
+		           break;
+	        case "WRITE-OFF"://списание
+	             
+		           break;
+		 }
+		
+		storeServiceImpl.save(store);
 		return consignmentData;
 		}
 		

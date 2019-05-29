@@ -8,12 +8,16 @@ function getStoreList(){
 getStoreList();
 //добавляем оптионалы для выборки по магазинам
 function addStoreSearchRow(data){
-	if (data.length < 0 ){
+	if (data.length < 0 ){// если магазинов у поьзователя нет то просм его создать
 		$("#consignmetnStoreSelect").append("<option value=\"0\">Создайте магазин</option>");
 		$("#consignmetnStoreDoublerSelect").append("<option value=\"0\">Создайте магазин</option>");
+		$("#searchConsignmentBytton").prop("disabled","disabled");// блокируем кнопку поиска
 	} else {
+		$("#searchConsignmentBytton").prop("disabled",false);// разблокируем кнопку поиска
 	data.forEach(store=>{
+		//добавлям селекты с названиями лоступных магазинов
 		$("#consignmetnStoreSelect").append("<option value=\""+store.id+"\" selected=\"selected\">"+store.address+"</option>");
+		//дублируем название доступных магазинов для поиска по внутриним перемещениям
 		$("#consignmetnStoreDoublerSelect").append("<option value=\""+store.id+"\" selected=\"selected\">"+store.address+"</option>");
 	});
 	$("#consignmetnStoreSelect").val(data[0].id);//устанавливаем selected первому магазину
@@ -62,17 +66,23 @@ fillDate();
 function postFindConsignmentByValue(){
 	var date = $("#dataRangeValue").val().split("-");
 	var meta = null ;
+	// проверяем доступны ли нам оптион с дубликатами магазинов
 	if($("#consignmetnStoreDoublerSelectCol").is(":visible") && !$("#consignmetnStoreDoublerSelect option:selected").is(":disabled") ){
-      meta = $("#consignmetnStoreDoublerSelect option:selected").text();
+     // добавляем название магазина к поисковому запросу
+		meta = $("#consignmetnStoreDoublerSelect option:selected").text();
 	}
+	// проверяем доступны ли нам оптион с поставщиками
 	if($("#consignmetnOnSelectCol").is(":visible") && $("#consignmetnOnSelect option:selected").val() !=="ANY"){
+		// добавляем название поставщика к поисковому запросу
 		meta = $("#consignmetnOnSelect option:selected").text();
 	}
+	// делаем простую валидацию дат
 	var isValid =  false ;
 	if( date.length >1){
 		isValid = (date[0].length > 8 && date[1].length >8 && formValidation($("#dataRangeValue"))) ;
 	}
 	if(isValid){
+	// если валидация пройдена формируем джейсон
 	var data = JSON.stringify({
 		 "storeId": $("#consignmetnStoreSelect").val(),
 		 "meta": meta,
@@ -81,14 +91,14 @@ function postFindConsignmentByValue(){
         "consignmentStatus": $("#consignmetnStatusSelect").val()
 	   }
 	);
-	console.log(data);
+	console.log(data);// отправляем поисковый запрос на сервер
 	request('POST', connectUrl+'/user/stores/сonsignment',fillConsignmentTable ,data);
-	
+	//сохраняем id магазина
 	$("#consignmentTableStoreId").text($("#consignmetnStoreSelect").val());
-	
+	// прячем сообщение с ощибкой о валидации
 	$("#inputConsignmentFormErrore").collapse("hide");
 	$("#dataRangeValue").removeClass("is-valid");
-	} else{
+	} else{// показываем сообщение о ощибке при валидации
 		$("#dataRangeValue").addClass("is-invalid");
 		$("#inputConsignmentFormErrore").collapse("show");
 	}
@@ -118,7 +128,7 @@ function fillConsignmentTable(data ){
 		  
 	 consignmentRow.innerHTML = "<td id=\"consignment_id_"+consignment.id+"\">"+consignment.id+"</td>"
 			 + "<td id=\"consignment_date_id_"+consignment.id+"\">"+consignment.date+"</td>"
-			 + "<td id=\"consignment_meta_id_"+consignment.id+"\">"+consignment.meta+"</td>"
+			 + "<td id=\"consignment_meta_id_"+consignment.id+"\"title=\""+consignment.meta.split(":%:")[0]+"\">"+consignment.meta.split(":%:")[1]+"</td>"
 			 + "<td id=\"consignment_status_id_"+consignment.id+"\">"+displayConsignmentStatus(consignment.consignmentStatus, 1)+"</td>"
 			 + "<td id=\"consignment_state_id_"+consignment.id+"\">"+displayConsignmentState(consignment.approved, 1)+"</td>"
 			 +"<td> <i class=\"fas fa-list-alt\" title=\"открыть\" onclick=\loadConsignmentData("+consignment.id+") ></i>  </td>"
@@ -144,17 +154,16 @@ function fillConsignmentTable(data ){
  	}
  }
  
- 
+ // метод форматирует статус накладной
  function displayConsignmentState(state,convert ){
 	 if(  state === "проведено" || state === true){
 	 		return (convert === 1)?"проведено": true;
 	 	}else {
-	 		
 	 		return  (convert === 1)?"не проведено": false;
 	 	}
  }
 
-// функция меняет данные для созданиявыборки на основе выбраного статуса накладной
+// функция меняет данные для создания выборки на основе выбраного статуса накладной
  $('#consignmetnStatusSelect').on('change', function() {
 	 var partnerSelect = $('#consignmetnOnSelectCol');
 	 var storeDoublerSelect =$('#consignmetnStoreDoublerSelectCol');

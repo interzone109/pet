@@ -1,23 +1,25 @@
-// метод создает делает запрос на получение данных из накладной 
+// метод  делает запрос на получение данных из накладной 
 function loadConsignmentData (consignmentId){
-	$('#consignmentDataTableBodyId tr').remove();
+	$('#consignmentDataTableBodyId tr').remove();//чистим таблицу от старых данных
+	
 	$("#namePlaceholder").val($("#consignment_meta_id_"+consignmentId).text());//показываем мета данные накладной
 	$("#namePlaceholder").collapse("show");//показываем мета данные
 	$("#currentConsignmentStatusId").text(displayConsignmentState($("#consignment_state_id_"+consignmentId).text(),2));// сохраняем статус накладной
-	
+	// скрываем список накладных
 	 $("#collapseConsignmentBody").collapse("hide");
+	 //показываем список ингридиентов в накладной
 	 $("#collapseConsignmentDataBody").collapse("show");
-	 
+	 //получаем ид магазина и делаем запрос на получение данных из накладной
 	 var storeId = $("#consignmentTableStoreId").text();
 	 request("GET",connectUrl + "/user/stores/сonsignment/"+storeId+"/"+consignmentId, showConsignmentDataRow );
 
-	 
+	 //сохраняем ид накладной
 	 $("#consignmentCurrentId").text(consignmentId);
-	 
+	 //устонавливаем функции кнопкам которые будут работать с накладными
 	 $("#saveDataConsignment").on("click",saveConsignmentData);
 	 $("#addDataConsignment").on("click",openAddIngridientModal);
 	 $("#approvedDataConsignment").on("click",approvedDataConsignment);
-	 
+	 // в зависимости от статуса накладной кнопки доступны либо нет
 	if($("#currentConsignmentStatusId").text()=== "true"){
 			$("#saveDataConsignment").prop("disabled","disabled");
 			$("#addDataConsignment").prop("disabled","disabled");
@@ -29,19 +31,24 @@ function loadConsignmentData (consignmentId){
 	}
  }
  // методразмещает строки с данными из накладной в таблицу
+//если накладная не проведена то поля с кол. и ценой то елементы будут инпуты
+//еслипроведена то текст
 function showConsignmentDataRow(data){
 	var isAproved = $("#currentConsignmentStatusId").text()=== "true";
+	//строки с шаблонами верстки
 	var inputStart = ""; 
 	var inputValue = "\">";
 	var inputEnd = "";   
-	if(!isAproved){
+	if(!isAproved){//проверяем статус накладной
 		 inputStart = "><input type=\"text\" class=\"form-control\"";
 		 inputValue = "\" value = \" ";
 		 inputEnd = "\" >"; 
 	}
+	//формируем строки с данными для каждой позиции из накладной
 	data.forEach(ingridient => {
 		$('#consignmentDataTableBodyId').append(createNewConsignmentDataRow(ingridient,inputStart, inputValue,inputEnd));
 	});
+	//пересчитываем итоговую сумму
 	updateTotalSumm();
 }
 
@@ -49,7 +56,11 @@ function showConsignmentDataRow(data){
 function createNewConsignmentDataRow(ingridient, inputStart, inputValue, inputEnd){
 	 var ingridientRow = document.createElement('tr');
 	 ingridientRow.id = "ingridient_row_id_"+ingridient.id;
-		  
+	 
+	 var totalPrice = ingridient.measureProduct==="UNIT"
+		 ?ingridient.description*ingridient.propertiesProduct
+		 :(ingridient.description*ingridient.propertiesProduct)/1000 ;
+			  
 	 ingridientRow.innerHTML =  "<td id=\"ingridient_group_id_"+ingridient.id+"\">"+ingridient.group+"</td>"
 	 		 +"<td id=\"ingridient_name_id_"+ingridient.id+"\">"+ingridient.name+"</td>"
 	 		 
@@ -62,7 +73,7 @@ function createNewConsignmentDataRow(ingridient, inputStart, inputValue, inputEn
 			 displayProductPrice(ingridient.description)+inputEnd+"</td>"
 			 
 			 + "<td id=\"ingridient_summ_id_"+ingridient.id+"\">"+
-			 displayProductPrice(ingridient.description*ingridient.propertiesProduct)+"</td>"
+			 displayProductPrice(totalPrice)+"</td>"
 			 +"<td> <i class=\"fas fa-list-alt\" title=\"вернутся к накладным\" onclick=\hideConsignmentData() ></i>  </td>"
 	
 	 var ids = $("#consignmentIngridientsId").text();
@@ -126,7 +137,7 @@ var result ;
 	
 	return result
 }
-//метод возращает к тамблице с накладными
+//метод возращает к таблице с накладными
  function hideConsignmentData(){
 	 $("#collapseConsignmentBody").collapse("show");
 	 $("#collapseConsignmentDataBody").collapse("hide");

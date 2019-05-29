@@ -31,11 +31,11 @@
 				<div th:insert="~{template/topBar :: top_bar}"></div>
 <!-- -----------  info collapse --------------------- -->
 					<div class="collapse" id="collapseInfo">
-						<div class="card card-body">Раздел служит учета и создания накладных.
+						<div class="card card-body">Раздел служит для учета и создания накладных.
 						<br> Возможности :
 						<br>-создание накладных;
-						<br>-просмотр накладных;
 						<br>-редактирование накладных;
+						<br>-проведение накладных;
 					</div>
 					<br>
 				</div>
@@ -89,14 +89,15 @@
   									 
 							</select>
 						</div>
-						<div class="col">
-							<button class="btn btn-info"  onclick="postFindConsignmentByValue()"  >Найти</button>
+						<div class="col-1">
+							<button class="btn btn-info"  onclick="postFindConsignmentByValue()" id="searchConsignmentBytton" >Найти</button>
 						</div>
+						
 					</div>
 				</div>  
 				<br>
 <!--     consignment table start   -->
-<div hidden id ="consignmentTableStoreId"></div>
+
 <table class="table" id="consignmentTableId" summary="0">
 	<thead>
 		<tr>
@@ -138,6 +139,7 @@
 <!-- input data end -->
 <br>
 <!--     consignment data table start   -->
+<div hidden id ="consignmentTableStoreId"></div>
 <div hidden id ="currentConsignmentStatusId"></div>
 <div hidden id ="consignmentCurrentId"></div>
 <div hidden id ="consignmentIngridientsId"></div>
@@ -148,7 +150,7 @@
 			<th>Название</th>
 			<th>Количество</th>
 			<th>Мера</th>
-			<th>Цена за шт/гр/мл</th>
+			<th>Цена за шт/кг/л</th>
 			<th>Итого/грн</th>
 			<th>Опции</th>
 		</tr>

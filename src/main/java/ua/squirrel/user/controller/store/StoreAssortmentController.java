@@ -88,19 +88,16 @@ public class StoreAssortmentController {
 		store.setProductPrice(storeUtil.concatIdsValueToString(idsPrice, "price"));
 		
 		
-		Set<Long> idsIngridient = new HashSet<>();
+		Set<Long> idsIngridient = new HashSet<>();//получаем ид ингридиентов для создания накладной
 		compositeProductServiceImpl.findAllByUserAndIdIn(user, cleanProductPrice.keySet()).forEach(compositeProduct->{
 			idsIngridient.addAll(storeUtil.spliteIds(compositeProduct.getProductExpend(), "rate"));
 		});
 		
-		//String productLeftovers = storeUtil.addDefaultLeftoverValue(idsIngridient, store.getProductLeftovers(), "quantity");
-		//store.setProductLeftovers(productLeftovers);
-		
 		//создаем прихоную накладную при добавлении нового товара на магазин
 		LocalDate calendar =  LocalDate.now() ;
-		
-		Optional<Consignment> consignmentOptional = consignmentServiceImpl.findOneByDateAndStoreAndConsignmentStatusAndIsApproved(calendar, store, 
-				consignmentStatusServiceImpl.findOneByName("ARRIVAL").get(), false);
+		//находи накладную сегодняшнего числа, текущего магазина со статусом поступления и не проведенную
+		Optional<Consignment> consignmentOptional = consignmentServiceImpl.findOneByDateAndStoreAndConsignmentStatusAndIsApprovedAndMetaIgnoreCaseContaining
+				(calendar, store, consignmentStatusServiceImpl.findOneByName("ARRIVAL").get(), false, "user:%:");
 		
 		Consignment consignment = consignmentOptional.isPresent() ?consignmentOptional.get() : null ;
 		

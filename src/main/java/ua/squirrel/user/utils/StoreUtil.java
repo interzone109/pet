@@ -19,28 +19,25 @@ import ua.squirrel.user.service.store.StoreServiceImpl;
 import ua.squirrel.user.service.store.consignment.status.ConsignmentStatusServiceImpl;
 
 @Component
-public class StoreUtil extends SmallOneUtil{
+public class StoreUtil extends SmallOneUtil {
 	@Autowired
 	private StoreServiceImpl storeServiceImpl;
 	@Autowired
 	private ConsignmentStatusServiceImpl consignmentStatusServiceImpl;
 
 	// метод создает модель продукт - цена
-	public List<CompositeProductModel> createProductPriceModel(List<CompositeProduct> products,  Map<Long, Integer> mapValue) {
+	public List<CompositeProductModel> createProductPriceModel(List<CompositeProduct> products,
+			Map<Long, Integer> mapValue) {
 
 		List<CompositeProductModel> compositeProducts = new ArrayList<>();
 		products.forEach(compositeProd -> {
-			compositeProducts.add(CompositeProductModel.builder()
-					.id(compositeProd.getId())
-					.name(compositeProd.getName())
-					.group(compositeProd.getGroup())
+			compositeProducts.add(CompositeProductModel.builder().id(compositeProd.getId())
+					.name(compositeProd.getName()).group(compositeProd.getGroup())
 					.propertiesProduct(mapValue.get(compositeProd.getId()).toString())
-					.measureProduct(compositeProd.getMeasureProduct().getMeasure())
-					.build());
+					.measureProduct(compositeProd.getMeasureProduct().getMeasure()).build());
 		});
-	return compositeProducts;
-}
-	
+		return compositeProducts;
+	}
 
 	// метод обновляет цену для выбраного продукта
 	public List<CompositeProductModel> updateCompositeProductPrice(Map<Long, Integer> updateProductPrice, Store store) {
@@ -88,60 +85,64 @@ public class StoreUtil extends SmallOneUtil{
 		return compositeProducts;
 	}
 
-	
-	 public Consignment createOrUpdateConsigment(Store store ,Set<Long>newIdsSet , Consignment consignment, LocalDate calendar) {
+	public Consignment createOrUpdateConsigment(Store store, Set<Long> newIdsSet, Consignment consignment,
+			LocalDate calendar) {
 
-			if (consignment != null && consignment.isApproved()) {//если накладная проведена/подтверждена она не изменяемая
-					 consignment = null;
-				}
-			 if(consignment == null){
-				consignment = new Consignment();
-				consignment.setDate(calendar);
-				consignment.setApproved(false);
-				consignment.setMeta("Поступление новых ингридиентов на "+store.getAddress());
-				consignment.setStore(store);
-				consignment.setConsignmentStatus(consignmentStatusServiceImpl.findOneByName("ARRIVAL").get());
-			}
-			String data =  consignment.getConsignmentData();
-			StringBuilder consignmentData = (data!= null)
-					?new StringBuilder(consignment.getConsignmentData())
-					:new StringBuilder();
-					
-			// удаляем дубликаты ид ингридиентов
-			super.spliteIds(consignmentData.toString(), "[price]*:*quantity[0-9]*price").forEach(id->{
-				newIdsSet.remove(id);
-			});
-			
-			newIdsSet.forEach(id->{
-			consignmentData.append(id+":0quantity0price");
-			});
-			
-			consignment.setConsignmentData(consignmentData.toString());
-			store.getConsignment().add(consignment);
-			return consignment;
-	 }
-	 //[price]*:[0-9]*quantity[0-9]*price
-	 
-	 
-	 
-	 
-
-	// метод принимает новые айти и строку с имеющимеся остатками
-		// и добавляет новые ингридиенты к старым (остатки уже имеющихся ингридиентов не
-		// меняются)
-	public String addDefaultLeftoverValue(Set<Long> ids, String strValue ,String regex) {
-		 Map<Long, Integer>  currentIdsQuantity = super.spliteIdsValue(strValue, regex);
-		
-		//удаляем дубликаты
-		currentIdsQuantity.keySet().forEach(id->{
-			ids.remove(id);
-		});
-		//устанавливаем значение по умолчанию 0
-		for (Long id : ids) {
-			currentIdsQuantity.put(id, 0);
+		if (consignment != null && consignment.isApproved()) {// если накладная проведена/подтверждена она не изменяемая
+			consignment = null;
 		}
-		return super.concatIdsValueToString(currentIdsQuantity, regex);
+		if (consignment == null) {
+			consignment = new Consignment();
+			consignment.setDate(calendar);
+			consignment.setApproved(false);
+			consignment.setMeta("user:%:Поступление новых ингридиентов на " + store.getAddress());
+			consignment.setStore(store);
+			consignment.setConsignmentStatus(consignmentStatusServiceImpl.findOneByName("ARRIVAL").get());
+		}
+		String data = consignment.getConsignmentData();
+		StringBuilder consignmentData = (data != null) ? new StringBuilder(consignment.getConsignmentData())
+				: new StringBuilder();
+
+		// удаляем дубликаты ид ингридиентов
+		super.spliteIds(consignmentData.toString(), "[price]*:*quantity[0-9]*price").forEach(id -> {
+			newIdsSet.remove(id);
+		});
+
+		newIdsSet.forEach(id -> {
+			consignmentData.append(id + ":0quantity0price");
+		});
+
+		consignment.setConsignmentData(consignmentData.toString());
+		store.getConsignment().add(consignment);
+		return consignment;
 	}
-	
+	// [price]*:[0-9]*quantity[0-9]*price
+
+	// метод принимает id ингридиента и его количество и добавляет к остаткам на
+	// магазине
+	public void addStoreLeftovers(Store store, String consignmentData) {
+		//получаем ид и количество ингридиентов из накладной
+		Map<Long, Integer> consignmentIdsQuantity = super.spliteIdsValue(consignmentData,
+				"[price]*:*quantity[0-9]*price");
+		String leftovers = store.getProductLeftovers();
+		//получаем текущие остатки на магазине
+		Map<Long, Integer> storeIdsQuantity = (leftovers == null || leftovers.isEmpty()) 
+				? new HashMap<>()
+				: super.spliteIdsValue(leftovers, "quantity");
+			
+		consignmentIdsQuantity.keySet().forEach(id->{
+			int newtQuantity = (storeIdsQuantity.containsKey(id))
+					? storeIdsQuantity.get(id) + consignmentIdsQuantity.get(id)
+					: consignmentIdsQuantity.get(id);
+			storeIdsQuantity.put(id, newtQuantity);
+			
+		});
+		StringBuilder storeLeftovers = new StringBuilder();
+		storeIdsQuantity.keySet().forEach(id->{
+			storeLeftovers.append(id+":"+storeIdsQuantity.get(id)+"quantity");
+		});
+		
+		store.setProductLeftovers(storeLeftovers.toString());
+	}
 
 }

@@ -18,8 +18,8 @@ public interface ConsignmentRepository extends JpaRepository<Consignment, Long> 
 	List<Consignment> findByStoreAndConsignmentStatusAndDateBetween(Store store,
 			ConsignmentStatus consignmentStatus, LocalDate start, LocalDate finish);
 
-	Optional<Consignment> findOneByDateAndStoreAndConsignmentStatusAndIsApproved(LocalDate date, Store store,
-			ConsignmentStatus consignmentStatus, boolean isApproved);
+	Optional<Consignment> findOneByDateAndStoreAndConsignmentStatusAndIsApprovedAndMetaIgnoreCaseContaining(LocalDate date, Store store,
+			ConsignmentStatus consignmentStatus, boolean isApproved, String meta);
 	
 	
 	

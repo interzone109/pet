@@ -20,9 +20,10 @@
      <div class="modal-body mx-3">			
 		<div class="modal-body mx-3">
 			<div class="collapse alert alert-danger "  id="updateErroreProductChose"></div>
-			<select name="AvailableFields" id="compositeProductSelect" multiple size="10">
+			<select name="AvailableFields" id="ingridientSelect" multiple size="10">
 															  
-    			<optgroup label="выберите из списка предложенных товаров" id="compositeProductGroup">
+    			<optgroup label="выберите из списка предложенных товаров" id="ingridientSelectGroup">
+    			
    				</optgroup>
    			</select>
 		</div>
@@ -31,7 +32,7 @@
         <div class="modal-footer d-flex justify-content-center">
         <div hidden id="sendIngridientId"> </div>
         <div hidden id="ingridientMeasyrValue"> </div>
-            <button class="btn btn-info" id="addIngridientToConsignmentButton"  >Добавить</button>
+            <button class="btn btn-info" id="addIngridientToConsignmentButton"  onclick="addSelectValueToConsingment()">Добавить</button>
       </div>
     </div> 
   </div>
