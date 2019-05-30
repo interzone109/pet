@@ -188,6 +188,13 @@ function fillConsignmentTable(data ){
 	 $("#consignmetnStoreDoublerSelect [value=" + this.value  + "]").prop('disabled', 'disabled');
  }
  });
+ $('#consignmetnStoreDoublerSelect').on('change', function() {
+	 if($('#consignmetnStatusSelect option:selected').val() === "HAULING"){
+	 $("#consignmetnStoreSelect option:disabled").prop('disabled', false);
+	 $("#consignmetnStoreSelect [value=" + this.value  + "]").prop('disabled', 'disabled');
+ }
+ });
+ 
 
  /******************** search function ****************************/
 

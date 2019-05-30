@@ -44,9 +44,12 @@ function saveConsignmentData( isUproved){
 }
 //метод обновляет цену, количество и итог
 function updateConsignmentDataRow(responce, disabled){
+	if(responce.length > 0 ){
 		var ingridientIds = $("#consignmentIngridientsId").text().split(" ");// получаем список ид ингридиента
 		for(var i = 1; i< ingridientIds.length ;i++){
 			var id = ingridientIds[i] ;// создаем переменую с ид ингридиента
+			console.log(i+"  i");
+			console.log(responce[id]+"  responce[id]");
 			var dataStr = responce[id].split("quantity");// находим строку с кол и ценой по ид и разбиаем ее на две строки 
 			// создаем переменую из dataStr[0] разбив ее и формируем вывод в зависимости от меры хранения -шт, кг , л
 			var quantity = createMeasureProduct (dataStr[0].split(":")[1],$("#ingridient_measureProduct_id_"+id).text());
@@ -62,17 +65,16 @@ function updateConsignmentDataRow(responce, disabled){
 			
 			 if(disabled === true){
 				 //блокиреум поля накладной
-				 $("#ingridient_quantity_id_"+id).prop("disabled","disabled");
-				$("#ingridient_price_id_"+id).prop("disabled","disabled");
-				$("#ingridient_summ_id_"+id).prop("disabled","disabled");
-				
-				
+				$("#ingridient_quantity_id_"+id).attr("disabled","disabled");
+				$("#ingridient_price_id_"+id).attr("disabled","disabled");
+				//$("#ingridient_summ_id_"+id).prop("disabled","disabled");
+				var consignmentId =$("#consignmentCurrentId").text();
+				$("#consignment_state_id_"+consignmentId).text("проведено");
 			 }
-		}
+		} 
 		
-		var consignmentId =$("#consignmentCurrentId").text();
-		$("#consignment_state_id_"+consignmentId).text("проведено");
 		updateTotalSumm();
+	}
 }
 //метод обновляет все строки и блокирует их для изменений
 function updateConsignmentDataRowUproved(responce){
@@ -100,6 +102,7 @@ function openAddIngridientModal(){
 	var consignmentId= $("#consignmentCurrentId").text();
 	//получаем мета данные накладной
 	var meta = $("#consignment_meta_id_"+consignmentId).prop("title");
+	  
 	//получаем список ид ингрдиентов
 	var ids =$("#consignmentIngridientsId").text().split(" ");
 	var jsonData = "";//формируем json 
@@ -123,20 +126,30 @@ function addPartnerIngridientList(data){
 	addIngridientList(data.productsModel);
 }
 // метод формирует селекты для добавления в накладную
+var ingridientData ;
 function addIngridientList(data){
-	
+	$("#ingridientSelectGroup").empty();
+	ingridientData = data;
 	if( Array.isArray(data) && data.length !== 0){
 		data.forEach(ingridient => {
 			$("#ingridientSelectGroup").append("<option value=\""
-					+ingridient+"\">"
+					+ingridient.id+"\">"
 					+ingridient.name+"</option>");
 		});
 }
 }
-
+// метод добавляем ингридиенты к накладной
 function addSelectValueToConsingment(){
-	var data = $("#ingridientSelectGroup option:selected").val();
-	console.log(data);
+	var addIngridient =[];
+	 while($("#ingridientSelectGroup option:selected").val() !== undefined){// находим выбранный елемент
+		 var id = $("#ingridientSelectGroup option:selected").val();// получаем id ингридиента
+		 var ingridient = ingridientData.find(element => element.id ==id);//получаем данные по id
+		 ingridient.description = "0";
+		 ingridient.propertiesProduct = "0";
+		 addIngridient.push(ingridient);//добавляем в масив
+		
+		 $("#ingridientSelectGroup  option[value="+id+"]").remove();
+	 }//отображаем данные из масива
+	 showConsignmentDataRow(addIngridient);
 }
-
 

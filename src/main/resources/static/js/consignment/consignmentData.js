@@ -11,6 +11,7 @@ function loadConsignmentData (consignmentId){
 	 $("#collapseConsignmentDataBody").collapse("show");
 	 //получаем ид магазина и делаем запрос на получение данных из накладной
 	 var storeId = $("#consignmentTableStoreId").text();
+	 $("#consignmentIngridientsId").text("");
 	 request("GET",connectUrl + "/user/stores/сonsignment/"+storeId+"/"+consignmentId, showConsignmentDataRow );
 
 	 //сохраняем ид накладной
@@ -34,6 +35,7 @@ function loadConsignmentData (consignmentId){
 //если накладная не проведена то поля с кол. и ценой то елементы будут инпуты
 //еслипроведена то текст
 function showConsignmentDataRow(data){
+	
 	var isAproved = $("#currentConsignmentStatusId").text()=== "true";
 	//строки с шаблонами верстки
 	var inputStart = ""; 
@@ -63,12 +65,12 @@ function createNewConsignmentDataRow(ingridient, inputStart, inputValue, inputEn
 			  
 	 ingridientRow.innerHTML =  "<td id=\"ingridient_group_id_"+ingridient.id+"\">"+ingridient.group+"</td>"
 	 		 +"<td id=\"ingridient_name_id_"+ingridient.id+"\">"+ingridient.name+"</td>"
-	 		 
+	 		 //количество в поле propertiesProduct
 	 		 + "<td"+ inputStart +" id=\"ingridient_quantity_id_"+ingridient.id+inputValue+
 	 		 createMeasureProduct(ingridient.propertiesProduct,ingridient.measureProduct )+inputEnd+"</td>"
 	 		 
 			 + "<td id=\"ingridient_measureProduct_id_"+ingridient.id+"\">"+displayProductMeasure(ingridient.measureProduct,1)+"</td>"
-			 
+			 // цена в поле description
 			 + "<td " +inputStart+ "id=\"ingridient_price_id_"+ingridient.id+inputValue+
 			 displayProductPrice(ingridient.description)+inputEnd+"</td>"
 			 
