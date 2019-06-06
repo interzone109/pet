@@ -91,8 +91,8 @@ function postFindConsignmentByValue(){
         "consignmentStatus": $("#consignmetnStatusSelect").val()
 	   }
 	);
-	console.log(data);// отправляем поисковый запрос на сервер
-	request('POST', connectUrl+'/user/stores/сonsignment',fillConsignmentTable ,data);
+	// отправляем поисковый запрос на сервер
+	request('POST', connectUrl+'/user/stores/consignment',fillConsignmentTable ,data);
 	//сохраняем id магазина
 	$("#consignmentTableStoreId").text($("#consignmetnStoreSelect").val());
 	// прячем сообщение с ощибкой о валидации
@@ -106,7 +106,7 @@ function postFindConsignmentByValue(){
 
 //метод заполняет таблицу с накладными
 function fillConsignmentTable(data ){
-	$("#consignmentTableBodyId tr").remove();//удвляем старый результат поиска
+	$("#consignmentTableBodyId tr").remove();//удаляем старый результат поиска
 	
 	$("#collapseConsignmentBody").collapse("show");
 	if( Array.isArray(data) && data.length !== 0){

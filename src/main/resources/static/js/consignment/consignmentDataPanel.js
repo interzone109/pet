@@ -1,6 +1,4 @@
-function test(){
-	console.log("TEST DATA "+ $(this).val());
-}
+
 // метод сохраняет навые данные о количестве и цене товара 
 function saveConsignmentData( isUproved){
 	//получаем список ид ингрииентов и разбиваем его на масив
@@ -35,21 +33,20 @@ function saveConsignmentData( isUproved){
 		//если у метода есть входной параметр  isUproved 
 		// и он равен true то запрос будет направлен к урлу в котором поменяется статус накладной и она станет недоступной
 		 if( isUproved !== true){
-		request("PUT",connectUrl + "/user/stores/сonsignment/"+storeId+"/"+consignmentId, updateConsignmentDataRow ,data);
+		request("PUT",connectUrl + "/user/stores/consignment/"+storeId+"/"+consignmentId, updateConsignmentDataRow ,data);
 		 }else{
-		request("PUT",connectUrl + "/user/stores/сonsignment/"+storeId+"/"+consignmentId+"/uproved", updateConsignmentDataRowUproved ,data);
+		request("PUT",connectUrl + "/user/stores/consignment/"+storeId+"/"+consignmentId+"/uproved", updateConsignmentDataRowUproved ,data);
 		 }
 	}
 	
 }
 //метод обновляет цену, количество и итог
 function updateConsignmentDataRow(responce, disabled){
-	if(responce.length > 0 ){
+
 		var ingridientIds = $("#consignmentIngridientsId").text().split(" ");// получаем список ид ингридиента
 		for(var i = 1; i< ingridientIds.length ;i++){
 			var id = ingridientIds[i] ;// создаем переменую с ид ингридиента
-			console.log(i+"  i");
-			console.log(responce[id]+"  responce[id]");
+			//			!!!!!!!!  errore fix
 			var dataStr = responce[id].split("quantity");// находим строку с кол и ценой по ид и разбиаем ее на две строки 
 			// создаем переменую из dataStr[0] разбив ее и формируем вывод в зависимости от меры хранения -шт, кг , л
 			var quantity = createMeasureProduct (dataStr[0].split(":")[1],$("#ingridient_measureProduct_id_"+id).text());
@@ -62,19 +59,19 @@ function updateConsignmentDataRow(responce, disabled){
 				 ?dataStr[1].split("price")[0] * dataStr[0].split(":")[1]
 				 :(dataStr[1].split("price")[0] * dataStr[0].split(":")[1])/1000 ;
 			$("#ingridient_summ_id_"+id).text(displayProductPrice(totalPrice));
-			
+			 
 			 if(disabled === true){
 				 //блокиреум поля накладной
 				$("#ingridient_quantity_id_"+id).attr("disabled","disabled");
 				$("#ingridient_price_id_"+id).attr("disabled","disabled");
-				//$("#ingridient_summ_id_"+id).prop("disabled","disabled");
 				var consignmentId =$("#consignmentCurrentId").text();
-				$("#consignment_state_id_"+consignmentId).text("проведено");
+				$("#currentConsignmentStatusId").text("true");
+				
 			 }
 		} 
 		
 		updateTotalSumm();
-	}
+	
 }
 //метод обновляет все строки и блокирует их для изменений
 function updateConsignmentDataRowUproved(responce){
@@ -86,7 +83,7 @@ function updateConsignmentDataRowUproved(responce){
 function approvedDataConsignment(){
 	
 	$("#currentConsignmentStatusId").text("true");
-	$("#consignment_status_id_"+$("#consignmentCurrentId").text()).text("проведено");
+	$("#consignment_state_id_"+$("#consignmentCurrentId").text()).text("проведено");
 	
 	saveConsignmentData(true);
 	$("#saveDataConsignment").prop("disabled","disabled");
@@ -94,32 +91,44 @@ function approvedDataConsignment(){
 	$("#approvedDataConsignment").prop("disabled","disabled");
 }
 
-// модеальное окно для добавления ингридиентов
+// модальное окно для добавления ингридиентов
 function openAddIngridientModal(){
 	$("#addIngridientToConsignmentModal").modal("show");
-
-	//получаем ид накладной
-	var consignmentId= $("#consignmentCurrentId").text();
-	//получаем мета данные накладной
-	var meta = $("#consignment_meta_id_"+consignmentId).prop("title");
-	  
-	//получаем список ид ингрдиентов
-	var ids =$("#consignmentIngridientsId").text().split(" ");
-	var jsonData = "";//формируем json 
-	for(var i = 1; i< ids.length ;i++){
-		jsonData += "\""+ids[i]+"\"" +" ,";
-	}
-	var data = "["+jsonData.slice(0, -1)+"]"
+	var consignmentId= $("#consignmentCurrentId").text();	//получаем ид накладной
+	var meta = $("#consignment_meta_id_"+consignmentId).prop("title");	//получаем мета данные накладной
+	var id ;
 	
-	if(meta === "user"){
-	request("POST",connectUrl + "/user/products_list", addIngridientList ,data);
-	}else if (meta.startsWith("store")){
-	var id = meta.split("store")[0];	
-	request("GET",connectUrl + "/user/stores/assortment/"+id+"/ingridient", addStoreIngridientList );
-	}else if(meta.startsWith("partner")){
-	var id = meta.split("partner")[0];
-	request("GET",connectUrl + "/user/partners/"+id+"/info", addPartnerIngridientList );
+	if(meta === "user")
+	{
+		var ids =$("#consignmentIngridientsId").text().split(" ");//получаем список ид ингрдиентов
+		var jsonData = "";//формируем json 
+		for(var i = 1; i< ids.length ;i++){
+			jsonData += "\""+ids[i]+"\"" +" ,";
+		}
+		var data = "["+jsonData.slice(0, -1)+"]";	
+		request("POST",connectUrl + "/user/products_list", addIngridientList ,data);
 	}
+	else if( meta === "userConsamption"){
+		id = $("#consignmentTableStoreId").text();//получаем ид текущего магазина
+		request("GET",connectUrl + "/user/stores/assortment/"+id+"/leftovers", addStoreIngridientList );
+	}
+	else if (meta.endsWith(":store"))
+	{
+		id = meta.split(":store")[0];//получаем ид магазина отправителя
+		//получаем остатки магаина отправителя
+		request("GET",connectUrl + "/user/stores/assortment/"+id+"/leftovers", addStoreIngridientList );
+	}
+	else if(meta.endsWith(":partner"))
+	{
+		id = meta.split(":partner")[0];
+		request("GET",connectUrl + "/user/partners/"+id+"/info", addPartnerIngridientList );
+	}
+}
+
+function addStoreIngridientList(data){
+	console.log(data);
+	addIngridientList(data);
+	
 }
 
 function addPartnerIngridientList(data){
@@ -131,10 +140,13 @@ function addIngridientList(data){
 	$("#ingridientSelectGroup").empty();
 	ingridientData = data;
 	if( Array.isArray(data) && data.length !== 0){
+		var ids =$("#consignmentIngridientsId").text();//получаем id уже имеющихся в накладной позиций
 		data.forEach(ingridient => {
+			if(!ids.includes(" "+ingridient.id)){
 			$("#ingridientSelectGroup").append("<option value=\""
 					+ingridient.id+"\">"
 					+ingridient.name+"</option>");
+			}
 		});
 }
 }

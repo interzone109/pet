@@ -14,6 +14,8 @@ public class ConsignmentModel {
 	
 	private String date;
 	
+	private long storeId;
+	
 	private List<ProductModel> productPrice;
 
 	private boolean isApproved;

@@ -1,6 +1,7 @@
 package ua.squirrel.user.controller.store;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -19,10 +20,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javassist.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
+import ua.squirrel.user.entity.product.ProductModel;
 import ua.squirrel.user.entity.product.composite.CompositeProductModel;
 import ua.squirrel.user.entity.store.Store;
 import ua.squirrel.user.entity.store.consignment.Consignment;
 import ua.squirrel.user.service.product.CompositeProductServiceImpl;
+import ua.squirrel.user.service.product.ProductServiceImpl;
 import ua.squirrel.user.service.store.StoreServiceImpl;
 import ua.squirrel.user.service.store.consignment.ConsignmentServiceImpl;
 import ua.squirrel.user.service.store.consignment.status.ConsignmentStatusServiceImpl;
@@ -42,6 +45,8 @@ public class StoreAssortmentController {
 	private UserServiceImpl userServiceImpl;
 	@Autowired
 	private StoreUtil storeUtil;
+	@Autowired
+	private ProductServiceImpl productServiceImpl;
 	@Autowired
 	private ConsignmentServiceImpl consignmentServiceImpl;
 	@Autowired
@@ -63,7 +68,28 @@ public class StoreAssortmentController {
 		
 	}
 	
-	
+	@GetMapping("/leftovers")
+	public List<ProductModel> getLeftOvers(@PathVariable("store_id")Long storeId, Authentication authentication) throws NotFoundException {
+
+		log.info("LOGGER: get leftovers for current store");
+		User user = userServiceImpl.findOneByLogin("test1").get();
+		// делаем мапу ид цена
+		Map<Long, Integer> idsQuantity = storeUtil.spliteIdsValue(getCurrentStore(user ,storeId).getProductLeftovers(), "quantity");
+		
+		List<ProductModel> productModel = new ArrayList<>();
+		  productServiceImpl.findAllByUserAndIdIn(user, idsQuantity.keySet()).forEach(product->{
+			  productModel.add(ProductModel.builder()
+					  .id(product.getId())
+					  .name(product.getName())
+					  .description(idsQuantity.get(product.getId()).toString())
+					  .measureProduct(product.getMeasureProduct().getMeasure())
+					  .group(product.getGroup())
+					  .build()
+					  );
+		});
+		 return productModel;
+		
+	}
 	
 	
 	
@@ -71,7 +97,7 @@ public class StoreAssortmentController {
 	
 	/**
 	 * Метод добавляет продукт на магазин 
-	 * также добавляет к магазину ингридиенты из которых состоит продукт
+	 * и создает прихродную накладную
 	 */
 	@PostMapping
 	public List<CompositeProductModel> addToStoreProduct(@PathVariable("store_id") Long storeId ,

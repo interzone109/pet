@@ -28,8 +28,8 @@ function fillStoreProductTable(dataJSON){
 	 var productRow = document.createElement('tr');
 	 productRow.id = "product_row_id_"+product.id;
 		  
-	 productRow.innerHTML = "<td id=\"store_name_id_"+product.id+"\">"+product.name+"</td>"
-			 + "<td id=\"product_group_id_"+product.id+"\">"+product.group+"</td>"
+	 productRow.innerHTML = "<td id=\"product_group_id_"+product.id+"\">"+product.group+"</td>"
+		 	 +"<td id=\"store_name_id_"+product.id+"\">"+product.name+"</td>"
 			 + "<td id=\"product_price_id_"+product.id+"\">"+displayProductPrice( product.propertiesProduct)+"</td>"
 			 + "<td id=\"product_price_id_"+product.id+"\">"+displayProductMeasure(product.measureProduct, 1)+"</td>"
 			 +"<td> <i class=\"fas fa-edit\" title=\"изменить цену\" onclick=\"updateStoreProductDataModal("+product.id+")\" ></i> " 

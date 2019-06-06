@@ -12,7 +12,7 @@ function loadConsignmentData (consignmentId){
 	 //получаем ид магазина и делаем запрос на получение данных из накладной
 	 var storeId = $("#consignmentTableStoreId").text();
 	 $("#consignmentIngridientsId").text("");
-	 request("GET",connectUrl + "/user/stores/сonsignment/"+storeId+"/"+consignmentId, showConsignmentDataRow );
+	 request("GET",connectUrl + "/user/stores/consignment/"+storeId+"/"+consignmentId, showConsignmentDataRow );
 
 	 //сохраняем ид накладной
 	 $("#consignmentCurrentId").text(consignmentId);
@@ -47,9 +47,11 @@ function showConsignmentDataRow(data){
 		 inputEnd = "\" >"; 
 	}
 	//формируем строки с данными для каждой позиции из накладной
+	if(data.length !== 0){
 	data.forEach(ingridient => {
 		$('#consignmentDataTableBodyId').append(createNewConsignmentDataRow(ingridient,inputStart, inputValue,inputEnd));
 	});
+	}
 	//пересчитываем итоговую сумму
 	updateTotalSumm();
 }

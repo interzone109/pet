@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>Витрина</title>
+
+<link rel="stylesheet" href="../static/css/data.css"
+	th:href="@{/css/data.css}" type="text/css" media="screen">
+
+<!-- Bootstrap CSS CDN -->
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+<!-- Our Custom CSS -->
+<link rel="stylesheet" href="../static/css/style.css"
+	th:href="@{/css/style.css}" type="text/css" media="screen">
+<!-- Font Awesome JS -->
+<script defer
+	src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js"></script>
+<script defer
+	src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js"></script>
+</head>
+<body>
+	<div class="wrapper">
+		<!-- left side menu -->
+		<div class="wrapper" th:insert="~{template/leftBar :: left_bar}">
+		</div>
+		<!-- left side menu -->		
+		<!-- Content conteiner -->
+		<div id="content">
+			<!--  top bar start -->
+			<div th:insert="~{template/topBar :: top_bar}">
+			</div>
+			<!-- top bar end -->
+			<!--  info collapse start -->
+			<div class="collapse" id="collapseInfo">
+						<div class="card card-body">Раздел служит для просмотра витрины магазина и продаж.
+							<br> Возможности :
+							<br>-создание накладных;
+							<br>-редактирование накладных;
+							<br>-проведение накладных;
+						</div>
+						<br>
+					</div>
+			<!-- info collapse end -->
+			<!-- leftover content start -->
+			<div class="" id="leftoverContent">
+				<!-- forma start -->
+				<div>
+					<!-- errore alert start -->
+					<div class="alert alert-danger collapse" id="inputConsignmentFormErrore">
+								Заполните обязательные поля.
+					</div>
+					<!-- errore alert end -->
+					<!-- button start -->
+					<div class="col">
+						<select class="form-control" id="storeSelect" >	
+						</select>
+					</div>
+					<!-- button end -->
+				</div>  
+				<!-- forma end -->
+				<br>
+				<!-- leftover content table start   -->
+				<table class="table" id="leftoverTableId" summary="0">
+					<thead>
+						<tr>
+							<th>Номер</th>
+							<th>Дата</th>
+							<th>Движение</th>
+							<th>Тип</th>
+							<th>Статус</th>
+							<th>Опции</th>
+						</tr>
+					</thead>
+					<tfoot id="consignmentTableFooter">
+	 				</tfoot>
+					<tbody id="consignmentTableBodyId">
+					</tbody>
+				</table>
+				<!-- leftover content table end   -->	
+			</div>
+			<!-- leftover content end -->
+		</div>
+	</div>
+<!-- template start-->
+<!--<div th:insert="~{template/modal/consignment/AddIngridientModal :: add_ingridient_to_consignment_modal}"></div>   -->
+<!-- template end-->
+<!-- script start-->
+<script th:src="@{/js/info.js}"></script>
+<script th:src="@{/js/leftover/leftover.js}"></script>
+<!-- script end -->
+ 
+</body>
+</html>

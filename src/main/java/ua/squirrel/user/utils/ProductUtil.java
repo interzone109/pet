@@ -14,7 +14,9 @@ public class ProductUtil extends SmallOneUtil {
 	
 		public List<ProductModel> createProductPriceQuantityModelList(List<Product> products, String idPriceQuantity){
 			List<ProductModel> productList = new ArrayList<>();
-			
+			if(idPriceQuantity==null || idPriceQuantity.isEmpty()) {
+				return productList;
+			}
 			Map <Long, String> priceQuantity = this.spliteIdValue1Value2(idPriceQuantity,"(:)|quantity|price");
 			
 			products.forEach(prod->{

@@ -226,7 +226,7 @@ public class FillDataUtil {
 		p.setDescription("Сок стекло яблоко");
 		p.setGroup("сок");
 		p.setPartner(partner);									
-		p.setPropertiesProduct(propertiesProductServiceImpl.findOneByName("PRODUCT_COMPOSITE"));
+		p.setPropertiesProduct(propertiesProductServiceImpl.findOneByName("INGREDIENS"));
 		p.setMeasureProduct(measureProductServiceImpl.findOneByMeasure("LITER"));
 		p.setUser(owner);
 		product.add(p);
@@ -236,7 +236,7 @@ public class FillDataUtil {
 		p.setDescription("Сок стекло груша");
 		p.setGroup("сок");
 		p.setPartner(partner);									
-		p.setPropertiesProduct(propertiesProductServiceImpl.findOneByName("PRODUCT_COMPOSITE"));
+		p.setPropertiesProduct(propertiesProductServiceImpl.findOneByName("INGREDIENS"));
 		p.setMeasureProduct(measureProductServiceImpl.findOneByMeasure("LITER"));
 		p.setUser(owner);
 		product.add(p);
@@ -246,7 +246,7 @@ public class FillDataUtil {
 		p.setDescription("Сок стекло кефир");
 		p.setGroup("сок");
 		p.setPartner(partner);									
-		p.setPropertiesProduct(propertiesProductServiceImpl.findOneByName("PRODUCT_COMPOSITE"));
+		p.setPropertiesProduct(propertiesProductServiceImpl.findOneByName("INGREDIENS"));
 		p.setMeasureProduct(measureProductServiceImpl.findOneByMeasure("LITER"));
 		p.setUser(owner);
 		product.add(p);

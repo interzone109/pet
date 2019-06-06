@@ -1,5 +1,7 @@
 package ua.squirrel.user.controller.store.consignment;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,7 +37,7 @@ import ua.squirrel.web.entity.user.User;
 import ua.squirrel.web.service.registration.user.UserServiceImpl;
 
 @RestController
-@RequestMapping("/user/stores/сonsignment")
+@RequestMapping("/user/stores/consignment")
 @Slf4j
 public class ConsignmentController {
 	
@@ -130,27 +132,74 @@ public class ConsignmentController {
 		 switch (consignment.getConsignmentStatus().getName()) {
 	        case "ARRIVAL"://приход 
 	        	storeUtil.addStoreLeftovers(store, consignment.getConsignmentData()); 
+	        	storeServiceImpl.save(store);
 	            break;
 	        case "CONSAMPTION":// расход
-	             
+	        	if(!consignment.getMeta().startsWith("auto:%:")) {
+	        		storeUtil.removeStoreLeftovers(store, consignment.getConsignmentData()); 
+		        	storeServiceImpl.save(store);
+	        	} 
 	           break;
 	        case "HAULING"://внутренее перемещение
-	             
+	        	storeUtil.removeStoreLeftovers(store, consignment.getConsignmentData()); // удаляем из магазина отправителя ингридиенты
+	        	storeServiceImpl.save(store);
+	        	//добавляем в магазин получателя
+	        	long haulingStoreId = Long.parseLong(consignment.getMeta().split(":store:%:")[0]);
+	        	Store haulingStore = getCurrentStore(user, haulingStoreId);
+	        	storeUtil.addStoreLeftovers(haulingStore, consignment.getConsignmentData()); 
+	        	storeServiceImpl.save(haulingStore);
 		           break;
 	        case "RETURN"://возрат поставщику
-	             
-		           break;
 	        case "WRITE-OFF"://списание
-	             
+	        	storeUtil.removeStoreLeftovers(store, consignment.getConsignmentData()); // удаляем из магазина  ингридиенты
+	        	storeServiceImpl.save(store);
 		           break;
 		 }
 		
-		storeServiceImpl.save(store);
+		
 		return consignmentData;
 		}
-		
 		return new HashMap<>();
 	}
+	
+	
+	/**
+	 * Метод сохраняет новую накладную
+	 * */
+	@PostMapping("/create") 
+	public List<ConsignmentModel> createСonsignment( Authentication authentication,
+			@RequestBody ConsignmentModel createConsignment) throws NotFoundException {
+		log.info("LOGGER: save new empty Consignment");
+		User user = userServiceImpl.findOneByLogin("test1").get();
+		Store store = getCurrentStore(user ,createConsignment.getStoreId()) ;
+		
+		String[]date = createConsignment.getDate().split("\\.");
+		LocalDate calendar = LocalDate.of(Integer.parseInt(date[2]), Integer.parseInt(date[1]),Integer.parseInt(date[0]));
+		
+		Consignment consignment = new Consignment();
+		consignment.setDate(calendar);
+		consignment.setConsignmentData("");
+		consignment.setApproved(false);
+		consignment.setMeta(createConsignment.getMeta());
+		consignment.setStore(store);
+		consignment.setConsignmentStatus(consignmentStatusServiceImpl.findOneByName(createConsignment.getConsignmentStatus()).get());
+		
+		consignmentServiceImpl.save(consignment);
+		
+		List<Consignment> resultList = new ArrayList<>();
+		resultList.add(consignment);
+		
+		return consignmentUtil.createConsignmentModelList(resultList )  ;
+		}
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	/**

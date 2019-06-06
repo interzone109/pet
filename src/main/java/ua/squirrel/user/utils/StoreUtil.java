@@ -84,7 +84,9 @@ public class StoreUtil extends SmallOneUtil {
 
 		return compositeProducts;
 	}
-
+	//метод используется для создания приходной накладной на основе добавленого продукта
+	//метод используется только в конкролере магазина addToStoreProduct где не указываются
+	//данные партнера
 	public Consignment createOrUpdateConsigment(Store store, Set<Long> newIdsSet, Consignment consignment,
 			LocalDate calendar) {
 
@@ -95,7 +97,7 @@ public class StoreUtil extends SmallOneUtil {
 			consignment = new Consignment();
 			consignment.setDate(calendar);
 			consignment.setApproved(false);
-			consignment.setMeta("user:%:Поступление новых ингридиентов на " + store.getAddress());
+			consignment.setMeta("user:%:Поступление новых ингридиентов на *" + store.getAddress()+"*");
 			consignment.setStore(store);
 			consignment.setConsignmentStatus(consignmentStatusServiceImpl.findOneByName("ARRIVAL").get());
 		}
@@ -143,6 +145,23 @@ public class StoreUtil extends SmallOneUtil {
 		});
 		
 		store.setProductLeftovers(storeLeftovers.toString());
+	}
+
+	public void removeStoreLeftovers(Store store, String consignmentData) {
+		//получаем ид и количество ингридиентов из накладной
+				Map<Long, Integer> consignmentIdsQuantity = super.spliteIdsValue(consignmentData,
+						"[price]*:*quantity[0-9]*price");
+				//получаем ид и количество ингридиентов из  магазина
+				Map<Long, Integer> storeIdsQuantity = super.spliteIdsValue(store.getProductLeftovers(),
+						"quantity");
+				consignmentIdsQuantity.keySet().forEach(id->{
+					if(storeIdsQuantity.containsKey(id)) {
+						int quantity = storeIdsQuantity.get(id);
+						quantity -= consignmentIdsQuantity.get(id);
+						storeIdsQuantity.put(id, quantity);
+					}
+				});
+				store.setProductLeftovers(this.concatIdsValueToString(storeIdsQuantity, "quantity"));
 	}
 
 }

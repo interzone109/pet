@@ -32,8 +32,13 @@ public class AppController {
 		return "user/storePrice";
 	}
 	
-	@RequestMapping(path = "/user/storeConsignment", method = RequestMethod.GET)
+	@RequestMapping(path = "/user/consignment", method = RequestMethod.GET)
 	public String getStoreConsignment() {
 		return "user/storeConsignment";
+	}
+	
+	@RequestMapping(path = "/user/leftover", method = RequestMethod.GET)
+	public String getStoreLeftovert() {
+		return "user/storeLeftover";
 	}
 }

@@ -24,7 +24,7 @@
     	      if (httpRequest.status >= 200 && httpRequest.status < 400) {
     	    	  method(dataJSON);
     	      } else {
-    	        console.log('error '+type+' method '+url);
+    	        console.log('error '+type+' URL '+url);
     	      }
     	    }
     	httpRequest.send();
@@ -34,11 +34,11 @@
     		httpRequest.onreadystatechange = function () {
     		    if (httpRequest.readyState === 4 && httpRequest.status === 200) {
     		        var json = JSON.parse(httpRequest.responseText);
-    		       console.log('type '+type+' method '+url);
+    		       console.log('type '+type+' URL '+url);
     		       console.log(json);
     		       method(json);
     		    }else {
-    		      console.log('error send data type '+type+' method '+url);
+    		      console.log('error send data type '+type+' URL '+url);
     		    }
     		};
     		
