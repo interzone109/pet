@@ -89,8 +89,7 @@ function postFindConsignmentByValue(){
         "dateStart": date[0],
         "dateFinish": date[1],
         "consignmentStatus": $("#consignmetnStatusSelect").val()
-	   }
-	);
+	   });
 	// отправляем поисковый запрос на сервер
 	request('POST', connectUrl+'/user/stores/consignment',fillConsignmentTable ,data);
 	//сохраняем id магазина

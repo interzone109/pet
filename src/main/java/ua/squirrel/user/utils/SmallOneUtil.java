@@ -1,5 +1,6 @@
 package ua.squirrel.user.utils;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -9,6 +10,15 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class SmallOneUtil {
+	
+	public LocalDate convertDate(String date) {
+		String[] splite = date.split("[.]");
+		LocalDate calendar = LocalDate.of(Integer.parseInt(splite[2].trim()), Integer.parseInt(splite[1].trim()),
+				Integer.parseInt(splite[0].trim()));
+
+		return calendar;
+	}
+	
 	// формирует мапу с id в качестве ключа и строй с двумя значениями разделеными символами val
 	public Map <Long, String> spliteIdValue1Value2(String data, String regex) {
 		Map <Long, String> idsValues = new HashMap<>();

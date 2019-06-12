@@ -70,6 +70,8 @@ public class RegistrationController {
 		
 		fillDataUtil.setSpend(user1);
 		
+		fillDataUtil.setInvoice(user1);
+		
 		return UserModel.builder()
 				.login(user1.getLogin())
 				.mail(user1.getMail())

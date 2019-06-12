@@ -1,6 +1,6 @@
 package ua.squirrel.user.utils;
 
-import java.time.LocalDate;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,13 +12,7 @@ import ua.squirrel.user.entity.store.consignment.ConsignmentModel;
 @Component
 public class ConsignmentUtil extends SmallOneUtil {
 
-	public LocalDate convertDate(String date) {
-		String[] splite = date.split("[.]");
-		LocalDate calendar = LocalDate.of(Integer.parseInt(splite[2].trim()), Integer.parseInt(splite[1].trim()),
-				Integer.parseInt(splite[0].trim()));
-
-		return calendar;
-	}
+	
 
 	public List<ConsignmentModel> createConsignmentModelList(List<Consignment> inputList) {
 		List<ConsignmentModel> modelList = new ArrayList<>();

@@ -16,6 +16,7 @@ import javax.persistence.Table;
 import lombok.Data;
 import ua.squirrel.user.entity.employee.Employee;
 import ua.squirrel.user.entity.store.consignment.Consignment;
+import ua.squirrel.user.entity.store.invoice.Invoice;
 import ua.squirrel.web.entity.user.User;
 
 @Entity
@@ -52,10 +53,15 @@ public class Store {
 	@Column(name = "product_leftovers", length = 4000)
 	private String productLeftovers;
 	
-	//накладные на движения товара
+	//счет по продажам
 	@OneToMany(mappedBy = "store", fetch = FetchType.LAZY, 
 			 cascade = CascadeType.ALL)
 	private List<Consignment> consignment;
+	
+	//счет на товар
+	@OneToMany(mappedBy = "store", fetch = FetchType.LAZY, 
+				 cascade = CascadeType.ALL)
+	private List<Invoice> invoice;
 	
 	@OneToMany( fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<Employee> employee;

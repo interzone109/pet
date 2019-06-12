@@ -73,7 +73,7 @@ public class StoreAssortmentController {
 
 		log.info("LOGGER: get leftovers for current store");
 		User user = userServiceImpl.findOneByLogin("test1").get();
-		// делаем мапу ид цена
+		// делаем мапу ид количество
 		Map<Long, Integer> idsQuantity = storeUtil.spliteIdsValue(getCurrentStore(user ,storeId).getProductLeftovers(), "quantity");
 		
 		List<ProductModel> productModel = new ArrayList<>();
@@ -83,6 +83,7 @@ public class StoreAssortmentController {
 					  .name(product.getName())
 					  .description(idsQuantity.get(product.getId()).toString())
 					  .measureProduct(product.getMeasureProduct().getMeasure())
+					  .propertiesProduct(product.getPropertiesProduct().getName())
 					  .group(product.getGroup())
 					  .build()
 					  );

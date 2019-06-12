@@ -35,7 +35,7 @@
 			<!-- top bar end -->
 			<!--  info collapse start -->
 			<div class="collapse" id="collapseInfo">
-						<div class="card card-body">Раздел служит для просмотра витрины магазина и продаж.
+						<div class="card card-body">Раздел служит для просмотра остатков магазина и продаж.
 							<br> Возможности :
 							<br>-создание накладных;
 							<br>-редактирование накладных;
@@ -45,41 +45,74 @@
 					</div>
 			<!-- info collapse end -->
 			<!-- leftover content start -->
-			<div class="" id="leftoverContent">
+			<div class="container-fluid" id="leftoverContent">
 				<!-- forma start -->
-				<div>
+				<div class="row">
 					<!-- errore alert start -->
 					<div class="alert alert-danger collapse" id="inputConsignmentFormErrore">
 								Заполните обязательные поля.
 					</div>
 					<!-- errore alert end -->
 					<!-- button start -->
-					<div class="col">
+					<div class="d-inline p-2 ">
 						<select class="form-control" id="storeSelect" >	
 						</select>
+					</div>
+					<div class="d-inline p-2 ">
+						<button class="btn btn-info"  onclick="searchStoreLeftovers()" id="searchIngridientBytton" title="просмотреть остатки">
+							Остатки <i class="fas fa-eye"></i>	 
+						</button>
+					</div>
+					<div class="d-inline p-2">
+							<label for="dataRangeValue" class="sr-only">Период</label>	
+                			<input id="dataRangeValue" type='text' data-range="true" placeholder="Период" autocomplete="off"
+                				  data-multiple-dates-separator=" - " class='datepicker-here form-control' />
+           				</div>
+					<div class="d-inline p-2">
+						<button class="btn btn-info"  onclick="postFindInvoiceByValue()" id="searchIngridientBytton" title="просмотреть остатки">
+							Продажи <i class="fas fa-dollar-sign"></i>	 
+						</button>
+					</div>
+					<div class="d-inline p-2">
+						<button class="btn btn-info"  onclick="#()" id="autoOrderBytton" title="автозаказ">
+							Создать автозаказ	 
+						</button>
 					</div>
 					<!-- button end -->
 				</div>  
 				<!-- forma end -->
 				<br>
 				<!-- leftover content table start   -->
-				<table class="table" id="leftoverTableId" summary="0">
+				<table class="table collapse" id="leftoverTableId" summary="0">
 					<thead>
 						<tr>
-							<th>Номер</th>
-							<th>Дата</th>
-							<th>Движение</th>
-							<th>Тип</th>
-							<th>Статус</th>
-							<th>Опции</th>
+							<th>Группа</th>
+							<th>Название</th>
+							<th>Остаток</th>
+							<th>Расход</th>
+							<th>Свойство</th>
 						</tr>
 					</thead>
-					<tfoot id="consignmentTableFooter">
+					<tfoot id="leftoverTableFooter">
 	 				</tfoot>
-					<tbody id="consignmentTableBodyId">
+					<tbody id="leftoverTableBodyId">
 					</tbody>
 				</table>
-				<!-- leftover content table end   -->	
+				<!-- leftover content table end   -->
+				<!-- invoice content table start   -->
+				<div class="live__scroll">
+					<table class="table collapse " id="invoiceTableId" summary="0">
+						<thead>
+							<tr id ="invoiceDataRow">
+							</tr>
+						</thead>
+						<tfoot id="invoiceTableFoterId">
+						</tfoot>
+						<tbody id="invoiceTableBodyId">
+						</tbody>
+					</table>
+				</div>
+				<!-- invoice content table end   -->		
 			</div>
 			<!-- leftover content end -->
 		</div>
@@ -89,6 +122,7 @@
 <!-- template end-->
 <!-- script start-->
 <script th:src="@{/js/info.js}"></script>
+<script th:src="@{/js/consignment/datapiker.js}"></script>	
 <script th:src="@{/js/leftover/leftover.js}"></script>
 <!-- script end -->
  

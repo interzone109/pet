@@ -1,5 +1,6 @@
 package ua.squirrel.z.util;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -12,6 +13,7 @@ import ua.squirrel.user.entity.partner.Partner;
 import ua.squirrel.user.entity.product.Product;
 import ua.squirrel.user.entity.product.composite.CompositeProduct;
 import ua.squirrel.user.entity.store.Store;
+import ua.squirrel.user.entity.store.invoice.Invoice;
 import ua.squirrel.user.entity.store.spending.Spend;
 import ua.squirrel.user.service.partner.PartnerServiceImpl;
 import ua.squirrel.user.service.product.CompositeProductServiceImpl;
@@ -19,6 +21,7 @@ import ua.squirrel.user.service.product.ProductServiceImpl;
 import ua.squirrel.user.service.product.properties.MeasureProductServiceImpl;
 import ua.squirrel.user.service.product.properties.PropertiesProductServiceImpl;
 import ua.squirrel.user.service.store.StoreServiceImpl;
+import ua.squirrel.user.service.store.invoice.InvoiceServiceImpl;
 import ua.squirrel.user.service.store.spending.SpendServiceImpl;
 import ua.squirrel.web.entity.user.User;
 
@@ -443,6 +446,47 @@ public class FillDataUtil {
 		
 		
 		
+	}
+
+	@Autowired
+	private InvoiceServiceImpl invoiceServiceImpl;
+
+	public void setInvoice(User user1) {
+		List<Invoice> invoices = new ArrayList<>();
+		int day = LocalDate.now().lengthOfMonth();
+		
+		 storeServiceImpl.findAllByUser(user1).forEach(store->{
+			 Invoice newInvoice = new Invoice();
+				newInvoice.setDate(LocalDate.of(2019, 6, 1));
+				newInvoice.setInvoiceData("1:2sale2:3sale3:7sale");
+				newInvoice.setStore(store);
+			invoices.add(newInvoice);
+			
+			newInvoice = new Invoice();
+			newInvoice.setDate(LocalDate.of(2019, 6, day-1));
+			newInvoice.setInvoiceData("4:2sale2:3sale3:7sale");
+			newInvoice.setStore(store);
+		invoices.add(newInvoice);
+		
+		newInvoice = new Invoice();
+		newInvoice.setDate(LocalDate.of(2019, 6, day-2));
+		newInvoice.setInvoiceData("4:2sale2:3sale3:7sale");
+		newInvoice.setStore(store);
+	invoices.add(newInvoice);
+	
+	newInvoice = new Invoice();
+	newInvoice.setDate(LocalDate.of(2019, 6, day-3));
+	newInvoice.setInvoiceData("4:2sale2:3sale3:7sale");
+	newInvoice.setStore(store);
+	invoices.add(newInvoice);
+
+	newInvoice = new Invoice();
+	newInvoice.setDate(LocalDate.of(2019, 6, day-4));
+	newInvoice.setInvoiceData("4:2sale2:3sale3:7sale");
+	newInvoice.setStore(store);
+	invoices.add(newInvoice);
+		 });
+		 invoiceServiceImpl.saveAll(invoices);
 	}
 
 }
