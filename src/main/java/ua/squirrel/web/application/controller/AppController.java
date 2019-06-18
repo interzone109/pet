@@ -41,4 +41,13 @@ public class AppController {
 	public String getStoreLeftovert() {
 		return "user/storeLeftover";
 	}
+	
+	@RequestMapping(path = "/user/cashbox", method = RequestMethod.GET)
+	public String getCashBox() {
+		return "user/cashBox";
+	}
+	@RequestMapping(path = "/user/cashbox/work", method = RequestMethod.GET)
+	public String getCashBoxWork() {
+		return "user/cashBoxWork";
+	}
 }

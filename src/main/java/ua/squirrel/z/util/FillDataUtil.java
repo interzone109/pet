@@ -9,12 +9,14 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import ua.squirrel.user.entity.employee.Employee;
 import ua.squirrel.user.entity.partner.Partner;
 import ua.squirrel.user.entity.product.Product;
 import ua.squirrel.user.entity.product.composite.CompositeProduct;
 import ua.squirrel.user.entity.store.Store;
 import ua.squirrel.user.entity.store.invoice.Invoice;
 import ua.squirrel.user.entity.store.spending.Spend;
+import ua.squirrel.user.service.employee.EmployeeServiceImpl;
 import ua.squirrel.user.service.partner.PartnerServiceImpl;
 import ua.squirrel.user.service.product.CompositeProductServiceImpl;
 import ua.squirrel.user.service.product.ProductServiceImpl;
@@ -488,5 +490,48 @@ public class FillDataUtil {
 		 });
 		 invoiceServiceImpl.saveAll(invoices);
 	}
+	
+	@Autowired
+	private EmployeeServiceImpl employeeServiceImpl;
+	public void setEmployee(User user) {
+		  
+		 List<Store> stores = storeServiceImpl.findAllByUser(user);
+		 stores.forEach(store->{
+
+			 Employee employee = new Employee();
+				employee.setFirstName("BOBA");
+				employee.setLastName("BIBA");
+				employee.setSalary(900000l);
+				employee.setCashBoxType(0);
+				employee.setUser(user);
+				employee.setStore(store);
+
+				employeeServiceImpl.save(employee);
+				
+				employee = new Employee();
+				employee.setFirstName("DODA");
+				employee.setLastName("DODOVSKI");
+				employee.setSalary(900000l);
+				employee.setCashBoxType(1);
+				employee.setUser(user);
+				employee.setStore(store);
+
+				employeeServiceImpl.save(employee);
+				
+				employee = new Employee();
+				employee.setFirstName("ЗУЗУ");
+				employee.setLastName("ЗУЗАСОВИЧ");
+				employee.setSalary(900000l);
+				employee.setCashBoxType(2);
+				employee.setUser(user);
+
+				employeeServiceImpl.save(employee);
+				
+		 });
+		 
+		
+	}
+	
+	
 
 }

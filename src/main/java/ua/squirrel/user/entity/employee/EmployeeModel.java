@@ -12,9 +12,15 @@ public class EmployeeModel {
 
 	private String lastName;
 
-	private long salary;
+	private Long salary;
 
 	private Long storeId;
 
+	private Integer cashBoxType; 
+	
 	private String storeName;
+	
+	private String workPeriod;
+	
+	private String workTime;
 }

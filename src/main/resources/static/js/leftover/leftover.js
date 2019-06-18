@@ -6,7 +6,7 @@ request("GET",connectUrl + "/user/stores", addStoreSearchRow );
 
 //добавляем оптионалы для выборки по магазинам
 function addStoreSearchRow(data){
-	if (data.length < 0 ){// если магазинов у поьзователя нет то просм его создать
+	if (data.length < 1 ){// если магазинов у поьзователя нет то просм его создать
 		$("#storeSelect").append("<option value=\"0\">Создайте магазин</option>");
 		$("#searchIngridientBytton").prop("disabled","disabled");// блокируем кнопку поиска
 	} else {
@@ -17,8 +17,7 @@ function addStoreSearchRow(data){
 		$("#storeSelect").val(data[0].id);//устанавливаем selected первому магазину
 		state.set("stores", data);
 		
-	}
-	
+	}	
 }
 
 
@@ -223,7 +222,7 @@ function displayProductProperties(properties,convert){
 $(document).ready(function(){
 	  $("#searchOnPageTable").on("keyup", function() {
 	    var value = $(this).val().toLowerCase();
-	    var tableName =  ($("#collapsePartnerBody").is(':visible')) ?"partnerTable" :"productTable" ;
+	    var tableName =  ($("#leftoverTableId").is(':visible')) ?"leftoverTableBodyId" :"invoiceTableBodyId" ;
 	    $("#"+tableName +" tr").filter(function() {
 	      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
 	    });

@@ -27,7 +27,13 @@ public class Employee {
 	@Column(name = "last_name")
 	private String lastName;
 	@Column(name = "salary")
-	private long salary;
+	private Long salary;
+	@Column(name = "cash_box_type")
+	private Integer cashBoxType; 
+	@Column(name = "work_period")
+	private String workPeriod;
+	@Column(name = "work_time")
+	private String workTime;
 	
 	@ManyToOne(fetch = FetchType.LAZY, cascade=CascadeType.ALL)
 	@JoinColumn(name = "store_employee_id", nullable = true)

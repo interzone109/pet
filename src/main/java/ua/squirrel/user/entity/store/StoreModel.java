@@ -15,5 +15,4 @@ public class StoreModel {
 	
 	private String mail;
 	
-
 }

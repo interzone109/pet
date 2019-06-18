@@ -24,7 +24,7 @@ import ua.squirrel.web.entity.user.User;
 import ua.squirrel.web.service.registration.user.UserServiceImpl;
 
 @RestController
-@RequestMapping("/employee")
+@RequestMapping("user/employee")
 @Slf4j
 public class AllEmployeeController {
 	@Autowired
@@ -59,6 +59,7 @@ public class AllEmployeeController {
 		employee.setFirstName(newEmployeeModel.getFirstName());
 		employee.setLastName(newEmployeeModel.getLastName());
 		employee.setSalary(newEmployeeModel.getSalary());
+		employee.setCashBoxType(0);
 		employee.setUser(user);
 		employee.setStore(getStore(user , newEmployeeModel.getStoreId()));
 
@@ -79,6 +80,9 @@ public class AllEmployeeController {
 		employee.setFirstName(newEmployeeModel.getFirstName());
 		employee.setLastName(newEmployeeModel.getLastName());
 		employee.setSalary(newEmployeeModel.getSalary());
+		employee.setCashBoxType(newEmployeeModel.getCashBoxType());
+		employee.setWorkPeriod(newEmployeeModel.getWorkPeriod());
+		employee.setWorkTime(newEmployeeModel.getWorkTime());
 		employee.setUser(user);
 		employee.setStore(getStore(user , newEmployeeModel.getStoreId()));
 
@@ -91,16 +95,22 @@ public class AllEmployeeController {
 		List<EmployeeModel> employeeModel = new ArrayList<>();
 
 		employeeServiceImpl.findAllByUser(user).forEach(employee -> {
-			Long storeId = employee.getStore().getId();
-			String storeAddres = employee.getStore().getAddress();
+			Store store = employee.getStore();
+			Long storeId = new Long(0l);
+			String storeAddres = new String("");
+			if(store != null) {
+			 storeId = employee.getStore().getId();
+			 storeAddres = employee.getStore().getAddress();
+			}
 
 			employeeModel.add(EmployeeModel.builder()
 					.id(employee.getId())
 					.firstName(employee.getFirstName())
 					.lastName(employee.getLastName())
+					.cashBoxType(employee.getCashBoxType())
 					.salary(employee.getSalary())
-					.storeId(storeId == null ? 0 : storeId)
-					.storeName(storeAddres == null ? "" : storeAddres)
+					.storeId( storeId)
+					.storeName( storeAddres)
 					.build());
 		});
 

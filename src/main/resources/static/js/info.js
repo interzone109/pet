@@ -2,14 +2,19 @@
 
 	$("#infoButton").on("click", function() { 
     var status =(this.title==="")?"show" :"hide";
-    $('#collapseInfo').collapse(status);
+    $('#collapseInfo').collapse(status);    
     this.title= (status ==="show")?"activ":"";
     });
     
     /******************** sidebar function ****************************/
+	var flag = false ;
     $(document).ready(function () {
         $('#sidebarCollapse').on('click', function () {
-            $('#sidebar').toggleClass('active');
+            $('#sidebar').toggleClass('active');// 768 ширь
+            if(window.innerWidth < 769){
+            	flag = !flag ;
+            	(flag )? $('a.dropdown-toggle').show():$('a.dropdown-toggle').hide() ;
+            }
         });
     });
     /******************** sidebar function ****************************/  

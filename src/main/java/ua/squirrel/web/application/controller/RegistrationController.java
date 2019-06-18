@@ -72,6 +72,8 @@ public class RegistrationController {
 		
 		fillDataUtil.setInvoice(user1);
 		
+		fillDataUtil.setEmployee(user1);
+		
 		return UserModel.builder()
 				.login(user1.getLogin())
 				.mail(user1.getMail())

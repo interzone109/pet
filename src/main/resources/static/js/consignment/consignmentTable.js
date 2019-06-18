@@ -8,7 +8,7 @@ function getStoreList(){
 getStoreList();
 //добавляем оптионалы для выборки по магазинам
 function addStoreSearchRow(data){
-	if (data.length < 0 ){// если магазинов у поьзователя нет то просм его создать
+	if (data.length < 1 ){// если магазинов у поьзователя нет то просм его создать
 		$("#consignmetnStoreSelect").append("<option value=\"0\">Создайте магазин</option>");
 		$("#consignmetnStoreDoublerSelect").append("<option value=\"0\">Создайте магазин</option>");
 		$("#searchConsignmentBytton").prop("disabled","disabled");// блокируем кнопку поиска

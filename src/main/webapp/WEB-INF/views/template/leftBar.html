@@ -21,8 +21,7 @@
 			</a>
 				<ul class="collapse list-unstyled" id="storeSubmenu">
 					<li><a th:href="@{/user/leftover}">Продажи и остатки</a></li>
-					<li><a href="#">Движение товара</a></li>
-					<li><a th:href="@{/user/consignment}">Накладные</a></li>
+					<li><a th:href="@{/user/consignment}">Движение товара</a></li>
 				</ul></li>
 
 			<li><a href="#partnerSubmenu" data-toggle="collapse"
@@ -30,7 +29,7 @@
 					class="fas fa-address-book"></i> Товар
 			</a>
 				<ul class="collapse list-unstyled" id="partnerSubmenu">
-					<li><a th:href="@{/user/contacts}">Партнеры</a></li>
+					<li><a th:href="@{/user/contacts}">Партнеры и продукты</a></li>
 					<li><a th:href="@{/user/products}">Карта товара</a></li>
 					<li><a th:href="@{/user/storePrice}">Цены на ТТ</a></li>
 				</ul></li>
@@ -67,9 +66,8 @@
 					class="fas fa-cogs"></i> Касса
 			</a>
 				<ul class="collapse list-unstyled" id="cashBoxSubmenu">
-					<li><a href="#">Интерфейс</a></li>
-					<li><a href="#">Настройка</a></li>
-					<li><a href="#">Провести заказ</a></li>
+					<li><a th:href="@{/user/cashbox/work}">Начать работу</a></li>
+					<li><a th:href="@{/user/cashbox}">Настроить кассу</a></li>
 				</ul></li>
 		</ul>
 
