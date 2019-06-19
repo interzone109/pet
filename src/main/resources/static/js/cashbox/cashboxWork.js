@@ -18,46 +18,82 @@ function addStoreSearchRow(data){
 	}	
 }
 
-
+var storeid ;
 function getStoreCashBox(){
-	var storeId = $("#storeSelect option:selected").val();
+	 storeId = $("#storeSelect option:selected").val();
 	//var isGroup = $('#groupPoducts').is(":checked");
 	
 	request('GET', connectUrl+'/user/stores/assortment/'+storeId, fillCashBoxData);
 }
 
 function fillCashBoxData(data){
-	var i = 0;
-	var state = new Map();
-	data.forEach(product => {
-
-		var cashBoxRow = document.createElement('div');
-		cashBoxRow.className = "row";
-		
-		cashBoxRow.append(createNewStoreProductElem( product));
-		
-		console.log(cashBoxRow);
-		if(i === 5 || i === data.length-1){
-			console.log(i);
-			i = 0 ;
-			$('#cashBoxContainer').append('<br>');
-			$('#cashBoxContainer').append(cashBoxRow);
-		}
-		i++ ;
-	});
+	state.set("storeId_"+storeId, data);
+	var cashBoxRow = document.createElement('div');
+	cashBoxRow.className = "row";
 	
+for(var  i = 0 , t= 0; i <data.length; i++){
+		cashBoxRow.append(createNewStoreProductElem( data[i]));
+		if( t ===2 || i === data.length-1){
+			console.log(t)
+			t = 0 ;
+			//$('#cashBoxContainer').append('<br>');
+			$('#cashBoxContainer').append(cashBoxRow);
+			var cashBoxRow = document.createElement('div');
+			cashBoxRow.className = "row";
+		}else{
+		t++;
+		}
+	}
 }
 
 
 function createNewStoreProductElem(product){
 	 var productElem = document.createElement('div');
-	 productElem.className = "col" 
-	 productElem.innerHTML = ""+product.name;
+	 productElem.className = "col"; 
+	 productElem.innerHTML = 
+		 
+		 "<div class=\"card border-info mb-3 text-center\" style=\"max-width: 18rem;\" >"
+		 	+"<div class=\"card-header\"title=\""+product.name +"\">"+product.name.substring(0, 12) +"</div>"
+		 		+"<div class=\"card-body text-info\">"
+		 		+"<h5 class=\"card-title\"> <i class=\"fas fa-minus\"></i>" 
+		 		+"1" 
+		 		+"<i class=\"fas fa-plus\"></i> </h5>"
+		 		+"<button class=\"btn btn-success col\"title=\"добавить\">"+displayProductPrice(product.propertiesProduct) +"</button>"
+		 	+"</div>"
+		 +"</div>";
+		 
+		 
+		 
+		var t =  "<div class=\"card-counter \">"
+		 +"<span class=\"count-numbers\">12 грн</span>"
+		 +"<span class=\"count-name\" title=\""+product.name+"\">"+product.name.substring(0, 12)+"</span>"
+		 +"<div class=\"\"> <i class=\"fas fa-minus-square\"></i>  1   <i class=\"fas fa-plus-square\"></i> шт</div>"
+		 	+"</div>" ;
+	 
+	 
+	
+	 
 	
 	return productElem;
 }
 
 
+
+
+
+
+
+function displayProductPrice(price){
+	if(price < 9){
+		return "0.0"+price+" грн";
+	}
+	else if(price <99){
+		return "0."+price+" грн";
+	}
+	else if(price >99){
+	return price/100+" грн"; 
+	}
+}
 
 
 /** **************** request method **************************** */
