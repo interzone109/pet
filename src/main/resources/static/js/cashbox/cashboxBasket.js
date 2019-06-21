@@ -15,7 +15,8 @@ $("#hiddenFoter").hide() ;
 //создаем карточку с товаром для конзины
 function createBusketElem(product){
 	var quantity = $("#input_product_id_"+product.id).val()<=0 ? 1 :$("#input_product_id_"+product.id).val();
-	var description = quantity + " X " + displayProductPrice(product.propertiesProduct);
+	var description = quantity + " шт X " + displayProductPrice(product.propertiesProduct);
+	console.log(description);
 	 var productElem = document.createElement('li');
 	 productElem.id="busket_id_"+product.id;
 	 productElem.innerHTML =   "<div class=\"conteiner border-info card bg-info text-center\">"
@@ -39,7 +40,8 @@ function addProductToexistBusketElem(product){
 	var quantity = $("#input_product_id_"+product.id).val()<=0 ? 0 :$("#input_product_id_"+product.id).val();
 	var description = $("#busket_description_"+product.id).text().split(" X ");
 	quantity = parseInt(quantity) + parseInt(description[0]);
-	$("#busket_description_"+product.id).text(quantity+" X "+description[1]);
+	console.log(quantity+" шт X "+description[1]);
+	$("#busket_description_"+product.id).text(quantity+" шт X "+description[1]);
 }
 
 // метод пересчитывает итоговую сумму покупки
@@ -54,7 +56,7 @@ function recountTotalPrice(){
 	
 	for(var i = 0; i < size ;i++){
 		id = $("#busketProductList").children()[i].id.split("busket_id_")[1];
-		var description = $("#busket_description_"+id).text().split(" X ");
+		var description = $("#busket_description_"+id).text().split(" шт X ");
 		totalPrice += description[0]*description[1].split(" ")[0]*100;
 	}
 	$("#topPrice").text(displayProductPrice(totalPrice));
