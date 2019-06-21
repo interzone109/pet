@@ -13,8 +13,7 @@
 <!-- Bootstrap CSS CDN -->
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
 <!-- Our Custom CSS -->
-<link rel="stylesheet" href="../static/css/style.css" th:href="@{/css/style.css}" type="text/css" media="screen">
-<link rel="stylesheet" href="../static/css/card.css" th:href="@{/css/card.css}" type="text/css" media="screen">
+<link rel="stylesheet" href="../static/css/style.css" th:href="@{/css/basket.css}" type="text/css" media="screen">
 <!-- Font Awesome JS -->
 <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js"></script>
 <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js"></script>
@@ -24,15 +23,15 @@
 <body>
 	<div class="wrapper">
 		<!-- left side menu -->
+		<div class="wrapper" th:insert="~{template/basket/basketTemplate :: basket_fragment}">
+		</div>
+		<!-- left side menu -->	
+		<!-- left side menu -->
 		<!--<div class="wrapper" th:insert="~{template/leftBar :: left_bar}">
 		</div> -->
 		<!-- left side menu -->		
 		<!-- Content conteiner -->
 		<div id="content">
-			<!--  top bar start -->
-			<!--<div th:insert="~{template/topBar :: top_bar}">
-			</div> -->
-			<!-- top bar end -->
 			<!--  info collapse start -->
 			<div class="collapse" id="collapseInfo">
 						<div class="card card-body">Раздел служит для настройки интерфейса кассы
@@ -45,30 +44,46 @@
 			<!-- info collapse end -->
 			<!-- cashbox content start -->
 			 <!-- forma start -->
-				<div class="container-fluid">
+				<div class="container-fluid ">
 					<!-- button start -->
 					<div class="row">
 						<div class="d-inline p-2">
-							<a class="btn btn-info" th:href="@{/user}"  >
-							Вернуться на главную	 
+							<a class="btn btn-info" th:href="@{/user}"  title ="Вернуться на главную">
+							<i class="fas fa-door-open"></i> На главную 
 							</a>
 						</div>
-						<div class="d-inline p-2 ">
-							<select class="form-control" id="storeSelect" >	
-							</select>
-						</div>
-						<div class="d-inline p-3 form-check">
-    						<input type="checkbox" class="form-check-input" id="groupPoducts">
-    						<label class="form-check-label" for="exampleCheck1">
-    							Сгрупировать
-    						</label>
-  						</div>
-  						<div class="d-inline p-2">
-							<button class="btn btn-info" onclick="getStoreCashBox()"  >
-								Применить	 
+						<div class="d-inline p-2">
+							<button class="btn btn-info" id="collapseOptionalButton">
+								<i class="fas fa-arrow-circle-down"></i> Настроить
 							</button>
 						</div>
 					</div>
+					<!-- optional collapse start -->
+					<div class="collapse " id ="collapseOptional">
+						<div class="card card-body" >
+							<div class="row">
+								<div class="d-inline p-2 ">
+									<select class="form-control col-8" id="storeSelect" >	
+									</select>
+								</div>
+								<div class="d-inline p-3 form-check">
+    								<input type="checkbox" class="form-check-input" id="groupPoducts">
+    								<label class="form-check-label" for="exampleCheck1">
+    									Сгрупировать
+    								</label>
+  								</div>
+  								<div class="d-inline p-2 col-2">
+									<input class="form-control" id="inputVievCount" title="Количесво карточек товара" value ="3">	
+								</div>
+  								<div class="d-inline p-2">
+									<button class="btn btn-info" onclick="getStoreCashBox()"  >
+										Применить	 
+									</button>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- optional collapse end -->
 					<!-- button end -->
 				</div>  
 				<!-- forma end -->
@@ -77,13 +92,15 @@
 				<!-- product start -->
 				<div class="container-fluid" id = "cashBoxContainer">
   					 
- 				 </div>
+ 				</div>
+ 				<div hidden id="cuurent_store_id"></div>
 				<!-- product end -->
 			<!-- cashbox content end -->
 		</div>
 	</div>
 <!-- script start-->
 <script th:src="@{/js/cashbox/cashboxWork.js}"></script>
+<script th:src="@{/js/cashbox/cashboxBasket.js}"></script>
 <!-- script end -->
  
 </body>

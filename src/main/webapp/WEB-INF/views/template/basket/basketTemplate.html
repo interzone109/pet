@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+
+</head>
+<body>
+	<nav id="sidebar" th:fragment="basket_fragment">
+		<div class="sidebar-header">
+			<h3>Корзина</h3> 
+		</div>
+		<ul class="list-unstyled ">
+			<li>
+				<a>Сумма заказа: <h4 id="topPrice">0 грн</h4></a>
+				<button class="btn btn-success col" onclick="comfirmSell()"  >
+					<i class="fas fa-shopping-basket"></i> Оплатить	 
+				</button>
+				<div class="line-mini">
+				</div>
+			</li>
+			<li>
+			<ol id="busketProductList" class="height-limiter">
+			</ol>
+			</li>
+			<li id="hiddenFoter" >
+				<div class="line-mini">
+				</div>
+				<a>Сумма заказа: <h4 id="bottomPrice">0 грн</h4></a>
+				<button class="btn btn-success col" onclick="comfirmSell()"  >
+					<i class="fas fa-shopping-basket"></i> Оплатить	 
+				</button>
+			</li>
+		</ul>
+
+		
+
+		<!-- jQuery CDN - Slim version (=without AJAX) -->
+		<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+		<!-- Popper.JS -->
+		<script
+			src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+		<!-- Bootstrap JS -->
+		<script
+			src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+
+	</nav>
+
+
+
+</body>
+</html>

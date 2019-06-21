@@ -1,7 +1,6 @@
 var state = new Map();//переменная хранит данные о запросax
 var connectUrl = "http://localhost:8080" ;
 
-
 //получаем список  магазинов
 request("GET",connectUrl + "/user/stores", addStoreSearchRow );
 
@@ -18,25 +17,30 @@ function addStoreSearchRow(data){
 	}	
 }
 
-var storeid ;
+// метод формирует запрос для вывода данных о товаре
 function getStoreCashBox(){
 	 storeId = $("#storeSelect option:selected").val();
+	 $("#cuurent_store_id").text(storeId);
 	//var isGroup = $('#groupPoducts').is(":checked");
+	 if(state.has("storeId_"+storeId)){
+		 fillCashBoxData(state.get("storeId_"+storeId));
+	 }else{
+		 request('GET', connectUrl+'/user/stores/assortment/'+storeId, fillCashBoxData);
+	 }
 	
-	request('GET', connectUrl+'/user/stores/assortment/'+storeId, fillCashBoxData);
 }
 
+//метод формирет поля с карточкамитовара
 function fillCashBoxData(data){
-	state.set("storeId_"+storeId, data);
+	 $("#cashBoxContainer").empty();
+	state.set("storeId_"+$("#cuurent_store_id").text(), data);
 	var cashBoxRow = document.createElement('div');
 	cashBoxRow.className = "row";
 	
 for(var  i = 0 , t= 0; i <data.length; i++){
 		cashBoxRow.append(createNewStoreProductElem( data[i]));
 		if( t ===2 || i === data.length-1){
-			console.log(t)
 			t = 0 ;
-			//$('#cashBoxContainer').append('<br>');
 			$('#cashBoxContainer').append(cashBoxRow);
 			var cashBoxRow = document.createElement('div');
 			cashBoxRow.className = "row";
@@ -46,41 +50,42 @@ for(var  i = 0 , t= 0; i <data.length; i++){
 	}
 }
 
-
+//создаем карточку с товаром
 function createNewStoreProductElem(product){
 	 var productElem = document.createElement('div');
 	 productElem.className = "col"; 
-	 productElem.innerHTML = 
-		 
-		 "<div class=\"card border-info mb-3 text-center\" style=\"max-width: 18rem;\" >"
-		 	+"<div class=\"card-header\"title=\""+product.name +"\">"+product.name.substring(0, 12) +"</div>"
-		 		+"<div class=\"card-body text-info\">"
-		 		+"<h5 class=\"card-title\"> <i class=\"fas fa-minus\"></i>" 
-		 		+"1" 
-		 		+"<i class=\"fas fa-plus\"></i> </h5>"
-		 		+"<button class=\"btn btn-success col\"title=\"добавить\">"+displayProductPrice(product.propertiesProduct) +"</button>"
+	 productElem.innerHTML =  "<div class=\"card border-info mb-3 text-center\" style=\"max-width: 18rem;\" >"
+		 	+"<div class=\"card-header text-info\"title=\""+product.name +"\">"+product.name.substring(0, 12) +"</div>"
+		 	+"<div class=\" text-primary\">"+product.group+"</div>"
+		 	+"<div class=\" text\">"+product.name+"</div>"
+		 		+"<div class=\"card-body text-info \">"
+		 		+"<h5 class=\"card-title row \"> " 
+		 		+"<i class=\"fas fa-minus col \" onclick=\"count(-1,"+product.id+")\"></i>" 
+		 		+"<input value=\"1\" class=\"col form-control  p-1\" id=\"input_product_id_"+product.id+"\"> " 
+		 		+"<i class=\"fas fa-plus col \" onclick=\"count(1,"+product.id+")\"></i> </h5>"
+		 		+"<button class=\"btn btn-success col\"title=\""+product.propertiesProduct+"\" id=\"sell_button_id_"+product.id +"\" onclick=\"addProductToBusket("+product.id+")\">"
+		 		+displayProductPrice(product.propertiesProduct) +"</button>"
 		 	+"</div>"
 		 +"</div>";
-		 
-		 
-		 
-		var t =  "<div class=\"card-counter \">"
-		 +"<span class=\"count-numbers\">12 грн</span>"
-		 +"<span class=\"count-name\" title=\""+product.name+"\">"+product.name.substring(0, 12)+"</span>"
-		 +"<div class=\"\"> <i class=\"fas fa-minus-square\"></i>  1   <i class=\"fas fa-plus-square\"></i> шт</div>"
-		 	+"</div>" ;
-	 
-	 
-	
-	 
-	
-	return productElem;
+	 return productElem;
 }
 
+//метод увеличивает счетчик количества товара
+function count(sing, productId){
+	var value = parseInt($("#input_product_id_"+productId).val());
+	$("#input_product_id_"+productId).val(value+(sing)<=0 ? 1 :value+(sing ));
+	
+	var price = Number($("#sell_button_id_"+productId).attr("title")) * Number($("#input_product_id_"+productId).val());
+	$("#sell_button_id_"+productId).text(displayProductPrice(price));
+	
+}
 
-
-
-
+// показывает карточку с настройками для кассы
+$("#collapseOptionalButton").on("click", function() { 
+    var status =(this.title==="")?"show" :"hide";
+    $('#collapseOptional').collapse(status);    
+    this.title= (status ==="show")?"activ":"";
+    });
 
 
 function displayProductPrice(price){
