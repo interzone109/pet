@@ -120,48 +120,69 @@ public class StoreUtil extends SmallOneUtil {
 	}
 	// [price]*:[0-9]*quantity[0-9]*price
 
-	// метод принимает id ингридиента и его количество и добавляет к остаткам на
-	// магазине
-	public void addStoreLeftovers(Store store, String consignmentData) {
+	// метод обновляет остаток ингридиентов и их цену
+	public void updateStoreLeftovers(Store store, String consignmentData , String sing) {
 		//получаем ид и количество ингридиентов из накладной
 		Map<Long, Integer> consignmentIdsQuantity = super.spliteIdsValue(consignmentData,
-				"[price]*:*quantity[0-9]*price");
+				"quantity[0-9]*price");
+		// получаем ид и цену за ед ингридиента
+		Map<Long, Integer> consignmentIdsPrice = new HashMap<>();
+		String[] str = consignmentData.split("[0-9]*quantity|price");
+		for (int i = 1; i < str.length; i+=2) {
+			consignmentIdsPrice.put(Long.parseLong(str[i-1].split(":")[0]), Integer.parseInt(str[i]));
+		}
+		
 		String leftovers = store.getProductLeftovers();
 		//получаем текущие остатки на магазине
 		Map<Long, Integer> storeIdsQuantity = (leftovers == null || leftovers.isEmpty()) 
 				? new HashMap<>()
-				: super.spliteIdsValue(leftovers, "quantity");
-			
+				: super.spliteIdsValue(leftovers, "quantity[0-9]*price");
+				
+		Map<Long, Integer> storeIdsPrice =  new HashMap<>() ;
+		if(leftovers != null && !leftovers.isEmpty()) {
+			String[] strStore = consignmentData.split("[0-9]*quantity|price");
+			for (int i = 1; i < strStore.length; i+=2) {
+				storeIdsPrice.put(Long.parseLong(strStore[i-1].split(":")[0]), Integer.parseInt(strStore[i]));
+			}
+		} 
+		
+		if(sing.equals("+")) {
 		consignmentIdsQuantity.keySet().forEach(id->{
-			int newtQuantity = (storeIdsQuantity.containsKey(id))
+			int newQuantity = (storeIdsQuantity.containsKey(id))
 					? storeIdsQuantity.get(id) + consignmentIdsQuantity.get(id)
 					: consignmentIdsQuantity.get(id);
-			storeIdsQuantity.put(id, newtQuantity);
+			storeIdsQuantity.put(id, newQuantity);
 			
 		});
+		}else {
+		consignmentIdsQuantity.keySet().forEach(id->{
+			if(storeIdsQuantity.containsKey(id)) {
+				int quantity = storeIdsQuantity.get(id);
+				quantity -= consignmentIdsQuantity.get(id);
+				storeIdsQuantity.put(id, quantity);
+			}
+		});
+		}
+		
 		StringBuilder storeLeftovers = new StringBuilder();
 		storeIdsQuantity.keySet().forEach(id->{
 			storeLeftovers.append(id+":"+storeIdsQuantity.get(id)+"quantity");
+			if(consignmentIdsPrice.containsKey(id)) {
+				storeLeftovers.append(consignmentIdsPrice.get(id)+"price");
+			}else  if(storeIdsPrice.containsKey(id)) {
+				storeLeftovers.append(storeIdsPrice.get(id)+"price");
+			}else {
+				storeLeftovers.append("0price");
+			}
 		});
 		
 		store.setProductLeftovers(storeLeftovers.toString());
 	}
 
-	public void removeStoreLeftovers(Store store, String consignmentData) {
-		//получаем ид и количество ингридиентов из накладной
-				Map<Long, Integer> consignmentIdsQuantity = super.spliteIdsValue(consignmentData,
-						"[price]*:*quantity[0-9]*price");
-				//получаем ид и количество ингридиентов из  магазина
-				Map<Long, Integer> storeIdsQuantity = super.spliteIdsValue(store.getProductLeftovers(),
-						"quantity");
-				consignmentIdsQuantity.keySet().forEach(id->{
-					if(storeIdsQuantity.containsKey(id)) {
-						int quantity = storeIdsQuantity.get(id);
-						quantity -= consignmentIdsQuantity.get(id);
-						storeIdsQuantity.put(id, quantity);
-					}
-				});
-				store.setProductLeftovers(this.concatIdsValueToString(storeIdsQuantity, "quantity"));
+
+	public void removeStoreLeftovers(Store store, Map<Long, Integer> ingridientQuantity) {
+	 
+		
 	}
 
 }

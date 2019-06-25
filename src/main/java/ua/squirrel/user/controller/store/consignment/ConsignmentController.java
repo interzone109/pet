@@ -131,27 +131,27 @@ public class ConsignmentController {
 		
 		 switch (consignment.getConsignmentStatus().getName()) {
 	        case "ARRIVAL"://приход 
-	        	storeUtil.addStoreLeftovers(store, consignment.getConsignmentData()); 
+	        	storeUtil.updateStoreLeftovers(store, consignment.getConsignmentData() ,"+"); 
 	        	storeServiceImpl.save(store);
 	            break;
 	        case "CONSAMPTION":// расход
 	        	if(!consignment.getMeta().startsWith("auto:%:")) {
-	        		storeUtil.removeStoreLeftovers(store, consignment.getConsignmentData()); 
+	        		storeUtil.updateStoreLeftovers(store, consignment.getConsignmentData(),"-"); 
 		        	storeServiceImpl.save(store);
 	        	} 
 	           break;
 	        case "HAULING"://внутренее перемещение
-	        	storeUtil.removeStoreLeftovers(store, consignment.getConsignmentData()); // удаляем из магазина отправителя ингридиенты
+	        	storeUtil.updateStoreLeftovers(store, consignment.getConsignmentData(),"-"); // удаляем из магазина отправителя ингридиенты
 	        	storeServiceImpl.save(store);
 	        	//добавляем в магазин получателя
 	        	long haulingStoreId = Long.parseLong(consignment.getMeta().split(":store:%:")[0]);
 	        	Store haulingStore = getCurrentStore(user, haulingStoreId);
-	        	storeUtil.addStoreLeftovers(haulingStore, consignment.getConsignmentData()); 
+	        	storeUtil.updateStoreLeftovers(haulingStore, consignment.getConsignmentData(),"+"); 
 	        	storeServiceImpl.save(haulingStore);
 		           break;
 	        case "RETURN"://возрат поставщику
 	        case "WRITE-OFF"://списание
-	        	storeUtil.removeStoreLeftovers(store, consignment.getConsignmentData()); // удаляем из магазина  ингридиенты
+	        	storeUtil.updateStoreLeftovers(store, consignment.getConsignmentData(),"-"); // удаляем из магазина  ингридиенты
 	        	storeServiceImpl.save(store);
 		           break;
 		 }

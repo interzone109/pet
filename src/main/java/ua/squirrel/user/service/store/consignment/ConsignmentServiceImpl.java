@@ -48,5 +48,6 @@ public class ConsignmentServiceImpl implements ConsignmentService {
 	public Optional<Consignment> findOneByIdAndStore(Long consignmentId, Store store) {
 		return consignmentRepository.findOneByIdAndStore( consignmentId,  store);
 	}
+
 	
 }

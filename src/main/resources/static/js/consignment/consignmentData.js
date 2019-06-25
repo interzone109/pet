@@ -104,7 +104,6 @@ function displayProductPrice(price){
 		  return 0 ; 
 		  }
 
-	
 		if(price < 1){
 			return 0;
 		} else if(price < 9){

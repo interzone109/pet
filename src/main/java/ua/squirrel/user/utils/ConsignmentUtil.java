@@ -3,6 +3,7 @@ package ua.squirrel.user.utils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Component;
 
@@ -31,6 +32,11 @@ public class ConsignmentUtil extends SmallOneUtil {
 				.consignmentStatus(consignment.getConsignmentStatus().getName())
 				.date(consignment.getDate().toString()).isApproved(consignment.isApproved())
 				.meta(consignment.getMeta()).build();
+	}
+
+	public void addData(Consignment consignment, Map<Long, Integer> ingridientQuantity) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

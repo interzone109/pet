@@ -27,4 +27,6 @@ public interface ConsignmentRepository extends JpaRepository<Consignment, Long> 
 			ConsignmentStatus consignmentStatus,String meta,  LocalDate start, LocalDate finish);
 
 	Optional<Consignment> findOneByIdAndStore(Long consignmentId, Store store);
+	
+	
 }

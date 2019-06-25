@@ -47,7 +47,11 @@ function updateConsignmentDataRow(responce, disabled){
 		for(var i = 1; i< ingridientIds.length ;i++){
 			var id = ingridientIds[i] ;// создаем переменую с ид ингридиента
 			//			!!!!!!!!  errore fix
+			try{
 			var dataStr = responce[id].split("quantity");// находим строку с кол и ценой по ид и разбиаем ее на две строки 
+			}catch{
+				console.log("errore");
+			}
 			// создаем переменую из dataStr[0] разбив ее и формируем вывод в зависимости от меры хранения -шт, кг , л
 			var quantity = createMeasureProduct (dataStr[0].split(":")[1],$("#ingridient_measureProduct_id_"+id).text());
 			var price = displayProductPrice( dataStr[1].split("price")[0] );// создаем переменную с ценой 
