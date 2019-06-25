@@ -17,21 +17,42 @@ function addStoreSearchRow(data){
 	}	
 }
 
-// метод формирует запрос для вывода данных о товаре
+// метод формирует запрос для получения инвойса
 function getStoreCashBox(){
 	 storeId = $("#storeSelect option:selected").val();
 	 $("#cuurent_store_id").text(storeId);
-	//var isGroup = $('#groupPoducts').is(":checked");
-	 if(state.has("storeId_"+storeId)){
-		 fillCashBoxData(state.get("storeId_"+storeId));
+		 var cashStart = $("#startCashBoxDay").val();
+		 var today = new Date();
+		 var dd = String(today.getDate()).padStart(2, '0');
+		 var mm = String(today.getMonth() + 1).padStart(2, '0');
+		 var yyyy = today.getFullYear();
+		 
+		 var data  = JSON.stringify({
+				"dateStart": dd+"."+mm+"."+yyyy,
+		        "cashBoxStartDay": cashStart*100,
+		        "currentSell":0,
+		        "sellQuantity":0, 
+		        "storeId":storeId
+			   }
+			);
+		 
+		 request('POST', connectUrl+'/user/stores/invoice/cashBox/'+storeId, getOrCreateInvoice,data);
+}
+
+//метод получает новый инвойс для выбрного магазина и отображает данные из него
+function getOrCreateInvoice(data){
+		console.log(data);
+		
+	 if(state.has("storeId_"+data.storeId)){
+		 fillCashBoxData(state.get("storeId_"+data.storeId));
 	 }else{
-		 request('GET', connectUrl+'/user/stores/assortment/'+storeId, fillCashBoxData);
+	 request('GET', connectUrl+'/user/stores/assortment/'+data.storeId, fillCashBoxData);
 	 }
-	
 }
 
 //метод формирет поля с карточкамитовара
 function fillCashBoxData(data){
+	//var isGroup = $('#groupPoducts').is(":checked");
 	 $("#cashBoxContainer").empty();
 	state.set("storeId_"+$("#cuurent_store_id").text(), data);
 	var cashBoxRow = document.createElement('div');
@@ -69,6 +90,7 @@ function createNewStoreProductElem(product){
 		 +"</div>";
 	 return productElem;
 }
+
 
 //метод увеличивает счетчик количества товара
 function count(sing, productId){
@@ -120,7 +142,7 @@ function request(type, url, method , json){
 		httpRequest.setRequestHeader("Content-Type", "application/json");
 		httpRequest.onreadystatechange = function () {
 		    if (httpRequest.readyState === 4 && httpRequest.status === 200) {
-		        var json = JSON.parse(httpRequest.responseText);
+		        var json = JSON.parse(httpRequest.responseText); 
 		       console.log('type '+type+' URL '+url);
 		       console.log(json);
 		       method(json);

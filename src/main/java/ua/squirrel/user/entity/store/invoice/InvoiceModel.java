@@ -17,7 +17,12 @@ public class InvoiceModel {
 	private boolean isBetween ;
 	// id продукта и количество продаж
 	private Map<Long, Integer> invoiceData ;
+	//денег на начало рабочего дня
+	private int cashBoxStartDay;
+	//текущая касса
+	private int currentSell;
+	//количество продаж
+	private int sellQuantity;
 	
-	private String meta;
 	private Long storeId;
 }

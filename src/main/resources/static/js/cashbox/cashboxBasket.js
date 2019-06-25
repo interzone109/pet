@@ -16,7 +16,6 @@ $("#hiddenFoter").hide() ;
 function createBusketElem(product){
 	var quantity = $("#input_product_id_"+product.id).val()<=0 ? 1 :$("#input_product_id_"+product.id).val();
 	var description = quantity + " шт X " + displayProductPrice(product.propertiesProduct);
-	console.log(description);
 	 var productElem = document.createElement('li');
 	 productElem.id="busket_id_"+product.id;
 	 productElem.innerHTML =   "<div class=\"conteiner border-info card bg-info text-center\">"
@@ -71,8 +70,63 @@ function removeFromBusket(productId){
 	recountTotalPrice();
 }
 
-function comfirmSell(){
-	console.log("sell");
+
+
+
+function conductSale(){
+	var storeId = $("#cuurent_store_id").text();
+	var size = $("#busketProductList").children().length;
+	var idsQuantity = "";
+	for(var i = 0; i < size ;i++){
+		id = $("#busketProductList").children()[i].id.split("busket_id_")[1];
+		var description = $("#busket_description_"+id).text().split(" шт X ");
+		idsQuantity += "\""+id+"\":"+description[0]+",";
+	}
+	
+	var invoiceData = "{"+idsQuantity.slice(0, -1) + "}";
+	var today = new Date();
+	var dd = String(today.getDate()).padStart(2, '0');
+	var mm = String(today.getMonth() + 1).padStart(2, '0');
+	var yyyy = today.getFullYear();
+
+	 var data  = JSON.stringify({
+			"dateStart": dd+"."+mm+"."+yyyy,
+	        "cashBoxStartDay": 0,
+	        "invoiceData": invoiceData,
+	        "currentSell":$("#topPrice").text().split(" ")[0]*100,
+	        "sellQuantity":1, 
+	        "storeId":storeId
+		   }
+		);
+	 var data1  = 
+				"{\"dateStart\":"+ "\""+dd+"."+mm+"."+yyyy+"\","
+		        +"\"cashBoxStartDay\":"+ 0+","
+		        +"\"invoiceData\":"+ invoiceData+","
+		        +"\"currentSell\":"+ $("#topPrice").text().split(" ")[0]*100+","
+		        +"\"sellQuantity\":"+ 1+","
+		        +"\"storeId\":"+ Number.parseInt(storeId)+"}";
+			   
+	 
+	 request('PUT', connectUrl+'/user/stores/invoice/'+storeId, console.log,data1);
+	 //request('GET', connectUrl+'/user/stores/invoice/', console.log);
+	console.log(data1);
 	$("#busketProductList").empty();
 	$("#hiddenFoter").hide()
+	$("#topPrice").text(displayProductPrice(0));
+	$("#bottomPrice").text(displayProductPrice(0));
+}
+
+
+
+
+
+
+
+
+
+
+
+function comfirmSell(){
+	console.log("sell");
+	
 }

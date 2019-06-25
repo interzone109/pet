@@ -34,10 +34,10 @@
 		<div id="content">
 			<!--  info collapse start -->
 			<div class="collapse" id="collapseInfo">
-						<div class="card card-body">Раздел служит для настройки интерфейса кассы
+						<div class="card card-body">Раздел отображает кассовый терминал
 							<br> Возможности :
-							<br>-Настройка интерфейса кассы для сотрудника
-							<br>-Выбор варианта кассы
+							<br>-Вести расчет с клиентом
+							<br>-Вести учет продаж
 						</div>
 						<br>
 					</div>
@@ -57,14 +57,27 @@
 								<i class="fas fa-arrow-circle-down"></i> Настроить
 							</button>
 						</div>
+						<div class="d-inline p-2">
+							<button class="btn btn-info" id="invoiceMeta">
+								<i class="fas fa-table"></i> Текущий день
+							</button>
+						</div>
+						<div class="d-inline p-2">
+							<button class="btn btn-info" id="infoAboutPage">
+								<i class="fas fa-info-circle"></i> Инфо
+							</button>
+						</div>
 					</div>
 					<!-- optional collapse start -->
 					<div class="collapse " id ="collapseOptional">
 						<div class="card card-body" >
 							<div class="row">
-								<div class="d-inline p-2 ">
+								<div class="d-inline p-2 col-3">
 									<select class="form-control col-8" id="storeSelect" >	
 									</select>
+								</div>
+								<div class="d-inline p-2 col-2">
+									<input class="form-control" id="startCashBoxDay" title="Сумма на начало работы" value ="0">	
 								</div>
 								<div class="d-inline p-3 form-check">
     								<input type="checkbox" class="form-check-input" id="groupPoducts">
