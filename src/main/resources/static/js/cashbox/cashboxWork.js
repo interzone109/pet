@@ -19,7 +19,7 @@ function addStoreSearchRow(data){
 
 // метод формирует запрос для получения инвойса
 function getStoreCashBox(){
-	 storeId = $("#storeSelect option:selected").val();
+	 var storeId = $("#storeSelect option:selected").val();
 	 $("#cuurent_store_id").text(storeId);
 		 var cashStart = $("#startCashBoxDay").val();
 		 var today = new Date();
@@ -41,14 +41,23 @@ function getStoreCashBox(){
 
 //метод получает новый инвойс для выбрного магазина и отображает данные из него
 function getOrCreateInvoice(data){
-		console.log(data);
-		
+		updateCashboxInfo(data);
 	 if(state.has("storeId_"+data.storeId)){
 		 fillCashBoxData(state.get("storeId_"+data.storeId));
 	 }else{
 	 request('GET', connectUrl+'/user/stores/assortment/'+data.storeId, fillCashBoxData);
 	 }
 }
+
+function updateCashboxInfo(data){
+	var storeId = $("#cuurent_store_id").text();
+	var  storeName = $('#storeSelect option[value="' + storeId + '"]').text();
+	$("#storeNameinvoiceInfo").text(storeName);
+	$("#cashboxStart").text(displayProductPrice(data.cashBoxStartDay));
+	$("#cashboxCurrent").text(displayProductPrice(data.currentSell));
+	$("#sellQyantity").text(data.sellQuantity);
+}
+
 
 //метод формирет поля с карточкамитовара
 function fillCashBoxData(data){
@@ -106,6 +115,20 @@ function count(sing, productId){
 $("#collapseOptionalButton").on("click", function() { 
     var status =(this.title==="")?"show" :"hide";
     $('#collapseOptional').collapse(status);    
+    this.title= (status ==="show")?"activ":"";
+    });
+
+//показывает карточку с информацией о кассе
+$("#invoiceMeta").on("click", function() { 
+    var status =(this.title==="")?"show" :"hide";
+    $('#collapseInvoiceMeta').collapse(status);    
+    this.title= (status ==="show")?"activ":"";
+    });
+
+//показывает карточку с информацией о странице
+$("#infoAboutPage").on("click", function() { 
+    var status =(this.title==="")?"show" :"hide";
+    $('#collapseInfo').collapse(status);    
     this.title= (status ==="show")?"activ":"";
     });
 

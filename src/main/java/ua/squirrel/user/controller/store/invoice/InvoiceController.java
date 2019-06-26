@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -176,9 +175,9 @@ public class InvoiceController {
 				}
 			});
 		 });
+		
 		 
-		 
-		 consignmentUtil.addData(consignment, ingridientQuantity);
+		 consignmentUtil.addData(consignment, ingridientQuantity, store.getProductLeftovers());
 		 consignmentServiceImpl.save(consignment);
 		 
 		 storeUtil.removeStoreLeftovers(store, ingridientQuantity);
@@ -187,21 +186,7 @@ public class InvoiceController {
 		return invoiceUtil.createInvoiceMetaModel(invoice) ;
 	}
 	
-	@GetMapping()
-	public InvoiceModel get() {
-		HashMap<Long, Integer> t = new HashMap<>();
-		t.put(1l, 2);
-		t.put(2l, 4);
-		t.put(3l, 5);
-		return InvoiceModel.builder()
-				.id(22)
-				.invoiceData(t)
-				.storeId(22l)
-				.cashBoxStartDay(22)
-				.currentSell(22)
-				.sellQuantity(22)
-				.build();
-	}
+
 	
 	/**
 	 * метод возращает инвойс на текущю дату 

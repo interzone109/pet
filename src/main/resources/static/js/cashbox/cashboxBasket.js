@@ -89,16 +89,7 @@ function conductSale(){
 	var mm = String(today.getMonth() + 1).padStart(2, '0');
 	var yyyy = today.getFullYear();
 
-	 var data  = JSON.stringify({
-			"dateStart": dd+"."+mm+"."+yyyy,
-	        "cashBoxStartDay": 0,
-	        "invoiceData": invoiceData,
-	        "currentSell":$("#topPrice").text().split(" ")[0]*100,
-	        "sellQuantity":1, 
-	        "storeId":storeId
-		   }
-		);
-	 var data1  = 
+	 var data  = 
 				"{\"dateStart\":"+ "\""+dd+"."+mm+"."+yyyy+"\","
 		        +"\"cashBoxStartDay\":"+ 0+","
 		        +"\"invoiceData\":"+ invoiceData+","
@@ -107,9 +98,7 @@ function conductSale(){
 		        +"\"storeId\":"+ Number.parseInt(storeId)+"}";
 			   
 	 
-	 request('PUT', connectUrl+'/user/stores/invoice/'+storeId, console.log,data1);
-	 //request('GET', connectUrl+'/user/stores/invoice/', console.log);
-	console.log(data1);
+	 request('PUT', connectUrl+'/user/stores/invoice/'+storeId, updateCashboxInfo,data);
 	$("#busketProductList").empty();
 	$("#hiddenFoter").hide()
 	$("#topPrice").text(displayProductPrice(0));

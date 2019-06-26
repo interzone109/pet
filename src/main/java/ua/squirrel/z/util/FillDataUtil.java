@@ -461,30 +461,35 @@ public class FillDataUtil {
 			 Invoice newInvoice = new Invoice();
 				newInvoice.setDate(LocalDate.of(2019, 6, 1));
 				newInvoice.setInvoiceData("1:2sale2:3sale3:7sale");
+				newInvoice.setMeta("30000:%:33000:%:1");
 				newInvoice.setStore(store);
 			invoices.add(newInvoice);
 			
 			newInvoice = new Invoice();
-			newInvoice.setDate(LocalDate.of(2019, 6, day-1));
+			newInvoice.setDate(LocalDate.of(2019, 6, 2));
 			newInvoice.setInvoiceData("4:2sale2:3sale3:7sale");
+			newInvoice.setMeta("10000:%:13000:%:1");
 			newInvoice.setStore(store);
 		invoices.add(newInvoice);
 		
 		newInvoice = new Invoice();
-		newInvoice.setDate(LocalDate.of(2019, 6, day-2));
+		newInvoice.setDate(LocalDate.of(2019, 6, 3));
 		newInvoice.setInvoiceData("4:2sale2:3sale3:7sale");
+		newInvoice.setMeta("30000:%:33000:%:1");
 		newInvoice.setStore(store);
 	invoices.add(newInvoice);
 	
 	newInvoice = new Invoice();
-	newInvoice.setDate(LocalDate.of(2019, 6, day-3));
+	newInvoice.setDate(LocalDate.of(2019, 6, 4));
 	newInvoice.setInvoiceData("4:2sale2:3sale3:7sale");
+	newInvoice.setMeta("20000:%:23000:%:1");
 	newInvoice.setStore(store);
 	invoices.add(newInvoice);
 
 	newInvoice = new Invoice();
-	newInvoice.setDate(LocalDate.of(2019, 6, day-4));
+	newInvoice.setDate(LocalDate.of(2019, 6, 5));
 	newInvoice.setInvoiceData("4:2sale2:3sale3:7sale");
+	newInvoice.setMeta("30000:%:33000:%:1");
 	newInvoice.setStore(store);
 	invoices.add(newInvoice);
 		 });
