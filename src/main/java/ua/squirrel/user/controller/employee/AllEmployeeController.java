@@ -58,6 +58,28 @@ public class AllEmployeeController {
 	@PostMapping
 	public EmployeeModel addEmployee(@RequestBody EmployeeModel newEmployeeModel, Authentication authentication) throws NotFoundException {
 		log.info("LOGGER: add new employees ");
+		Employee employee = new Employee();
+		User user = userServiceImpl.findOneByLogin("test1").get();
+
+		employeeServiceImpl.save(putOrPostEmployee(employee, newEmployeeModel, user));
+		return employeeBuild(employee);
+	}
+	
+	
+	@PutMapping
+	@RequestMapping("/{id}/edit")
+	public EmployeeModel updateEmployee(@RequestBody EmployeeModel newEmployeeModel,
+			@PathVariable Long id ,Authentication authentication) throws NotFoundException {
+		log.info("LOGGER: update current employees ");
+
+		User user = userServiceImpl.findOneByLogin("test1").get();
+		Employee employee = getEmployee(user, id);
+	
+		employeeServiceImpl.save(putOrPostEmployee(employee, newEmployeeModel, user));
+		return employeeBuild(employee);
+	}
+
+	private Employee putOrPostEmployee(Employee employee ,EmployeeModel newEmployeeModel, User user ) throws NotFoundException {
 		String login = newEmployeeModel.getLogin();
 		String pass = newEmployeeModel.getPassword();
 		String role = !(login == null & login.isEmpty()) && !( pass == null & pass.isEmpty()) 
@@ -68,8 +90,6 @@ public class AllEmployeeController {
 			pass = login;
 		}
 		
-		User user = userServiceImpl.findOneByLogin("test1").get();
-		Employee employee = new Employee();
 		employee.setFirstName(newEmployeeModel.getFirstName());
 		employee.setLastName(newEmployeeModel.getLastName());
 		employee.setSalary(newEmployeeModel.getSalary());
@@ -80,33 +100,8 @@ public class AllEmployeeController {
 		employee.setPassword(pass);
 		employee.setRole(roleService.findOneByName(role));
 		employee.setStore(getStore(user , newEmployeeModel.getStoreId()));
-
-		employeeServiceImpl.save(employee);
-		return employeeBuild(employee);
+		return employee;
 	}
-	
-	
-	@PutMapping
-	@RequestMapping("/employee/{id}/edit")
-	public EmployeeModel updateEmployee(@RequestBody EmployeeModel newEmployeeModel,
-			@PathVariable Long id ,Authentication authentication) throws NotFoundException {
-		log.info("LOGGER: add new employees ");
-
-		User user = userServiceImpl.findOneByLogin("test1").get();
-		Employee employee = getEmployee(user, id);
-		
-		employee.setFirstName(newEmployeeModel.getFirstName());
-		employee.setLastName(newEmployeeModel.getLastName());
-		employee.setSalary(newEmployeeModel.getSalary());
-		employee.setCashBoxType(newEmployeeModel.getCashBoxType());
-
-		employee.setUser(user);
-		employee.setStore(getStore(user , newEmployeeModel.getStoreId()));
-
-		employeeServiceImpl.save(employee);
-		return employeeBuild(employee);
-	}
-
 	
 	private List<EmployeeModel> buildEmployeeModel(User user) {
 		List<EmployeeModel> employeeModel = new ArrayList<>();

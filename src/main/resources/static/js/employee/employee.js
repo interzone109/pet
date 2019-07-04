@@ -7,8 +7,8 @@ $("#dateHiringValue").on("focus", function (){$("#datepickers-container").css("z
 //подсказки при заполнении полей в форме
 $(document).ready(function() { $('#employeeLoginInput').tooltip(); });
 $(document).ready(function() {  $('#employeePassInput').tooltip(); });
-
-$("#addIngridientLins").on("click",postNewEmployee);
+var putEmployeeId = 0;
+$("#addIngridientLins").on("click",postOrPutEmployee);
 
 //получаем список  работников
 request("GET",connectUrl + "/user/rest/employee", createEmployeeTable );
@@ -26,22 +26,32 @@ function createEmployeeTable(employees){
 function createEmployeeTableRow(employee){
 	var employeeRow = document.createElement('tr');
 	  
-	employeeRow.innerHTML = "<td id=\"employee_hairing_date_id_"+employee.id+"\">"+employee.hairingDate+"</td>"
+	employeeRow.innerHTML = "<td id=\"employee_hairing_date_id_"+employee.id+"\">"+converDate(employee.hairingDate)+"</td>"
 		 + "<td id=\"employee_name_id_"+employee.id+"\">"+employee.firstName+"</td>"
 		 + "<td id=\"employee_last_name_id_"+employee.id+"\">"+employee.lastName+"</td>"
 		 + "<td id=\"employee_salary_id_"+employee.id+"\">"+employee.salary+"</td>"
 		 + "<td id=\"employee_store_id_"+employee.id+"\">"+employee.storeName+"</td>"
-		 +"<td>  <i class=\"fas fa-edit\"  title=\"редактировать\"  onclick=\"editeEmployeeRow("+employee.id+")\"  ></i> </td>";
+		 +"<td>  <i class=\"fas fa-edit\" style=\"color:#17a2b8\" title=\"редактировать\"  onclick=\"editeEmployeeRow("+employee.id+")\"  ></i> " 
+		 +"<i class=\"fas fa-user-times\" title=\"удалить\" onclick=\"removeEmployeeRow("+employee.id+")\"></i>	</td>";
 		
 	return employeeRow;
 }
 
-
+//ометод обновляет данные о работнике
 function editeEmployeeRow(employeeId){
-	console.log(employeeId);
+	$("#employeeModalBody").modal("show");//окрываем окно для редактирования данных 
+	$("#employeeNameInput").val($("#employee_name_id_"+employeeId).text());
+	$("#employeeSecondNameInput").val($("#employee_last_name_id_"+employeeId).text());
+	$("#employeeSalaryInput").val($("#employee_salary_id_"+employeeId).text());
+	$("#dateHiringValue").val($("#employee_hairing_date_id_"+employeeId).text());
+	$("#storeSelect").val($("#storeSelect option:contains("+$("#employee_store_id_"+employeeId).text()+")").val());
+	putEmployeeId = employeeId;
 }
 
 
+function removeEmployeeRow(employeeId){
+	console.log(employeeId);
+}
 
 // получаем список  магазинов
 request("GET",connectUrl + "/user/stores", addStoreSearchRow );
@@ -61,7 +71,7 @@ function addStoreSearchRow(data){
 		
 	}	
 }
-function postNewEmployee(){
+function postOrPutEmployee(){
 	//валидируем обязательные поля
 	var isValid = formValidation($("#employeeNameInput"))&
 	formValidation($("#employeeSecondNameInput"))&
@@ -69,7 +79,6 @@ function postNewEmployee(){
 	formValidation($("#dateHiringValue"));
 	
 	var isHassAcces = $("#employeeLoginInput").val()!="" && $("#employeePassInput").val()!="" ;
-	console.log(isHassAcces);
 	if(isValid){
 		var employee = JSON.stringify({
 				"firstName": $("#employeeNameInput").val(),
@@ -80,12 +89,27 @@ function postNewEmployee(){
 		        "login": isHassAcces ?$("#employeeLoginInput").val():"",
 		        "password":isHassAcces ? $("#employeePassInput").val():""
 			   });
-		
-		 console.log(employee);
-		 request("POST",connectUrl + "/user/rest/employee", createEmployeeTable,  employee);
-		
+		if(putEmployeeId!==0){
+			request("PUT",connectUrl + "/user/rest/employee/"+putEmployeeId+"/edit", updateEmployeeRow,  employee);
+			putEmployeeId = 0 ;
+		}else{
+			request("POST",connectUrl + "/user/rest/employee", createEmployeeTable,  employee);
+		}
 	}
 }
 
+function updateEmployeeRow (employee){
+	
+	 $("#employee_name_id_"+employee.id).text(employee.firstName);
+	 $("#employee_last_name_id_"+employee.id).text(employee.lastName);
+	 $("#employee_salary_id_"+employee.id).text(employee.salary);
+	 $("#employee_hairing_date_id_"+employee.id).text(converDate(employee.hairingDate));
+	 $("#employee_store_id_"+employee.id).text(employee.storeName);
+}
+
+function converDate(date){
+	var dateStr = date.split("-");
+	return dateStr[2]+"."+dateStr[1]+"."+dateStr[0];
+}
 
 
