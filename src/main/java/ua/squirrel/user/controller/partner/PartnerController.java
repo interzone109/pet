@@ -100,6 +100,7 @@ public class PartnerController {
 		// создаем список моделей  ProductModel 
 		List<ProductModel> productsModel = new ArrayList<>();
 		// заполняем список данными партнера
+		
 		partner.getProducts().stream().forEach(obj -> {
 			productsModel.add(ProductModel.builder()
 					.id(obj.getId())

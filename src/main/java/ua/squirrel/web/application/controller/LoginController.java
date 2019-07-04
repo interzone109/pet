@@ -10,7 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import ua.squirrel.web.entity.user.UserModel;
 
 @RestController
-@RequestMapping("/rest/login")
+@RequestMapping("/public/login/in")
 @Slf4j
 public class LoginController {
 	
@@ -30,6 +30,7 @@ public class LoginController {
 		log.info("enter method post url:/registr"+user.getLogin());
 		System.out.println("login :"+user.getLogin());
 		System.out.println("pass :"+user.getHashPass());
+		
 		return user;
 	}
 }

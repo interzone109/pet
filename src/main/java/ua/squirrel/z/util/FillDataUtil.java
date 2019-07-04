@@ -4,7 +4,9 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -25,7 +27,9 @@ import ua.squirrel.user.service.product.properties.PropertiesProductServiceImpl;
 import ua.squirrel.user.service.store.StoreServiceImpl;
 import ua.squirrel.user.service.store.invoice.InvoiceServiceImpl;
 import ua.squirrel.user.service.store.spending.SpendServiceImpl;
+import ua.squirrel.web.entity.user.Role;
 import ua.squirrel.web.entity.user.User;
+import ua.squirrel.web.service.registration.RoleServiceImpl;
 
 @Component
 public class FillDataUtil {
@@ -297,6 +301,18 @@ public class FillDataUtil {
 		p.setUser(owner);
 		product.add(p);
 		
+		for (int i = 0; i < 100; i++) {
+			p = new Product();
+			p.setName("test " + i);
+			p.setDescription("test " + i);
+			p.setGroup("test");
+			p.setPartner(partner);
+			p.setPropertiesProduct(propertiesProductServiceImpl.findOneByName("INGREDIENS"));
+			p.setMeasureProduct(measureProductServiceImpl.findOneByMeasure("UNIT"));
+			p.setUser(owner);
+			product.add(p);
+		}
+		
 		productServiceImpl.saveAll(product);
 		return product;
 	}
@@ -458,48 +474,26 @@ public class FillDataUtil {
 		int day = LocalDate.now().lengthOfMonth();
 		
 		 storeServiceImpl.findAllByUser(user1).forEach(store->{
-			 Invoice newInvoice = new Invoice();
-				newInvoice.setDate(LocalDate.of(2019, 6, 1));
-				newInvoice.setInvoiceData("1:2sale2:3sale3:7sale");
-				newInvoice.setMeta("30000:%:33000:%:1");
-				newInvoice.setStore(store);
-			invoices.add(newInvoice);
-			
-			newInvoice = new Invoice();
-			newInvoice.setDate(LocalDate.of(2019, 6, 2));
-			newInvoice.setInvoiceData("4:2sale2:3sale3:7sale");
-			newInvoice.setMeta("10000:%:13000:%:1");
-			newInvoice.setStore(store);
-		invoices.add(newInvoice);
-		
-		newInvoice = new Invoice();
-		newInvoice.setDate(LocalDate.of(2019, 6, 3));
-		newInvoice.setInvoiceData("4:2sale2:3sale3:7sale");
-		newInvoice.setMeta("30000:%:33000:%:1");
-		newInvoice.setStore(store);
-	invoices.add(newInvoice);
-	
-	newInvoice = new Invoice();
-	newInvoice.setDate(LocalDate.of(2019, 6, 4));
-	newInvoice.setInvoiceData("4:2sale2:3sale3:7sale");
-	newInvoice.setMeta("20000:%:23000:%:1");
-	newInvoice.setStore(store);
-	invoices.add(newInvoice);
-
-	newInvoice = new Invoice();
-	newInvoice.setDate(LocalDate.of(2019, 6, 5));
-	newInvoice.setInvoiceData("4:2sale2:3sale3:7sale");
-	newInvoice.setMeta("30000:%:33000:%:1");
-	newInvoice.setStore(store);
-	invoices.add(newInvoice);
+			 for (int i = 1; i < day; i++) {
+				 Invoice newInvoice = new Invoice();
+					newInvoice.setDate(LocalDate.of(2019, 6, i));
+					newInvoice.setInvoiceData("1:2sale2:3sale3:7sale");
+					newInvoice.setMeta("30000:%:33000:%:1");
+					newInvoice.setStore(store);
+				invoices.add(newInvoice);
+			}
+			 
 		 });
 		 invoiceServiceImpl.saveAll(invoices);
 	}
 	
 	@Autowired
+	private RoleServiceImpl roleServiceImpl;
+	@Autowired
 	private EmployeeServiceImpl employeeServiceImpl;
 	public void setEmployee(User user) {
-		  
+		Role role = new Role();
+		role = roleServiceImpl.findOneByName("EMPLOYEE");
 		 List<Store> stores = storeServiceImpl.findAllByUser(user);
 		 stores.forEach(store->{
 
@@ -508,8 +502,12 @@ public class FillDataUtil {
 				employee.setLastName("BIBA");
 				employee.setSalary(900000l);
 				employee.setCashBoxType(0);
+				employee.setHairingDate(LocalDate.now());
 				employee.setUser(user);
 				employee.setStore(store);
+				employee.setRole(roleServiceImpl.findOneByName("EMPLOYEE"));
+				employee.setLogin("%autogenerate%"+store.getId()+ new Long(System.currentTimeMillis()).toString());
+				employee.setPassword("%autogenerate%"+store.getId()+ new Long(System.currentTimeMillis()).toString());
 
 				employeeServiceImpl.save(employee);
 				
@@ -518,8 +516,12 @@ public class FillDataUtil {
 				employee.setLastName("DODOVSKI");
 				employee.setSalary(900000l);
 				employee.setCashBoxType(1);
+				employee.setHairingDate(LocalDate.now());
 				employee.setUser(user);
 				employee.setStore(store);
+				employee.setRole(roleServiceImpl.findOneByName("EMPLOYEE"));
+				employee.setLogin("%autogenerate%"+store.getId()+ new Long(System.currentTimeMillis()).toString());
+				employee.setPassword("%autogenerate%"+store.getId()+ new Long(System.currentTimeMillis()).toString());
 
 				employeeServiceImpl.save(employee);
 				
@@ -528,7 +530,12 @@ public class FillDataUtil {
 				employee.setLastName("ЗУЗАСОВИЧ");
 				employee.setSalary(900000l);
 				employee.setCashBoxType(2);
+				employee.setHairingDate(LocalDate.now());
 				employee.setUser(user);
+				employee.setStore(store);
+				employee.setRole(roleServiceImpl.findOneByName("EMPLOYEE"));
+				employee.setLogin("%autogenerate%"+store.getId()+ new Long(System.currentTimeMillis()).toString());
+				employee.setPassword("%autogenerate%"+store.getId()+ new Long(System.currentTimeMillis()).toString());
 
 				employeeServiceImpl.save(employee);
 				

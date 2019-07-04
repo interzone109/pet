@@ -1,11 +1,12 @@
 
+
 /** ****************** GET function *************************** */
 // заполняет страницу данными после загрузки страницы
 var connectUrl = "http://localhost:8080" ;
 
 request('GET', connectUrl+'/user/partners', addPartnerData);
 /** ****************** GET function *************************** */ 
-$("#collapsePartnerBody").collapse("show");
+$("#collapsePartnerBody").show();
 
 /** ****************** display partner row functions *************************** */ 
 //метод проверяет являются ли данные масивом
@@ -39,18 +40,18 @@ function displayPartnerRow( partner){
 
 
 /** ****************** display product row functions *************************** */
-
-
+$("#spiners").hide();
 // метод срабатывает при нажатии кнопки списка продуктов у поставщика
 function loadProductData(id){
+	 $("#collapsePartnerBody").hide();// скрываем таблицу с поставщиками
+	 
 	$("#namePlaceholder").val("Поставщик - "+$("#partner_company_id_"+id).text());// находим название партнера по ид и устанавливаем его
 	$("#namePlaceholder").collapse("show");//показываем название компании
-	
-	 $("#collapsePartnerBody").collapse("hide");// скрываем таблицу с поставщиками
-	// делаем запрос к серверу на получение списка продуктов
-	request('GET' ,connectUrl+'/user/partners/'+id+'/info',displayProductDataGET);
 	 
-	 $("#collapseProductBody").collapse("show");// показываем таблицу с продуктами 
+	
+	// делаем запрос к серверу на получение списка продуктов
+	 request('GET' ,connectUrl+'/user/partners/'+id+'/info',displayProductDataGET);
+	 $("#spiners").show();
 	 $("#curentPartnerProductList").text(id);
 };
 
@@ -58,7 +59,7 @@ function loadProductData(id){
 // метод проверяет являются ли данные масивом
 // и передает их методу формирующие строки для таблицы продукты
 function displayProductDataGET(dataJSON){
-	
+	 
 	var productList = dataJSON.productsModel ;
 	if(productList !== null && productList.length !== 0){
 	 if( Array.isArray(productList)){
@@ -72,6 +73,10 @@ function displayProductDataGET(dataJSON){
 			
 	$("#productContent").collapse("show");
 	$('#sendUpdateProduct').prop('title', dataJSON.id);
+	
+	$("#spiners").hide();
+	$("#collapseProductBody").collapse("show");// показываем таблицу с продуктами
+	
 	}
 
 $("#sendUpdateProduct").on("click",postNewProductForm );
@@ -161,7 +166,7 @@ function updateProductRow (productRow){
 // метод прячит таблицу с продуктами и заменяет ее таблицей с поставщиками
 function hideProduct(){
 	 $("#namePlaceholder").collapse("hide"); // прячем название компании
-	 $("#collapsePartnerBody").collapse("show");// покахываем список поставщиков
+	 $("#collapsePartnerBody").show();// покахываем список поставщиков
 	 $("#collapseProductBody").collapse("hide"); // прячем список продуктов
 	$("#productTable").empty();// чистим строки в таблице с продуктами
 	$("#productCaption").remove();// удаляем заголовок списка, если такой есть

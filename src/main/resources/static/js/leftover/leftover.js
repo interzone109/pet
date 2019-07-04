@@ -131,10 +131,11 @@ function fillInvoiceTableProduct(data){
 function fillInvoiceTableSales(data){
 	var totalSales = 0;
 	if( Array.isArray(data) && data.length !== 0){
-		var totalSaleForPeriod = 0 ;
+		
 		// прозодимся по каждому счету
 		data.forEach(invoice => {//создаем колонку с датой продажи
 			$('#invoiceOptionRow').before("<th>"+invoice.dateStart+"</th>");
+			var totalSaleForPeriod = 0 ;
 			// проходимся по каждой строке с названием продукта в таблице
 			$("#invoiceTableBodyId tr").each(function(){
 				//получаем ид строки

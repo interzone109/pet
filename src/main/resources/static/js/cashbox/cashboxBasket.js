@@ -72,7 +72,7 @@ function removeFromBusket(productId){
 
 
 
-
+//метод проводит продажу
 function conductSale(){
 	var storeId = $("#cuurent_store_id").text();
 	var size = $("#busketProductList").children().length;
@@ -81,6 +81,8 @@ function conductSale(){
 		id = $("#busketProductList").children()[i].id.split("busket_id_")[1];
 		var description = $("#busket_description_"+id).text().split(" шт X ");
 		idsQuantity += "\""+id+"\":"+description[0]+",";
+		$("#input_product_id_"+id).val("1");
+		
 	}
 	
 	var invoiceData = "{"+idsQuantity.slice(0, -1) + "}";
@@ -105,17 +107,3 @@ function conductSale(){
 	$("#bottomPrice").text(displayProductPrice(0));
 }
 
-
-
-
-
-
-
-
-
-
-
-function comfirmSell(){
-	console.log("sell");
-	
-}

@@ -21,6 +21,7 @@
 				<ul class="collapse list-unstyled" id="storeSubmenu">
 					<li><a th:href="@{/user/leftover}">Продажи и остатки</a></li>
 					<li><a th:href="@{/user/consignment}">Движение товара</a></li>
+					<li><a th:href="@{/user/storePrice}">ТТ и товар</a></li>
 				</ul></li>
 
 			<li><a href="#partnerSubmenu" data-toggle="collapse"
@@ -30,7 +31,6 @@
 				<ul class="collapse list-unstyled" id="partnerSubmenu">
 					<li><a th:href="@{/user/contacts}">Партнеры и продукты</a></li>
 					<li><a th:href="@{/user/products}">Карта товара</a></li>
-					<li><a th:href="@{/user/storePrice}">Цены на ТТ</a></li>
 				</ul></li>
 
 			<li><a href="#employeeSubmenu" data-toggle="collapse"
@@ -38,8 +38,8 @@
 				<i class="fas fa-user-tie"></i> Работники
 			</a>
 				<ul class="collapse list-unstyled" id="employeeSubmenu">
-					<li><a href="#">Карточки</a></li>
-					<li><a href="#">Расчеты</a></li>
+					<li><a th:href="@{/user/employee}">Карточки</a></li>
+					<li><a href="#">Расходы</a></li>
 				</ul></li>
 
 			<li><a href="#analiticSubmenu" data-toggle="collapse"
@@ -51,14 +51,7 @@
 					<li><a href="#">Прогноз</a></li>
 				</ul></li>
 
-			<li><a href="#calendarSubmenu" data-toggle="collapse"
-				aria-expanded="false" class="dropdown-toggle"> <i
-					class="fas fa-calendar-alt"></i> Календарь
-			</a>
-				<ul class="collapse list-unstyled" id="calendarSubmenu">
-					<li><a href="#">Заметки</a></li>
-					<li><a href="#">Расходы</a></li>
-				</ul></li>
+			
 
 			<li><a href="#cashBoxSubmenu" data-toggle="collapse"
 				aria-expanded="false" class="dropdown-toggle"> <i
@@ -68,6 +61,16 @@
 					<li><a th:href="@{/user/cashbox/work}">Начать работу</a></li>
 					<li><a th:href="@{/user/cashbox}">Настроить кассу</a></li>
 				</ul></li>
+				
+				<li><a href="#calendarSubmenu" data-toggle="collapse"
+				aria-expanded="false" class="dropdown-toggle"> <i
+					class="fas fa-calendar-alt"></i>Органайзер
+			</a>
+				<ul class="collapse list-unstyled" id="calendarSubmenu">
+					<li><a href="#">Календарь</a></li>
+					<li><a href="#">Файлы</a></li>
+				</ul>
+				</li>
 		</ul>
 
 		<ul class="list-unstyled CTAs">

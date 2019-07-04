@@ -12,9 +12,24 @@ public class AppController {
 		return "index";
 	}
 	
-	@RequestMapping(path = "/user", method = RequestMethod.GET)
+	@RequestMapping(path = "/public/login", method = RequestMethod.GET)
+	public String login() {
+		return "login";
+	}
+	
+	@RequestMapping(path = "/public/registration", method = RequestMethod.GET)
+	public String registration() {
+		return "registration";
+	}
+	
+	@RequestMapping(path = "/user/home", method = RequestMethod.GET)
 	public String getUserPage() {
 		return "user/userHome";
+	}
+	
+	@RequestMapping(path = "/user/employee", method = RequestMethod.GET)
+	public String getEmployeePageUser() {
+		return "/user/employee";
 	}
 	
 	@RequestMapping(path = "/user/contacts", method = RequestMethod.GET)
@@ -49,5 +64,11 @@ public class AppController {
 	@RequestMapping(path = "/user/cashbox/work", method = RequestMethod.GET)
 	public String getCashBoxWork() {
 		return "user/cashBoxWork";
+	}
+	
+	
+	@RequestMapping(path = "/employee/home", method = RequestMethod.GET)
+	public String getEmployeePage() {
+		return "employee/employeeHome";
 	}
 }

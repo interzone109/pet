@@ -25,8 +25,8 @@ public class SquirrelSecurityConfig extends WebSecurityConfigurerAdapter {
 
      @Override
      public void configure(HttpSecurity http) throws Exception {
-         String path = this.console.getPath();
-         String antPattern = (path.endsWith("/") ? path + "**" : path + "/**");
+        String path = this.console.getPath();
+         String antPattern = (path.endsWith("/h2") ? path + "**" : path + "/h2/**");
          HttpSecurity h2Console = http.antMatcher(antPattern);
          h2Console.csrf().disable();
          h2Console.httpBasic();
@@ -34,18 +34,18 @@ public class SquirrelSecurityConfig extends WebSecurityConfigurerAdapter {
          // config as you like
          http.authorizeRequests().anyRequest().permitAll();
     	 
-    	// предостовление доступа к адресам, определенным ролям
-       /*  http.authorizeRequests()
+         	// предостовление доступа к адресам, определенным ролям
+         /* http.authorizeRequests()
          // добавление шаблонов страниц, требующих авторизации
-         .antMatchers("/", "/public/**").permitAll()
+         .antMatchers("/", "/public/**","/test").permitAll()
          .antMatchers("/user/**").hasAuthority("USER")
          .antMatchers("/employee/**").hasAuthority("EMPLOYEE")
          .anyRequest().fullyAuthenticated()
          .and()
          // указание формы для аутентификации
          .formLogin()
-         .loginPage("/")
-         .failureUrl("/?error")
+         .loginPage("/public/login")
+         .failureUrl("/public/login")
          .usernameParameter("login")
          .permitAll()
          .and()
@@ -60,10 +60,10 @@ public class SquirrelSecurityConfig extends WebSecurityConfigurerAdapter {
      }
 	
     
-  /*   @Override
+     @Override
  	public void configure(AuthenticationManagerBuilder auth) throws Exception {
  		// задание способа шифрования пароля
  		auth.userDetailsService(userDetailsService).passwordEncoder(new BCryptPasswordEncoder());
- 	}*/
+ 	}
 	
 }

@@ -41,7 +41,7 @@ function getStoreCashBox(){
 
 //метод получает новый инвойс для выбрного магазина и отображает данные из него
 function getOrCreateInvoice(data){
-		updateCashboxInfo(data);
+	updateCashboxInfo(data);
 	 if(state.has("storeId_"+data.storeId)){
 		 fillCashBoxData(state.get("storeId_"+data.storeId));
 	 }else{
@@ -61,7 +61,6 @@ function updateCashboxInfo(data){
 
 //метод формирет поля с карточкамитовара
 function fillCashBoxData(data){
-	//var isGroup = $('#groupPoducts').is(":checked");
 	 $("#cashBoxContainer").empty();
 	state.set("storeId_"+$("#cuurent_store_id").text(), data);
 	var cashBoxRow = document.createElement('div');

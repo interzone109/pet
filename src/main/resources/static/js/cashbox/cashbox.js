@@ -18,7 +18,7 @@ function addStoreSearchRow(data){
 }
 
 //запрос на получения списка сотрудников
-request("GET",connectUrl + "/user/employee", function(data){state.set("employee", data);updateEmployeeSelect();} );
+request("GET",connectUrl + "/user/rest/employee", function(data){state.set("employee", data);updateEmployeeSelect();} );
 
 
 $("#storeSelect").on("change", updateEmployeeSelect);
