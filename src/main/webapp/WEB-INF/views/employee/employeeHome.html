@@ -1,10 +1,32 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>Employee home</title>
+<!-- Bootstrap CSS CDN -->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+<!-- Our Custom CSS -->
+<link rel="stylesheet" href="../static/css/style.css"  th:href="@{/css/style.css}"  type="text/css" media="screen">
+<!-- Font Awesome JS -->
+<script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js"></script>
+<script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js"></script>
+
 </head>
 <body>
-employee home
+<div class="wrapper" >
+		<!-- left side menu -->
+		<div  class="wrapper" th:insert="~{employee/template/leftBar :: left_bar}"></div>
+
+		<!-- Content conteiner -->
+		<div id="content">
+			<div th:insert="~{employee/template/topBar :: top_bar}"></div>
+
+			<div class="line"></div>
+		</div>
+	</div>
+	
+<script th:src="@{/js/info.js}"></script>
 </body>
 </html>

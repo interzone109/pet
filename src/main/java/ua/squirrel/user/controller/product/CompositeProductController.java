@@ -1,9 +1,12 @@
 package ua.squirrel.user.controller.product;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,8 +18,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javassist.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
+import ua.squirrel.user.entity.product.Product;
 import ua.squirrel.user.entity.product.ProductModel;
 import ua.squirrel.user.entity.product.composite.CompositeProduct;
+import ua.squirrel.user.entity.product.map.ProductMap;
 import ua.squirrel.user.service.product.CompositeProductServiceImpl;
 import ua.squirrel.user.service.product.ProductServiceImpl;
 import ua.squirrel.user.utils.CompositeProductUtil;
@@ -35,8 +40,9 @@ public class CompositeProductController {
 	private ProductServiceImpl productServiceImpl;
 	@Autowired
 	private CompositeProductUtil  compositeProductUtil;
-
-
+	
+	@Autowired
+	private ProductMapServiceImpl  productMapRepository;
 	
 	/**
 	 * метод находит по id и User CompositeProduct и возращает информацию о нем и о
@@ -54,7 +60,7 @@ public class CompositeProductController {
 
 	/**
 	 * метод добавляет новые ингридиенты и их расход к продукту
-	 */
+	 
 	@PostMapping
 	public List<ProductModel> addToCompositeProduct(@PathVariable("id") Long compositeId ,
 			@RequestBody Map<Long, Integer> composites, Authentication authentication) throws NotFoundException {
@@ -72,9 +78,28 @@ public class CompositeProductController {
 		compositeProductServiceImpl.save(compositeProduct);
 		
 		return compositeProductUtil.convertToProductModelDescription(productServiceImpl.findAllByUserAndIdIn(userCurrentSesion, composites.keySet()), idsExpends);
+	}*/
+	// New controller
+	@PostMapping
+	public List<ProductModel> addToCompositeProduct(@PathVariable("id") Long compositeId ,
+			@RequestBody Map<Long, Integer> composites, Authentication authentication) throws NotFoundException {
+		log.info("LOGGER:  product add new ingridient in  curent composite product");
+		User user = userServiceImpl.findOneByLogin("test1").get();
+		
+		//получаем композитный продукт в который будем добавлять новые ингридиенты и их расход
+		CompositeProduct compositeProduct = getCompositeProduct(compositeId, user);
+		List<Product> prducts = productServiceImpl.findAllByUserAndIdIn(user, composites.keySet());
+		Set<ProductMap> productMaps = new HashSet<>();
+		prducts.forEach(product->{
+			ProductMap productMap = new ProductMap();
+			productMap.setCompositeProduct(compositeProduct);
+			productMap.setProduct(product);
+			productMap.setRate(composites.get(product.getId()));
+			productMaps.add(productMap);
+		});
+		productMapRepository.saveAll(productMaps);
+		return null;
 	}
-
-	
 	
 	
 	

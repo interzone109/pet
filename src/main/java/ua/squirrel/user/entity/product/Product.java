@@ -1,5 +1,7 @@
 package ua.squirrel.user.entity.product;
 
+import java.util.List;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,10 +11,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import lombok.Data;
 import ua.squirrel.user.entity.partner.Partner;
+import ua.squirrel.user.entity.product.map.ProductMap;
 import ua.squirrel.web.entity.user.User;
 
 @Data
@@ -49,5 +53,7 @@ public class Product {
 	@JoinColumn(name = "product_user_id", nullable = false)
 	private User user;
 
-	
+	@OneToMany(mappedBy = "product", fetch = FetchType.LAZY 
+			, cascade = CascadeType.ALL)
+	private List<ProductMap> productMap;
 }

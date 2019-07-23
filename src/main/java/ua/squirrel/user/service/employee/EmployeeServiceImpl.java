@@ -32,5 +32,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 	public Optional<Employee> findOneByIdAndUser(Long id, User user){
 		return employeeRepository.findOneByIdAndUser(id, user);
 	}
+	public Optional<Employee> findOneById(Long id){
+		return employeeRepository.findById(id);
+	}
 
 }

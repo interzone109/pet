@@ -494,6 +494,7 @@ public class FillDataUtil {
 	public void setEmployee(User user) {
 		Role role = new Role();
 		role = roleServiceImpl.findOneByName("EMPLOYEE");
+		
 		 List<Store> stores = storeServiceImpl.findAllByUser(user);
 		 stores.forEach(store->{
 
@@ -505,7 +506,7 @@ public class FillDataUtil {
 				employee.setHairingDate(LocalDate.now());
 				employee.setUser(user);
 				employee.setStore(store);
-				employee.setRole(roleServiceImpl.findOneByName("EMPLOYEE"));
+				employee.setRole(roleServiceImpl.findOneByName("EMPLOYEE_WITH_ACCESS"));
 				employee.setLogin("%autogenerate%"+store.getId()+ new Long(System.currentTimeMillis()).toString());
 				employee.setPassword("%autogenerate%"+store.getId()+ new Long(System.currentTimeMillis()).toString());
 

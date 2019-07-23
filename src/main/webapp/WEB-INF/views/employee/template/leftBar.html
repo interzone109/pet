@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+
+</head>
+<body>
+
+	<!-- Sidebar  -->
+	<nav id="sidebar" th:fragment="left_bar">
+		<div class="sidebar-header">
+			<a th:href="@{/user}">
+				<h3>Small One</h3> <strong>S1</strong>
+			</a>
+		</div>
+		<ul class="list-unstyled components">
+			<li><a href="#storeSubmenu" data-toggle="collapse"
+				aria-expanded="false" class="dropdown-toggle">
+				<i class="fas fa-home"></i> Магазины
+			</a>
+				<ul class="collapse list-unstyled" id="storeSubmenu">
+					<li><a th:href="@{/employee/leftover}">Продажи и остатки</a></li>
+				</ul></li>
+
+
+			<li><a href="#cashBoxSubmenu" data-toggle="collapse"
+				aria-expanded="false" class="dropdown-toggle"> <i
+					class="fas fa-cogs"></i> Касса
+			</a>
+				<ul class="collapse list-unstyled" id="cashBoxSubmenu">
+					<li><a th:href="@{/employee/cashbox/work}">Начать работу</a></li>
+				</ul></li>
+			
+		</ul>
+
+		<ul class="list-unstyled CTAs">
+			<li><a href="#" class="article">Контакты</a></li>
+			<li><a href="#" class="article">FAQ</a></li>
+		</ul>
+
+		<!-- jQuery CDN - Slim version (=without AJAX) -->
+		<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+		<!-- Popper.JS -->
+		<script
+			src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+		<!-- Bootstrap JS -->
+		<script
+			src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+
+	</nav>
+
+
+
+</body>
+</html>
