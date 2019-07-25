@@ -21,12 +21,16 @@ import org.springframework.web.bind.annotation.RestController;
 import javassist.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import ua.squirrel.user.entity.product.ProductModel;
+import ua.squirrel.user.entity.product.composite.CompositeProduct;
 import ua.squirrel.user.entity.product.composite.CompositeProductModel;
 import ua.squirrel.user.entity.store.Store;
+import ua.squirrel.user.entity.store.compositeproduct.node.StoreCompositeProductNode;
 import ua.squirrel.user.entity.store.consignment.Consignment;
+import ua.squirrel.user.entity.store.ingridient.node.StoreIngridientNode;
 import ua.squirrel.user.service.product.CompositeProductServiceImpl;
 import ua.squirrel.user.service.product.ProductServiceImpl;
 import ua.squirrel.user.service.store.StoreServiceImpl;
+import ua.squirrel.user.service.store.compositeproduct.node.StoreCompositeProductServiceImpl;
 import ua.squirrel.user.service.store.consignment.ConsignmentServiceImpl;
 import ua.squirrel.user.service.store.consignment.status.ConsignmentStatusServiceImpl;
 import ua.squirrel.user.utils.StoreUtil;
@@ -51,22 +55,10 @@ public class StoreAssortmentController {
 	private ConsignmentServiceImpl consignmentServiceImpl;
 	@Autowired
 	private ConsignmentStatusServiceImpl consignmentStatusServiceImpl;
+	@Autowired
+	private StoreCompositeProductServiceImpl storeCompositeProductServiceImpl;
+	
 
-
-	/**
-	 * Метод возращает список композитных продуктов и их цену для данной ТТ
-	 */
-	@GetMapping
-	public List<CompositeProductModel> getAssortment(@PathVariable("store_id")Long storeId, Authentication authentication) throws NotFoundException {
-
-		log.info("LOGGER: get assortment for current user");
-		User user = userServiceImpl.findOneByLogin("test1").get();
-		// делаем мапу ид цена
-		Map<Long, Integer> idsPrice = storeUtil.spliteIdsValue(getCurrentStore(user ,storeId).getProductPrice(), "price");
-		
-		return storeUtil.createProductPriceModel( compositeProductServiceImpl.findAllByUserAndIdIn(user, idsPrice.keySet()) ,idsPrice);
-		
-	}
 	
 	@GetMapping("/leftovers")
 	public List<ProductModel> getLeftOvers(@PathVariable("store_id")Long storeId, Authentication authentication) throws NotFoundException {
@@ -91,6 +83,22 @@ public class StoreAssortmentController {
 		 return productModel;
 		
 	}
+
+	/**
+	 * Метод возращает список композитных продуктов и их цену для данной ТТ
+	 */
+	@GetMapping
+	public List<CompositeProductModel> getAssortment(@PathVariable("store_id")Long storeId, Authentication authentication) throws NotFoundException {
+
+		log.info("LOGGER: get assortment for current user");
+		User user = userServiceImpl.findOneByLogin("test1").get();
+		// делаем мапу ид цена
+		Map<Long, Integer> idsPrice = storeUtil.spliteIdsValue(getCurrentStore(user ,storeId).getProductPrice(), "price");
+		
+		return storeUtil.createProductPriceModel( compositeProductServiceImpl.findAllByUserAndIdIn(user, idsPrice.keySet()) ,idsPrice);
+		
+	}
+
 	
 	
 	
@@ -99,7 +107,7 @@ public class StoreAssortmentController {
 	/**
 	 * Метод добавляет продукт на магазин 
 	 * и создает прихродную накладную
-	 */
+	 
 	@PostMapping
 	public List<CompositeProductModel> addToStoreProduct(@PathVariable("store_id") Long storeId ,
 			@RequestBody Map<Long, Integer> newProductPrice, Authentication authentication) throws NotFoundException {
@@ -136,9 +144,29 @@ public class StoreAssortmentController {
 		return storeUtil.createProductPriceModel( compositeProductServiceImpl.findAllByUserAndIdIn(user, cleanProductPrice.keySet())
 				,cleanProductPrice);
 	}
+	*/
 	
-	
-	
+	@PostMapping
+	public List<CompositeProductModel> addToStoreProduct(@PathVariable("store_id") Long storeId ,
+			@RequestBody Map<Long, Integer> newProductPrice, Authentication authentication) throws NotFoundException {
+		log.info("LOGGER: add new product price to store");
+		User user = userServiceImpl.findOneByLogin("test1").get();
+		Store store = getCurrentStore(user ,storeId) ;
+		
+		List<StoreCompositeProductNode> compositesPriceNode = store.getStoreCompositeProductNode();
+		//находим композитный продукт и создаем узел с ним и его ценой
+		Long compositeProductId = newProductPrice.keySet().iterator().next();
+		CompositeProduct compositsProduct = compositeProductServiceImpl.findByIdAndUser( compositeProductId, user).get();
+		StoreCompositeProductNode storeCompositeProductNode = new StoreCompositeProductNode();
+		storeCompositeProductNode.setCompositeProduct(compositsProduct);
+		storeCompositeProductNode.setPrice(newProductPrice.get(compositeProductId));
+		storeCompositeProductNode.setStore(store);
+		compositesPriceNode.add(storeCompositeProductNode);
+		storeCompositeProductServiceImpl.saveAll(compositesPriceNode);
+		
+		List<StoreIngridientNode> ingridientNode = store.getStoreIngridientNode();
+	return null;	
+	}
 	
 	
 	

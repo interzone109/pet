@@ -1,12 +1,11 @@
 package ua.squirrel.user.controller.product;
 
-import java.util.HashSet;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,9 +20,10 @@ import lombok.extern.slf4j.Slf4j;
 import ua.squirrel.user.entity.product.Product;
 import ua.squirrel.user.entity.product.ProductModel;
 import ua.squirrel.user.entity.product.composite.CompositeProduct;
-import ua.squirrel.user.entity.product.map.ProductMap;
+import ua.squirrel.user.entity.product.node.ProductMap;
 import ua.squirrel.user.service.product.CompositeProductServiceImpl;
 import ua.squirrel.user.service.product.ProductServiceImpl;
+import ua.squirrel.user.service.product.node.ProductMapServiceImpl;
 import ua.squirrel.user.utils.CompositeProductUtil;
 import ua.squirrel.web.entity.user.User;
 import ua.squirrel.web.service.registration.user.UserServiceImpl;
@@ -42,7 +42,7 @@ public class CompositeProductController {
 	private CompositeProductUtil  compositeProductUtil;
 	
 	@Autowired
-	private ProductMapServiceImpl  productMapRepository;
+	private ProductMapServiceImpl  productMapServiceImpl;
 	
 	/**
 	 * метод находит по id и User CompositeProduct и возращает информацию о нем и о
@@ -52,33 +52,14 @@ public class CompositeProductController {
 	public List<ProductModel> getCompositeProductInfo(Authentication authentication, @PathVariable("id") Long id)
 			throws NotFoundException {
 		log.info("LOGGER: return curent composite product");
-		User userCurrentSesion = userServiceImpl.findOneByLogin("test1").get();
+		User user = userServiceImpl.findOneByLogin("test1").get();
+		
+		CompositeProduct compositeProduct = getCompositeProduct(id, user);
 		// вызывается привaтный метод возращающий модель коспозитного продукта
-		return getProductExpendsModel(id, userCurrentSesion);
+		return compositeProductUtil.convertToProductModelFromMap(compositeProduct.getProductMap());
 
 	}
-
-	/**
-	 * метод добавляет новые ингридиенты и их расход к продукту
-	 
-	@PostMapping
-	public List<ProductModel> addToCompositeProduct(@PathVariable("id") Long compositeId ,
-			@RequestBody Map<Long, Integer> composites, Authentication authentication) throws NotFoundException {
-		log.info("LOGGER:  product add new ingridient in  curent composite product");
-		User userCurrentSesion = userServiceImpl.findOneByLogin("test1").get();
-		
-		//получаем композитный продукт в который будем добавлять новые ингридиенты и их расход
-		CompositeProduct compositeProduct = getCompositeProduct(compositeId, userCurrentSesion);
-		Map<Long, Integer> idsExpends = compositeProductUtil.spliteIdsValue(compositeProduct.getProductExpend(), "rate");
-		
-		//пнроверяем входные данные на дубликаты
-		idsExpends.putAll( compositeProductUtil.removeDublicateMap(idsExpends, composites));
-		// добавляем новые ингридиенты и расход к продукту и сохраняем в базу
-		compositeProduct.setProductExpend(compositeProductUtil.concatIdsValueToString(idsExpends, "rate"));
-		compositeProductServiceImpl.save(compositeProduct);
-		
-		return compositeProductUtil.convertToProductModelDescription(productServiceImpl.findAllByUserAndIdIn(userCurrentSesion, composites.keySet()), idsExpends);
-	}*/
+	
 	// New controller
 	@PostMapping
 	public List<ProductModel> addToCompositeProduct(@PathVariable("id") Long compositeId ,
@@ -89,7 +70,7 @@ public class CompositeProductController {
 		//получаем композитный продукт в который будем добавлять новые ингридиенты и их расход
 		CompositeProduct compositeProduct = getCompositeProduct(compositeId, user);
 		List<Product> prducts = productServiceImpl.findAllByUserAndIdIn(user, composites.keySet());
-		Set<ProductMap> productMaps = new HashSet<>();
+		List<ProductMap> productMaps = new ArrayList<>();
 		prducts.forEach(product->{
 			ProductMap productMap = new ProductMap();
 			productMap.setCompositeProduct(compositeProduct);
@@ -97,48 +78,26 @@ public class CompositeProductController {
 			productMap.setRate(composites.get(product.getId()));
 			productMaps.add(productMap);
 		});
-		productMapRepository.saveAll(productMaps);
-		return null;
+		productMapServiceImpl.saveAll(productMaps);
+		
+		
+		return compositeProductUtil.convertToProductModelFromMap(productMaps);
 	}
 	
 	
-	
-	/**
-	 * метод обновляет расход ингридиентa 
-	 */
-	@PutMapping("{ingridientId}")
-	public ProductModel updateProduct(@PathVariable("id") Long copositeId, @PathVariable("ingridientId") Long ingridientId, Authentication authentication,
+	@PutMapping("{productMapId}")
+	public ProductModel updateProduct(@PathVariable("id") Long copositeId, @PathVariable("productMapId") Long productMapId, Authentication authentication,
 			@RequestBody  Integer updateRate) throws NotFoundException {
 		
 		log.info("LOGGER: update  product expends");
 		User user = userServiceImpl.findOneByLogin("test1").get();
 		
 		// получаем текущий композитный продукт по Id и пользователю
-		CompositeProduct compositeProduct = getCompositeProduct(copositeId, user); 
-		Map<Long, Integer> idsExpends = compositeProductUtil.spliteIdsValue(compositeProduct.getProductExpend(), "rate");
-		
-		if(idsExpends.containsKey(ingridientId)) {
-			String updateDate = compositeProductUtil.concatIdsValueDateToString(ingridientId, idsExpends.get(ingridientId), "rate");
-			idsExpends.put(ingridientId, updateRate);
-			
-			
-			compositeProduct.setProductExpend(compositeProductUtil.concatIdsValueToString(idsExpends, "rate"));
-			
-			//создаем новую строку с обновлениями
-			StringBuilder update = compositeProduct.getExpendUpdate() != null
-					//если старая строка пустая то создаеться новая если нет то строки конкатинируються
-					? new StringBuilder(compositeProduct.getExpendUpdate())
-					: new StringBuilder();
-					update.append(updateDate);
-					compositeProduct.setExpendUpdate(update.toString());
-					
-					compositeProductServiceImpl.save(compositeProduct);
-		}
-		
-		return  compositeProductUtil.convertToProductModel(productServiceImpl.findOneByIdAndUser(ingridientId, user).get(), idsExpends.get(ingridientId)) ;
+		ProductMap node = productMapServiceImpl.findOneByIdAndCompositeProduct(productMapId, getCompositeProduct(copositeId, user));
+		node.setRate(updateRate);
+		productMapServiceImpl.save(node);
+		return  compositeProductUtil.convertToProductPriceModel(node);
 	}
-	
-	
 
 
 	private CompositeProduct getCompositeProduct(Long id, User currentUser) throws NotFoundException {
@@ -146,14 +105,6 @@ public class CompositeProductController {
 				.orElseThrow(() -> new NotFoundException("Composite product not found"));
 	}
 
-	// метод возращает описание продукта с его расходом
-	private List<ProductModel> getProductExpendsModel(Long id, User currentUser) throws NotFoundException {
-
-		CompositeProduct compositeProduct = getCompositeProduct(id, currentUser);
-		Map<Long, Integer> idsExpends = compositeProductUtil.spliteIdsValue(compositeProduct.getProductExpend(), "rate");	
-		
-		return compositeProductUtil.convertToProductModelDescription(productServiceImpl.findAllById(idsExpends.keySet()), idsExpends);
-	}
 
 	/*
 	  тестовый джейсон Post 

@@ -20,6 +20,16 @@ import ua.squirrel.user.service.store.consignment.status.ConsignmentStatusServic
 
 @Component
 public class StoreUtil extends SmallOneUtil {
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	@Autowired
 	private StoreServiceImpl storeServiceImpl;
 	@Autowired

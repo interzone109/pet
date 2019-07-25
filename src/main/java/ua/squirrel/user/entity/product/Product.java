@@ -16,7 +16,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import lombok.Data;
 import ua.squirrel.user.entity.partner.Partner;
-import ua.squirrel.user.entity.product.map.ProductMap;
+import ua.squirrel.user.entity.product.node.ProductMap;
 import ua.squirrel.web.entity.user.User;
 
 @Data

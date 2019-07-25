@@ -1,6 +1,6 @@
 package ua.squirrel.user.entity.product.composite;
 
-import java.util.Set;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -19,7 +19,7 @@ import javax.persistence.Table;
 import lombok.Data;
 import ua.squirrel.user.entity.product.MeasureProduct;
 import ua.squirrel.user.entity.product.PropertiesProduct;
-import ua.squirrel.user.entity.product.map.ProductMap;
+import ua.squirrel.user.entity.product.node.ProductMap;
 import ua.squirrel.web.entity.user.User;
 
 /**
@@ -40,18 +40,6 @@ public class CompositeProduct {
 	@Column(name = "name", nullable = false)
 	private String name;
 	
-	//поле хранит текущай расход и id расходуемого ингридиента
-	@Column(name = "expend_product_id", length=512)
-	private String productExpend ;
-	
-	//поле хранит предыдущий расход и дату его изменения
-	@Column(name = "expend_update_id", length=1024)
-	private String expendUpdate ;
-	
-	//поле хранит дату и ид удаленного ингридиента
-	@Column(name = "delete_ingridient_date_id", length=1024)
-	private String ingridientDelete ;
-	
 	@Column(name = "product_group")
 	private String group;
 	
@@ -69,5 +57,25 @@ public class CompositeProduct {
 	
 	@OneToMany(mappedBy = "compositeProduct", fetch = FetchType.LAZY 
 			, cascade = CascadeType.ALL)
-	private Set<ProductMap> productMap;
+	private List<ProductMap> productMap;
+	
+	
+	
+	
+	
+	
+	//поле хранит текущай расход и id расходуемого ингридиента
+	@Column(name = "expend_product_id", length=512)
+	@Deprecated
+	private String productExpend ;
+	
+	//поле хранит предыдущий расход и дату его изменения
+	@Column(name = "expend_update_id", length=1024)
+	@Deprecated
+	private String expendUpdate ;
+	
+	//поле хранит дату и ид удаленного ингридиента
+	@Column(name = "delete_ingridient_date_id", length=1024)
+	@Deprecated
+	private String ingridientDelete ;
 }

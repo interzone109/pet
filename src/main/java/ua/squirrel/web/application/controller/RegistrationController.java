@@ -62,17 +62,17 @@ public class RegistrationController {
 		l.get(1).setUser(user1);
 		l.get(2).setUser(user1);
 		
-		fillDataUtil.getProduct(user1);
+		//fillDataUtil.getProduct(user1);
 		
-		userServiceImpl.save(user1);
+		//userServiceImpl.save(user1);
 		
-		fillDataUtil.getStore(user1);
+		//fillDataUtil.getStore(user1);
 		
-		fillDataUtil.setSpend(user1);
+		//fillDataUtil.setSpend(user1);
 		
-		fillDataUtil.setInvoice(user1);
+		//fillDataUtil.setInvoice(user1);
 		
-		fillDataUtil.setEmployee(user1);
+		//fillDataUtil.setEmployee(user1);
 		
 		return UserModel.builder()
 				.login(user1.getLogin())
