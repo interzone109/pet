@@ -1,4 +1,5 @@
-package ua.squirrel.user.entity.store.ingridient.node;
+package ua.squirrel.user.entity.store.consignment.node;
+ 
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -8,29 +9,32 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.ManyToOne; 
 import javax.persistence.Table;
 
 import lombok.Data;
-import ua.squirrel.user.entity.product.Product;
-import ua.squirrel.user.entity.store.Store; 
+import ua.squirrel.user.entity.product.Product; 
+import ua.squirrel.user.entity.store.consignment.Consignment;
 
 @Data
 @Entity
-@Table(name = "store_ingridient_node")
-public class StoreIngridientNode {
+@Table(name = "consignments_node")
+public class ConsignmentNode {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "store_ingridient_id", nullable = false)
+	@Column(name = "consignment_node_id", nullable = false)
 	private long id;
-	
+
 	@ManyToOne(fetch = FetchType.LAZY, cascade=CascadeType.ALL)
 	@JoinColumn(name = "product_id", nullable = false)
 	private Product product;
 	
 	@ManyToOne(fetch = FetchType.LAZY, cascade=CascadeType.ALL)
-	@JoinColumn(name = "store_id", nullable = false)
-	private Store store;
+	@JoinColumn(name = "consignment_id", nullable = false)
+	private Consignment consignment;
 	
-	private int leftOvers ;
+	private int unitPrice;
+	
+	private int quantity;
+
 }

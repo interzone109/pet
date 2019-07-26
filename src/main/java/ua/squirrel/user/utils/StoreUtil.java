@@ -11,10 +11,13 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import ua.squirrel.user.entity.product.Product;
 import ua.squirrel.user.entity.product.composite.CompositeProduct;
 import ua.squirrel.user.entity.product.composite.CompositeProductModel;
 import ua.squirrel.user.entity.store.Store;
+import ua.squirrel.user.entity.store.compositeproduct.node.StoreCompositeProductNode;
 import ua.squirrel.user.entity.store.consignment.Consignment;
+import ua.squirrel.user.entity.store.consignment.node.ConsignmentNode;
 import ua.squirrel.user.service.store.StoreServiceImpl;
 import ua.squirrel.user.service.store.consignment.status.ConsignmentStatusServiceImpl;
 
@@ -22,12 +25,42 @@ import ua.squirrel.user.service.store.consignment.status.ConsignmentStatusServic
 public class StoreUtil extends SmallOneUtil {
 	
 	
+	public List<CompositeProductModel> getProductPriceModel(List<StoreCompositeProductNode> storeCompositeProductNode) {
+		List<CompositeProductModel> compositeProducts = new ArrayList<>();
+		storeCompositeProductNode.forEach(compositeNode -> {
+			CompositeProduct compositeProd = compositeNode.getCompositeProduct();
+			compositeProducts.add(CompositeProductModel.builder().id(compositeProd.getId())
+					.name(compositeProd.getName()).group(compositeProd.getGroup())
+					.propertiesProduct(Integer.toString(compositeNode.getPrice()))
+					.measureProduct(compositeProd.getMeasureProduct().getMeasure()).build());
+		});
+		return compositeProducts;
+	}
 	
+	public Consignment fillConsigment( Consignment consignment, List<Product> currentProduct) {
+		List<ConsignmentNode> consignmentsNode = consignment.getConsignmentNode();
+		currentProduct.forEach(product->{
+			 
+			ConsignmentNode consignmentNode = new ConsignmentNode();
+			consignmentNode.setConsignment(consignment);
+			consignmentNode.setProduct(product);
+			consignmentNode.setQuantity(0);
+			consignmentNode.setUnitPrice(0);
+			consignmentsNode.add(consignmentNode);
+		});
+		return consignment;
+	}
 	
-	
-	
-	
-	
+	public Consignment uniqueConsigment( Consignment consignment, List<Product> currentProduct) {
+		List<Product> uniqueProduct = new ArrayList<>();
+		List<ConsignmentNode> consignmentsNode = consignment.getConsignmentNode();
+		consignmentsNode.forEach(consignmentNode->{
+			if(!currentProduct.contains(consignmentNode.getProduct())) {
+				uniqueProduct.add(consignmentNode.getProduct());
+			}
+		});
+		return fillConsigment(consignment, uniqueProduct);
+	}
 	
 	
 	@Autowired
@@ -36,6 +69,7 @@ public class StoreUtil extends SmallOneUtil {
 	private ConsignmentStatusServiceImpl consignmentStatusServiceImpl;
 
 	// метод создает модель продукт - цена
+	@Deprecated
 	public List<CompositeProductModel> createProductPriceModel(List<CompositeProduct> products,
 			Map<Long, Integer> mapValue) {
 
@@ -50,6 +84,7 @@ public class StoreUtil extends SmallOneUtil {
 	}
 
 	// метод обновляет цену для выбраного продукта
+	@Deprecated
 	public List<CompositeProductModel> updateCompositeProductPrice(Map<Long, Integer> updateProductPrice, Store store) {
 		List<CompositeProductModel> compositeProducts = new ArrayList<>();
 
@@ -100,6 +135,7 @@ public class StoreUtil extends SmallOneUtil {
 	// метод используется только в конкролере магазина addToStoreProduct где не
 	// указываются
 	// данные партнера
+	@Deprecated
 	public Consignment createOrUpdateConsigment(Store store, Set<Long> newIdsSet, Consignment consignment,
 			LocalDate calendar) {
 
@@ -134,6 +170,7 @@ public class StoreUtil extends SmallOneUtil {
 	// [price]*:[0-9]*quantity[0-9]*price
 
 	// метод обновляет остаток ингридиентов и их цену
+	@Deprecated
 	public void updateStoreLeftovers(Store store, String consignmentData, String sing) {
 		// получаем ид и количество ингридиентов из накладной
 		Map<Long, Integer> consignmentIdsQuantity = super.spliteIdsValue(consignmentData, "quantity[0-9]*price");
@@ -189,7 +226,7 @@ public class StoreUtil extends SmallOneUtil {
 
 		store.setProductLeftovers(storeLeftovers.toString());
 	}
-
+	@Deprecated
 	public void removeStoreLeftovers(Store store, Map<Long, Integer> ingridientQuantity) {
 		// получаем ид и количество ингридиентов из накладной
 		Map<Long, Integer> storeIdsQuantity = super.spliteIdsValue(store.getProductLeftovers(), "quantity[0-9]*price");
@@ -219,5 +256,7 @@ public class StoreUtil extends SmallOneUtil {
 		});
 		store.setProductLeftovers(storeLeftovers.toString());
 	}
+
+	
 
 }
