@@ -50,7 +50,7 @@ function updateConsignmentDataRow(responce, disabled){
 			try{
 			var dataStr = responce[id].split("quantity");// находим строку с кол и ценой по ид и разбиаем ее на две строки 
 			}catch{
-				console.log("errore");
+				return console.log("errore");
 			}
 			// создаем переменую из dataStr[0] разбив ее и формируем вывод в зависимости от меры хранения -шт, кг , л
 			var quantity = createMeasureProduct (dataStr[0].split(":")[1],$("#ingridient_measureProduct_id_"+id).text());

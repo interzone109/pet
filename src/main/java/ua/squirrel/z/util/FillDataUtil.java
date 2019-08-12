@@ -445,7 +445,7 @@ public class FillDataUtil {
 		 newStore = new Store();
 		newStore.setAddress("Тираспольский грук 15.Б");
 		newStore.setPhone("545-254-54");
-		newStore.setProductPrice(idsPrice.toString());
+		//newStore.setProductPrice(idsPrice.toString());
 		newStore.setMail("test@mail.com");
 		newStore.setUser(owner);
 		
@@ -455,7 +455,7 @@ public class FillDataUtil {
 		 newStore = new Store();
 		newStore.setAddress("Test");
 		newStore.setPhone("545-254-54");
-		newStore.setProductPrice(idsPrice.toString());
+		//newStore.setProductPrice(idsPrice.toString());
 		newStore.setMail("test@mail.com");
 		newStore.setUser(owner);
 		
@@ -477,7 +477,7 @@ public class FillDataUtil {
 			 for (int i = 1; i < day; i++) {
 				 Invoice newInvoice = new Invoice();
 					newInvoice.setDate(LocalDate.of(2019, 6, i));
-					newInvoice.setInvoiceData("1:2sale2:3sale3:7sale");
+				//	newInvoice.setInvoiceData("1:2sale2:3sale3:7sale");
 					newInvoice.setMeta("30000:%:33000:%:1");
 					newInvoice.setStore(store);
 				invoices.add(newInvoice);

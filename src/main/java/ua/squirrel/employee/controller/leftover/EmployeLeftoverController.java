@@ -37,7 +37,8 @@ public class EmployeLeftoverController {
 	private StoreUtil storeUtil;
 
 	/**
-	 * метод возращаетсписок ингридиентов с магазина на котором закреплен сотрудник
+	 * метод возращает список ингридиентов магазина на котором закреплен сотрудник
+	 * который авторизирован в системе
 	 * */
 	@GetMapping
 	public List<ProductModel> getLeftOvers( Authentication authentication) throws NotFoundException {
@@ -46,7 +47,7 @@ public class EmployeLeftoverController {
 		//Employee employee = employeeServiceImpl.findOneById(authentication.getId()).get();
 		Employee employee = employeeServiceImpl.findOneById(1l).get();
 		// делаем мапу ид количество
-		Map<Long, Integer> idsQuantity = storeUtil.spliteIdsValue(getCurrentStore(employee.getUser() ,employee.getStore().getId()).getProductLeftovers(), "quantity[0-9]*price");
+		/*Map<Long, Integer> idsQuantity = storeUtil.spliteIdsValue(getCurrentStore(employee.getUser() ,employee.getStore().getId()).getProductLeftovers(), "quantity[0-9]*price");
 		
 		List<ProductModel> productModel = new ArrayList<>();
 		  productServiceImpl.findAllByUserAndIdIn(employee.getUser(), idsQuantity.keySet()).forEach(product->{
@@ -60,7 +61,8 @@ public class EmployeLeftoverController {
 					  .build()
 					  );
 		});
-		 return productModel;
+		 return productModel;*/
+		return null;
 		
 	}
 	

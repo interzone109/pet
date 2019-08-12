@@ -39,6 +39,7 @@ public class ConsignmentUtil extends SmallOneUtil {
 	 * Медот получает накладную , количество расхода ингридиентов и остатки на магазине ( для получение цены ингридиента)
 	 * Далее добавляем в накладную расход и цену ингридиента и сохраняем данные.
 	 * */
+	@Deprecated
 	public void addData(Consignment consignment, Map<Long, Integer> ingridientQuantity, String leftovers) {
 		//получаем ид и количество ингридиентов из накладной
 		Map<Long, Integer> consignmentIdsQuantity = super.spliteIdsValue(consignment.getConsignmentData(), "quantity[0-9]*price");

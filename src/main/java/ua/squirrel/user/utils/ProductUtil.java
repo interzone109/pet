@@ -10,6 +10,7 @@ import ua.squirrel.user.entity.product.Product;
 import ua.squirrel.user.entity.product.ProductModel;
 
 @Component
+@Deprecated
 public class ProductUtil extends SmallOneUtil {
 	
 		public List<ProductModel> createProductPriceQuantityModelList(List<Product> products, String idPriceQuantity){

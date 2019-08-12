@@ -24,14 +24,12 @@ import ua.squirrel.user.entity.product.ProductModel;
 import ua.squirrel.user.entity.product.composite.CompositeProductModel;
 import ua.squirrel.user.entity.store.Store;
 import ua.squirrel.user.entity.store.compositeproduct.node.StoreCompositeProductNode;
-import ua.squirrel.user.entity.store.consignment.Consignment;
-import ua.squirrel.user.entity.store.ingridient.node.StoreIngridientNode;
+import ua.squirrel.user.entity.store.consignment.Consignment; 
 import ua.squirrel.user.service.product.CompositeProductServiceImpl; 
 import ua.squirrel.user.service.store.StoreServiceImpl;
 import ua.squirrel.user.service.store.compositeproduct.node.StoreCompositeProductServiceImpl;
 import ua.squirrel.user.service.store.consignment.ConsignmentServiceImpl;
-import ua.squirrel.user.service.store.consignment.status.ConsignmentStatusServiceImpl;
-import ua.squirrel.user.service.store.ingridient.node.StoreIngridientNodeServiceImpl;
+import ua.squirrel.user.service.store.consignment.status.ConsignmentStatusServiceImpl; 
 import ua.squirrel.user.utils.StoreUtil;
 import ua.squirrel.web.entity.user.User;
 import ua.squirrel.web.service.registration.user.UserServiceImpl;
@@ -48,8 +46,6 @@ public class StoreAssortmentController {
 	private ConsignmentStatusServiceImpl consignmentStatusServiceImpl;
 	@Autowired
 	private StoreCompositeProductServiceImpl storeCompositeProductServiceImpl;
-	@Autowired
-	private StoreIngridientNodeServiceImpl storeIngridientNodeServiceImpl;
 	@Autowired
 	private CompositeProductServiceImpl compositeProductServiceImpl;
 	@Autowired
@@ -103,9 +99,8 @@ public class StoreAssortmentController {
 	
 	/**
 	 * Метод добавляет продукт на магазин 
-	 * и создает прихродную накладную
+	 * и создает прихродную накладную с ингридиентами продукта
 	*/
-	
 	@PostMapping
 	public List<CompositeProductModel> addToStoreProduct(@PathVariable("store_id") Long storeId ,
 			@RequestBody Map<Long, Integer> newProductPrice, Authentication authentication) throws NotFoundException {
@@ -113,52 +108,33 @@ public class StoreAssortmentController {
 		User user = userServiceImpl.findOneByLogin("test1").get();
 		Store store = getCurrentStore(user ,storeId) ;
 		
-		List<Product> currentProduct = new ArrayList<>();
+		List<Product> newIngridients = new ArrayList<>();
 		List<StoreCompositeProductNode> compositesPriceNode = new ArrayList<>();
 		//находим композитный продукт
 		compositeProductServiceImpl.findAllByUserAndIdIn(user, newProductPrice.keySet()).forEach(compProd->{
+			boolean isProductExist = false ;//проверяем есть ли уже такой продукт на магазине
+			for(StoreCompositeProductNode node : store.getStoreCompositeProductNode()){
+				if(node.getCompositeProduct().getId() == compProd.getId()) {
+					isProductExist = true;
+				}
+			};
+			if(!isProductExist) {
 			// создаем узел для хранения продукта цены и магазина
-				StoreCompositeProductNode storeCompositeProductNode = new StoreCompositeProductNode();
+			StoreCompositeProductNode storeCompositeProductNode = new StoreCompositeProductNode();
 			storeCompositeProductNode.setCompositeProduct(compProd);
 			storeCompositeProductNode.setPrice(newProductPrice.get(compProd.getId()));
 			storeCompositeProductNode.setStore(store);
 			compositesPriceNode.add(storeCompositeProductNode);
-			
+			//получаем ингридиенты композитного продукта		
 			compProd.getProductMap().forEach(productMap->{
 				Product product = productMap.getProduct() ;
-				if(!currentProduct.contains(product)) {
-				currentProduct.add(product);
+				if(!newIngridients.contains(product)) {
+				newIngridients.add(product);
 				}
 			});
-		
+			}
 		});
 		storeCompositeProductServiceImpl.saveAll(compositesPriceNode);
-		
-		
-		List<StoreIngridientNode> newStoreLeftOverNode = new ArrayList<>();
-	
-		if(store.getStoreIngridientNode().size()== 0) {
-			currentProduct.forEach(product->{
-				//получаем новые ингридиенты на магазин
-				StoreIngridientNode storeIngridientNode = new StoreIngridientNode();
-				storeIngridientNode.setLeftOvers(0);
-				storeIngridientNode.setProduct(product);
-				storeIngridientNode.setStore(store);
-				newStoreLeftOverNode.add(storeIngridientNode);
-			});
-		}else {
-			store.getStoreIngridientNode().forEach(node->{//получаем узел с остатками ингридиента
-				if(!currentProduct.contains(node.getProduct())) {// если такой ингридиент есть в колекции с новыми ингридиентами то пропускаем его
-					//получаем новые ингридиенты на магазин
-					StoreIngridientNode storeIngridientNode = new StoreIngridientNode();
-					storeIngridientNode.setLeftOvers(0);
-					storeIngridientNode.setProduct(node.getProduct());
-					storeIngridientNode.setStore(store);
-					newStoreLeftOverNode.add(storeIngridientNode);
-				}
-			});//сохраняем новые ингридиенты на остатке в магазине
-		}
-		storeIngridientNodeServiceImpl.saveAll(newStoreLeftOverNode);
 		
 		//создаем прихоную накладную при добавлении нового товара на магазин
 		LocalDate calendar =  LocalDate.now() ;
@@ -170,7 +146,7 @@ public class StoreAssortmentController {
 		if(consignmentOptional.isPresent()) {
 			  consignment = consignmentOptional.get();
 			  if(!consignment.isApproved()) {
-				consignment = storeUtil.uniqueConsigment( consignment , currentProduct);
+				consignment = storeUtil.uniqueConsigment( consignment , newIngridients);
 			  }
 		}else {
 			consignment = new Consignment();
@@ -180,14 +156,10 @@ public class StoreAssortmentController {
 			consignment.setStore(store);
 			consignment.setConsignmentStatus(consignmentStatusServiceImpl.findOneByName("ARRIVAL").get());
 			consignment.setConsignmentNode(new ArrayList<>());
-			consignment = storeUtil.fillConsigment( consignment , currentProduct);
+			consignment = storeUtil.fillConsigment( consignment , newIngridients);
 			
 		}
-
-		store.getConsignment().add(consignment);
-		storeServiceImpl.save(store);
-		
-		
+		consignmentServiceImpl.save(consignment);
 	return storeUtil.getProductPriceModel(compositesPriceNode);	
 	}
 	

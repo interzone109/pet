@@ -2,6 +2,7 @@ package ua.squirrel.user.service.store;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,6 +32,11 @@ public class StoreServiceImpl implements StoreService {
 	@Override
 	public List<Store> findAllByUser(User user) {
 		return storeRepository.findAllByUser(user);
+	}
+
+	public void saveAll(Set<Store> storeList) {
+		storeRepository.saveAll(storeList);
+		
 	}
 	
 

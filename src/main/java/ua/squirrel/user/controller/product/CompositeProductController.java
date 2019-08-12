@@ -1,9 +1,13 @@
 package ua.squirrel.user.controller.product;
 
 
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
+import java.util.Map; 
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -21,10 +25,17 @@ import ua.squirrel.user.entity.product.Product;
 import ua.squirrel.user.entity.product.ProductModel;
 import ua.squirrel.user.entity.product.composite.CompositeProduct;
 import ua.squirrel.user.entity.product.node.ProductMap;
+import ua.squirrel.user.entity.store.Store;
+import ua.squirrel.user.entity.store.consignment.Consignment;
+import ua.squirrel.user.entity.store.consignment.ConsignmentStatus; 
 import ua.squirrel.user.service.product.CompositeProductServiceImpl;
 import ua.squirrel.user.service.product.ProductServiceImpl;
 import ua.squirrel.user.service.product.node.ProductMapServiceImpl;
+import ua.squirrel.user.service.store.StoreServiceImpl;
+import ua.squirrel.user.service.store.consignment.ConsignmentServiceImpl;
+import ua.squirrel.user.service.store.consignment.status.ConsignmentStatusServiceImpl; 
 import ua.squirrel.user.utils.CompositeProductUtil;
+import ua.squirrel.user.utils.StoreUtil;
 import ua.squirrel.web.entity.user.User;
 import ua.squirrel.web.service.registration.user.UserServiceImpl;
 
@@ -40,7 +51,14 @@ public class CompositeProductController {
 	private ProductServiceImpl productServiceImpl;
 	@Autowired
 	private CompositeProductUtil  compositeProductUtil;
-	
+	@Autowired
+	private ConsignmentServiceImpl consignmentServiceImpl;
+	@Autowired
+	private ConsignmentStatusServiceImpl consignmentStatusServiceImpl;
+	@Autowired
+	private StoreServiceImpl storeServiceImpl;
+	@Autowired
+	private StoreUtil storeUtil;
 	@Autowired
 	private ProductMapServiceImpl  productMapServiceImpl;
 	
@@ -79,8 +97,42 @@ public class CompositeProductController {
 			productMaps.add(productMap);
 		});
 		productMapServiceImpl.saveAll(productMaps);
-		
-		
+		Set<Store> storeList = new HashSet<>();
+		List<Store> stores = storeServiceImpl.findAllByUser(user);
+		stores.forEach(store->{
+			store.getStoreCompositeProductNode().forEach(compositeNode->{
+				if(compositeNode.getCompositeProduct().getId() == compositeId) {
+					storeList.add(store);
+				}
+			});
+		}); 
+		LocalDate calendar =  LocalDate.now() ;
+		ConsignmentStatus consignmentStatus = consignmentStatusServiceImpl.findOneByName("ARRIVAL").get();
+		 storeList.forEach(store->{
+			 ///находим для каждого магазина накладную за сегоднешний день
+			 List<Consignment> consigmentList = store.getConsignment().stream().filter(consigment->
+			consigment.getConsignmentStatus().equals(consignmentStatus) &&
+			consigment.getDate().equals(calendar)&&
+			!consigment.isApproved() &&
+			consigment.getMeta().startsWith("user:%:")).collect(Collectors.toList());
+			 Consignment consignment = null;
+			 if(consigmentList.size() >= 1) {//добавляем новый ингридиент
+				 consignment = consigmentList.get(0);
+				 consignment = storeUtil.fillConsigment( consignment , prducts);
+			 }else {//или создаем новую накладную
+				 consignment = new Consignment();
+				consignment.setDate(calendar);
+				consignment.setApproved(false);
+				consignment.setMeta("user:%:Поступление новых ингридиентов на *" + store.getAddress() + "*");
+				consignment.setStore(store);
+				consignment.setConsignmentStatus(consignmentStatusServiceImpl.findOneByName("ARRIVAL").get());
+				consignment.setConsignmentNode(new ArrayList<>());
+				consignment = storeUtil.fillConsigment( consignment , prducts);
+				consignmentServiceImpl.save(consignment);
+			 } 
+		 }); 
+		 storeServiceImpl.saveAll(storeList);
+		 
 		return compositeProductUtil.convertToProductModelFromMap(productMaps);
 	}
 	

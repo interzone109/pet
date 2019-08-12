@@ -62,36 +62,5 @@ public class Store {
 	@JoinColumn(name = "store_user_id", nullable = false)
 	private User user;
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	// остатки ингридиентов (id) и их количество ("quantity") на магазине
-	@Column(name = "product_leftovers", length = 4000)
-	@Deprecated
-	private String productLeftovers;
-
-	// композитный продукт (id) - цена для магазина
-	@Column(name = "comosite_product_price_id", length = 40000)
-	@Deprecated
-	private String productPrice;
-
-	// композитный продукт (id) -старая цена для магазина и дата изменения цены
-	@Column(name = "price_update_id", length = 4000)
-	@Deprecated
-	private String priceUpdate;
-
-	// удаленные продукты и дата удаления
-	@Column(name = "product_delete_id", length = 4000)
-	@Deprecated
-	private String productDelete;
 
 }

@@ -1,6 +1,8 @@
 package ua.squirrel.user.controller.store.invoice;
 
+import java.awt.print.Pageable;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -8,6 +10,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -20,16 +23,22 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javassist.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
+import ua.squirrel.user.entity.product.Product;
+import ua.squirrel.user.entity.product.composite.CompositeProduct;
 import ua.squirrel.user.entity.store.Store;
 import ua.squirrel.user.entity.store.consignment.Consignment;
 import ua.squirrel.user.entity.store.consignment.ConsignmentStatus;
+import ua.squirrel.user.entity.store.consignment.node.ConsignmentNode;
 import ua.squirrel.user.entity.store.invoice.Invoice;
 import ua.squirrel.user.entity.store.invoice.InvoiceModel;
+import ua.squirrel.user.entity.store.invoice.node.InvoiceNode;
 import ua.squirrel.user.service.product.CompositeProductServiceImpl;
 import ua.squirrel.user.service.store.StoreServiceImpl;
 import ua.squirrel.user.service.store.consignment.ConsignmentServiceImpl;
+import ua.squirrel.user.service.store.consignment.node.ConsignmentNodeServiceImpl;
 import ua.squirrel.user.service.store.consignment.status.ConsignmentStatusServiceImpl;
 import ua.squirrel.user.service.store.invoice.InvoiceServiceImpl;
+import ua.squirrel.user.service.store.invoice.node.InvoiceNodeServiceImpl;
 import ua.squirrel.user.utils.ConsignmentUtil;
 import ua.squirrel.user.utils.InvoiceUtil;
 import ua.squirrel.user.utils.StoreUtil;
@@ -50,9 +59,13 @@ public class InvoiceController {
 	@Autowired
 	private ConsignmentServiceImpl consignmentServiceImpl;
 	@Autowired
+	private ConsignmentNodeServiceImpl consignmentNodeServiceImpl;
+	@Autowired
 	private ConsignmentStatusServiceImpl consignmentStatusServiceImpl;
 	@Autowired
 	private CompositeProductServiceImpl compositeProductServiceImpl;
+	@Autowired
+	private InvoiceNodeServiceImpl invoiceNodeServiceImpl;
 	@Autowired
 	private ConsignmentUtil consignmentUtil;
 	@Autowired 
@@ -63,7 +76,7 @@ public class InvoiceController {
 	
 	/**
 	 * Метод принимает модель InvoiceModel
-	 * и возращает одинт или список инвойсов
+	 * и возращает один или список инвойсов
 	 * 
 	 * */
 	@PostMapping("/find") 
@@ -89,9 +102,11 @@ public class InvoiceController {
 		return invoiceUtil.createInvoiceModel(invoices);
 		}
 	
+	
+	
 	/**
 	 * метод добавляет данные в ивойс
-	 * */
+	 * 
 	@PutMapping("{storeId}")
 	public InvoiceModel saleProduct( Authentication authentication,
 			@RequestBody InvoiceModel invoiceModel , @PathVariable("storeId")Long storeId) throws NotFoundException {
@@ -184,9 +199,97 @@ public class InvoiceController {
 		 storeServiceImpl.save(store);
 		 
 		return invoiceUtil.createInvoiceMetaModel(invoice) ;
-	}
-	
+	}*/
 
+	
+	/**
+	 * метод добавляет данные в ивойс
+	 * */
+	@PutMapping("{storeId}")
+	public InvoiceModel saleProduct( Authentication authentication,
+			@RequestBody InvoiceModel invoiceModel , @PathVariable("storeId")Long storeId) throws NotFoundException {
+		log.info("LOGGER: add sale to current date and store invoice");
+		User user = userServiceImpl.findOneByLogin("test1").get();
+		Store store = getCurrentStore(user ,storeId) ;
+		
+		// ннаходим инвойс за текущую дату
+		LocalDate date = LocalDate.now();
+		Optional<Invoice> invoiceOption = invoiceServiceImpl.findOneByStoreAndDate(store, date);
+		Map<Long, Integer> invoiceData = invoiceModel.getInvoiceData();
+		List<CompositeProduct> compositeProductList = new ArrayList<>();
+		if(invoiceOption.isPresent()) {
+			Invoice invoice = invoiceOption.get();
+			List<InvoiceNode> invoiceNodeList = new ArrayList<>();
+			//получаем все проданы продукты
+			compositeProductList = compositeProductServiceImpl.findAllByUserAndIdIn(user, invoiceData.keySet());
+			compositeProductList.forEach(compositeProduct->{//создаем запись в инвойсе с продуктом и его продажей
+				InvoiceNode invoiceNode = new InvoiceNode();
+				invoiceNode.setTime(LocalDateTime.now());
+				invoiceNode.setCompositeProduct(compositeProduct);
+				invoiceNode.setInvoice(invoice);
+				invoiceNode.setSaleQuantity(invoiceData.get(compositeProduct.getId()));
+				invoiceNodeList.add(invoiceNode );
+			});//сохраняем новые продажи для инвойса
+			invoiceNodeServiceImpl.saveAll(invoiceNodeList);
+			
+		}else {//если инвойс не найден значит что он небыл заранее создан в контроллере createOrFindInvoice
+			return  InvoiceModel.builder().build() ;
+		}
+		//делаем мапу ингридиента и его общего расхода из инвойса
+		Map<Product, Integer> productRateMap = new HashMap<>();
+		compositeProductList.forEach(compProduct->{
+			compProduct.getProductMap().forEach(productNode->{
+				Product product = productNode.getProduct();
+				if(productRateMap.containsKey(product)) {
+					int quntity = productRateMap.get(product);
+					productRateMap.put(product, quntity+invoiceData.get(product.getId()));
+				}else {
+					productRateMap.put(product, invoiceData.get(product.getId()));
+				}
+			});
+		});
+		
+		
+		consignmentNodeServiceImpl.getAllProductFIFO(productRateMap.keySet()).forEach(prod->{
+			System.err.println(prod.getQuantity() + prod.getUnitPrice());
+		});
+		
+		ConsignmentStatus consStatus = consignmentStatusServiceImpl.findOneByName("CONSAMPTION").get();
+		// находим расходную накладную за сегодняшний день
+		// эта накладная создаеться автоматически и отвечаетза расход ингридиентов
+		// относительно количества продаж
+		 Optional<Consignment> consOptional = consignmentServiceImpl.findOneByDateAndStoreAndConsignmentStatusAndIsApprovedAndMetaIgnoreCaseContaining
+				 (date, store, consStatus, true, "auto:%:");
+		 Consignment consignment = null ;
+		 if(consOptional.isPresent()) {
+			 consignment = consOptional.get();
+			 
+		 }else {
+			consignment = new Consignment();
+			consignment.setDate(date);
+			consignment.setApproved(true);
+			consignment.setMeta("auto:%:");
+			consignment.setStore(store);
+			consignment.setConsignmentStatus(consStatus);
+			 
+			List<ConsignmentNode> consignmentsNode = new ArrayList<>();
+			productRateMap.keySet().forEach(product->{
+				ConsignmentNode consignmentNode = new ConsignmentNode();
+				consignmentNode.setProduct(product);
+				consignmentNode.setQuantity(productRateMap.get(product));
+				consignmentNode.setUnitPrice(0);
+				consignmentsNode.add(consignmentNode);
+			});
+			 consignment.setConsignmentNode(consignmentsNode);
+		 }
+		
+		 
+		 
+		 
+		return null;
+	}
+
+	
 	
 	/**
 	 * метод возращает инвойс на текущю дату 

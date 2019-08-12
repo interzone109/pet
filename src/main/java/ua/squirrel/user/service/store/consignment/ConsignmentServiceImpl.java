@@ -49,5 +49,10 @@ public class ConsignmentServiceImpl implements ConsignmentService {
 		return consignmentRepository.findOneByIdAndStore( consignmentId,  store);
 	}
 
-	
+	public void saveAll(List<Consignment> consigmentList) {
+		consignmentRepository.saveAll(consigmentList);
+		
+	}
+
+
 }
