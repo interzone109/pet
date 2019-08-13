@@ -23,11 +23,10 @@ import ua.squirrel.user.entity.product.node.ProductMap;
 import ua.squirrel.web.entity.user.User;
 
 /**
- * Класс описывает продукт который создает пользовтель 
- * из доступных товаров у поставщика
- * 
+ * Класс CompositeProduct описывает карту товара 
+ * (набор ингридиентов из которых состоит итоговый продукт).
+ * Хранит данные описывающие композитный продукт, узлы с расходом ингридиента.
  * */
-
 @Data
 @Entity
 @Table(name = "сomposite_product")
@@ -36,34 +35,30 @@ public class CompositeProduct {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "сomposite_product_id", nullable = false)
 	private long id;
-	
+	// наименование
 	@Column(name = "name", nullable = false)
 	private String name;
-	
+	//группа 
 	@Column(name = "product_group")
 	private String group;
-	
-	@OneToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "properties_id")
-	private PropertiesProduct propertiesProduct;
-	
+	// единица расхода продукта (шт/гр/мл)
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "measure_id")
 	private MeasureProduct measureProduct;
-	
+	//пользователь
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_owner_id", nullable = false)
 	private User user ; 
-	
+	// узлы с ингридиентом и расходом на условную единицу композитного продукта
 	@OneToMany(mappedBy = "compositeProduct", fetch = FetchType.LAZY 
 			, cascade = CascadeType.ALL)
 	private List<ProductMap> productMap;
 	
-	
-	
-	
-	
-	
+	// свойство ( в дальнейшем данная переменная будет удалена из-за отсутствия надобности в ней)
+	@Deprecated
+	@OneToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "properties_id")
+	private PropertiesProduct propertiesProduct;
 	//поле хранит текущай расход и id расходуемого ингридиента
 	@Column(name = "expend_product_id", length=512)
 	@Deprecated

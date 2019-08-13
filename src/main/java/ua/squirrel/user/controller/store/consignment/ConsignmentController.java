@@ -133,6 +133,7 @@ public class ConsignmentController {
 					long ingridientId = consignmentNode.getProduct().getId(); 
 					String[] data = consignmentData.get(ingridientId).split(":|quantity|price");
 					consignmentNode.setQuantity(Integer.parseInt(data[1]));
+					consignmentNode.setCurrentQuantity(Integer.parseInt(data[1]));
 					consignmentNode.setUnitPrice(Integer.parseInt(data[2]));
 				}
 			});

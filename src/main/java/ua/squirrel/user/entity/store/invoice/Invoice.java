@@ -18,7 +18,11 @@ import javax.persistence.Table;
 import lombok.Data;
 import ua.squirrel.user.entity.store.Store;
 import ua.squirrel.user.entity.store.invoice.node.InvoiceNode;
-
+/***
+ * Класс Invoice описывает сущность чека.
+ * Хранит данные о дате создания, денег в кассе на начало рабочего дня,
+ * служебную информацию а также магазин на котором произошла продажа.
+ * */
 @Entity
 @Table(name = "invoices")
 @Data
@@ -27,19 +31,17 @@ public class Invoice {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "invoice_id", nullable = false)
 	private long id;
-	
-	//денег на начало рабочего дня
+	//денег в кассе на начало рабочего дня
 	@Column(name = "cash_box_start_day", nullable = false)
 	private int cashBoxStartDay;
-	
 	// дата создания
 	private LocalDate date;
-	
+	//список проданых композитных продуктов
 	@OneToMany(mappedBy = "invoice", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<InvoiceNode> invoiceNode;
-	
+	//служебные данные
 	private String meta ;
-	
+	//магазин на котором происходит продажа
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "store_id", nullable = false)
 	private Store store;

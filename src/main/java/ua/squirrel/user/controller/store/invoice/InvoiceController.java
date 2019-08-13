@@ -224,7 +224,6 @@ public class InvoiceController {
 			compositeProductList = compositeProductServiceImpl.findAllByUserAndIdIn(user, invoiceData.keySet());
 			compositeProductList.forEach(compositeProduct->{//создаем запись в инвойсе с продуктом и его продажей
 				InvoiceNode invoiceNode = new InvoiceNode();
-				invoiceNode.setTime(LocalDateTime.now());
 				invoiceNode.setCompositeProduct(compositeProduct);
 				invoiceNode.setInvoice(invoice);
 				invoiceNode.setSaleQuantity(invoiceData.get(compositeProduct.getId()));
