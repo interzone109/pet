@@ -51,11 +51,13 @@ public class StoreUtil extends SmallOneUtil {
 		return compositeProducts;
 	}
 	
-	
+	/**
+	 * Метод создает новые узлы с ингридиентом и количеством
+	 * для накладной
+	 * */
 	public Consignment fillConsigment( Consignment consignment, List<Product> currentProduct) {
 		List<ConsignmentNode> consignmentsNode = consignment.getConsignmentNode();
 		currentProduct.forEach(product->{
-			 
 			ConsignmentNode consignmentNode = new ConsignmentNode();
 			consignmentNode.setConsignment(consignment);
 			consignmentNode.setProduct(product);
@@ -66,11 +68,14 @@ public class StoreUtil extends SmallOneUtil {
 		return consignment;
 	}
 	
-	
+	// метод добавляет новые ингридиенты в накладную
 	public Consignment uniqueConsigment( Consignment consignment, List<Product> currentProduct) {
-		List<Product> existProduct = new ArrayList<>();
-		consignment.getConsignmentNode().forEach(consignmentNode->
-			existProduct.add(consignmentNode.getProduct()) );
+		List<Product> existProduct = new ArrayList<>();//колекция хранит список уже имеющихся ингридиентов
+		consignment.getConsignmentNode().forEach(consignmentNode-> existProduct.add(consignmentNode.getProduct()) );
+		/**
+		 * передаем в метод fillConsigment список (currentProduct) который может содержать новые игридиенты
+		 * предварительно убераем из списка (currentProduct) все ингридиенты которые уже есть в накладной и находятся в списке (existProduct)
+		 * */
 		return fillConsigment(consignment, 
 				currentProduct.stream()
 				.filter(product->!existProduct.contains(product))

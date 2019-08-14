@@ -59,6 +59,7 @@ public class CompositeProduct {
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "properties_id")
 	private PropertiesProduct propertiesProduct;
+	
 	//поле хранит текущай расход и id расходуемого ингридиента
 	@Column(name = "expend_product_id", length=512)
 	@Deprecated

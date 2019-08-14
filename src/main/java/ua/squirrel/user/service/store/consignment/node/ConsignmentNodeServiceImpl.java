@@ -1,12 +1,11 @@
 package ua.squirrel.user.service.store.consignment.node;
 
-import java.util.Collection;
+ 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import ua.squirrel.user.entity.product.Product;
+ 
 import ua.squirrel.user.entity.store.consignment.node.ConsignmentNode; 
 
 @Service
@@ -22,7 +21,5 @@ public class ConsignmentNodeServiceImpl implements ConsignmentNodeService {
 		return сonsignmentNodeRepository.save(сonsignmentNode);
 	}
 	
-	public List<ConsignmentNode> getAllProductFIFO( Collection<Product> products){
-		return сonsignmentNodeRepository.getAllProductFIFO(products);
-	}
+	
 }

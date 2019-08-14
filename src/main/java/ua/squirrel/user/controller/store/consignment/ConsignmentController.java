@@ -72,32 +72,46 @@ public class ConsignmentController {
 	}
 
 	/**
-	 * Метод обновляет даные о количестве и цене в накладной
+	 * Контроллер обновляет даные о количестве и  цене ингридиентов в накладной,
+	 * так же добавляет новые ингридиенты.
+	 * 1. Получаем данные из баззы (магазин, накладная, список ингридиентов)
+	 * 2. Добавляем новые ингридиенты
+	 * 3. Обновляем у всех ингридиентов их количество
 	 */
 	@PutMapping("{storeId}/{consignmentId}")
 	public Map<Long, String> putСonsignmentData(Authentication authentication,
 			@RequestBody Map<Long, String> consignmentData, @PathVariable("storeId") Long storeId,
 			@PathVariable("consignmentId") Long consignmentId) throws NotFoundException {
 		log.info("LOGGER: update Consignment data");
-		User user = userServiceImpl.findOneByLogin("test1").get();
-		Store store = getCurrentStore(user, storeId);
-
+		/**
+		 *		1 пункт
+		 * */
+		User user = userServiceImpl.findOneByLogin("test1").get();//тестовый пользователь
+		Store store = getCurrentStore(user, storeId);//находим магазин к которому был направлен запрос
 		Consignment consignment = consignmentServiceImpl.findOneByIdAndStore(consignmentId, store)
-				.orElseThrow(() -> new NotFoundException("Status not found"));
+				.orElseThrow(() -> new NotFoundException("Status not found"));//находим накладную  в  которую будем вносить обновления
+		//если накладная не проведена то вносим изменения
+		if (!consignment.isApproved()) {//обновляем старые ингридиенты
+		//получаем список ингридиентов (в данном списке страные и новые ингридиенты
 		List<Product> ingridientList = productServiceImpl.findAllByUserAndIdIn(user, consignmentData.keySet());
-		
+		/**
+		 *		2 пункт
+		 * */
 		//добавляем новые ингридиенты если они есть
 		storeUtil.uniqueConsigment(consignment, ingridientList);
+		/**
+		 *		3 пункт
+		 * */
+		//получаем все узлы из накладной
 		List<ConsignmentNode> consignmentNodeList = consignment.getConsignmentNode(); 
-		if (!consignment.isApproved()) {//обновляем старые ингридиенты
+			//вносим изменения в количество ингридиентов для каждого узла
 			consignmentNodeList.forEach(consignmentNode->{
 				if(ingridientList.contains(consignmentNode.getProduct())) {
-					System.err.println(consignmentNode.getProduct().getName());
 					long ingridientId = consignmentNode.getProduct().getId(); 
 					String[] data = consignmentData.get(ingridientId).split(":|quantity|price");
 					consignmentNode.setQuantity(Integer.parseInt(data[1]));
+					consignmentNode.setCurrentQuantity(Integer.parseInt(data[1]));
 					consignmentNode.setUnitPrice(Integer.parseInt(data[2]));
-					
 				}
 			});
 			consignmentServiceImpl.save(consignment);
@@ -126,6 +140,7 @@ public class ConsignmentController {
 		
 		//добавляем новые ингридиенты если они есть
 		storeUtil.uniqueConsigment(consignment, ingridientList);
+		
 		List<ConsignmentNode> consignmentNodeList = consignment.getConsignmentNode(); 
 		if (!consignment.isApproved()) {//обновляем старые ингридиенты
 			consignmentNodeList.forEach(consignmentNode->{
@@ -139,6 +154,7 @@ public class ConsignmentController {
 			});
 			consignment.setApproved(true);
 			consignmentServiceImpl.save(consignment);
+			
 			//добавляем новые ингридиенты в остатки на магазин
 			List<StoreIngridientNode> nodeList = new ArrayList<>();
 			List<Product> existProductList = new ArrayList<>();

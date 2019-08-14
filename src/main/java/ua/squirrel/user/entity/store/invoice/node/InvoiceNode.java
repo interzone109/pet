@@ -1,6 +1,8 @@
 package ua.squirrel.user.entity.store.invoice.node;
 
 
+import java.time.LocalDateTime;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -37,5 +39,7 @@ public class InvoiceNode {
 	private Invoice invoice;
 	//количество продаж
 	private int saleQuantity;
+	//время продажи
+	private LocalDateTime time;
 
 }

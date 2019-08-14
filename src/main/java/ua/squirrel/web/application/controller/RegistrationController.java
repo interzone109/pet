@@ -55,18 +55,18 @@ public class RegistrationController {
 		user1.setMail("user1@mail.com");
 		user1.setRoles(role);
 		user1.setStates(state);
-		
+		userServiceImpl.save(user1);
 		
 		List<Partner> l = fillDataUtil.getPartner(user1);
 		l.get(0).setUser(user1);
 		l.get(1).setUser(user1);
 		l.get(2).setUser(user1);
 		
-		//fillDataUtil.getProduct(user1);
+		fillDataUtil.getProduct(user1);
 		
 		//userServiceImpl.save(user1);
 		
-		//fillDataUtil.getStore(user1);
+		fillDataUtil.getStore(user1);
 		
 		//fillDataUtil.setSpend(user1);
 		

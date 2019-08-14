@@ -248,9 +248,9 @@ public class InvoiceController {
 			});
 		});
 		
-		
-		consignmentNodeServiceImpl.getAllProductFIFO(productRateMap.keySet()).forEach(prod->{
-			System.err.println(prod.getQuantity() + prod.getUnitPrice());
+		//получаем список накладных дли реализации расчетов отпускаемых ингридиентов с по методу ФИФО
+		consignmentServiceImpl.getConsigmentFIFO(store , productRateMap.keySet()).forEach(consignment->{
+			System.err.println(consignment.getId() +" "+ consignment.getDate());
 		});
 		
 		ConsignmentStatus consStatus = consignmentStatusServiceImpl.findOneByName("CONSAMPTION").get();

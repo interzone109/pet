@@ -1,12 +1,14 @@
 package ua.squirrel.user.service.store.consignment;
 
 import java.time.LocalDate;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import ua.squirrel.user.entity.product.Product;
 import ua.squirrel.user.entity.store.Store;
 import ua.squirrel.user.entity.store.consignment.Consignment;
 import ua.squirrel.user.entity.store.consignment.ConsignmentStatus;
@@ -54,5 +56,7 @@ public class ConsignmentServiceImpl implements ConsignmentService {
 		
 	}
 
-
+	public List<Consignment> getConsigmentFIFO(Store storeId,  Collection<Product> products){
+		return consignmentRepository.getConsigmentFIFO(storeId, products);
+	}
 }
