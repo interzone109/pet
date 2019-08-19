@@ -32,6 +32,7 @@ public class StoreUtil extends SmallOneUtil {
 					.propertiesProduct(Integer.toString(productNode.getQuantity()))//quantity
 					.description(Integer.toString(productNode.getUnitPrice()))//price
 					.group(product.getGroup())
+					.partner(Integer.toString(productNode.getCurrentQuantity()))
 					.build()
 					);
 			
@@ -99,7 +100,22 @@ public class StoreUtil extends SmallOneUtil {
 			});
 		
 	}
-
+	public void updateStoreLeftoversForSale(Store store,  Map<Product, Integer> consignmentData, String sing ) {
+		List<StoreIngridientNode> ingridientNode = store.getStoreIngridientNode();
+		
+			ingridientNode.forEach(node->{
+				if(consignmentData.containsKey(node.getProduct())){ 
+					if (sing.equals("+")) {
+						int leftover = node.getLeftOvers()  + consignmentData.get(node.getProduct());
+						node.setLeftOvers(leftover);
+					}else {
+						int leftover = node.getLeftOvers() - consignmentData.get(node.getProduct());
+						node.setLeftOvers(leftover);
+					}
+				}
+			});
+		
+	}
 
 
 

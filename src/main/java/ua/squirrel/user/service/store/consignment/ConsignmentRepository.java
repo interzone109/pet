@@ -30,8 +30,6 @@ public interface ConsignmentRepository extends JpaRepository<Consignment, Long> 
 
 	Optional<Consignment> findOneByIdAndStore(Long consignmentId, Store store);
 	
-	 //@Query("SELECT  c FROM Consignment c   inner join c.consignmentNode p WHERE p.product IN products order by c.date")
-	//@Query("SELECT  c FROM Consignment c  WHERE c.store = store AND c.consignment.consignmentStatus =2 ORDER BY c.date inner join c.consignmentNode p WHERE p.product IN products")
-	@Query("SELECT  c FROM Consignment c   inner join c.consignmentNode p WHERE c.consignmentStatus =2 AND c.store = :storeId AND p.currentQuantity >0 AND  p.product IN :products order by c.date")
+	@Query("SELECT distinct c FROM Consignment c   inner join c.consignmentNode p WHERE c.consignmentStatus =1 AND c.store = :storeId AND p.currentQuantity >0 AND  p.product IN :products order by c.date")
 	List<Consignment> getConsigmentFIFO(@Param("storeId")Store storeId,  @Param("products")Collection<Product> products);
 }

@@ -3,8 +3,10 @@ package ua.squirrel.user.controller.store.consignment;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -126,6 +128,7 @@ public class ConsignmentController {
 	 * Метод обновляет даные о количестве и цене в накладной и закрывает накладную
 	 * для редактирования
 	 */
+	
 	@PutMapping("{storeId}/{consignmentId}/uproved")
 	public Map<Long, String> putСonsignmentDataUproved(Authentication authentication,
 			@RequestBody Map<Long, String> consignmentData, @PathVariable("storeId") Long storeId,
@@ -133,16 +136,15 @@ public class ConsignmentController {
 		log.info("LOGGER: uproved Consignment data");
 		User user = userServiceImpl.findOneByLogin("test1").get();
 		Store store = getCurrentStore(user, storeId);
-
 		Consignment consignment = consignmentServiceImpl.findOneByIdAndStore(consignmentId, store)
 				.orElseThrow(() -> new NotFoundException("Status not found"));
-		List<Product> ingridientList = productServiceImpl.findAllByUserAndIdIn(user, consignmentData.keySet());
-		
-		//добавляем новые ингридиенты если они есть
-		storeUtil.uniqueConsigment(consignment, ingridientList);
-		
-		List<ConsignmentNode> consignmentNodeList = consignment.getConsignmentNode(); 
+
 		if (!consignment.isApproved()) {//обновляем старые ингридиенты
+			
+			List<ConsignmentNode> consignmentNodeList = consignment.getConsignmentNode(); 
+			List<Product> ingridientList = productServiceImpl.findAllByUserAndIdIn(user, consignmentData.keySet());
+			//добавляем новые ингридиенты если они есть
+			storeUtil.uniqueConsigment(consignment, ingridientList);
 			consignmentNodeList.forEach(consignmentNode->{
 				if(ingridientList.contains(consignmentNode.getProduct())) {
 					long ingridientId = consignmentNode.getProduct().getId(); 
@@ -154,18 +156,18 @@ public class ConsignmentController {
 			});
 			consignment.setApproved(true);
 			consignmentServiceImpl.save(consignment);
+			/*****/
 			
 			//добавляем новые ингридиенты в остатки на магазин
-			List<StoreIngridientNode> nodeList = new ArrayList<>();
-			List<Product> existProductList = new ArrayList<>();
+			Set<StoreIngridientNode> nodeList = new HashSet<>();
+			Set<Product> existProductList = new HashSet<>();
 			store.getStoreIngridientNode().forEach(node->{
 				existProductList.add(node.getProduct());
-				System.err.println("exist product = ");
 			});
-			System.err.println("exist product = "+existProductList.size());
-			System.err.println("befor remove = "+ingridientList.size());
+			System.err.println("existProductList size "+existProductList.size());
 			ingridientList.removeAll(existProductList);
-			System.err.println("after  = "+ingridientList.size());
+			System.err.println("ingridientList size after remove "+ingridientList.size());
+			if(ingridientList.size()>0) {
 			ingridientList.forEach(product->{
 				StoreIngridientNode storeIngridientNode = new StoreIngridientNode();
 				storeIngridientNode.setLeftOvers(Integer.parseInt(consignmentData.get(product.getId()).split(":|quantity|price")[1]));
@@ -173,8 +175,10 @@ public class ConsignmentController {
 				storeIngridientNode.setProduct(product);
 				nodeList.add(storeIngridientNode);
 			});
+			}
 			storeIngridientNodeServiceImpl.saveAll(nodeList);
-			//обновляем остатки н амагазине в соответствии с изменениями в накладной
+			/*****/
+			//обновляем остатки на магазине в соответствии с изменениями в накладной
 			switch (consignment.getConsignmentStatus().getName()) {
 			case "ARRIVAL":// приход
 				storeUtil.updateStoreLeftovers(store, consignmentData, "+");
@@ -186,6 +190,7 @@ public class ConsignmentController {
 					storeServiceImpl.save(store);
 				}
 				break;
+				//fix
 			case "HAULING":// внутренее перемещение
 				storeUtil.updateStoreLeftovers(store, consignmentData, "-"); // удаляем из магазина отправителя
 																				// ингридиенты
@@ -218,8 +223,8 @@ public class ConsignmentController {
 		Store store = getCurrentStore(user, createConsignment.getStoreId());
 
 		String[] date = createConsignment.getDate().split("\\.");
-		LocalDate calendar = LocalDate.of(Integer.parseInt(date[2]), Integer.parseInt(date[1]),
-				Integer.parseInt(date[0]));
+		LocalDate calendar = LocalDate.of(Integer.parseInt(date[2].trim()), Integer.parseInt(date[1].trim()),
+				Integer.parseInt(date[0].trim()));
 
 		Consignment consignment = new Consignment();
 		consignment.setDate(calendar);
@@ -234,7 +239,6 @@ public class ConsignmentController {
 
 		List<Consignment> resultList = new ArrayList<>();
 		resultList.add(consignment);
-
 		return consignmentUtil.createConsignmentModelList(resultList);
 	}
 

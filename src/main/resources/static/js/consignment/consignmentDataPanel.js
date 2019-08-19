@@ -30,16 +30,19 @@ function saveConsignmentData( isUproved){
 		var storeId = $("#consignmentTableStoreId").text();//получаем ид магазина
 		var consignmentId =$("#consignmentCurrentId").text();//получаем ид накладной
 		var data = "{"+jsonData.slice(0, -1)+"}";//формируем json (удаляем последнюю запятую в строке jsonData)
+		
 		//если у метода есть входной параметр  isUproved 
 		// и он равен true то запрос будет направлен к урлу в котором поменяется статус накладной и она станет недоступной
-		 if( isUproved !== true){
-		request("PUT",connectUrl + "/user/stores/consignment/"+storeId+"/"+consignmentId, updateConsignmentDataRow ,data);
+		 if( isUproved === true){
+			request("PUT",connectUrl + "/user/stores/consignment/"+storeId+"/"+consignmentId+"/uproved", updateConsignmentDataRowUproved ,data);
 		 }else{
-		request("PUT",connectUrl + "/user/stores/consignment/"+storeId+"/"+consignmentId+"/uproved", updateConsignmentDataRowUproved ,data);
+			 request("PUT",connectUrl + "/user/stores/consignment/"+storeId+"/"+consignmentId, updateConsignmentDataRow ,data);
 		 }
 	}
 	
 }
+
+
 //метод обновляет цену, количество и итог
 function updateConsignmentDataRow(responce, disabled){
 
@@ -79,12 +82,12 @@ function updateConsignmentDataRow(responce, disabled){
 }
 //метод обновляет все строки и блокирует их для изменений
 function updateConsignmentDataRowUproved(responce){
-	updateConsignmentDataRow(responce, true);
+	  updateConsignmentDataRow(responce, true);
 	
 }
 
 //метод отправляет запрос на закрытие накладной 
-function approvedDataConsignment(){
+function approvedDataConsignmentMethod(){
 	
 	$("#currentConsignmentStatusId").text("true");
 	$("#consignment_state_id_"+$("#consignmentCurrentId").text()).text("проведено");
@@ -116,7 +119,7 @@ function openAddIngridientModal(){
 		id = $("#consignmentTableStoreId").text();//получаем ид текущего магазина
 		request("GET",connectUrl + "/user/stores/assortment/"+id+"/leftovers", addStoreIngridientList );
 	}
-	else if (meta.endsWith(":store"))
+	else if (meta.endsWith(":store"))//fix
 	{
 		id = meta.split(":store")[0];//получаем ид магазина отправителя
 		//получаем остатки магаина отправителя
@@ -162,6 +165,7 @@ function addSelectValueToConsingment(){
 		 var ingridient = ingridientData.find(element => element.id ==id);//получаем данные по id
 		 ingridient.description = "0";
 		 ingridient.propertiesProduct = "0";
+		 ingridient.partner = "0";
 		 addIngridient.push(ingridient);//добавляем в масив
 		
 		 $("#ingridientSelectGroup  option[value="+id+"]").remove();

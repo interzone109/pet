@@ -22,7 +22,7 @@ function createNewConsignment (){
 		  meta = "userConsamption:%:Расход ингридиентов c *"+$("#consignmetnStoreSelect option:selected").text()+"*";
 		  $("#hiddenLable").hide();
 	    break;
-	  case "HAULING":
+	  case "HAULING"://fix
 		  meta = $("#consignmetnStoreDoublerSelect option:selected").val()+":store:%:Перемещение ингридиентов с *"
 		  +$("#consignmetnStoreSelect option:selected").text()
 		  +"* на *"+$("#consignmetnStoreDoublerSelect option:selected").text()+"*";

@@ -119,13 +119,13 @@
 								Заполните обязательные поля.
 					</div>
 					<div class="form-row">
-						<div class="col-3">
-							<button class="btn btn-info"   id="saveDataConsignment" >Сохранить </button>
+						<div class="col-4">
+							<button class="btn btn-info"   id="saveDataConsignment" >Сохранить изменения</button>
 						</div>
-						<div class="col-3">
-							<button class="btn btn-info"   id="addDataConsignment">Добавить </button>
+						<div class="col-4">
+							<button class="btn btn-info"   id="addDataConsignment">Добавить ингридиент</button>
 						</div>
-						<div class="col-3">
+						<div class="col-4">
 							<button class="btn btn-info"  id="approvedDataConsignment">Провести и сохранить</button>
 						</div>
 					</div>
@@ -143,6 +143,7 @@
 			<th>Группа</th>
 			<th>Название</th>
 			<th>Количество</th>
+			<th>Остаток партии</th>
 			<th>Расход</th>
 			<th>Цена за шт/гр/мл</th>
 			<th>Итого/грн</th>
@@ -154,6 +155,7 @@
 		</tbody>
 		<tfoot>
     <tr>
+      <td></td>
       <td></td>
       <td></td>
       <td></td>
@@ -181,9 +183,9 @@
  
 <script th:src="@{/js/info.js}"></script>
  <script th:src="@{/js/consignment/datapiker.js}"></script>	
- <script th:src="@{/js/consignment/consignmentTable.js}"></script>	
- <script th:src="@{/js/consignment/consignmentData.js}"></script>	
+ <script th:src="@{/js/consignment/consignmentTable.js}"></script>
  <script th:src="@{/js/consignment/consignmentDataPanel.js}"></script>
+  <script th:src="@{/js/consignment/consignmentData.js}"></script>
  <script th:src="@{/js/consignment/createConsignment.js}"></script>
 
 </body>

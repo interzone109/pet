@@ -1,3 +1,7 @@
+//устонавливаем функции кнопкам которые будут работать с накладными	 
+$("#saveDataConsignment").on("click",saveConsignmentData);
+$("#addDataConsignment").on("click",openAddIngridientModal);
+$("#approvedDataConsignment").on("click",approvedDataConsignmentMethod);
 // метод  делает запрос на получение данных из накладной 
 function loadConsignmentData (consignmentId){
 	$('#consignmentDataTableBodyId tr').remove();//чистим таблицу от старых данных
@@ -16,10 +20,8 @@ function loadConsignmentData (consignmentId){
 
 	 //сохраняем ид накладной
 	 $("#consignmentCurrentId").text(consignmentId);
-	 //устонавливаем функции кнопкам которые будут работать с накладными
-	 $("#saveDataConsignment").on("click",saveConsignmentData);
-	 $("#addDataConsignment").on("click",openAddIngridientModal);
-	 $("#approvedDataConsignment").on("click",approvedDataConsignment);
+	 
+
 	 // в зависимости от статуса накладной кнопки доступны либо нет
 	if($("#currentConsignmentStatusId").text()=== "true"){
 			$("#saveDataConsignment").prop("disabled","disabled");
@@ -31,7 +33,11 @@ function loadConsignmentData (consignmentId){
 			$("#approvedDataConsignment").prop("disabled",false);
 	}
  }
- // методразмещает строки с данными из накладной в таблицу
+function clicked(){
+	var i = 0;
+	console.log(i);
+}
+ // метод размещает строки с данными из накладной в таблицу
 //если накладная не проведена то поля с кол. и ценой то елементы будут инпуты
 //еслипроведена то текст
 function showConsignmentDataRow(data){
@@ -67,9 +73,12 @@ function createNewConsignmentDataRow(ingridient, inputStart, inputValue, inputEn
 			  
 	 ingridientRow.innerHTML =  "<td id=\"ingridient_group_id_"+ingridient.id+"\">"+ingridient.group+"</td>"
 	 		 +"<td id=\"ingridient_name_id_"+ingridient.id+"\">"+ingridient.name+"</td>"
-	 		 //количество в поле propertiesProduct
+	 		 //количество в поле propertiesProduct   
 	 		 + "<td"+ inputStart +" id=\"ingridient_quantity_id_"+ingridient.id+inputValue+
 	 		 createMeasureProduct(ingridient.propertiesProduct,ingridient.measureProduct )+inputEnd+"</td>"
+	 		 //остаток ингридиентов в партии (актуально для приходных накладных)
+	 		+"<td id=\"ingridient_current_quantity_id_"+ingridient.id+"\">" +
+	 		createMeasureProduct(ingridient.partner,ingridient.measureProduct )+"</td>"
 	 		 
 			 + "<td id=\"ingridient_measureProduct_id_"+ingridient.id+"\">"+displayProductMeasure(ingridient.measureProduct,1)+"</td>"
 			 // цена в поле description

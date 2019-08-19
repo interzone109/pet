@@ -46,6 +46,7 @@ public class InvoiceUtil extends SmallOneUtil{
 		meta.append(invoiceModel.getCashBoxStartDay()+":%:"+invoiceModel.getCurrentSell()+":%:"+invoiceModel.getSellQuantity());
 		Invoice invoice = new Invoice();
 		invoice.setDate(LocalDate.now());
+		invoice.setCashBoxStartDay(invoiceModel.getCashBoxStartDay());
 		invoice.setStore(store);
 		invoice.setMeta(meta.toString());
 		System.err.println(LocalDate.now());
