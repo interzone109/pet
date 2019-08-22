@@ -48,7 +48,7 @@ public class Store {
 	//мыло
 	@Column(name = "mail")
 	private String mail;
-	// ассортимент на магазине/ композитный продукт и его цена
+	// ассортимент на магазине/композитный продукт и его цена
 	@OneToMany(mappedBy = "store", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<StoreCompositeProductNode> storeCompositeProductNode;
 	// остатки ингридиентов на магазине

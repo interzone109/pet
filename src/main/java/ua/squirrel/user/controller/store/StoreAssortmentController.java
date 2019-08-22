@@ -1,13 +1,13 @@
 package ua.squirrel.user.controller.store;
 
-import java.time.LocalDate;
+import java.time.LocalDate; 
 import java.util.ArrayList; 
 import java.util.List;
 import java.util.Map;
 import java.util.Optional; 
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Autowired; 
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -52,6 +52,7 @@ public class StoreAssortmentController {
 	private StoreServiceImpl storeServiceImpl;
 	@Autowired
 	private StoreUtil storeUtil;
+	
 	
 
 	
@@ -193,4 +194,7 @@ public class StoreAssortmentController {
 		return storeServiceImpl.findOneByIdAndUser(id, user)
 				.orElseThrow(() -> new NotFoundException("Store not found"));
 	}
+	
+
+	
 }

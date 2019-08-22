@@ -20,9 +20,11 @@ public class InvoiceModel {
 	//денег на начало рабочего дня
 	private int cashBoxStartDay;
 	//текущая касса
-	private int currentSell;
-	//количество продаж
+	private int cashBox;
+	//количество продаж в шт
 	private int sellQuantity;
+	//количество заказов
+	private int orderQuantity;
 	
 	private Long storeId;
 }

@@ -77,14 +77,16 @@ function conductSale(){
 	var storeId = $("#cuurent_store_id").text();
 	var size = $("#busketProductList").children().length;
 	var idsQuantity = "";
+	var totalSellQuantity = 0;
 	for(var i = 0; i < size ;i++){
 		id = $("#busketProductList").children()[i].id.split("busket_id_")[1];
 		var description = $("#busket_description_"+id).text().split(" шт X ");
+		totalSellQuantity += parseInt(description[0]);
 		idsQuantity += "\""+id+"\":"+description[0]+",";
 		$("#input_product_id_"+id).val("1");
 		
 	}
-	
+	console.log("total sell = "+ totalSellQuantity);
 	var invoiceData = "{"+idsQuantity.slice(0, -1) + "}";
 	var today = new Date();
 	var dd = String(today.getDate()).padStart(2, '0');
@@ -95,8 +97,9 @@ function conductSale(){
 				"{\"dateStart\":"+ "\""+dd+"."+mm+"."+yyyy+"\","
 		        +"\"cashBoxStartDay\":"+ 0+","
 		        +"\"invoiceData\":"+ invoiceData+","
-		        +"\"currentSell\":"+ $("#topPrice").text().split(" ")[0]*100+","
-		        +"\"sellQuantity\":"+ 1+","
+		        +"\"cashBox\":"+ $("#topPrice").text().split(" ")[0]*100+","
+		        +"\"orderQuantity\":"+ 1+","
+		        +"\"sellQuantity\":"+ totalSellQuantity+","
 		        +"\"storeId\":"+ Number.parseInt(storeId)+"}";
 			   
 	 

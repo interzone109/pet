@@ -41,5 +41,7 @@ public class InvoiceNode {
 	private int saleQuantity;
 	//время продажи
 	private LocalDateTime time;
+	//цена
+	private int price;
 
 }

@@ -34,6 +34,15 @@ public class Invoice {
 	//денег в кассе на начало рабочего дня
 	@Column(name = "cash_box_start_day", nullable = false)
 	private int cashBoxStartDay;
+	//итоговая касса
+	@Column(name = "cash_box_total", nullable = false)
+	private int cashBox ;
+	//количество продаж в единицах
+	@Column(name = "sell_quantity", nullable = false)
+	private int sellQuantity;
+	//количество заказов
+	@Column(name = "order_quantity", nullable = false)
+	private int orderQuantity;
 	// дата создания
 	private LocalDate date;
 	//список проданых композитных продуктов

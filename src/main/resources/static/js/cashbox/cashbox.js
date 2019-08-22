@@ -3,10 +3,10 @@ var connectUrl = "http://localhost:8080";
 
 // получаем список  магазинов
 request("GET",connectUrl + "/user/stores", addStoreSearchRow );
-
+$("#storeSelect").append("<option value=\"NONE\">Создайте магазин</option>");
 //добавляем оптионалы для выборки по магазинам
 function addStoreSearchRow(data){
-	if (data.length < 1 ){// если магазинов у поьзователя нет то просм его создать
+	if (data.length === 0 ){// если магазинов у поьзователя нет то просм его создать
 		$("#storeSelect").append("<option value=\"NONE\">Создайте магазин</option>");
 	} else {
 		data.forEach(store=>{

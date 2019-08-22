@@ -3,7 +3,7 @@ var connectUrl = "http://localhost:8080" ;
 
 //получаем список  магазинов
 request("GET",connectUrl + "/user/stores", addStoreSearchRow );
-
+//fix store viev
 //добавляем оптионалы для выборки по магазинам
 function addStoreSearchRow(data){
 	if (data.length < 1 ){// если магазинов у поьзователя нет то просм его создать
@@ -30,13 +30,16 @@ function getStoreCashBox(){
 		 var data  = JSON.stringify({
 				"dateStart": dd+"."+mm+"."+yyyy,
 		        "cashBoxStartDay": cashStart*100,
+		        "cashBox":0,
 		        "currentSell":0,
-		        "sellQuantity":0, 
+		        "orderQuantity":0, 
 		        "storeId":storeId
 			   }
 			);
 		 
 		 request('POST', connectUrl+'/user/stores/invoice/cashBox/'+storeId, getOrCreateInvoice,data);
+		 
+		 $('#collapseOptional').collapse("hide"); 
 }
 
 //метод получает новый инвойс для выбрного магазина и отображает данные из него
@@ -53,9 +56,12 @@ function updateCashboxInfo(data){
 	var storeId = $("#cuurent_store_id").text();
 	var  storeName = $('#storeSelect option[value="' + storeId + '"]').text();
 	$("#storeNameinvoiceInfo").text(storeName);
+	
 	$("#cashboxStart").text(displayProductPrice(data.cashBoxStartDay));
-	$("#cashboxCurrent").text(displayProductPrice(data.currentSell));
+	$("#cashboxCurrent").text(displayProductPrice(data.cashBox));
 	$("#sellQyantity").text(data.sellQuantity);
+	$("#orderQuantity").text(data.orderQuantity);
+	
 }
 
 
