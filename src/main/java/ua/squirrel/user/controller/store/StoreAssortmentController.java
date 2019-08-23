@@ -175,15 +175,15 @@ public class StoreAssortmentController {
 		log.info("LOGGER: update product price to store");
 		User user = userServiceImpl.findOneByLogin("test1").get(); 
 		 //получаем колекцию узлов которые нунжо обновить
-		List<StoreCompositeProductNode> newPriceNode =  getCurrentStore(user ,storeId)
-		.getStoreCompositeProductNode().stream()
+		 Store store = getCurrentStore(user ,storeId);
+		List<StoreCompositeProductNode> newPriceNode = store .getStoreCompositeProductNode().stream()
 		.filter( productNode-> productPrice.containsKey(productNode.getCompositeProduct().getId()))
 		.collect(Collectors.toList());
 		
 		newPriceNode.forEach(updateNode->{
 			updateNode.setPrice(productPrice.get(updateNode.getCompositeProduct().getId()));
 		});
-		
+		storeServiceImpl.save(store);
 		return storeUtil.getProductPriceModel(newPriceNode) ;
 	}
 	

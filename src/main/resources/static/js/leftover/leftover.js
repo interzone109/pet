@@ -88,10 +88,10 @@ function postFindInvoiceByValue(){
         "between" : between
         
 	   });
+
 		
-		request('GET', connectUrl+'/user/stores/assortment/'+storeId,fillInvoiceTableProduct );
-		
-		setTimeout(function() { request('POST', connectUrl+'/user/stores/invoice/find',fillInvoiceTableSales ,data); }, 100);
+		//setTimeout(function() { request('POST', connectUrl+'/user/stores/invoice/find',fillInvoiceTableSales ,data); }, 100);
+		setTimeout(function() { request('POST', connectUrl+'/user/stores/invoice/find',test ,data); }, 100);
 		$('#leftoverTableId').collapse("hide");
 		$('#invoiceTableId').collapse("show");
 	}
@@ -101,27 +101,58 @@ function postFindInvoiceByValue(){
 function cleaneInvoiceTable(){
 	$('#invoiceTableBodyId').empty();
 	$('#invoiceDataRow').empty();
-	$('#invoiceDataRow').append( "<th >Название</th><th>Цена</th> <th id=\"invoiceOptionRow\">Опции</th><th >Итого продажи</th>" );
-	$('#invoiceTableFoterId').empty();
-	$('#invoiceTableFoterId').append("<th ></th><th >Итого за день</th><th id=\"totalSaleAll\">Общая сумма</th>");
+	//$('#invoiceDataRow').append( "<th >Название</th><th>Цена</th> <th id=\"invoiceOptionRow\">Опции</th><th >Итого за период</th>" );
+	$('#invoiceTableFooterId').empty();
+	//$('#invoiceTableFooterId').append("<th ></th><th >Итого за день</th><th id=\"totalSaleAll\">Общая сумма</th>");
 }
 
 
-//заполняем таблицу названиями продуктов с магазина
-function fillInvoiceTableProduct(data){
-	if( Array.isArray(data) && data.length !== 0){
-		data.forEach(product => {
-			 var productRow = document.createElement('tr');
-			 productRow.id = "productNameRowId_"+product.id;
-			var price =  displayProductPrice(product.propertiesProduct);
-			 productRow.innerHTML="<td>"+product.name+"</td>"
-			 	+"<td id=\"priceId_"+ product.id+"\">"+price+"</td>"
-				+"<td id=\"checkBox_"+ product.id+"\">check box </td>"
-				+"</td id=\"totalSale_"+ product.id+"\"></td>";
-			 
-			$('#invoiceTableBodyId').append(productRow);
+function test(data){
+	var productSet = new Set() ;
+	data.forEach(invoice => {
+		invoice.invoiceNode.forEach(product => productSet.add(product.id));
+	});
+	data.forEach(invoice => {
+		$('#invoiceDataRow').append("<th colspan =\"2\" class=\"text-center\">"+invoice.dateStart+"</th>");
+		productSet.forEach(id => {
+			if(invoice.invoiceNode.has(id)){
+				var product = invoice.invoiceNode.get(id);
+				if(!$('#product_name_'+product.id).lenght){
+					$('#invoiceTableBodyId').append("<tr id=\"row_id_"+product.id+"\"><th id =\"product_name_"+product.id+"\">"+product.name+"</th></tr>");
+					}else{
+						$('#row_id_'+product.id).append("<th id =\"product_quantity_"+product.id+"\" class=\"text-center\">"
+								+createMeasureProduct( product.sellQuantite ,product.measureProduct)+" "+displayProductMeasure( product.measureProduct ,1) +"</th>"
+								+"<th id =\"product_summ_"+product.id+"\" class=\"text-center\">"+displayProductPrice(product.totalSumm)+" грн</th>" );
+					
+					}
+			}else{
+				$('#row_id_'+id).append("<th class=\"text-center\">0</th> <th >0 грн</th>" );
+			
+			}
 		});
-	}
+	});
+	console.log("HERE "+productSet.size);
+	//fillInvoiceTableSalesByDate(data);
+}
+
+
+//заполняем таблицу датой продажи и количеством
+function fillInvoiceTableSalesByDate(data){
+	$('#invoiceDataRow').append("<th >Название</th>");
+
+	data.forEach(invoice => {
+		$('#invoiceDataRow').append("<th colspan =\"2\" class=\"text-center\">"+invoice.dateStart+"</th>");
+		invoice.invoiceNode.forEach(product => {
+			if(!$('#product_name_'+product.id).lenght){
+			$('#invoiceTableBodyId').append("<tr id=\"row_id_"+product.id+"\"><th id =\"product_name_"+product.id+"\">"+product.name+"</th></tr>");
+			}
+			$('#row_id_'+product.id).append("<th id =\"product_quantity_"+product.id+"\" class=\"text-center\">"
+					+createMeasureProduct( product.sellQuantite ,product.measureProduct)+" "+displayProductMeasure( product.measureProduct ,1) +"</th>"
+					+"<th id =\"product_summ_"+product.id+"\" class=\"text-center\">"+displayProductPrice(product.totalSumm)+" грн</th>" );
+		});
+		
+	});
+	//$('#invoiceTableFooterId').append("<th ></th><th >Итого за день</th><th id=\"totalSaleAll\">Общая сумма</th>");
 }
 
 

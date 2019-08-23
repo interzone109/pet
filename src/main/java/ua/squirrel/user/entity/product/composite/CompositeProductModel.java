@@ -19,4 +19,8 @@ public class CompositeProductModel {
 	
 	private String measureProduct;
 	
+	private int totalSumm ;
+	
+	private int sellQuantite ;
+	
 }

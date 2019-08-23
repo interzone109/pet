@@ -74,7 +74,7 @@ public class InvoiceController {
 			}
 		}
 
-		return  createInvoiceModelList(invoices);
+		return  storeUtil.createSaleProductViev(invoices);
 	}
 
 
@@ -93,13 +93,13 @@ public class InvoiceController {
 		Optional<Invoice> invoiceOption = invoiceServiceImpl.findOneByStoreAndDate(store, date);
 		Invoice invoice = null;
 		if (invoiceOption.isPresent()) {// если инвойс представлен то возращаем его модель
-			return new ResponseEntity<InvoiceModel>(createInvoiceModel(invoiceOption.get()),
+			return new ResponseEntity<InvoiceModel>(storeUtil.createInvoiceModel(invoiceOption.get()),
 					HttpStatus.OK);
 		}
 		invoice = createNewInvoice(invoiceModel, store);
 		invoiceServiceImpl.save(invoice);
 
-		return new ResponseEntity<InvoiceModel>(createInvoiceModel(invoice), HttpStatus.OK);
+		return new ResponseEntity<InvoiceModel>(storeUtil.createInvoiceModel(invoice), HttpStatus.OK);
 	}
 
 	/**
@@ -168,7 +168,7 @@ public class InvoiceController {
 				}
 			});// сохраняем новые продажи для инвойса
 			invoiceServiceImpl.save(invoice);
-			return createInvoiceModel(invoiceOption.get());
+			return storeUtil.createInvoiceModel(invoiceOption.get());
 		} 
 		// если инвойс не найден значит что он небыл заранее создан в контроллере
 		// createOrFindInvoice и работать с ним невыйдет
@@ -183,23 +183,6 @@ public class InvoiceController {
 				.orElseThrow(() -> new NotFoundException("Store not found"));
 	}
 	
-	private List<InvoiceModel> createInvoiceModelList(List<Invoice> invoiceList) {
-		 List<InvoiceModel> invoiceModelList = new ArrayList<>();
-		 invoiceList.forEach(invoice-> invoiceModelList.add(createInvoiceModel(invoice)));
-		return invoiceModelList;
-	}
-	
-	private InvoiceModel createInvoiceModel(Invoice invoice) {
-		return InvoiceModel.builder()
-				.id(invoice.getId())
-				.cashBox(invoice.getCashBox())
-				.cashBoxStartDay(invoice.getCashBoxStartDay())
-				.dateStart(invoice.getDate().toString())
-				.orderQuantity(invoice.getOrderQuantity())
-				.sellQuantity(invoice.getSellQuantity())
-				.storeId(invoice.getStore().getId())
-				.build();
-	}
 	
 	private Invoice createNewInvoice(InvoiceModel invoiceModel, Store store) {
 		Invoice invoice = new Invoice ();

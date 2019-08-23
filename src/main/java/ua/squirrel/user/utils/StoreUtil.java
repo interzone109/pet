@@ -2,6 +2,7 @@ package ua.squirrel.user.utils;
 
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -17,6 +18,9 @@ import ua.squirrel.user.entity.store.compositeproduct.node.StoreCompositeProduct
 import ua.squirrel.user.entity.store.consignment.Consignment;
 import ua.squirrel.user.entity.store.consignment.node.ConsignmentNode;
 import ua.squirrel.user.entity.store.ingridient.node.StoreIngridientNode;
+import ua.squirrel.user.entity.store.invoice.Invoice;
+import ua.squirrel.user.entity.store.invoice.InvoiceModel;
+import ua.squirrel.user.entity.store.invoice.node.InvoiceNode;
 
 @Component
 public class StoreUtil extends SmallOneUtil {
@@ -116,7 +120,59 @@ public class StoreUtil extends SmallOneUtil {
 			});
 		
 	}
-
-
-
+	
+	/**
+	 * Метод формирует список инвойсов с данными о продажах
+	 * */
+	public List<InvoiceModel> createSaleProductViev(List<Invoice> invoiceList){
+		List<InvoiceModel> invoiceModelList = new ArrayList<>();
+		invoiceList.forEach(invoice->{
+			InvoiceModel invoiceModel = createInvoiceModel(invoice);
+			invoiceModel.setInvoiceNode(getTotalInvoiceData(invoice.getInvoiceNode()));
+			invoiceModelList.add(invoiceModel);
+		});
+		return invoiceModelList;
+	}
+	/**
+	 * 
+	 * @param invoiceNodeList
+	 * @return метод возращает список моделей композитного продукта в котором находиться 
+	 * количество его продаж и общая сумма (для получения седней цены) в разрезе дня
+	 */
+	public Map<Long, CompositeProductModel> getTotalInvoiceData(List<InvoiceNode> invoiceNodeList){
+		Map<Long, CompositeProductModel> compositeProductModelMap = new HashMap<>();
+		invoiceNodeList.forEach(invoiceNode->{// если продукт с таким ид уже есть в мапе то обновляем данные
+			long compProdId = invoiceNode.getCompositeProduct().getId();
+			if(compositeProductModelMap.containsKey(compProdId)) {
+				CompositeProductModel compositeProductModel = compositeProductModelMap.get(compProdId);
+				int sellQuantite = compositeProductModel.getSellQuantite();
+				int totalSumm = compositeProductModel.getTotalSumm();
+				compositeProductModel.setSellQuantite(sellQuantite + invoiceNode.getSaleQuantity());
+				compositeProductModel.setTotalSumm(totalSumm + (invoiceNode.getPrice()*invoiceNode.getSaleQuantity()));
+			}else {// если нет то создаем новую модель
+			CompositeProductModel compositeProductModel = CompositeProductModel.builder()
+					.id(compProdId)
+					.name(invoiceNode.getCompositeProduct().getName())
+					.totalSumm(invoiceNode.getPrice()*invoiceNode.getSaleQuantity())
+					.measureProduct(invoiceNode.getCompositeProduct().getMeasureProduct().getMeasure())
+					.sellQuantite(invoiceNode.getSaleQuantity())
+					.build();		
+			compositeProductModelMap.put(compProdId, compositeProductModel);
+			}
+		});
+		return compositeProductModelMap ;
+	}
+	
+	
+	public InvoiceModel createInvoiceModel(Invoice invoice) {
+		return InvoiceModel.builder()
+				.id(invoice.getId())
+				.cashBox(invoice.getCashBox())
+				.cashBoxStartDay(invoice.getCashBoxStartDay())
+				.dateStart(invoice.getDate().toString())
+				.orderQuantity(invoice.getOrderQuantity())
+				.sellQuantity(invoice.getSellQuantity())
+				.storeId(invoice.getStore().getId())
+				.build();
+	}
 }

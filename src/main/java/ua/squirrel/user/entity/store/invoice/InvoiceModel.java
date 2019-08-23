@@ -1,9 +1,11 @@
 package ua.squirrel.user.entity.store.invoice;
 
+
 import java.util.Map;
 
 import lombok.Builder;
 import lombok.Data;
+import ua.squirrel.user.entity.product.composite.CompositeProductModel;
 
 
 @Builder
@@ -17,6 +19,8 @@ public class InvoiceModel {
 	private boolean isBetween ;
 	// id продукта и количество продаж
 	private Map<Long, Integer> invoiceData ;
+	// id продукта и количество продаж
+	private Map<Long, CompositeProductModel> invoiceNode ;
 	//денег на начало рабочего дня
 	private int cashBoxStartDay;
 	//текущая касса
