@@ -22,4 +22,9 @@ public class EmployeeController {
 	public String getCashBoxWork() {
 		return "employee/cashBoxWork";
 	}
+	
+	@RequestMapping(path = "/employee/logout", method = RequestMethod.GET)
+	public String logout() {
+		return "logout";
+	}
 }

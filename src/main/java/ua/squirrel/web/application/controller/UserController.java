@@ -49,4 +49,9 @@ public class UserController {
 	public String getCashBoxWork() {
 		return "user/cashBoxWork";
 	}
+	
+	@RequestMapping(path = "/user/logout", method = RequestMethod.GET)
+	public String logout() {
+		return "logout";
+	}
 }

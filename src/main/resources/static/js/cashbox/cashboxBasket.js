@@ -12,7 +12,7 @@ function addProductToBusket( productId){
 }
 $("#hiddenFoter").hide() ;
 
-//создаем карточку с товаром для конзины
+//создаем карточку с товаром для коpзины
 function createBusketElem(product){
 	var quantity = $("#input_product_id_"+product.id).val()<=0 ? 1 :$("#input_product_id_"+product.id).val();
 	var description = quantity + " шт X " + displayProductPrice(product.propertiesProduct);

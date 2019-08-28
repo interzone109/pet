@@ -78,7 +78,8 @@ public class AllEmployeeController {
 		employeeServiceImpl.save(putOrPostEmployee(employee, newEmployeeModel, user));
 		return employeeBuild(employee);
 	}
-
+	
+	
 	private Employee putOrPostEmployee(Employee employee ,EmployeeModel newEmployeeModel, User user ) throws NotFoundException {
 		String login = newEmployeeModel.getLogin();
 		String pass = newEmployeeModel.getPassword();
@@ -96,6 +97,7 @@ public class AllEmployeeController {
 		employee.setCashBoxType(0);
 		employee.setHairingDate(smallOneUtil.convertDate(newEmployeeModel.getHairingDate()));
 		employee.setUser(user);
+		employee.setStatus(newEmployeeModel.getStatus());
 		employee.setLogin(login);
 		employee.setPassword(pass);
 		employee.setRole(roleService.findOneByName(role));
@@ -121,6 +123,7 @@ public class AllEmployeeController {
 				.lastName(employee.getLastName())
 				.cashBoxType(employee.getCashBoxType())
 				.hairingDate(employee.getHairingDate().toString())
+				.status(employee.getStatus())
 				.salary(employee.getSalary())
 				.storeId( employee.getStore().getId())
 				.storeName( employee.getStore().getAddress())

@@ -41,6 +41,8 @@ public class Employee {
 	private String password;
 	@Column(name = "hairing_date")
 	private LocalDate hairingDate;
+	@Column(name = "status")
+	private String status;
 	
 	@ManyToOne(fetch = FetchType.LAZY, cascade=CascadeType.ALL)
 	@JoinColumn(name = "store_employee_id", nullable = false)

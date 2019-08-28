@@ -2,6 +2,7 @@ package ua.squirrel.user.utils;
 
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -139,7 +140,7 @@ public class StoreUtil extends SmallOneUtil {
 	 * @return метод возращает список моделей композитного продукта в котором находиться 
 	 * количество его продаж и общая сумма (для получения седней цены) в разрезе дня
 	 */
-	public Map<Long, CompositeProductModel> getTotalInvoiceData(List<InvoiceNode> invoiceNodeList){
+	public Collection<CompositeProductModel> getTotalInvoiceData(List<InvoiceNode> invoiceNodeList){
 		Map<Long, CompositeProductModel> compositeProductModelMap = new HashMap<>();
 		invoiceNodeList.forEach(invoiceNode->{// если продукт с таким ид уже есть в мапе то обновляем данные
 			long compProdId = invoiceNode.getCompositeProduct().getId();
@@ -160,7 +161,7 @@ public class StoreUtil extends SmallOneUtil {
 			compositeProductModelMap.put(compProdId, compositeProductModel);
 			}
 		});
-		return compositeProductModelMap ;
+		return compositeProductModelMap.values() ;
 	}
 	
 	

@@ -12,6 +12,7 @@ public class AppController {
 		return "index";
 	}
 	
+	
 	@RequestMapping(path = "/public/login", method = RequestMethod.GET)
 	public String login() {
 		return "login";

@@ -1,6 +1,7 @@
 package ua.squirrel.user.entity.store.invoice;
 
 
+import java.util.Collection;
 import java.util.Map;
 
 import lombok.Builder;
@@ -20,7 +21,7 @@ public class InvoiceModel {
 	// id продукта и количество продаж
 	private Map<Long, Integer> invoiceData ;
 	// id продукта и количество продаж
-	private Map<Long, CompositeProductModel> invoiceNode ;
+	private Collection< CompositeProductModel> invoiceNode ;
 	//денег на начало рабочего дня
 	private int cashBoxStartDay;
 	//текущая касса

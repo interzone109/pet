@@ -31,26 +31,33 @@ function createEmployeeTableRow(employee){
 		 + "<td id=\"employee_last_name_id_"+employee.id+"\">"+employee.lastName+"</td>"
 		 + "<td id=\"employee_salary_id_"+employee.id+"\">"+employee.salary+"</td>"
 		 + "<td id=\"employee_store_id_"+employee.id+"\">"+employee.storeName+"</td>"
+		 + "<td id=\"employee_status_id_"+employee.id+"\">"+employee.status+"</td>"
 		 +"<td>  <i class=\"fas fa-edit\" style=\"color:#17a2b8\" title=\"редактировать\"  onclick=\"editeEmployeeRow("+employee.id+")\"  ></i> " 
 		 +"<i class=\"fas fa-user-times\" title=\"удалить\" onclick=\"removeEmployeeRow("+employee.id+")\"></i>	</td>";
 		
 	return employeeRow;
 }
 
-//ометод обновляет данные о работнике
+//метод обновляет данные о работнике
 function editeEmployeeRow(employeeId){
 	$("#employeeModalBody").modal("show");//окрываем окно для редактирования данных 
 	$("#employeeNameInput").val($("#employee_name_id_"+employeeId).text());
 	$("#employeeSecondNameInput").val($("#employee_last_name_id_"+employeeId).text());
 	$("#employeeSalaryInput").val($("#employee_salary_id_"+employeeId).text());
 	$("#dateHiringValue").val($("#employee_hairing_date_id_"+employeeId).text());
+	$("#status").val($("#employee_status_id_"+employeeId).text());
 	$("#storeSelect").val($("#storeSelect option:contains("+$("#employee_store_id_"+employeeId).text()+")").val());
 	putEmployeeId = employeeId;
 }
 
 
 function removeEmployeeRow(employeeId){
-	console.log(employeeId);
+	if($("#employee_status_id_"+employeeId).text()==="на уделение"){
+	$("#employee_status_id_"+employeeId).text("востановлен");
+	}else{
+		$("#employee_status_id_"+employeeId).text("на уделение");
+	}
+	 editeEmployeeRow(employeeId)
 }
 
 // получаем список  магазинов
@@ -86,6 +93,7 @@ function postOrPutEmployee(){
 		        "salary": $("#employeeSalaryInput").val(),
 		        "storeId": $("#storeSelect option:selected").val(),
 		        "hairingDate": $("#dateHiringValue").val(),
+		        "status": $("#status").val(),
 		        "login": isHassAcces ?$("#employeeLoginInput").val():"",
 		        "password":isHassAcces ? $("#employeePassInput").val():""
 			   });
@@ -105,6 +113,7 @@ function updateEmployeeRow (employee){
 	 $("#employee_salary_id_"+employee.id).text(employee.salary);
 	 $("#employee_hairing_date_id_"+employee.id).text(converDate(employee.hairingDate));
 	 $("#employee_store_id_"+employee.id).text(employee.storeName);
+	 $("#employee_status_id_"+employee.id).text(employee.status);
 }
 
 function converDate(date){

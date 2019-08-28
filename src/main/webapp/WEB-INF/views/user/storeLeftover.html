@@ -15,6 +15,7 @@
 <!-- Our Custom CSS -->
 <link rel="stylesheet" href="../static/css/style.css"
 	th:href="@{/css/style.css}" type="text/css" media="screen">
+	<link rel="stylesheet" href="../static/css/spin.css" th:href="@{/css/spin.css}" type="text/css" media="screen">
 <!-- Font Awesome JS -->
 <script defer
 	src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js"></script>
@@ -81,6 +82,12 @@
 				</div>  
 				<!-- forma end -->
 				<br>
+				<!-- spiner -->
+				<div class="center ">
+					<div class="loader center"  id="spiners">
+					</div>
+				</div>
+				<!-- spiner -->
 				<!-- leftover content table start   -->
 				<table class="table collapse" id="leftoverTableId" summary="0">
 					<thead>
@@ -116,6 +123,7 @@
 			<!-- leftover content end -->
 		</div>
 	</div>
+	
 <!-- template start-->
 <!--<div th:insert="~{template/modal/consignment/AddIngridientModal :: add_ingridient_to_consignment_modal}"></div>   -->
 <!-- template end-->

@@ -1,6 +1,6 @@
 var state = new Map();//переменная хранит данные о запросе остатков для разным магазинов
 var connectUrl = "http://localhost:8080";
-
+$("#spiners").hide();
 // получаем список  магазинов
 request("GET",connectUrl + "/user/stores", addStoreSearchRow );
 
@@ -31,11 +31,11 @@ function searchStoreLeftovers(){
 		console.log("variable data");
 	}else{
 		console.log("request data");
+		$("#spiners").show();
 	request("GET",connectUrl + "/user/stores/assortment/"+storeId+"/leftovers", createLeftoverRow );
 	
 	
 	}
-	$('#leftoverTableId').collapse("show");
 	$('#invoiceTableId').collapse("hide");
 	
 }
@@ -48,6 +48,8 @@ function createLeftoverRow(data){
 		$('#leftoverTableBodyId').append(displayProductRow(product));
 		});
 	}
+	$("#spiners").hide();
+	$('#leftoverTableId').collapse("show");
 }
 
 //метод формирует строку для таблицы остатков
@@ -88,12 +90,10 @@ function postFindInvoiceByValue(){
         "between" : between
         
 	   });
-
-		
-		//setTimeout(function() { request('POST', connectUrl+'/user/stores/invoice/find',fillInvoiceTableSales ,data); }, 100);
-		setTimeout(function() { request('POST', connectUrl+'/user/stores/invoice/find',test ,data); }, 100);
+		$("#spiners").show();
+		request('POST', connectUrl+'/user/stores/invoice/find',showInvoiceData ,data); 
 		$('#leftoverTableId').collapse("hide");
-		$('#invoiceTableId').collapse("show");
+		
 	}
 }
 
@@ -101,101 +101,39 @@ function postFindInvoiceByValue(){
 function cleaneInvoiceTable(){
 	$('#invoiceTableBodyId').empty();
 	$('#invoiceDataRow').empty();
-	//$('#invoiceDataRow').append( "<th >Название</th><th>Цена</th> <th id=\"invoiceOptionRow\">Опции</th><th >Итого за период</th>" );
 	$('#invoiceTableFooterId').empty();
-	//$('#invoiceTableFooterId').append("<th ></th><th >Итого за день</th><th id=\"totalSaleAll\">Общая сумма</th>");
 }
 
+function showInvoiceData(data){
 
-function test(data){
-	var productSet = new Set() ;
+	//колонка с названием продукта
+	$('#invoiceDataRow').append("<th colspan =\"1\" class=\"text-center\">Название</th>");
 	data.forEach(invoice => {
-		invoice.invoiceNode.forEach(product => productSet.add(product.id));
-	});
-	data.forEach(invoice => {
-		$('#invoiceDataRow').append("<th colspan =\"2\" class=\"text-center\">"+invoice.dateStart+"</th>");
-		productSet.forEach(id => {
-			if(invoice.invoiceNode.has(id)){
-				var product = invoice.invoiceNode.get(id);
-				if(!$('#product_name_'+product.id).lenght){
-					$('#invoiceTableBodyId').append("<tr id=\"row_id_"+product.id+"\"><th id =\"product_name_"+product.id+"\">"+product.name+"</th></tr>");
-					}else{
-						$('#row_id_'+product.id).append("<th id =\"product_quantity_"+product.id+"\" class=\"text-center\">"
-								+createMeasureProduct( product.sellQuantite ,product.measureProduct)+" "+displayProductMeasure( product.measureProduct ,1) +"</th>"
-								+"<th id =\"product_summ_"+product.id+"\" class=\"text-center\">"+displayProductPrice(product.totalSumm)+" грн</th>" );
-					
+		//колонка с датой инвойса
+		$('#invoiceDataRow').append("<th colspan =\"2\" class=\"text-center\" id=\"col_id_"+invoice.id+"\">"
+				+invoice.dateStart+"</th>");
+		invoice.invoiceNode.forEach(product =>{
+			
+			 if( !$('#product_name_'+product.id).lenght){//если название отсутсвует в таблице то добавляем новое
+					$('#invoiceTableBodyId').append( "<tr id=\"row_id_"+product.id 
+							+"\"><th id =\"product_name_" +product.id+"\">"+product.name+"</th></tr>");
+					for(var i =0 ; i< data.length; i++){
+					$('#row_id_'+product.id).append( "<th class=\"text-center\" id=\"row_quan_" + data[i].id+"_"+product.id+"\">0</th> " +
+							"<th class=\"text-center\" id=\"row_price_" + data[i].id+"_"+product.id+"\">0 грн</th>");
 					}
-			}else{
-				$('#row_id_'+id).append("<th class=\"text-center\">0</th> <th >0 грн</th>" );
-			
-			}
-		});
-	});
-	console.log("HERE "+productSet.size);
-	//fillInvoiceTableSalesByDate(data);
-}
-
-
-//заполняем таблицу датой продажи и количеством
-function fillInvoiceTableSalesByDate(data){
-	$('#invoiceDataRow').append("<th >Название</th>");
-
-	data.forEach(invoice => {
-		$('#invoiceDataRow').append("<th colspan =\"2\" class=\"text-center\">"+invoice.dateStart+"</th>");
-		invoice.invoiceNode.forEach(product => {
-			if(!$('#product_name_'+product.id).lenght){
-			$('#invoiceTableBodyId').append("<tr id=\"row_id_"+product.id+"\"><th id =\"product_name_"+product.id+"\">"+product.name+"</th></tr>");
-			}
-			$('#row_id_'+product.id).append("<th id =\"product_quantity_"+product.id+"\" class=\"text-center\">"
-					+createMeasureProduct( product.sellQuantite ,product.measureProduct)+" "+displayProductMeasure( product.measureProduct ,1) +"</th>"
-					+"<th id =\"product_summ_"+product.id+"\" class=\"text-center\">"+displayProductPrice(product.totalSumm)+" грн</th>" );
-		});
-		
-	});
-	//$('#invoiceTableFooterId').append("<th ></th><th >Итого за день</th><th id=\"totalSaleAll\">Общая сумма</th>");
-}
-
-
-
-
-//заполняем таблицу датой продажи и количеством
-function fillInvoiceTableSales(data){
-	var totalSales = 0;
-	if( Array.isArray(data) && data.length !== 0){
-		
-		// прозодимся по каждому счету
-		data.forEach(invoice => {//создаем колонку с датой продажи
-			$('#invoiceOptionRow').before("<th>"+invoice.dateStart+"</th>");
-			var totalSaleForPeriod = 0 ;
-			// проходимся по каждой строке с названием продукта в таблице
-			$("#invoiceTableBodyId tr").each(function(){
-				//получаем ид строки
-				var rowId = this.id.split("productNameRowId_")[1];
-				//console.log(rowId);
-				var quantity = invoice.invoiceData[rowId]=== undefined ?0: invoice.invoiceData[rowId];
-				// плучаем цену на текущий период
-				totalSaleForPeriod+=quantity * $("#priceId_"+rowId).text();
-				$('#checkBox_'+rowId).before("<td class=\"quantity\">"+quantity+"</td>");
-			});
-			
-			totalSales += parseInt(Number(totalSaleForPeriod).toFixed(3));
-			$('#totalSaleAll').before("<td>"+Number(totalSaleForPeriod).toFixed(3)+"</td>");
-		});
-		$('#totalSaleAll').after("<td>"+totalSales+"</td>");
-		//заполняем итоговую колонку слува
-		$("#invoiceTableBodyId tr").each(function(){
-			var rowId = this.id.split("productNameRowId_")[1];
-			var totalSale = 0;
-			$(this).children().each(function(){
-				
-				if($(this).hasClass('quantity')){
-					totalSale += parseInt($(this).text());
 				}
-			});
-			var saleRound = Number((totalSale*$("#priceId_"+rowId).text()).toFixed(3));
-			$(this).append("<td>"+saleRound+"</td>");
 		});
-	}
+	}); 
+	data.forEach(invoice => {
+		invoice.invoiceNode.forEach(product =>{
+			$('#row_quan_'+invoice.id+"_"+product.id).text(
+					createMeasureProduct( product.sellQuantite ,product.measureProduct)
+					+" "+displayProductMeasure( product.measureProduct ,1));
+			$('#row_price_'+invoice.id+"_"+product.id).text(displayProductPrice(product.totalSumm)+" грн");
+		});
+	});
+	$("#spiners").hide();
+	$('#invoiceTableId').collapse("show");
 }
 
 

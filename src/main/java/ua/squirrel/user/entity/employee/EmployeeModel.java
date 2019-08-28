@@ -26,4 +26,6 @@ public class EmployeeModel {
 	private String password;
 	
 	private String hairingDate;
+	
+	private String status;
 }

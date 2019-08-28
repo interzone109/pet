@@ -1,6 +1,6 @@
 var state = new Map();//переменная хранит данные о запросax
 var connectUrl = "http://localhost:8080" ;
-
+$("#spiners").hide();
 //получаем список  магазинов
 request("GET",connectUrl + "/user/stores", addStoreSearchRow );
 //fix store viev
@@ -92,7 +92,7 @@ function createNewStoreProductElem(product){
 	 productElem.innerHTML =  "<div class=\"card border-info mb-3 text-center\" style=\"max-width: 18rem;\" >"
 		 	+"<div class=\"card-header text-info\"title=\""+product.name +"\">"+product.name.substring(0, 12) +"</div>"
 		 	+"<div class=\" text-primary\">"+product.group+"</div>"
-		 	+"<div class=\" text\">"+product.name+"</div>"
+		 //+"<div class=\" text\">"+product.name+"</div>"
 		 		+"<div class=\"card-body text-info \">"
 		 		+"<h5 class=\"card-title row \"> " 
 		 		+"<i class=\"fas fa-minus col \" onclick=\"count(-1,"+product.id+")\"></i>" 
