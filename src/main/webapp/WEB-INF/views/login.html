@@ -13,25 +13,57 @@
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
 <!-- Our Custom CSS -->
 <link rel="stylesheet" href="../static/css/style.css" th:href="@{/css/style.css}" type="text/css" media="screen">
+<link rel="stylesheet" href="../static/css/indexBody.css"
+	th:href="@{/css/indexBody.css}" type="text/css" media="screen">
 <!-- Font Awesome JS -->
 <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js"></script>
 <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js"></script>
 
 </head>
 <body>
-login
-<div class="card">
-  <div class="col-4 ">
-    <label for="exampleInputEmail1">Login</label>
-    <input type="email" class="form-control" id="exampleInputEmail1"  placeholder="Enter login">
-  </div>
-  <div class="col-4">
-    <label for="exampleInputPassword1">Password</label>
-    <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
-  </div>
-  <div class="col-4">
-  	<button type="submit" class="btn btn-primary ">Submit</button>
-  	</div>
-</div>
+<div th:insert="~{appTemplate/indexTopBar :: index_top_bar}"></div>
+<div class="container login-container">
+            <div class="row">
+            <form name='f' action="/login" method='POST'>
+                <div class="col-md-6 login-form-1">
+                    <h3>Войдите как пользователь</h3>
+                    
+                        <div class="form-group">
+                            <input type="text" class="form-control" placeholder="Логин" value="" />
+                        </div>
+                        <div class="form-group">
+                            <input type="password" class="form-control" placeholder="Пароль" value="" />
+                        </div>
+                        <div class="form-group">
+                            <input type="submit" class="btnSubmitUser" value="Войти" />
+                        </div>
+                        <div class="form-group">
+                            <a href="#" class="btnForgetPwd">Забыли пароль?</a>
+                        </div>
+                    
+                </div>
+                </form>
+                <div class="col-md-6 login-form-2">
+                    <div class="login-logo">
+                        <img src="https://i.ibb.co/SrLCphR/logo-Round.png" alt=""/>
+                    </div>
+                    <h3>Войдите как сотрудник</h3>
+                        <div class="form-group">
+                            <input type="text" class="form-control" placeholder="Логин" value="" />
+                        </div>
+                        <div class="form-group">
+                            <input type="password" class="form-control" placeholder="Пароль" value="" />
+                        </div>
+                        <div class="form-group">
+                            <input type="submit" class="btnSubmit" value="Войти" />
+                        </div>
+                        <div class="form-group">
+                            <a href="#" class="btnForgetPwd" value="Login">Забыли пароль?</a>
+                        </div>
+                </div>
+            </div>
+        </div>
+        
+<div th:insert="~{appTemplate/indexFooter :: index_footer}"></div>
 </body>
 </html>

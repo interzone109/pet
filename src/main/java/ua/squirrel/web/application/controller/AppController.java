@@ -18,9 +18,14 @@ public class AppController {
 		return "login";
 	}
 	
+	
+	
 	@RequestMapping(path = "/public/registration", method = RequestMethod.GET)
 	public String registration() {
 		return "registration";
 	}
-	
+	@RequestMapping(path = "/logout", method = RequestMethod.GET)
+	public String logout() {
+		return "logout";
+	}
 }

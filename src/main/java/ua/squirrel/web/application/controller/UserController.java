@@ -1,5 +1,6 @@
 package ua.squirrel.web.application.controller;
 
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -7,8 +8,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @Controller
 public class UserController {
 	@RequestMapping(path = "/user/home", method = RequestMethod.GET)
-	public String getUserPage() {
-		return "user/userHome";
+	public String getUserHomePage(Authentication authentication) {
+		/*if(authentication!= null) {
+			return "user/userHome";
+		}
+		return "login";*/
+		return  "user/userHome";
 	}
 	
 	@RequestMapping(path = "/user/employee", method = RequestMethod.GET)
@@ -50,8 +55,5 @@ public class UserController {
 		return "user/cashBoxWork";
 	}
 	
-	@RequestMapping(path = "/user/logout", method = RequestMethod.GET)
-	public String logout() {
-		return "logout";
-	}
+	
 }

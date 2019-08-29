@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<title>Витрина</title>
+<title>Остатки и продажи</title>
 
 <link rel="stylesheet" href="../static/css/data.css"
 	th:href="@{/css/data.css}" type="text/css" media="screen">
@@ -15,6 +15,7 @@
 <!-- Our Custom CSS -->
 <link rel="stylesheet" href="../static/css/style.css"
 	th:href="@{/css/style.css}" type="text/css" media="screen">
+	<link rel="stylesheet" href="../static/css/spin.css" th:href="@{/css/spin.css}" type="text/css" media="screen">
 <!-- Font Awesome JS -->
 <script defer
 	src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js"></script>
@@ -24,22 +25,21 @@
 <body>
 	<div class="wrapper">
 		<!-- left side menu -->
-		<div class="wrapper" th:insert="~{employee/template/leftBar :: left_bar}">
+		<div class="wrapper" th:insert="~{template/leftBar :: left_bar}">
 		</div>
 		<!-- left side menu -->		
 		<!-- Content conteiner -->
 		<div id="content">
 			<!--  top bar start -->
-			<div th:insert="~{employee/template/topBar :: top_bar}">
+			<div th:insert="~{template/topBar :: top_bar}">
 			</div>
 			<!-- top bar end -->
 			<!--  info collapse start -->
 			<div class="collapse" id="collapseInfo">
-						<div class="card card-body">Раздел служит для просмотра остатков магазина и продаж.
+						<div class="card card-body">Раздел служит для просмотра остатков магазина и продаж за период.
 							<br> Возможности :
 							<br>-Просмотр остатков ингридиентов на магазине на текущий момент времени;
 							<br>-Просмотр продаж за выбранный день или временной промижуток времени;
-							<br>-Автоматическое создание накладных времмено недоступно
 						</div>
 						<br>
 					</div>
@@ -55,15 +55,39 @@
 					<!-- errore alert end -->
 					<!-- button start -->
 					<div class="d-inline p-2 ">
+						<select class="form-control" id="storeSelect" >	
+						</select>
+					</div>
+					<div class="d-inline p-2 ">
 						<button class="btn btn-info"  onclick="searchStoreLeftovers()" id="searchIngridientBytton" title="просмотреть остатки">
 							Остатки <i class="fas fa-eye"></i>	 
 						</button>
 					</div>
-					
+					<div class="d-inline p-2">
+							<label for="dataRangeValue" class="sr-only">Период</label>	
+                			<input id="dataRangeValue" type='text' data-range="true" placeholder="Период" autocomplete="off"
+                				  data-multiple-dates-separator=" - " class='datepicker-here form-control' />
+           				</div>
+					<div class="d-inline p-2">
+						<button class="btn btn-info"  onclick="postFindInvoiceByValue()" id="searchIngridientBytton" title="просмотреть остатки">
+							Продажи <i class="fas fa-dollar-sign"></i>	 
+						</button>
+					</div>
+					<div class="d-inline p-2">
+						<button class="btn btn-info"  onclick="#()" id="autoOrderBytton" title="автозаказ" disabled>
+							Создать автозаказ	 
+						</button>
+					</div>
 					<!-- button end -->
 				</div>  
 				<!-- forma end -->
 				<br>
+				<!-- spiner -->
+				<div class="center ">
+					<div class="loader center"  id="spiners">
+					</div>
+				</div>
+				<!-- spiner -->
 				<!-- leftover content table start   -->
 				<table class="table collapse" id="leftoverTableId" summary="0">
 					<thead>
@@ -88,7 +112,7 @@
 							<tr id ="invoiceDataRow">
 							</tr>
 						</thead>
-						<tfoot id="invoiceTableFoterId">
+						<tfoot id="invoiceTableFooterId">
 						</tfoot>
 						<tbody id="invoiceTableBodyId">
 						</tbody>
@@ -99,6 +123,7 @@
 			<!-- leftover content end -->
 		</div>
 	</div>
+	
 <!-- template start-->
 <!--<div th:insert="~{template/modal/consignment/AddIngridientModal :: add_ingridient_to_consignment_modal}"></div>   -->
 <!-- template end-->

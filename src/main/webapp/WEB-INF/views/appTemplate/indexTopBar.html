@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>top bar</title>
+
+</head>
+<body>
+
+	<!-- top_bar  -->
+	<nav class="navbar navbar-expand-lg navbar-light bg-light" th:fragment="index_top_bar">
+    	<div class="container-fluid">
+			
+			<a class="nav-link" th:href="@{/}"><h3>Small one</h3></a>
+				<a class="nav-link" th:href="@{/user/home}">Тестовый юзер</a>
+ 				<a class="nav-link" th:href="@{/employee/home}">Тестовый рабочий</a>
+				<a class="nav-link" th:href="@{/public/login}">Войти</a>
+				<a class="nav-link" th:href="@{/public/registration}">Регистрация</a>
+    </div>
+</nav> 
+
+
+
+</body>
+</html>
