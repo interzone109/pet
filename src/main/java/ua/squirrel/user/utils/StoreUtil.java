@@ -134,6 +134,8 @@ public class StoreUtil extends SmallOneUtil {
 		});
 		return invoiceModelList;
 	}
+	
+	
 	/**
 	 * 
 	 * @param invoiceNodeList

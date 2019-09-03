@@ -6,16 +6,28 @@
 </head>
 <body>
 	<nav id="sidebar" th:fragment="basket_fragment">
-		<div class="sidebar-header">
-			<h3>Корзина 
+		<div class="sidebar-header ">
+			<h3   id="cashTitle">
+				<a class="btn " id="cashTitleBtn" title="подсчет сдачи">
+					<i class="fas fa-exchange-alt"></i>
+				</a>
+			    	  Касса 
 				<a class="btn " id="infoAboutPage">
 					<i class="fas fa-info-circle"></i> 
 				</a>
 			</h3> 
+			 <h3 id="restCountInput">
+			 	<input  data-placement="right" type="number" id="calcTooltipinput" class="form-control" data-toggle="tooltip" data-html="true" 
+				title='Введите сумму'>
+			 	<a class="btn " id="restCountInputBtn">
+					<i class="fas fa-exchange-alt" ></i>rest 44
+				</a>
+			 </h3>
+			
 		</div>
 		<ul class="list-unstyled ">
 			<li>
-				<a>Сумма заказа: <h4 id="topPrice">0 грн</h4></a>
+				<a>Сумма заказа: <h4 id="topPrice">0.00 грн</h4></a>
 				<div class="d-inline p-5">
 					<button class="btn btn-success" onclick="conductSale()">
 						<i class="fas fa-shopping-basket"></i> Оплатить	 

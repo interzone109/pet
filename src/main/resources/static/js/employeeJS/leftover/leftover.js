@@ -1,12 +1,14 @@
 var connectUrl = "http://localhost:8080";
 
+$('#spiners').hide();
+
 //метод возращает остатки для выбраного магазина
 function searchStoreLeftovers(){
 	$('#leftoverTableBodyId').empty();//чистим таблицу от старых данных
-
+	$('#spiners').show();
 	request("GET",connectUrl + "/employee/stores/leftover", createLeftoverRow );
 
-	$('#leftoverTableId').collapse("show");
+	
 	$('#invoiceTableId').collapse("hide");
 	
 }
@@ -18,6 +20,8 @@ function createLeftoverRow(data){
 		$('#leftoverTableBodyId').append(displayProductRow(product));
 		});
 	}
+	$('#spiners').hide();
+	$('#leftoverTableId').collapse("show");
 }
 //метод формирует строку для таблицы остатков
 function displayProductRow(product){
@@ -32,22 +36,78 @@ function displayProductRow(product){
 		
 		  return productRow;
 }
+/************************************************************************************/
 
+//метод формирует таблицу с продажами
+function postFindInvoiceByValue(){
+	cleaneInvoiceTable();
 
+	var date = $("#dataRangeValue").val().split("-");
+	var isValid =  false ;
+	var between = false ;
+	if( date.length >1){
+		isValid = (date[0].length > 8 && date[1].length >8 && formValidation($("#dataRangeValue"))) ;
+		between = true ;
+	}else{
+		isValid =formValidation($("#dataRangeValue"));
+	}
+	if(isValid){
+		
+		start = date[0];
+		var storeId = $("#storeSelect option:selected").val()
+		// если валидация пройдена формируем джейсон
+	var data = JSON.stringify({
+		 "storeId": storeId,
+        "dateStart": date[0],
+        "dateEnd": date[1],
+        "between" : between
+        
+	   });
+		$("#spiners").show();
+		request('POST', connectUrl+'/employee/stores/invoice/find',showInvoiceData ,data); 
+		$('#leftoverTableId').collapse("hide");
+		
+	}
+}
 
+//метод очищает таблицу от старых данных
+function cleaneInvoiceTable(){
+	$('#invoiceTableBodyId').empty();
+	$('#invoiceDataRow').empty();
+	$('#invoiceTableFooterId').empty();
+}
 
+function showInvoiceData(data){
 
-
-
-
-
-
-
-
-
-
-
-
+	//колонка с названием продукта
+	$('#invoiceDataRow').append("<th colspan =\"1\" class=\"text-center\">Название</th>");
+	data.forEach(invoice => {
+		//колонка с датой инвойса
+		$('#invoiceDataRow').append("<th colspan =\"2\" class=\"text-center\" id=\"col_id_"+invoice.id+"\">"
+				+invoice.dateStart+"</th>");
+		invoice.invoiceNode.forEach(product =>{
+			
+			 if( !$('#product_name_'+product.id).lenght){//если название отсутсвует в таблице то добавляем новое
+					$('#invoiceTableBodyId').append( "<tr id=\"row_id_"+product.id 
+							+"\"><th id =\"product_name_" +product.id+"\">"+product.name+"</th></tr>");
+					for(var i =0 ; i< data.length; i++){
+					$('#row_id_'+product.id).append( "<th class=\"text-center\" id=\"row_quan_" + data[i].id+"_"+product.id+"\">0</th> " +
+							"<th class=\"text-center\" id=\"row_price_" + data[i].id+"_"+product.id+"\">0 грн</th>");
+					}
+				}
+		});
+	}); 
+	data.forEach(invoice => {
+		invoice.invoiceNode.forEach(product =>{
+			$('#row_quan_'+invoice.id+"_"+product.id).text(
+					createMeasureProduct( product.sellQuantite ,product.measureProduct)
+					+" "+displayProductMeasure( product.measureProduct ,1));
+			$('#row_price_'+invoice.id+"_"+product.id).text(displayProductPrice(product.totalSumm)+" грн");
+		});
+	});
+	$("#spiners").hide();
+	$('#invoiceTableId').collapse("show");
+}
 
 
 
