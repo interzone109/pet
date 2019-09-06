@@ -116,12 +116,12 @@ function conductSale(){
 		        +"\"invoiceData\":"+ invoiceData+","
 		        +"\"cashBox\":"+ $("#topPrice").text().split(" ")[0]*100+","
 		        +"\"orderQuantity\":"+ 1+","
-		        +"\"sellQuantity\":"+ totalSellQuantity+","
-		        +"\"storeId\":"+ Number.parseInt(storeId)+"}";
-			   
+		        +"\"sellQuantity\":"+ totalSellQuantity+ "}";
+	 console.log(data);	   
 	 if(totalSellQuantity !==0 ){
-	 request('PUT', connectUrl+'/user/stores/invoice/'+storeId, updateCashboxInfo,data);
+	 request('PUT', connectUrl+'/employee/stores/invoice', updateCashboxInfo,data);
 	 }
+	 
 	$("#busketProductList").empty();
 	$("#hiddenFoter").hide()
 	$("#topPrice").text(displayProductPrice(0));

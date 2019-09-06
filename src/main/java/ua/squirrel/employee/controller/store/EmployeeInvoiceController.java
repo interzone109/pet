@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -80,7 +79,7 @@ public class EmployeeInvoiceController {
 	 */
 	@PostMapping("/cashBox")
 	public ResponseEntity<InvoiceModel> createOrFindInvoice(Authentication authentication,
-			@RequestBody InvoiceModel invoiceModel, @PathVariable("storeId") Long storeId) throws NotFoundException {
+			@RequestBody InvoiceModel invoiceModel) throws NotFoundException {
 		log.info("LOGGER: get current invoice or create new");
 		Employee employee = employeeServiceImpl.findOneById(1l).get();
 		Store store = employee.getStore();
@@ -105,8 +104,8 @@ public class EmployeeInvoiceController {
 	 * 2. Создаем узел с  продуктом который еще не был продан в рамках часа, количеством продаж и временем покупки 
 	 * */
 	@PutMapping()
-	public InvoiceModel saleCompositeProduct(Authentication authentication, @RequestBody InvoiceModel invoiceModel,
-			@PathVariable("storeId") Long storeId) throws NotFoundException {
+	public InvoiceModel saleCompositeProduct(Authentication authentication, @RequestBody InvoiceModel invoiceModel
+			) throws NotFoundException {
 		log.info("LOGGER: add sale to current date and store invoice");
 		Employee employee = employeeServiceImpl.findOneById(1l).get();
 		/**

@@ -268,17 +268,21 @@ function postNewProductForm(){
 			 "name": $("#inputProductName").val(),
 	         "description": $("#inputProductDescription").val(),
 	         "group": $("#inputProductGroup").val(),
-	         "partner": null,
+	         "rate": $("#inputCompositeProductRate" ).val(),
 	         "propertiesProduct":displayProductProperties( $("#propertieSelect option:selected" ).text() , 2),
 	         "measureProduct":   displayProductMeasure( $("#measureSelect option:selected" ).text(), 2)
 		   }
 		);
-
+	if($("#createProductCheckbox" ).val() === ""){
 	request('POST', connectUrl+'/user/partners/'+this.title+'/edit',displayPostProductRow ,data);
+	}else{
+	request('POST', connectUrl+'/user/partners/'+this.title+'/edit/coposite',displayPostProductRow ,data);
+	}
 
 	$("#inputProductName").val("");
 	$("#inputProductDescription").val("");
 	$("#inputProductGroup").val("");
+	$("#inputCompositeProductRate" ).val("")
 	$("#inputPartnerProductFormErrore").collapse("hide");
 	$("#inputProductName").removeClass("is-valid");
 	}else{

@@ -14,8 +14,11 @@ import lombok.extern.slf4j.Slf4j;
 import ua.squirrel.user.entity.partner.Partner;
 import ua.squirrel.user.entity.product.Product;
 import ua.squirrel.user.entity.product.ProductModel;
+import ua.squirrel.user.entity.product.composite.CompositeProduct;
+import ua.squirrel.user.entity.product.node.ProductMap;
 import ua.squirrel.user.service.partner.PartnerServiceImpl;
 import ua.squirrel.user.service.product.ProductServiceImpl;
+import ua.squirrel.user.service.product.node.ProductMapServiceImpl;
 import ua.squirrel.user.service.product.properties.MeasureProductServiceImpl;
 import ua.squirrel.user.service.product.properties.PropertiesProductServiceImpl;
 import ua.squirrel.web.entity.user.User;
@@ -42,7 +45,8 @@ public class ProductController {
 	private PropertiesProductServiceImpl propertiesProductServiceImpl;
 	@Autowired
 	private MeasureProductServiceImpl measureProductServiceImpl;
-	
+	@Autowired
+	private ProductMapServiceImpl productMapServiceImpl;
 	
 	/**
 	 * мeтод получает  новый продукт и добавляет его
@@ -71,6 +75,55 @@ public class ProductController {
 			addProduct.setUser(userCurrentSesion);
 
 		productServiceImpl.save(addProduct);
+		
+		
+		productsModel.setId(addProduct.getId());
+
+		return productsModel;
+	}
+	
+	/**
+	 * мeтод получает  новый продукт и добавляет его
+	 * к текущему поставщику.
+	 * */
+	
+	@PostMapping("/coposite")
+	public ProductModel dddProductToPartnerCreateCompProd(Authentication authentication, @PathVariable("partner_id") Long idPartner,
+			@RequestBody ProductModel productsModel) throws NotFoundException {
+		log.info("LOGGER: add product to current partner and create composite product");
+
+		User userCurrentSesion = userServiceImpl.findOneByLogin("test1").get();
+
+		Partner partner = getCurrentPartner(idPartner, userCurrentSesion);
+
+			Product addProduct = new Product();
+			addProduct.setDescription(productsModel.getDescription());
+			addProduct.setName(productsModel.getName());
+			addProduct.setPropertiesProduct( 
+					propertiesProductServiceImpl.findOneByName(productsModel.getPropertiesProduct()));
+			addProduct.setMeasureProduct(
+					measureProductServiceImpl.findOneByMeasure(productsModel.getMeasureProduct()));
+			addProduct.setGroup(productsModel.getGroup());
+			addProduct.setPartner(partner);
+
+			addProduct.setUser(userCurrentSesion);
+
+		productServiceImpl.save(addProduct);
+		
+		CompositeProduct compositeProduct = new CompositeProduct();
+		compositeProduct.setName(productsModel.getName());
+		compositeProduct.setGroup(productsModel.getGroup());
+		compositeProduct.setPropertiesProduct(propertiesProductServiceImpl.findOneByName("PRODUCT_FINAL"));
+		compositeProduct.setMeasureProduct(measureProductServiceImpl.findOneByMeasure(productsModel.getMeasureProduct()));
+		
+		compositeProduct.setUser(userCurrentSesion);
+		
+		ProductMap productMap = new ProductMap();
+		productMap.setCompositeProduct(compositeProduct);
+		productMap.setProduct(addProduct);
+		productMap.setRate(productsModel.getRate());
+		
+		productMapServiceImpl.save(productMap);
 		
 		
 		productsModel.setId(addProduct.getId());

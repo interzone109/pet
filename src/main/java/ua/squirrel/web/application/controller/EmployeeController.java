@@ -23,5 +23,8 @@ public class EmployeeController {
 		return "employee/cashBoxWork";
 	}
 	
-	
+	@RequestMapping(path = "/employee/consignment", method = RequestMethod.GET)
+	public String getConsignment() {
+		return "employee/consignment";
+	}
 }

@@ -1,26 +1,10 @@
 var state = new Map();//переменная хранит данные о запросax
 var connectUrl = "http://localhost:8080" ;
 $("#spiners").hide();
-//получаем список  магазинов
-request("GET",connectUrl + "/user/stores", addStoreSearchRow );
-//fix store viev
-//добавляем оптионалы для выборки по магазинам
-function addStoreSearchRow(data){
-	if (data.length < 1 ){// если магазинов у поьзователя нет то просм его создать
-		$("#storeSelect").append("<option value=\"NONE\">Создайте магазин</option>");
-	} else {
-		data.forEach(store=>{
-			$("#storeSelect").append("<option value=\""+store.id+"\" selected=\"selected\">"+store.address+"</option>");//добавлям селекты с названиями лоступных магазинов
-			});
-		$("#storeSelect").val(data[0].id);//устанавливаем selected 
-		state.set("stores", data);
-	}	
-}
+
 
 // метод формирует запрос для получения инвойса
 function getStoreCashBox(){
-	 var storeId = $("#storeSelect option:selected").val();
-	 $("#cuurent_store_id").text(storeId);
 		 var cashStart = $("#startCashBoxDay").val();
 		 var today = new Date();
 		 var dd = String(today.getDate()).padStart(2, '0');
@@ -32,12 +16,11 @@ function getStoreCashBox(){
 		        "cashBoxStartDay": cashStart*100,
 		        "cashBox":0,
 		        "currentSell":0,
-		        "orderQuantity":0, 
-		        "storeId":storeId
+		        "orderQuantity":0
 			   }
 			);
 		 
-		 request('POST', connectUrl+'/user/stores/invoice/cashBox/'+storeId, getOrCreateInvoice,data);
+		 request('POST', connectUrl+'/employee/stores/invoice/cashBox/', getOrCreateInvoice,data);
 		 
 		 $('#collapseOptional').collapse("hide"); 
 }
@@ -45,11 +28,9 @@ function getStoreCashBox(){
 //метод получает новый инвойс для выбрного магазина и отображает данные из него
 function getOrCreateInvoice(data){
 	updateCashboxInfo(data);
-	 if(state.has("storeId_"+data.storeId)){
-		 fillCashBoxData(state.get("storeId_"+data.storeId));
-	 }else{
-	 request('GET', connectUrl+'/user/stores/assortment/'+data.storeId, fillCashBoxData);
-	 }
+	 
+	 request('GET', connectUrl+'/employee/stores/assortment/', fillCashBoxData);
+	 
 }
 
 function updateCashboxInfo(data){

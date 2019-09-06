@@ -24,11 +24,11 @@
 <body>
 	<div class="wrapper">
 <!-- left side menu -->
-		<div class="wrapper" th:insert="~{template/leftBar :: left_bar}"></div>
+		<div class="wrapper" th:insert="~{employee/template/leftBar :: left_bar}"></div>
 <!-- left side menu -->		
 <!-- Content conteiner -->
 			<div id="content">
-				<div th:insert="~{template/topBar :: top_bar}"></div>
+				<div th:insert="~{employee/template/topBar :: top_bar}"></div>
 <!-- -----------  info collapse --------------------- -->
 					<div class="collapse" id="collapseInfo">
 						<div class="card card-body">Раздел служит для учета и создания накладных.
@@ -183,10 +183,10 @@
  
 <script th:src="@{/js/info.js}"></script>
  <script th:src="@{/js/consignment/datapiker.js}"></script>	
- <script th:src="@{/js/consignment/consignmentTable.js}"></script>
- <script th:src="@{/js/consignment/consignmentDataPanel.js}"></script>
-  <script th:src="@{/js/consignment/consignmentData.js}"></script>
- <script th:src="@{/js/consignment/createConsignment.js}"></script>
+ <script th:src="@{/js/employeeJS/consignment/consignmentTable.js}"></script>
+ <script th:src="@{/js/employeeJS/consignment/consignmentDataPanel.js}"></script>
+  <script th:src="@{/js/employeeJS/consignment/consignmentData.js}"></script>
+ <script th:src="@{/js/employeeJS/consignment/createConsignment.js}"></script>
 
 </body>
 </html>
