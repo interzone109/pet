@@ -5,21 +5,27 @@
 <title>top bar</title>
 
 </head>
-<body>
+<body>   
 
-	<!-- top_bar  -->
-	<nav class="navbar navbar-expand-lg navbar-light bg-light" th:fragment="index_top_bar">
-    	<div class="container-fluid">
-			
-			<a class="nav-link" th:href="@{/}"><h3>Small one</h3></a>
-				<a class="nav-link" th:href="@{/user/home}">Тестовый юзер</a>
- 				<a class="nav-link" th:href="@{/employee/home}">Тестовый рабочий</a>
-				<a class="nav-link" th:href="@{/public/login}">Войти</a>
-				<a class="nav-link" th:href="@{/public/registration}">Регистрация</a>
-    </div>
-</nav> 
-
-
+       
+  <nav class="mb-4 navbar navbar-expand-lg navbar-dark b1" th:fragment="index_top_bar">
+                <a class="navbar-brand font-bold" th:href="@{/}">Small One</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent-4" aria-controls="navbarSupportedContent-4" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent-4">
+                    <ul class="navbar-nav ml-auto">
+                        
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/public/login}"><i class="fas fa-sign-in-alt"></i> Войти</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/public/registration}"><i class="fas fa-id-badge"></i> Регистрация</a>
+                        </li>
+                    </ul>
+                </div>
+            </nav> 
+  
 
 </body>
 </html>

@@ -46,9 +46,8 @@ public class AllEmployeeController {
 	 */
 	@GetMapping
 	public List<EmployeeModel> getAllEmployee(Authentication authentication) {
-		log.info("LOGGER: show all employees ");
-
-		User user = userServiceImpl.findOneByLogin("test1").get();
+		log.info("LOGGER: show all employees "); 
+		User user = userServiceImpl.findOneByLogin(authentication.getName()).get();
 		return buildEmployeeModel(user);
 	}
 	/**
@@ -58,8 +57,8 @@ public class AllEmployeeController {
 	@PostMapping
 	public EmployeeModel addEmployee(@RequestBody EmployeeModel newEmployeeModel, Authentication authentication) throws NotFoundException {
 		log.info("LOGGER: add new employees ");
-		Employee employee = new Employee();
-		User user = userServiceImpl.findOneByLogin("test1").get();
+		Employee employee = new Employee(); 
+		User user = userServiceImpl.findOneByLogin(authentication.getName()).get();
 
 		employeeServiceImpl.save(putOrPostEmployee(employee, newEmployeeModel, user));
 		return employeeBuild(employee);
@@ -70,9 +69,8 @@ public class AllEmployeeController {
 	@RequestMapping("/{id}/edit")
 	public EmployeeModel updateEmployee(@RequestBody EmployeeModel newEmployeeModel,
 			@PathVariable Long id ,Authentication authentication) throws NotFoundException {
-		log.info("LOGGER: update current employees ");
-
-		User user = userServiceImpl.findOneByLogin("test1").get();
+		log.info("LOGGER: update current employees "); 
+		User user = userServiceImpl.findOneByLogin(authentication.getName()).get();
 		Employee employee = getEmployee(user, id);
 	
 		employeeServiceImpl.save(putOrPostEmployee(employee, newEmployeeModel, user));

@@ -31,8 +31,8 @@ public class AllProductController {
 	@GetMapping
 	public List<ProductModel> getUserProduct(Authentication authentication) throws NotFoundException {
 		
-		log.info("LOGGER: get all user product : /user/products_list");
-		User user = userServiceImpl.findOneByLogin("test1").get();
+		log.info("LOGGER: get all user product : /user/products_list"); 
+		User user = userServiceImpl.findOneByLogin(authentication.getName()).get();
 		
 		List<ProductModel> productList = new ArrayList<>();
 		
@@ -48,7 +48,7 @@ public class AllProductController {
 			Authentication authentication) throws NotFoundException {
 		
 		log.info("LOGGER: get all user product : /user/products_list");
-		User user = userServiceImpl.findOneByLogin("test1").get();
+		User user = userServiceImpl.findOneByLogin(authentication.getName()).get();
 		
 		List<ProductModel> productList = new ArrayList<>();
 		

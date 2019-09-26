@@ -9,10 +9,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 public class UserController {
 	@RequestMapping(path = "/user/home", method = RequestMethod.GET)
 	public String getUserHomePage(Authentication authentication) {
-		/*if(authentication!= null) {
-			return "user/userHome";
-		}
-		return "login";*/
+		
+		System.err.println(authentication.getPrincipal().toString());
+		
 		return  "user/userHome";
 	}
 	

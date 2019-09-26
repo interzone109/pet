@@ -39,7 +39,7 @@ public class AllStoreConrtoller {
 	public List<StoreModel> showAllStores(Authentication authentication) throws NotFoundException {
 
 		log.info("LOGGER: return all stores current user");
-		User userCurrentSesion = userServiceImpl.findOneByLogin("test1").get();
+		User userCurrentSesion = userServiceImpl.findOneByLogin(authentication.getName()).get();
 		return getAllStore(userCurrentSesion);
 		
 	}
@@ -51,7 +51,7 @@ public class AllStoreConrtoller {
 	public StoreModel addNewStore(@RequestBody StoreModel storeModel, Authentication authentication)
 			throws NotFoundException {
 		log.info("LOGGER: create new store with composite product");
-		User user = userServiceImpl.findOneByLogin("test1").get();
+		User user = userServiceImpl.findOneByLogin(authentication.getName()).get();
 
 
 		
@@ -75,7 +75,7 @@ public class AllStoreConrtoller {
 	public StoreModel updateStore(@PathVariable("id") Long storeId, @RequestBody StoreModel storeModel, Authentication authentication)
 			throws NotFoundException {
 		log.info("LOGGER: create new store with composite product");
-		User user = userServiceImpl.findOneByLogin("test1").get();
+		User user = userServiceImpl.findOneByLogin(authentication.getName()).get();
 
 		Store updateStore =  storeServiceImpl.findOneByIdAndUser(storeId, user)
 				.orElseThrow(() -> new NotFoundException("Store not found"));

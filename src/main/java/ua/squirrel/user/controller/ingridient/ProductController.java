@@ -58,7 +58,7 @@ public class ProductController {
 			@RequestBody ProductModel productsModel) throws NotFoundException {
 		log.info("LOGGER: add product to current partner");
 
-		User userCurrentSesion = userServiceImpl.findOneByLogin("test1").get();
+		User userCurrentSesion = userServiceImpl.findOneByLogin(authentication.getName()).get();
 
 		Partner partner = getCurrentPartner(id, userCurrentSesion);
 
@@ -92,7 +92,7 @@ public class ProductController {
 			@RequestBody ProductModel productsModel) throws NotFoundException {
 		log.info("LOGGER: add product to current partner and create composite product");
 
-		User userCurrentSesion = userServiceImpl.findOneByLogin("test1").get();
+		User userCurrentSesion = userServiceImpl.findOneByLogin(authentication.getName()).get();
 
 		Partner partner = getCurrentPartner(idPartner, userCurrentSesion);
 
@@ -140,7 +140,7 @@ public class ProductController {
 			@PathVariable("product_id") Long productId ,@RequestBody ProductModel productModel) throws NotFoundException {
 		log.info("LOGGER: update current product");
 		
-		User userCurrentSesion = userServiceImpl.findOneByLogin("test1").get();
+		User userCurrentSesion = userServiceImpl.findOneByLogin(authentication.getName()).get();
 
 		Partner partner = getCurrentPartner(id, userCurrentSesion);
 		

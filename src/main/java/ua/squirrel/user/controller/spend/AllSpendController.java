@@ -40,7 +40,7 @@ public class AllSpendController {
 	public List<SpendModel> getAllSpends(Authentication authentication) {
 		log.info("LOGGER: show all spends");
 
-		User user = userServiceImpl.findOneByLogin("test1").get();
+		User user = userServiceImpl.findOneByLogin(authentication.getName()).get();
 
 		return getAllSpendModel(spendServiceImpl.findAllByUserOrderByDateAsc(user));
 	}
@@ -53,7 +53,7 @@ public class AllSpendController {
 	@PostMapping
 	public List<SpendModel> createSpends(Authentication authentication, @RequestBody SpendModel spendModel) throws NotFoundException {
 		log.info("LOGGER: save new spends");
-		User user = userServiceImpl.findOneByLogin("test1").get();
+		User user = userServiceImpl.findOneByLogin(authentication.getName()).get();
 		
 		Spend spend = new Spend();
 		spend.setName(spendModel.getName());

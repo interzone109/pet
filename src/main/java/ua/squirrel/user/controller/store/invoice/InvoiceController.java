@@ -58,7 +58,7 @@ public class InvoiceController {
 	public List<InvoiceModel> createСonsignment(Authentication authentication, @RequestBody InvoiceModel invoiceModel)
 			throws NotFoundException {
 		log.info("LOGGER: find invoice by date and store");
-		User user = userServiceImpl.findOneByLogin("test1").get();
+		User user = userServiceImpl.findOneByLogin(authentication.getName()).get();
 		Store store = getCurrentStore(user, invoiceModel.getStoreId());
 
 		List<Invoice> invoices = new ArrayList<>();
@@ -86,7 +86,7 @@ public class InvoiceController {
 	public ResponseEntity<InvoiceModel> createOrFindInvoice(Authentication authentication,
 			@RequestBody InvoiceModel invoiceModel, @PathVariable("storeId") Long storeId) throws NotFoundException {
 		log.info("LOGGER: get current invoice or create new");
-		User user = userServiceImpl.findOneByLogin("test1").get();
+		User user = userServiceImpl.findOneByLogin(authentication.getName()).get();
 		Store store = getCurrentStore(user, storeId);
 		LocalDate date = LocalDate.now();
 		// находим инвойс за сегодня
@@ -112,7 +112,7 @@ public class InvoiceController {
 	public InvoiceModel saleCompositeProduct(Authentication authentication, @RequestBody InvoiceModel invoiceModel,
 			@PathVariable("storeId") Long storeId) throws NotFoundException {
 		log.info("LOGGER: add sale to current date and store invoice");
-		User user = userServiceImpl.findOneByLogin("test1").get();
+		User user = userServiceImpl.findOneByLogin(authentication.getName()).get();
 		/**
 		 *		1 пункт
 		 */

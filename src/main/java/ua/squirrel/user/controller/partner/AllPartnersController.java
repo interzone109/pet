@@ -41,8 +41,7 @@ public class AllPartnersController {
 	@GetMapping
 	public List<PartnerModel> getAllPartner(Authentication authentication) {
 		log.info("LOGGER: retгrn all partners for current user: /user/partners");
-		
-		User user = userServiceImpl.findOneByLogin("test1").get();
+		User user = userServiceImpl.findOneByLogin(authentication.getName()).get();
 		
 		List<PartnerModel> partnersModel = new ArrayList<>();
 		partnerServiceImpl.findAllByUser(user).stream().forEach(obj->{
@@ -65,7 +64,7 @@ public class AllPartnersController {
 	@PostMapping
 	public PartnerModel addNewPartner(@RequestBody PartnerModel newPartners ,Authentication authentication) {
 		log.info("LOGGER: save new partners from model: /user/partners" );
-		User user = userServiceImpl.findOneByLogin("test1").get();
+		User user = userServiceImpl.findOneByLogin(authentication.getName()).get();
 
  			Partner addPartner = new Partner();
 			addPartner.setCompany(newPartners.getCompany());

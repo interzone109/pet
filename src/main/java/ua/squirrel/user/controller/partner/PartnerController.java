@@ -50,7 +50,7 @@ public class PartnerController {
 
 		log.info("LOGGER: return current partner product: /user/partners/{partner_id}/info ");
 
-		User userCurrentSesion = userServiceImpl.findOneByLogin("test1").get();
+		User userCurrentSesion = userServiceImpl.findOneByLogin(authentication.getName()).get();
 		// вызываем медот преобразования сущности в модель
 		return getPartnerModel(id, userCurrentSesion);
 	}
@@ -59,7 +59,7 @@ public class PartnerController {
 	public PartnerModel updatePartnerInfo(@PathVariable("partner_id") Long id, @RequestBody PartnerModel partnerModel,
 			Authentication authentication) throws NotFoundException {
 		log.info("LOGGER: update curent partners info : /user/partners/{partner_id}/info");
-		User userCurrentSesion = userServiceImpl.findOneByLogin("test1").get();
+		User userCurrentSesion = userServiceImpl.findOneByLogin(authentication.getName()).get();
 		// получаем из базы Partner по ид и текущему пользователю
 		Partner currentPartner = getCurrentPartner(id, userCurrentSesion);
 		//обновляем данные и сохраняем в базу
@@ -81,7 +81,7 @@ public class PartnerController {
 			throws NotFoundException {
 		log.info("LOGGER: delete curent partners");
 
-		User userCurrentSesion = userServiceImpl.findOneByLogin("test1").get();
+		User userCurrentSesion = userServiceImpl.findOneByLogin(authentication.getName()).get();
 		Partner partner = getCurrentPartner(id, userCurrentSesion);
 		partner.setRemove(true);
 		partnerServiceImpl.save(partner);

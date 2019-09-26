@@ -46,7 +46,7 @@ public class AllCompositeProductController {
 	public List<CompositeProductModel> getAllCompositeProduct(Authentication authentication) {
 		log.info("LOGGER: show all Composite ProductModel");
 
-		User user = userServiceImpl.findOneByLogin("test1").get();
+		User user = userServiceImpl.findOneByLogin(authentication.getName()).get();
 
 		return getAllCompositProduct(user);
 	}
@@ -61,7 +61,7 @@ public class AllCompositeProductController {
 			@RequestBody CompositeProductModel newCompositeProductModels) {
 		log.info("LOGGER: save new Composite ProductModel from model ");
 
-		User user = userServiceImpl.findOneByLogin("test1").get();
+		User user = userServiceImpl.findOneByLogin(authentication.getName()).get();
 		CompositeProduct compositeProduct = new CompositeProduct();
 		compositeProduct.setName(newCompositeProductModels.getName());
 		compositeProduct.setGroup(newCompositeProductModels.getGroup());
@@ -85,7 +85,7 @@ public class AllCompositeProductController {
 			@RequestBody CompositeProductModel newCompositeProductModels) throws NotFoundException {
 		log.info("LOGGER: update Composite Product Model from model ");
 
-		User user = userServiceImpl.findOneByLogin("test1").get();
+		User user = userServiceImpl.findOneByLogin(authentication.getName()).get();
 		
 		
 		

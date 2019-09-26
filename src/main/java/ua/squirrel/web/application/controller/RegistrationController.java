@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -51,7 +52,7 @@ public class RegistrationController {
 
 		User user1 = new User();
 		user1.setLogin("test1");
-		user1.setHashPass("user1");
+		user1.setHashPass(new BCryptPasswordEncoder().encode("user1") );
 		user1.setMail("user1@mail.com");
 		user1.setRoles(role);
 		user1.setStates(state);
@@ -73,11 +74,12 @@ public class RegistrationController {
 		//fillDataUtil.setInvoice(user1);
 		
 		//fillDataUtil.setEmployee(user1);
+		UserModel us = new UserModel ();
+		us.setLogin(user1.getLogin());
+		us.setHashPass(user1.getHashPass());
+		us.setMail(user1.getMail());
 		
-		return UserModel.builder()
-				.login(user1.getLogin())
-				.mail(user1.getMail())
-				.build();
+		return us;
 	}
 
 	
@@ -98,10 +100,11 @@ public class RegistrationController {
 		user.setMail(userModel.getMail());
 		user.setStates(state);
 
-		return UserModel.builder()
-				.login(user.getLogin())
-				.mail(user.getMail())
-				.build();
+		UserModel us = new UserModel ();
+		us.setLogin(user.getLogin());
+		us.setMail(user.getMail());
+		
+		return us;
 	}
 
 }

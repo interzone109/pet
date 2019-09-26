@@ -2,8 +2,7 @@ package ua.squirrel.user.controller.store;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Date;
+import java.util.ArrayList; 
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -20,8 +19,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import javassist.NotFoundException;
-import lombok.extern.slf4j.Slf4j;
-import ua.squirrel.user.controller.store.invoice.InvoiceController;
+import lombok.extern.slf4j.Slf4j; 
 import ua.squirrel.user.entity.product.Product;
 import ua.squirrel.user.entity.product.composite.CompositeProduct;
 import ua.squirrel.user.entity.store.Store;
@@ -88,7 +86,7 @@ public class StoreAutoUpdateController {
 	public InvoiceModel saleProduct(Authentication authentication, @RequestBody InvoiceModel invoiceModel,
 			@PathVariable("storeId") Long storeId) throws NotFoundException {
 		log.info("LOGGER: add sale to current date and store invoice");
-		User user = userServiceImpl.findOneByLogin("test1").get();
+		User user = userServiceImpl.findOneByLogin(authentication.getName()).get();
 		/**
 		 *		1 пункт
 		 */

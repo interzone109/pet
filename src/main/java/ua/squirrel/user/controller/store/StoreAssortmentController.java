@@ -61,7 +61,7 @@ public class StoreAssortmentController {
 	public List<ProductModel> getLeftOvers(@PathVariable("store_id")Long storeId, Authentication authentication) throws NotFoundException {
 
 		log.info("LOGGER: get leftovers for current store");
-		User user = userServiceImpl.findOneByLogin("test1").get();
+		User user = userServiceImpl.findOneByLogin(authentication.getName()).get();
 		Store store = getCurrentStore(user ,storeId);
 		List<ProductModel> productModel = new ArrayList<>();
 		store.getStoreIngridientNode().forEach(productNode->{
@@ -88,7 +88,7 @@ public class StoreAssortmentController {
 			Authentication authentication) throws NotFoundException {
 
 		log.info("LOGGER: get assortment for current user");
-		User user = userServiceImpl.findOneByLogin("test1").get();
+		User user = userServiceImpl.findOneByLogin(authentication.getName()).get();
 		return storeUtil.getProductPriceModel( getCurrentStore(user ,storeId).getStoreCompositeProductNode());
 		
 	}
@@ -106,7 +106,7 @@ public class StoreAssortmentController {
 	public List<CompositeProductModel> addToStoreProduct(@PathVariable("store_id") Long storeId ,
 			@RequestBody Map<Long, Integer> newProductPrice, Authentication authentication) throws NotFoundException {
 		log.info("LOGGER: add new product price to store");
-		User user = userServiceImpl.findOneByLogin("test1").get();
+		User user = userServiceImpl.findOneByLogin(authentication.getName()).get();
 		Store store = getCurrentStore(user ,storeId) ;
 		
 		List<Product> newIngridients = new ArrayList<>();
@@ -173,7 +173,7 @@ public class StoreAssortmentController {
 	public List<CompositeProductModel> updateToStoreProduct(@PathVariable("store_id") Long storeId ,
 			@RequestBody Map<Long, Integer> productPrice, Authentication authentication) throws NotFoundException {
 		log.info("LOGGER: update product price to store");
-		User user = userServiceImpl.findOneByLogin("test1").get(); 
+		User user = userServiceImpl.findOneByLogin(authentication.getName()).get(); 
 		 //получаем колекцию узлов которые нунжо обновить
 		 Store store = getCurrentStore(user ,storeId);
 		List<StoreCompositeProductNode> newPriceNode = store .getStoreCompositeProductNode().stream()

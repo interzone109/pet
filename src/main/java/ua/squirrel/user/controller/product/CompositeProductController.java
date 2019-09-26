@@ -70,7 +70,7 @@ public class CompositeProductController {
 	public List<ProductModel> getCompositeProductInfo(Authentication authentication, @PathVariable("id") Long id)
 			throws NotFoundException {
 		log.info("LOGGER: return curent composite product");
-		User user = userServiceImpl.findOneByLogin("test1").get();
+		User user = userServiceImpl.findOneByLogin(authentication.getName()).get();
 		
 		CompositeProduct compositeProduct = getCompositeProduct(id, user);
 		// вызывается привaтный метод возращающий модель коспозитного продукта
@@ -83,7 +83,7 @@ public class CompositeProductController {
 	public List<ProductModel> addToCompositeProduct(@PathVariable("id") Long compositeId ,
 			@RequestBody Map<Long, Integer> composites, Authentication authentication) throws NotFoundException {
 		log.info("LOGGER:  product add new ingridient in  curent composite product");
-		User user = userServiceImpl.findOneByLogin("test1").get();
+		User user = userServiceImpl.findOneByLogin(authentication.getName()).get();
 		
 		//получаем композитный продукт в который будем добавлять новые ингридиенты и их расход
 		CompositeProduct compositeProduct = getCompositeProduct(compositeId, user);
@@ -142,7 +142,7 @@ public class CompositeProductController {
 			@RequestBody  Integer updateRate) throws NotFoundException {
 		
 		log.info("LOGGER: update  product expends");
-		User user = userServiceImpl.findOneByLogin("test1").get();
+		User user = userServiceImpl.findOneByLogin(authentication.getName()).get();
 		
 		// получаем текущий композитный продукт по Id и пользователю
 		ProductMap node = productMapServiceImpl.findOneByIdAndCompositeProduct(productMapId, getCompositeProduct(copositeId, user));
