@@ -57,7 +57,8 @@ public class SquirrelSecurityConfig extends WebSecurityConfigurerAdapter {
          .logoutSuccessUrl("/")
          .permitAll()
          .and()
-         .rememberMe();
+         .rememberMe()
+         .and().csrf().disable();;
      }
 	
     
