@@ -13,7 +13,7 @@ public class AppController {
 
 	@RequestMapping(path = "/", method = RequestMethod.GET)
 	public String index() {
-		return "index";
+		return "landing/index";
 	}
 	
 	

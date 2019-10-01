@@ -34,7 +34,7 @@ public class SquirrelSecurityConfig extends WebSecurityConfigurerAdapter {
          	// предостовление доступа к адресам, определенным ролям
           http.authorizeRequests()
          // добавление шаблонов страниц, требующих авторизации
-         .antMatchers("/", "/public/**","/test","/css/**").permitAll()
+         .antMatchers("/", "/public/**","/test","/css/**","/js/**").permitAll()
          .antMatchers("/user/**").hasAuthority("USER")
          .antMatchers("/employee/**").hasAuthority("EMPLOYEE")
          .anyRequest().fullyAuthenticated()
