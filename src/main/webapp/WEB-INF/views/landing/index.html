@@ -31,7 +31,7 @@
       <!--top bar start-->
       <nav class="navbar navbar-expand-md bg-inverse fixed-top scrolling-navbar">
         <div class="container">
-          <a href="index.html" class="navbar-brand">
+          <a th:href="@{/}" class="navbar-brand">
           	<img th:src="@{css/img/logoSmallOne.png}"/>
           </a>       
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
@@ -55,14 +55,14 @@
                 <a class="nav-link page-scroll" href="#pricing">Стоимость</a>
               </li>  
               <li class="nav-item">
-                  <a class="nav-link page-scroll" href="#contact">Регистрация</a>
+                  <a class="nav-link page-scroll" th:href="@{/registration}">Регистрация</a>
                 </li>  
               <li class="nav-item">
                 <a class="nav-link page-scroll" href="#blog">FAQ</a>
-              </li>   
-             <!-- <li class="nav-item">
-                <a class="btn btn-singin" href="#">Download</a>
-              </li>-->
+              </li> 
+              <li class="nav-item">
+                <a class="nav-link page-scroll" th:href="@{/login}">Войти</a>
+              </li> 
             </ul>
           </div>
         </div>
@@ -77,8 +77,7 @@
                 <p>Мы нацелены на сокращение времени обслуживания клиента 
                 <br>и ведение товарного учета</p>
               <div class="header-button">
-                <a href="#" class="btn btn-border-filled">Присоединиться</a>
-                <a href="#contact" class="btn btn-border page-scroll">Связаться с нами</a>
+                <a th:href="@{/registration}" class="btn btn-border-filled">Присоединиться</a>
               </div>
             </div>
           </div>
@@ -165,7 +164,7 @@
                 <br>в реальном времени. Так же наша аналитика покажет Ваши 
                  <br> сильные и слабые стороны.</p>
 
-              <a class="btn btn-common" href="#">Получить</a>
+              <a class="btn btn-common" href="#">Подключить</a>
             </div>
           </div>
           <!-- End Col -->
@@ -177,7 +176,7 @@
 
 
 
-    <!-- Cool Fetatures Section Start -->
+    <!-- Cool Fetatures Section Start структура продукта-->
     <section id="features" class="section">
       <div class="container">
         <!-- Start Row -->
@@ -315,7 +314,7 @@
     <!-- Cool Fetatures Section End --> 
 
 
-    <!-- Recent Showcase Section Start -->
+    <!-- Recent Showcase Section Start  -->
     <section id="showcase">
       <div class="container-fluid right-position">
         <!-- Start Row -->
@@ -334,13 +333,13 @@
 
         </div>
         <!-- End Row -->
-        <!-- Start Row 
+        <!-- Start Row -->
         <div class="row justify-content-center showcase-area">
           <div class="col-lg-12 col-md-12 col-xs-12 pr-0">
             <div class="showcase-slider owl-carousel">
-              <div class="item">
+               <div class="item">
                 <div class="screenshot-thumb">
-                  <img th:src="@{css/img/showcase/01.jp}"/>
+                  <img src="https://i.ibb.co/N6Ppp5V/title-Top-Small.png" class="img-fluid" alt="" />
                   <div class="hover-content text-center">
                     <div class="fancy-table">
                       <div class="table-cell">
@@ -349,39 +348,18 @@
                           <h5>Redesign Slack</h5>
                         </div>
                         <div class="zoom-icon">
-                          <a class="lightbox" href="img/showcase/01.jpg">
+                          <a class="lightbox" href="https://i.ibb.co/N6Ppp5V/title-Top-Small.png">
                           <i class="lni-zoom-in"></i></a>
-                          <a href="#"><i class="lni-link"></i></a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                </div>
-              </div>
-              <div class="item">
-                <div class="screenshot-thumb">
-                  <img th:src="@{css/img/showcase/02.jpg}" class="img-fluid" alt="" />
-                  <div class="hover-content text-center">
-                    <div class="fancy-table">
-                      <div class="table-cell">
-                        <div class="single-text">
-                          <p>Icon , Web</p>
-                          <h5>Redesign Slack</h5>
-                        </div>
-                        <div class="zoom-icon">
-                          <a class="lightbox" href="img/showcase/02.jpg">
-                          <i class="lni-zoom-in"></i></a>
-                          <a href="#"><i class="lni-link"></i></a>
+                          <a href="https://i.ibb.co/N6Ppp5V/title-Top-Small.png"><i class="lni-link"></i></a>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-              <div class="item">
+               <div class="item">
                 <div class="screenshot-thumb">
-                  <img th:src="@{css/img/showcase/03.jpg}" class="img-fluid" alt="" />
+                  <img  src="https://i.ibb.co/N6Ppp5V/title-Top-Small.png" class="img-fluid" alt="" />
                   <div class="hover-content text-center">
                     <div class="fancy-table">
                       <div class="table-cell">
@@ -390,352 +368,9 @@
                           <h5>Redesign Slack</h5>
                         </div>
                         <div class="zoom-icon">
-                          <a class="lightbox" href="img/showcase/03.jpg">
+                          <a class="lightbox" href="https://i.ibb.co/N6Ppp5V/title-Top-Small.png">
                           <i class="lni-zoom-in"></i></a>
-                          <a href="#"><i class="lni-link"></i></a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="item">
-                <div class="screenshot-thumb">
-                  <img th:src="@{css/img/showcase/04.jpg}" class="img-fluid" alt="" />
-                  <div class="hover-content text-center">
-                    <div class="fancy-table">
-                      <div class="table-cell">
-                        <div class="single-text">
-                          <p>Icon , Web</p>
-                          <h5>Redesign Slack</h5>
-                        </div>
-                        <div class="zoom-icon">
-                          <a class="lightbox" href="img/showcase/04.jpg">
-                          <i class="lni-zoom-in"></i></a>
-                          <a href="#"><i class="lni-link"></i></a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="item">
-                <div class="screenshot-thumb">
-                  <img th:src="@{css/img/showcase/05.jpg}" class="img-fluid" alt="" />
-                  <div class="hover-content text-center">
-                    <div class="fancy-table">
-                      <div class="table-cell">
-                        <div class="single-text">
-                          <p>Icon , Web</p>
-                          <h5>Redesign Slack</h5>
-                        </div>
-                        <div class="zoom-icon">
-                          <a class="lightbox" href="img/showcase/05.jpg">
-                          <i class="lni-zoom-in"></i></a>
-                          <a href="#"><i class="lni-link"></i></a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="item">
-                <div class="screenshot-thumb">
-                  <img th:src="@{css/img/showcase/01.jpg}" class="img-fluid" alt="" />
-                  <div class="hover-content text-center">
-                    <div class="fancy-table">
-                      <div class="table-cell">
-                        <div class="single-text">
-                          <p>Icon , Web</p>
-                          <h5>Redesign Slack</h5>
-                        </div>
-                        <div class="zoom-icon">
-                          <a class="lightbox" href="img/showcase/01.jpg">
-                          <i class="lni-zoom-in"></i></a>
-                          <a href="#"><i class="lni-link"></i></a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                </div>
-              </div>
-              <div class="item">
-                <div class="screenshot-thumb">
-                  <img th:src="@{css/img/showcase/02.jpg}" class="img-fluid" alt="" />
-                  <div class="hover-content text-center">
-                    <div class="fancy-table">
-                      <div class="table-cell">
-                        <div class="single-text">
-                          <p>Icon , Web</p>
-                          <h5>Redesign Slack</h5>
-                        </div>
-                        <div class="zoom-icon">
-                          <a class="lightbox" href="img/showcase/02.jpg">
-                          <i class="lni-zoom-in"></i></a>
-                          <a href="#"><i class="lni-link"></i></a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="item">
-                <div class="screenshot-thumb">
-                  <img th:src="@{css/img/showcase/03.jpg}" class="img-fluid" alt="" />
-                  <div class="hover-content text-center">
-                    <div class="fancy-table">
-                      <div class="table-cell">
-                        <div class="single-text">
-                          <p>Icon , Web</p>
-                          <h5>Redesign Slack</h5>
-                        </div>
-                        <div class="zoom-icon">
-                          <a class="lightbox" href="img/showcase/03.jpg">
-                          <i class="lni-zoom-in"></i></a>
-                          <a href="#"><i class="lni-link"></i></a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="item">
-                <div class="screenshot-thumb">
-                  <img th:src="@{css/img/showcase/04.jpg}" class="img-fluid" alt="" />
-                  <div class="hover-content text-center">
-                    <div class="fancy-table">
-                      <div class="table-cell">
-                        <div class="single-text">
-                          <p>Icon , Web</p>
-                          <h5>Redesign Slack</h5>
-                        </div>
-                        <div class="zoom-icon">
-                          <a class="lightbox" href="img/showcase/04.jpg">
-                          <i class="lni-zoom-in"></i></a>
-                          <a href="#"><i class="lni-link"></i></a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="item">
-                <div class="screenshot-thumb">
-                  <img th:src="@{css/img/showcase/05.jpg" class="img-fluid" alt="" />
-                  <div class="hover-content text-center">
-                    <div class="fancy-table">
-                      <div class="table-cell">
-                        <div class="single-text">
-                          <p>Icon , Web</p>
-                          <h5>Redesign Slack</h5>
-                        </div>
-                        <div class="zoom-icon">
-                          <a class="lightbox" href="img/showcase/05.jpg">
-                          <i class="lni-zoom-in"></i></a>
-                          <a href="#"><i class="lni-link"></i></a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="item">
-                <div class="screenshot-thumb">
-                  <img th:src="@{css/img/showcase/01.jpg}" class="img-fluid" alt="" />
-                  <div class="hover-content text-center">
-                    <div class="fancy-table">
-                      <div class="table-cell">
-                        <div class="single-text">
-                          <p>Icon , Web</p>
-                          <h5>Redesign Slack</h5>
-                        </div>
-                        <div class="zoom-icon">
-                          <a class="lightbox" href="img/showcase/01.jpg">
-                          <i class="lni-zoom-in"></i></a>
-                          <a href="#"><i class="lni-link"></i></a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                </div>
-              </div>
-              <div class="item">
-                <div class="screenshot-thumb">
-                  <img th:src="@{css/img/showcase/02.jpg}" class="img-fluid" alt="" />
-                  <div class="hover-content text-center">
-                    <div class="fancy-table">
-                      <div class="table-cell">
-                        <div class="single-text">
-                          <p>Icon , Web</p>
-                          <h5>Redesign Slack</h5>
-                        </div>
-                        <div class="zoom-icon">
-                          <a class="lightbox" href="img/showcase/01.jpg">
-                          <i class="lni-zoom-in"></i></a>
-                          <a href="#"><i class="lni-link"></i></a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="item">
-                <div class="screenshot-thumb">
-                  <img th:src="@{css/img/showcase/03.jpg}" class="img-fluid" alt="" />
-                  <div class="hover-content text-center">
-                    <div class="fancy-table">
-                      <div class="table-cell">
-                        <div class="single-text">
-                          <p>Icon , Web</p>
-                          <h5>Redesign Slack</h5>
-                        </div>
-                        <div class="zoom-icon">
-                          <a class="lightbox" href="img/showcase/01.jpg">
-                          <i class="lni-zoom-in"></i></a>
-                          <a href="#"><i class="lni-link"></i></a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="item">
-                <div class="screenshot-thumb">
-                  <img th:src="@{css/img/showcase/04.jpg}" class="img-fluid" alt="" />
-                  <div class="hover-content text-center">
-                    <div class="fancy-table">
-                      <div class="table-cell">
-                        <div class="single-text">
-                          <p>Icon , Web</p>
-                          <h5>Redesign Slack</h5>
-                        </div>
-                        <div class="zoom-icon">
-                          <a class="lightbox" href="img/showcase/01.jpg">
-                          <i class="lni-zoom-in"></i></a>
-                          <a href="#"><i class="lni-link"></i></a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="item">
-                <div class="screenshot-thumb">
-                  <img th:src="@{css/img/showcase/05.jpg}" class="img-fluid" alt="" />
-                  <div class="hover-content text-center">
-                    <div class="fancy-table">
-                      <div class="table-cell">
-                        <div class="single-text">
-                          <p>Icon , Web</p>
-                          <h5>Redesign Slack</h5>
-                        </div>
-                        <div class="zoom-icon">
-                          <a class="lightbox" href="img/showcase/01.jpg">
-                          <i class="lni-zoom-in"></i></a>
-                          <a href="#"><i class="lni-link"></i></a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="item">
-                <div class="screenshot-thumb">
-                  <img th:src="@{css/img/showcase/01.jpg}" class="img-fluid" alt="" />
-                  <div class="hover-content text-center">
-                    <div class="fancy-table">
-                      <div class="table-cell">
-                        <div class="single-text">
-                          <p>Icon , Web</p>
-                          <h5>Redesign Slack</h5>
-                        </div>
-                        <div class="zoom-icon">
-                          <a class="lightbox" href="img/showcase/01.jpg">
-                          <i class="lni-zoom-in"></i></a>
-                          <a href="#"><i class="lni-link"></i></a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                </div>
-              </div>
-              <div class="item">
-                <div class="screenshot-thumb">
-                  <img th:src="@{css/img/showcase/02.jpg}" class="img-fluid" alt="" />
-                  <div class="hover-content text-center">
-                    <div class="fancy-table">
-                      <div class="table-cell">
-                        <div class="single-text">
-                          <p>Icon , Web</p>
-                          <h5>Redesign Slack</h5>
-                        </div>
-                        <div class="zoom-icon">
-                          <a class="lightbox" href="img/showcase/01.jpg">
-                          <i class="lni-zoom-in"></i></a>
-                          <a href="#"><i class="lni-link"></i></a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="item">
-                <div class="screenshot-thumb">
-                  <img th:src="@{css/img/showcase/03.jpg}" class="img-fluid" alt="" />
-                  <div class="hover-content text-center">
-                    <div class="fancy-table">
-                      <div class="table-cell">
-                        <div class="single-text">
-                          <p>Icon , Web</p>
-                          <h5>Redesign Slack</h5>
-                        </div>
-                        <div class="zoom-icon">
-                          <a class="lightbox" href="img/showcase/01.jpg">
-                          <i class="lni-zoom-in"></i></a>
-                          <a href="#"><i class="lni-link"></i></a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="item">
-                <div class="screenshot-thumb">
-                  <img th:src="@{css/img/showcase/04.jpg}" class="img-fluid" alt="" />
-                  <div class="hover-content text-center">
-                    <div class="fancy-table">
-                      <div class="table-cell">
-                        <div class="single-text">
-                          <p>Icon , Web</p>
-                          <h5>Redesign Slack</h5>
-                        </div>
-                        <div class="zoom-icon">
-                          <a class="lightbox" href="img/showcase/01.jpg">
-                          <i class="lni-zoom-in"></i></a>
-                          <a href="#"><i class="lni-link"></i></a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="item">
-                <div class="screenshot-thumb">
-                  <img th:src="@{css/img/showcase/05.jpg}" class="img-fluid" alt="" />
-                  <div class="hover-content text-center">
-                    <div class="fancy-table">
-                      <div class="table-cell">
-                        <div class="single-text">
-                          <p>Icon , Web</p>
-                          <h5>Redesign Slack</h5>
-                        </div>
-                        <div class="zoom-icon">
-                          <a class="lightbox" href="img/showcase/01.jpg">
-                          <i class="lni-zoom-in"></i></a>
-                          <a href="#"><i class="lni-link"></i></a>
+                          <a href="https://i.ibb.co/N6Ppp5V/title-Top-Small.png"><i class="lni-link"></i></a>
                         </div>
                       </div>
                     </div>
@@ -743,12 +378,32 @@
                 </div>
               </div>
              
-
+           <!--     <div class="item">
+                <div class="screenshot-thumb">
+                  <img th:src="@{css/img/showcase/02.jpg}" class="img-fluid" alt="" />
+                  <div class="hover-content text-center">
+                    <div class="fancy-table">
+                      <div class="table-cell">
+                        <div class="single-text">
+                          <p>Icon , Web</p>
+                          <h5>Redesign Slack</h5>
+                        </div>
+                        <div class="zoom-icon">
+                          <a class="lightbox" href="img/showcase/02.jpg">
+                          <i class="lni-zoom-in"></i></a>
+                          <a href="#"><i class="lni-link"></i></a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
               
-            </div>
-          </div>
+           -->
+           </div>
         </div>
-        End Row -->
+        </div>
+      <!-- End Row -->
       </div>
     </section>
     <!-- Recent Showcase Section End --> 
@@ -799,7 +454,7 @@
             <div class="pricing-table text-center">
               <div class="pricing-details">
                 <h3>Стандартный</h3>
-                <h1><span>Грн</span>200</h1>
+                <h1><span>Грн</span>199</h1>
                 <ul>
                     <li>5 магазинов</li>
                     <li>5 сотрудников</li>
@@ -847,10 +502,9 @@
           <div class="col-lg-12">
             <div class="contact-text section-header text-center">  
               <div>   
-                <h2 class="section-title">Get In Touch</h2>
+                <h2 class="section-title">Обратная связь</h2>
                 <div class="desc-text">
-                  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do</p>  
-                  <p>eiusmod tempor incididunt ut labore et dolore.</p>
+                  <p>Напишите нам </p>  
                 </div>
               </div> 
             </div>
@@ -889,10 +543,6 @@
                 </div> 
               </div>
               <div class="col-md-12">
-                <div class="form-group"> 
-                  <textarea class="form-control" id="message"  name="message" placeholder="Write Message" rows="4" data-error="Write your message" required></textarea>
-                  <div class="help-block with-errors"></div>
-                </div>
                 <div class="submit-button">
                   <button class="btn btn-common" id="submit" type="submit">Submit</button>
                   <div id="msgSubmit" class="h3 hidden"></div> 

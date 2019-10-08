@@ -34,7 +34,7 @@ public class SquirrelSecurityConfig extends WebSecurityConfigurerAdapter {
          	// предостовление доступа к адресам, определенным ролям
           http.authorizeRequests()
          // добавление шаблонов страниц, требующих авторизации
-         .antMatchers("/", "/public/**","/test","/css/**","/js/**").permitAll()
+         .antMatchers("/","/registration", "/test","/css/**","/js/**").permitAll()
          .antMatchers("/user/**").hasAuthority("USER")
          .antMatchers("/employee/**").hasAuthority("EMPLOYEE")
          .anyRequest().fullyAuthenticated()
@@ -42,9 +42,9 @@ public class SquirrelSecurityConfig extends WebSecurityConfigurerAdapter {
          // указание формы для аутентификации
          .formLogin()
          .loginProcessingUrl("/j_spring_security_check") 
-         .loginPage("/public/login")
+         .loginPage("/login")
          .defaultSuccessUrl("/user/home")
-         .failureUrl("/public/login")
+         .failureUrl("/login")
          .usernameParameter("login")
          .passwordParameter("hashPass")
          .permitAll()

@@ -17,19 +17,27 @@ public class AppController {
 	}
 	
 	
-	@RequestMapping(path = "/public/login", method = RequestMethod.GET)
+	@RequestMapping(path = "/login", method = RequestMethod.GET)
 	public String login(Model model) {
 		model.addAttribute("user",  new UserModel());
-		return "login";
+		return "landing/login";
 	}
 	
 	
 	
-	@RequestMapping(path = "/public/registration", method = RequestMethod.GET)
+	@RequestMapping(path = "/registration", method = RequestMethod.GET)
 	public String registration(Model model) {
 		model.addAttribute("user",  new UserModel());
-		return "registration";
+		return "landing/registr";
 	}
+	
+	@RequestMapping(path = "/registration", method = RequestMethod.POST)
+	public String registrationNewUser(UserModel userModel) {
+		 
+		return "landing/registrSuccess";
+	}
+	
+	
 	@RequestMapping(path = "/logout", method = RequestMethod.GET)
 	public String logout(Model model) {
 		SecurityContextHolder.clearContext();

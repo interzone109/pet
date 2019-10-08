@@ -21,9 +21,68 @@
 
 </head>
 <body>
-<div th:insert="~{appTemplate/indexTopBar :: index_top_bar}"></div>
-<div th:insert="~{appTemplate/loginBody :: login_body}"></div>
-<div th:insert="~{appTemplate/indexFooter :: index_footer}"></div>
+<div class="container login-container" >
+<nav class="navbar navbar-expand-md bg-inverse fixed-top scrolling-navbar">
+        <div class="container">
+          <a th:href="@{/}" class="navbar-brand">
+          	<img th:src="@{css/img/logoSmallOne.png}"/>
+          </a>       
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="lni-menu"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav mr-auto w-100 justify-content-end">
+              <li class="nav-item">
+                <a class="nav-link page-scroll"  th:href="@{/}">Вернуться на главную</a>
+              </li>
+             
+            </ul>
+          </div>
+        </div>
+      </nav>  
+      <!--  -->
+	<div class="login-wrap">
+		<div class="login-html">
+			<input id="tab-1" type="radio" name="tab" class="sign-in" checked><label for="tab-1" class="tab">Пользователь</label>
+			<input id="tab-2" type="radio" name="tab" class="for-pwd"><label for="tab-2" class="tab">Сотрудник</label>
+			<div class="login-form">
+				<form  th:action="@{/j_spring_security_check}"  th:object="${user}" method='POST'>
+					<div class="sign-in-htm">
+						<div class="group">
+							<label for="user" class="label">Логин</label>
+							<input id="user" type="text" class="input" th:field="*{login}" name="j_username">
+						</div>
+					<div class="group">
+						<label for="pass" class="label">Пароль</label>
+						<input id="pass" type="password" class="input" data-type="password" th:field="*{hashPass}" name="j_password">
+					</div>
+					<div class="group">
+						<input type="submit" class="button" value="Войти">
+					</div>
+						<div class="hr"></div>
+					</div>
+				</form>
+				<form>
+					<div class="for-pwd-htm">
+						<div class="group">
+							<label for="employee" class="label">Логин</label>
+							<input id="employee" type="text" class="input">
+						</div>
+						<div class="group">
+							<label for="employeePass" class="label">Пароль</label>
+							<input id="employeePass" type="password" class="input" data-type="password">
+						</div>
+						<div class="group">
+							<input type="submit" class="button" value="Войти"> 
+						</div>
+					<div class="hr"></div>
+				</div>
+			</form>
+			
+		</div>
+	</div>
 
+</div>     
+</div>
 </body>
 </html>
