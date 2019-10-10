@@ -10,4 +10,5 @@ public class UserModel {
 	private String hashPass;
 	private String repidPass;
 	private String mail;
+	private String subscription;
 }

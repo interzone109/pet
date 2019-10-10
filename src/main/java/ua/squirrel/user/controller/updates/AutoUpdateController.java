@@ -1,4 +1,4 @@
-package ua.squirrel.user.controller.store;
+package ua.squirrel.user.controller.updates;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -42,7 +42,7 @@ import ua.squirrel.web.service.registration.user.UserServiceImpl;
 
 @Controller
 @Slf4j
-public class StoreAutoUpdateController {
+public class AutoUpdateController {
 	
 	@Autowired
 	private UserServiceImpl userServiceImpl;
@@ -69,6 +69,13 @@ public class StoreAutoUpdateController {
     public void reportCurrentTime() {
         log.info("System controller");
     }
+	
+	@Scheduled(fixedRate = 500000)
+    public void checkPayment() {
+        log.info("check payment");
+    }
+	
+	
 	
 	
 	/**
