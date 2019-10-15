@@ -8,18 +8,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import lombok.extern.slf4j.Slf4j;
 import ua.squirrel.user.entity.partner.Partner;
 import ua.squirrel.web.entity.user.Role;
-import ua.squirrel.web.entity.user.State;
 import ua.squirrel.web.entity.user.User;
 import ua.squirrel.web.entity.user.UserModel;
+import ua.squirrel.web.entity.user.UserSubscription;
 import ua.squirrel.web.service.registration.RoleServiceImpl;
-import ua.squirrel.web.service.registration.StateServiceImpl;
 import ua.squirrel.web.service.registration.user.UserServiceImpl;
 import ua.squirrel.z.util.FillDataUtil;
 /**
@@ -35,8 +32,6 @@ public class RegistrationController {
 	@Autowired
 	private UserServiceImpl userServiceImpl;
 	@Autowired
-	private StateServiceImpl stateServiceImpl;
-	@Autowired
 	private RoleServiceImpl roleServiceImpl;
 	@Autowired
 	private FillDataUtil fillDataUtil ;
@@ -47,15 +42,20 @@ public class RegistrationController {
 		log.info("LOGGER: return new user model ");
 		Set<Role> role = new HashSet<>();
 		role.add(roleServiceImpl.findOneByName("USER"));
-		Set<State> state = new HashSet<>();
-		state.add(stateServiceImpl.findOneByName("ACTIVE"));
+		
+		UserSubscription userSubscription = new UserSubscription();
+		userSubscription.setEmployeesQuantity(1);
+		userSubscription.setStoreQuantity(1);
+		userSubscription.setPartnerQuantity(5);		
+		userSubscription.setProductQuantity(50);
 
 		User user1 = new User();
+		user1.setUserSubscription(userSubscription);
 		user1.setLogin("test1");
 		user1.setHashPass(new BCryptPasswordEncoder().encode("user1") );
 		user1.setMail("user1@mail.com");
 		user1.setRoles(role);
-		user1.setStates(state);
+		userSubscription.setUser(user1);
 		userServiceImpl.save(user1);
 		
 		List<Partner> l = fillDataUtil.getPartner(user1);
@@ -74,7 +74,7 @@ public class RegistrationController {
 		//fillDataUtil.setInvoice(user1);
 		
 		//fillDataUtil.setEmployee(user1);
-		UserModel us = new UserModel ();
+		UserModel us = new UserModel();
 		us.setLogin(user1.getLogin());
 		us.setHashPass(user1.getHashPass());
 		us.setMail(user1.getMail());
@@ -83,28 +83,5 @@ public class RegistrationController {
 	}
 
 	
-
-	@PostMapping
-	public UserModel registr(@RequestBody UserModel userModel) {
-		log.info("LOGGER: regist new user " + userModel.getLogin());
-
-		Set<Role> role = new HashSet<>();
-		role.add(roleServiceImpl.findOneByName("USER"));
-		Set<State> state = new HashSet<>();
-		state.add(stateServiceImpl.findOneByName("ACTIVE"));
-
-		User user = new User();
-		user.setLogin(userModel.getLogin());
-		user.setHashPass(userModel.getHashPass());
-		user.setRoles(role);
-		user.setMail(userModel.getMail());
-		user.setStates(state);
-
-		UserModel us = new UserModel ();
-		us.setLogin(user.getLogin());
-		us.setMail(user.getMail());
-		
-		return us;
-	}
 
 }

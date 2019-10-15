@@ -22,5 +22,7 @@ public class UserServiceImpl implements UserService {
 	public Optional<User> findOneByLogin(String login) {
 		return userRepository.findOneByLogin(login);
 	}
-	
+	public boolean existsByLoginOrMail(String login, String mail) {
+		return userRepository.existsByLoginOrMail(login, mail);
+	}
 }

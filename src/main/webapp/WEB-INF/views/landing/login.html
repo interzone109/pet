@@ -60,6 +60,11 @@
                <div class="col-lg-9 col-md-12">
           <form  th:action="@{/j_spring_security_check}"  th:object="${user}" method='POST'>
             <div class="row">
+           		<div class="col-md-12">
+            		<p id="errors" th:if="${(param.error != null) and (param.error[0] == 'true')}">
+   					 Ошибка ввода логина или пароля
+					</p>
+				</div>
               <div class="col-md-6">
                 <div class="form-group">
                   <input type="text" class="form-control"    placeholder="Login"  
@@ -76,8 +81,8 @@
               </div>
               <div class="col-md-6">
                 <div class="submit-button">
-                  <button class="btn btn-common" id="submit" type="submit">Войти</button>
-                  <div id="msgSubmit" class="h3 hidden"></div> 
+                  <button class="btn btn-common"  type="submit">Войти</button>
+                  <div id="msgSubmit" class="h3  "></div> 
                   <div class="clearfix"></div> 
                 </div>
               </div>
@@ -129,7 +134,7 @@
             <div class="col-lg-3 col-md-6 col-sm-6 col-xs-6 col-mb-12">
               
               <div class="footer-logo">
-               <img src="img/footer-logo.png" alt="">
+                <img th:src="@{css/img/logoSmallOne.png}"/>
               </div>
             </div>
              <!-- End Col -->

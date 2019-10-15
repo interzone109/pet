@@ -36,8 +36,11 @@ public class UserSubscription {
 	private int partnerQuantity ;
 	//доступное количество продуктов
 	private int productQuantity ;
-	
-	@OneToOne(fetch = FetchType.LAZY)
+	//стоимость подписки
+	private int price ;
+		
+
+	@OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
 	private User user;
 }

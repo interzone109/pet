@@ -43,6 +43,9 @@
                 <a class="nav-link page-scroll" th:href="@{/}">Главная</a>
               </li> 
               <li class="nav-item">
+                <a class="nav-link page-scroll" th:href="@{/login}">Войти</a>
+              </li> 
+              <li class="nav-item">
                 <a class="nav-link page-scroll" href="#blog">FAQ</a>
               </li> 
             </ul>
@@ -53,45 +56,61 @@
       <div class="container">      
         <div class="row space-100">
           <div class="">
+          
             <div class="contents">
                <div class="col-lg-9 col-md-12">
-          <form  >
+               <div th:switch="${state}"> 
+ 				 <p th:case="'new'"></p>
+  				 <p th:case="'success'">Регистрация прошла успешно, проверьте почту</p>
+ 				 <p th:case="'fail'">Регистрация не прошла</p> 
+				</div>
+				<div th:switch="${erorr}"> 
+ 				 <p th:case="notValidPass">Пароли не равны</p>
+ 				  <p th:case="existUser">пользователь с таким логином или паролем уже существует</p>
+                </div>
+				
+          <form th:action="@{/registration}"  th:object="${user}" method='POST' >
             <div class="row">
               <div class="col-md-3">
                 <div class="form-group">
-                <label  for="login"  class=""><p>Login</p></label>
-                  <input type="text" class="form-control"  id="login"  placeholder="Login"  >
-                  <div class="help-block with-errors"></div>
+                <label  for="login"  class=""><p>Логин</p></label>
+                  <input type="text" class="form-control"  id="login"  placeholder="Login"  th:field="*{login}" >
+                  <p th:if="${#fields.hasErrors('login')}" th:errors="*{login}" class="help-block ">
+				 </p>
+                  
                 </div>                                 
               </div>
               <div class="col-md-3">
                 <div class="form-group">
-                	<label  for="pass"  class=""><p>Pass</p></label>
-                  <input type="password" placeholder="Pass" id="pass" class="form-control" >
-                  <div class="help-block with-errors"></div>
+                	<label  for="pass"  class=""><p>Пароль</p></label>
+                  <input type="password" placeholder="Pass" id="pass" class="form-control" th:field="*{hashPass}">
+                  <p th:if="${#fields.hasErrors('hashPass')}" th:errors="*{hashPass}" class="help-block "  >
+				 </p>
                 </div> 
               </div>
               <div class="col-md-3">
                 <div class="form-group">
-                <label  for="repidPass"  class=""><p>Repid pass</p></label>
-                  <input type="password" class="form-control" id="repidPass" name="email" placeholder="Pass" >
-                  <div class="help-block with-errors"></div>
+                <label  for="repidPass"  class=""><p>Повторите пароль</p></label>
+                  <input type="password" class="form-control" id="repidPass" name="email" placeholder="Pass" th:field="*{repidPass}" >
+                  <p th:if="${#fields.hasErrors('repidPass')}" th:errors="*{repidPass}" class="help-block "  >
+				 </p>
                 </div>                                 
               </div>
               <div class="col-md-6">
                 <div class="form-group">
                 <label  for="email"  class=""><p>Email</p></label>
-                  <input type="text" placeholder="Email" class="form-control" id="email" name="Email" >
-                  <div class="help-block with-errors"></div>
+                  <input type="text" placeholder="Email" class="form-control" id="email" name="Email" th:field="*{mail}">
+                  <p th:if="${#fields.hasErrors('mail')}" th:errors="*{mail}" class="help-block ">
+				 </p>
                 </div> 
               </div>
               <div class="col-md-3">
                 <div class="form-group">
                 <label  for="pay"  class=""><p>Пакет услуг</p></label>
-                  	<select class="form-control" id="pay">
-								<option >Бесплатный</option>
-								<option selected> Стандартный</option>
-								<option disabled>Идивидуальный</option>
+                  	<select class="form-control" id="pay" th:field="*{subscription}">
+								<option value="USER_FREE" >Бесплатный</option>
+								<option selected value="USER_STANDART"  >Стандартный </option>
+								<option disabled value="USER_CONTRACT">Идивидуальный</option>
 							</select>
                   <div class="help-block with-errors"></div>
                 </div> 
@@ -128,7 +147,7 @@
             <div class="col-lg-3 col-md-6 col-sm-6 col-xs-6 col-mb-12">
               
               <div class="footer-logo">
-               <img src="img/footer-logo.png" alt="">
+               <img th:src="@{css/img/logoSmallOne.png}"/>
               </div>
             </div>
              <!-- End Col -->
@@ -138,9 +157,7 @@
                 <h3 class="block-title">Company</h3>
                 <ul class="menu">
                   <li><a href="#">  - About Us</a></li>
-                  <li><a href="#">- Career</a></li>
-                  <li><a href="#">- Blog</a></li>
-                  <li><a href="#">- Press</a></li>
+                   
                 </ul>
               </div>
             </div>
@@ -151,10 +168,7 @@
                 <h3 class="block-title">Product</h3>
                 <ul class="menu">
                   <li><a href="#">  - Customer Service</a></li>
-                  <li><a href="#">- Enterprise</a></li>
-                  <li><a href="#">- Price</a></li>
-                  <li><a href="#">- Scurity</a></li>
-                  <li><a href="#">- Why SLICK?</a></li>
+                  
                 </ul>
               </div>
             </div>
@@ -165,10 +179,7 @@
                 <h3 class="block-title">Download App</h3>
                 <ul class="menu">
                   <li><a href="#">  - Android App</a></li>
-                  <li><a href="#">- IOS App</a></li>
-                  <li><a href="#">- Windows App</a></li>
-                  <li><a href="#">- Play Store</a></li>
-                  <li><a href="#">- IOS Store</a></li>
+                   
                 </ul>
               </div>
             </div>
@@ -224,17 +235,17 @@
     </div>
     <!-- End Preloader -->
 
-    <!-- jQuery first, then Tether, then Bootstrap JS. -->
+    <!-- jQuery first, then Tether, then Bootstrap JS.-->
     <script th:src="@{js/landing/jquery-min.js}"></script>
-    <script th:src="@{js/landing/popper.min.js}"></script>
-    <script th:src="@{js/landing/bootstrap.min.js}"></script>
+     <script th:src="@{js/landing/popper.min.js}"></script> 
+     <script th:src="@{js/landing/bootstrap.min.js}"></script>
     <script th:src="@{js/landing/owl.carousel.js}"></script>
     <script th:src="@{js/landing/jquery.nav.js}"></script>
     <script th:src="@{js/landing/jquery.easing.min.js}"></script>
     <script th:src="@{js/landing/nivo-lightbox.js}"></script>
     <script th:src="@{js/landing/jquery.magnific-popup.min.js}"></script>
-     <script th:src="@{js/landing/main.js}"></script>
-     
+     <script th:src="@{js/landing/main.js}"></script> 
+     <script th:src="@{js/landing/validation.js}"></script> 
 
     
   </body>

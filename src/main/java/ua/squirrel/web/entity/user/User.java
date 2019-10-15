@@ -31,13 +31,10 @@ public class User {
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
 	private Set<Role> roles;
-
-	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(name = "user_state", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "state_id"))
-	private Set<State> states;
+	
 	
 	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL,
-            fetch = FetchType.LAZY, optional = false)
+    fetch = FetchType.EAGER, optional = false)
 	private UserSubscription userSubscription;
 
 }
