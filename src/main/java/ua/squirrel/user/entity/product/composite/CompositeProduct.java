@@ -60,18 +60,5 @@ public class CompositeProduct {
 	@JoinColumn(name = "properties_id")
 	private PropertiesProduct propertiesProduct;
 	
-	//поле хранит текущай расход и id расходуемого ингридиента
-	@Column(name = "expend_product_id", length=512)
-	@Deprecated
-	private String productExpend ;
-	
-	//поле хранит предыдущий расход и дату его изменения
-	@Column(name = "expend_update_id", length=1024)
-	@Deprecated
-	private String expendUpdate ;
-	
-	//поле хранит дату и ид удаленного ингридиента
-	@Column(name = "delete_ingridient_date_id", length=1024)
-	@Deprecated
-	private String ingridientDelete ;
+
 }

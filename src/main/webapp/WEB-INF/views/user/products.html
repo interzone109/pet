@@ -55,7 +55,14 @@
 					</div>
 				</div>
 			<!-- Search end -->
+			
 			<br>
+			<div class="alert alert-warning alert-dismissible fade collapse" role="alert" id="excessOfLimit">
+  				<span id="excessOfLimitText"> </span>
+  			<button type="button" class="close"   aria-label="Close" onclick="closeExcessOfLimit()">
+    			<span aria-hidden="true">&times;</span>
+ 			 </button>
+			</div>
 			<!-- -----------  search --------------------- -->
 			
 			
@@ -85,7 +92,7 @@
 						</select>
 						</div>
 						<div class="col-2">
-							<button class="btn btn-info"  onclick="postNewCompositeProduct()"  >Добавить</button>
+							<button class="btn btn-success"  onclick="postNewCompositeProduct()" >Добавить</button>
 						</div>
 					</div>
 				</div>
@@ -148,7 +155,13 @@
 				<div hidden id="currentProductId"></div>
 				<!-- -----------  composite table  --------------------- -->	
 			</div>
-
+					<ul class="nav navbar-nav ml-auto">
+						<li class="nav-item ">
+							<a class="nav-link" href="#" onclick="hideProduct()">
+						 		Вернуться к продуктам 
+						 	</a>
+						 </li>
+					</ul>
 			<div class="line"></div>
 		</div>
 		

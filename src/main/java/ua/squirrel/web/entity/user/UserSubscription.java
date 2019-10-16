@@ -30,12 +30,20 @@ public class UserSubscription {
 	private LocalDate deadlineDate;
 	//доступное количество магазинов
 	private int storeQuantity ;
+	//текущее количество магазинов
+	private int storeCurrentQuantity ;
 	//доступное количество работников
 	private int employeesQuantity ;
+	//текущее количество работников
+	private int employeesCurrentQuantity ;
 	//доступное количество поставщиков
 	private int partnerQuantity ;
+	//текущее количество поставщиков
+	private int partnerCurrentQuantity ;
 	//доступное количество продуктов
 	private int productQuantity ;
+	//текущее количество продуктов
+	private int productCurrentQuantity ;
 	//стоимость подписки
 	private int price ;
 		

@@ -10,7 +10,10 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -157,7 +160,16 @@ public class CompositeProductController {
 				.orElseThrow(() -> new NotFoundException("Composite product not found"));
 	}
 
-
+	@DeleteMapping
+	public ResponseEntity<String> removeIngridient(@PathVariable("id") Long compositeId ){
+		log.info("LOGGER: remove ingridient from  product ");
+		try {
+		productMapServiceImpl.deleteById(compositeId);
+		}catch(Exception e) {
+			return new ResponseEntity<>("bad request", HttpStatus.REQUESTED_RANGE_NOT_SATISFIABLE);
+		}
+		return new ResponseEntity<>("remove", HttpStatus.OK);
+	}
 	/*
 	  тестовый джейсон Post 
 	  { 

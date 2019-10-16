@@ -28,11 +28,11 @@ public class ProductMap {
 	@Column(name = "product_map_id", nullable = false)
 	private long id;
 	//Композитный продукт
-	@ManyToOne(fetch = FetchType.LAZY, cascade=CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.LAZY, cascade=CascadeType.DETACH)
 	@JoinColumn(name = "composite_product_id", nullable = false)
 	private CompositeProduct compositeProduct;
 	//ингридиент
-	@ManyToOne(fetch = FetchType.LAZY, cascade=CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.LAZY, cascade=CascadeType.DETACH)
 	@JoinColumn(name = "products_map_product_id", nullable = false)
 	private Product product;
 	//количество ингридиента на единицу композитного продукта

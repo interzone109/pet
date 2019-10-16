@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -74,18 +73,6 @@ public class PartnerController {
 				.partnerMail(currentPartner.getPartnerMail())
 				.phonNumber(currentPartner.getPhonNumber())
 				.build();
-	}
-
-	@DeleteMapping
-	public void getDeletePartner(@PathVariable("partner_id") Long id, Authentication authentication)
-			throws NotFoundException {
-		log.info("LOGGER: delete curent partners");
-
-		User userCurrentSesion = userServiceImpl.findOneByLogin(authentication.getName()).get();
-		Partner partner = getCurrentPartner(id, userCurrentSesion);
-		partner.setRemove(true);
-		partnerServiceImpl.save(partner);
-		
 	}
 
 	

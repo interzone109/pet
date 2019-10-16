@@ -44,10 +44,14 @@ public class RegistrationController {
 		role.add(roleServiceImpl.findOneByName("USER"));
 		
 		UserSubscription userSubscription = new UserSubscription();
+		userSubscription.setEmployeesCurrentQuantity(0);
 		userSubscription.setEmployeesQuantity(1);
+		userSubscription.setStoreCurrentQuantity(0);
 		userSubscription.setStoreQuantity(1);
-		userSubscription.setPartnerQuantity(5);		
-		userSubscription.setProductQuantity(50);
+		userSubscription.setPartnerCurrentQuantity(0);
+		userSubscription.setPartnerQuantity(2);
+		userSubscription.setProductCurrentQuantity(0);
+		userSubscription.setProductQuantity(2);
 
 		User user1 = new User();
 		user1.setUserSubscription(userSubscription);

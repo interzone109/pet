@@ -2,6 +2,8 @@ package ua.squirrel.user.controller.ingridient;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -88,35 +90,35 @@ public class ProductController {
 	 * */
 	
 	@PostMapping("/coposite")
-	public ProductModel dddProductToPartnerCreateCompProd(Authentication authentication, @PathVariable("partner_id") Long idPartner,
+	public ResponseEntity<ProductModel> dddProductToPartnerCreateCompProd(Authentication authentication, @PathVariable("partner_id") Long idPartner,
 			@RequestBody ProductModel productsModel) throws NotFoundException {
 		log.info("LOGGER: add product to current partner and create composite product");
 
-		User userCurrentSesion = userServiceImpl.findOneByLogin(authentication.getName()).get();
+		User user  = userServiceImpl.findOneByLogin(authentication.getName()).get();
 
-		Partner partner = getCurrentPartner(idPartner, userCurrentSesion);
+		Partner partner = getCurrentPartner(idPartner, user);
 
 			Product addProduct = new Product();
 			addProduct.setDescription(productsModel.getDescription());
 			addProduct.setName(productsModel.getName());
-			addProduct.setPropertiesProduct( 
-					propertiesProductServiceImpl.findOneByName(productsModel.getPropertiesProduct()));
-			addProduct.setMeasureProduct(
-					measureProductServiceImpl.findOneByMeasure(productsModel.getMeasureProduct()));
+			addProduct.setPropertiesProduct( propertiesProductServiceImpl.findOneByName(productsModel.getPropertiesProduct()));
+			addProduct.setMeasureProduct( measureProductServiceImpl.findOneByMeasure(productsModel.getMeasureProduct()));
 			addProduct.setGroup(productsModel.getGroup());
 			addProduct.setPartner(partner);
 
-			addProduct.setUser(userCurrentSesion);
+			addProduct.setUser(user );
 
 		productServiceImpl.save(addProduct);
-		
+		int productCurrent = user.getUserSubscription().getProductCurrentQuantity();
+		int productrLimit = user.getUserSubscription().getProductQuantity();
+		if(productCurrent < productrLimit) {
 		CompositeProduct compositeProduct = new CompositeProduct();
 		compositeProduct.setName(productsModel.getName());
 		compositeProduct.setGroup(productsModel.getGroup());
 		compositeProduct.setPropertiesProduct(propertiesProductServiceImpl.findOneByName("PRODUCT_FINAL"));
 		compositeProduct.setMeasureProduct(measureProductServiceImpl.findOneByMeasure(productsModel.getMeasureProduct()));
 		
-		compositeProduct.setUser(userCurrentSesion);
+		compositeProduct.setUser(user );
 		
 		ProductMap productMap = new ProductMap();
 		productMap.setCompositeProduct(compositeProduct);
@@ -125,10 +127,16 @@ public class ProductController {
 		
 		productMapServiceImpl.save(productMap);
 		
+		user.getUserSubscription().setProductCurrentQuantity(++productCurrent);
+		userServiceImpl.save(user);
+		}else {
+			return  new ResponseEntity<>(ProductModel.builder().name("excess_of_limit").build()
+					, HttpStatus.FAILED_DEPENDENCY);
+		}
 		
 		productsModel.setId(addProduct.getId());
 
-		return productsModel;
+		return new ResponseEntity<>(productsModel, HttpStatus.OK);
 	}
 	
 	/**

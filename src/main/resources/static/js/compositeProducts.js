@@ -27,8 +27,8 @@ function createCompositeRow(cProd){
 		   "<td id=\"product_group_id_"+cProd.id+"\">"+cProd.group+"</td>"
 		 +"<td id=\"product_name_id_"+cProd.id+"\">"+cProd.name+"</td>"
 		 + "<td id=\"product_measure_id_"+cProd.id+"\">"+displayProductMeasure(cProd.measureProduct,1)+"</td>"
-		 + "<td>  <i class=\"fas fa-edit\"  title=\"редактировать\"  onclick=\"updateCompositeRow("+cProd.id+")\"  ></i>"
-		 +"<i class=\"fas fa-list-alt\" title=\"просмотреть ингридиенты\"  onclick=\"loadProductData("+cProd.id+")\"></i> </td>";
+		 + "<td> <span class=\"badge badge-success\"> <i class=\"fas fa-edit\"  title=\"редактировать\"  onclick=\"updateCompositeRow("+cProd.id+")\"  ></i></span>"
+		 +" <span class=\"badge badge-info\"> <i class=\"fas fa-list-alt\" title=\"просмотреть ингридиенты\"  onclick=\"loadProductData("+cProd.id+")\"></i></span> </td>";
 		 	 
 		return compositeCol;
 	
@@ -167,9 +167,9 @@ function createIngridientsRow(ingridiet){
 		   "<td id=\"ingridiet_group_id_"+ingridiet.id+"\">"+ingridiet.group+"</td>"
 		 +"<td id=\"ingridiet_name_id_"+ingridiet.id+"\">"+ingridiet.name+"</td>"
 		 + "<td id=\"ingridiet_description_id_"+ingridiet.id+"\">"+createMeasureProduct(ingridiet.description, ingridiet.measureProduct)+"</td>"
-		 + "<td>  <i class=\"fas fa-edit\"  title=\"редактировать расход\"  onclick=\"updateIngridieteRow("+ingridiet.id+")\"  ></i>"
-		 +"<i class=\"fas fa-list-alt\" title=\"вернуться к продуктам\"  onclick=\"hideProduct()\"></i> " 
-		 +"<i class=\"fas fa-trash-alt\" title=\"удалить\"  onclick=\"removeIngridient("+ingridiet.id+")\"></i></td>";
+		 + "<td>  <span class=\"badge badge-success\"><i class=\"fas fa-edit\"  title=\"редактировать расход\"  onclick=\"updateIngridieteRow("+ingridiet.id+")\"  ></i></span>"
+		 +" <span class=\"badge badge-info\"><i class=\"fas fa-list-alt\" title=\"вернуться к продуктам\"  onclick=\"hideProduct()\"></i> </span>" 
+		 +" <span class=\"badge badge-danger\"><i class=\"fas fa-trash-alt\" title=\"удалить\"  onclick=\"removeIngridient("+ingridiet.id+")\"></i></span></td>";
 		 	 
 		$("#listIngridientsId").append(document.createTextNode(ingridiet.id+","));
 		

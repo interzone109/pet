@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -57,11 +59,14 @@ public class AllCompositeProductController {
 	 * сущности и сохраняет их в базу
 	 */
 	@PostMapping
-	public CompositeProductModel addNewCompositeProduct(Authentication authentication,
+	public ResponseEntity<CompositeProductModel> addNewCompositeProduct(Authentication authentication,
 			@RequestBody CompositeProductModel newCompositeProductModels) {
 		log.info("LOGGER: save new Composite ProductModel from model ");
 
 		User user = userServiceImpl.findOneByLogin(authentication.getName()).get();
+		int productCurrent = user.getUserSubscription().getProductCurrentQuantity();
+		int productrLimit = user.getUserSubscription().getProductQuantity();
+		if(productCurrent < productrLimit) {
 		CompositeProduct compositeProduct = new CompositeProduct();
 		compositeProduct.setName(newCompositeProductModels.getName());
 		compositeProduct.setGroup(newCompositeProductModels.getGroup());
@@ -72,8 +77,15 @@ public class AllCompositeProductController {
 		compositeProductServiceImpl.save(compositeProduct);
 		
 		newCompositeProductModels.setId(compositeProduct.getId());
-
-		return newCompositeProductModels;
+		
+		user.getUserSubscription().setProductCurrentQuantity(++productCurrent);
+		userServiceImpl.save(user);
+		 
+		return  new ResponseEntity<>( newCompositeProductModels, HttpStatus.OK);
+		}else {
+			return  new ResponseEntity<>(CompositeProductModel.builder().name("excess_of_limit").build()
+					, HttpStatus.CONFLICT);
+			}
 	}
 	
 	

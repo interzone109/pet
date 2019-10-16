@@ -83,7 +83,10 @@ public class AppController {
 			userSubscription.setPartnerQuantity(25);
 			userSubscription.setProductQuantity(200);
 		} 
-		
+		userSubscription.setEmployeesCurrentQuantity(0);
+		userSubscription.setStoreCurrentQuantity(0); 
+		userSubscription.setPartnerCurrentQuantity(0); 
+		userSubscription.setProductCurrentQuantity(0);
 		
 		User user = new User();
 		user.setDate(LocalDate.now());

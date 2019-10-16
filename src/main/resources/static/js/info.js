@@ -10,13 +10,14 @@
 	var flag = false ;
     $(document).ready(function () {
         $('#sidebarCollapse').on('click', function () {
+        	 
             $('#sidebar').toggleClass('active');// 768 ширь
-            if(window.innerWidth < 769){
-            	flag = !flag ;
-            	(flag )? $('a.dropdown-toggle').show():$('a.dropdown-toggle').hide() ;
-            }
         });
     });
+    //$(window).on('resize', function(){
+     //   var win = $(this); 
+       // if (win.width() >= 769 ) {  $('a.dropdown-toggle').show();}
+    //   if (win.width() >= 769 && !$('#sidebar').hasClass('active')) {  $('a.dropdown-toggle').hide();  }  });
     /******************** sidebar function ****************************/  
     
     /** **************** request method **************************** */
@@ -34,7 +35,7 @@
     	    }
     	httpRequest.send();
     	};
-    	if(type==='PUT' ||type==='POST' ){
+    	if(type==='PUT' ||type==='POST' || type==='DELETE'){
     		httpRequest.setRequestHeader("Content-Type", "application/json");
     		httpRequest.onreadystatechange = function () {
     		    if (httpRequest.readyState === 4 && httpRequest.status === 200) {
@@ -43,7 +44,8 @@
     		       console.log(json);
     		       method(json);
     		    }else {
-    		      console.log('error send data type '+type+' URL '+url);
+    		     
+    		      errorHandler(httpRequest);
     		    }
     		};
     		
@@ -91,10 +93,32 @@
 
     
     
+  function errorHandler(httpRequest){
+	  console.log('error- '+httpRequest.responseText);
+	  if ( httpRequest.readyState === 4 && httpRequest.status === 509) {
+    	 console.log("parntner limit");
+    	 $("#excessOfLimit").collapse('show');
+    	 $("#excessOfLimitText").text('Превышен доступный Вам лимит поставщиков'); 
+      }else if ( httpRequest.readyState === 4 && httpRequest.status === 409) {
+    	 console.log("parntner limit");
+    	 $("#excessOfLimit").collapse('show');
+    	 $("#excessOfLimitText").text('Превышен доступный Вам лимит продуктов');  
+      }else if ( httpRequest.readyState === 4 && httpRequest.status === 424) {
+    	 console.log("parntner limit");
+    	 $("#excessOfLimit").collapse('show');
+    	 $("#excessOfLimitText").text('Игридиент добавлен к поставщику но превышен доступный Вам лимит продуктов');  
+      }else if ( httpRequest.readyState === 4 && httpRequest.status === 415) {
+    	 console.log("parntner limit");
+    	 $("#excessOfLimit").collapse('show');
+    	 $("#excessOfLimitText").text('Ошибка удаления');  
+      }
+   }
     
     
-    
-    
+  function closeExcessOfLimit(){
+	  $("#excessOfLimit").collapse('hide');
+  }
+  
     
     
     

@@ -1,8 +1,6 @@
 package ua.squirrel.user.service.product.node;
 
 import java.util.List;
-import java.util.Set;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,5 +22,8 @@ public class ProductMapServiceImpl implements ProductMapService {
 	}
 	public ProductMap findOneByIdAndCompositeProduct(Long id, CompositeProduct compositeProduct) {
 		return productMapRepository.findOneByIdAndCompositeProduct(id, compositeProduct);
+	}
+	public void deleteById(Long id) {
+		productMapRepository.deleteById(id);
 	}
 }

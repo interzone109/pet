@@ -29,8 +29,8 @@ function displayPartnerRow( partner){
 	  partnerCol.innerHTML = "<td id=\"partner_company_id_"+partner.id+"\">"+partner.company+"</td>"
 		 + "<td id=\"partner_phon_id_"+partner.id+"\">"+partner.phonNumber+"</td>"
 		 + "<td id=\"partner_mail_id_"+partner.id+"\">"+partner.partnerMail+"</td>"
-		 + "<td>  <i class=\"fas fa-edit\"  title=\"редактировать\"  onclick=\"updatePartnerRow("+partner.id+")\"  ></i>"
-		 +"<i class=\"fas fa-list-alt\" title=\"просмотреть товары поставщика\"  onclick=\"loadProductData("+partner.id+")\"></i> </td>";
+		 + "<td> <span class=\"badge badge-success\"> <i class=\"fas fa-edit\"  title=\"редактировать\"  onclick=\"updatePartnerRow("+partner.id+")\"  ></i></span>"
+		 +" <span class=\"badge badge-info\"><i class=\"fas fa-list-alt\" title=\"просмотреть товары поставщика\"  onclick=\"loadProductData("+partner.id+")\"></i></span> </td>";
 		 
 		 
 		return partnerCol;
@@ -94,8 +94,8 @@ function displayProductRow(product){
 		 + "<td id=\"product_description_id_"+product.id+"\">"+product.description+"</td>"
 		 +"<td id=\"product_properties_id_"+product.id+"\">"+displayProductProperties(product.propertiesProduct,1)+"</td>"
 		 +"<td id=\"product_measure_id_"+product.id+"\">"+displayProductMeasure(product.measureProduct,1)+"</td>"
-		 +"<td> <i class=\"fas fa-edit\" title=\"редактировать\" onclick=\"updateProduct("+product.id+")\" ></i> " 
-		 +"<i class=\"fas fa-list-alt\" onclick=\"hideProduct()\"  title=\"вернуться к поставщикам\"></i> </td>"
+		 +"<td> <span class=\"badge badge-success\"> <i class=\"fas fa-edit\" title=\"редактировать\" onclick=\"updateProduct("+product.id+")\" ></i></span>  " 
+		 +"<span class=\"badge badge-info\"><i class=\"fas fa-list-alt\" onclick=\"hideProduct()\"  title=\"вернуться к поставщикам\"></i></span></td>"
 		
 		  return productRow;
 }
@@ -273,7 +273,10 @@ function postNewProductForm(){
 	         "measureProduct":   displayProductMeasure( $("#measureSelect option:selected" ).text(), 2)
 		   }
 		);
-	if($("#createProductCheckbox" ).val() === ""){
+	//var createComposite = parseInt($("#createProductCheckbox" ).val(),10) >=0;
+	console.log($("#inputCompositeProductRate" ).val()<=0);
+	var createComposite = $("#inputCompositeProductRate" ).val()<=0;
+	if(createComposite){
 	request('POST', connectUrl+'/user/partners/'+this.title+'/edit',displayPostProductRow ,data);
 	}else{
 	request('POST', connectUrl+'/user/partners/'+this.title+'/edit/coposite',displayPostProductRow ,data);
@@ -282,7 +285,7 @@ function postNewProductForm(){
 	$("#inputProductName").val("");
 	$("#inputProductDescription").val("");
 	$("#inputProductGroup").val("");
-	$("#inputCompositeProductRate" ).val("")
+	$("#inputCompositeProductRate" ).val("0")
 	$("#inputPartnerProductFormErrore").collapse("hide");
 	$("#inputProductName").removeClass("is-valid");
 	}else{

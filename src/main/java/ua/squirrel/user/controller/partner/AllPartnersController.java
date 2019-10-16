@@ -4,6 +4,8 @@ package ua.squirrel.user.controller.partner;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -62,21 +64,27 @@ public class AllPartnersController {
 	 * после чего переписывает данные из поделей в сущности и сохраняет их в базу
 	 * */
 	@PostMapping
-	public PartnerModel addNewPartner(@RequestBody PartnerModel newPartners ,Authentication authentication) {
+	public ResponseEntity<PartnerModel> addNewPartner(@RequestBody PartnerModel newPartners ,Authentication authentication) {
 		log.info("LOGGER: save new partners from model: /user/partners" );
 		User user = userServiceImpl.findOneByLogin(authentication.getName()).get();
-
+		int partnerCurrent = user.getUserSubscription().getPartnerCurrentQuantity();
+		int partnerLimit = user.getUserSubscription().getPartnerQuantity();
+		if(partnerCurrent < partnerLimit) {
  			Partner addPartner = new Partner();
 			addPartner.setCompany(newPartners.getCompany());
 			addPartner.setPartnerMail(newPartners.getPartnerMail());
 			addPartner.setPhonNumber(newPartners.getPhonNumber());
 			addPartner.setUser(user);
 		
-		partnerServiceImpl.save(addPartner);
-		
-		newPartners.setId(addPartner.getId());
-
-		return  newPartners;
+			partnerServiceImpl.save(addPartner);
+			user.getUserSubscription().setPartnerCurrentQuantity(++partnerCurrent);
+			userServiceImpl.save(user);
+			newPartners.setId(addPartner.getId());
+			return  new ResponseEntity<>( newPartners, HttpStatus.OK);
+		}else {
+			return  new ResponseEntity<>(PartnerModel.builder().company("excess_of_limit").build()
+					, HttpStatus.BANDWIDTH_LIMIT_EXCEEDED);
+			}
 		}
 	
 	
