@@ -27,6 +27,8 @@ function saveConsignmentData( isUproved){
 	}
 	// если валидация прошла успешно то отправляем данные
 	if(result){
+		
+		$( ".badge-danger" ).remove();//убираем возможность удалить позицию после сохранения в накладной
 		var storeId = $("#consignmentTableStoreId").text();//получаем ид магазина
 		var consignmentId =$("#consignmentCurrentId").text();//получаем ид накладной
 		var data = "{"+jsonData.slice(0, -1)+"}";//формируем json (удаляем последнюю запятую в строке jsonData)
@@ -170,6 +172,6 @@ function addSelectValueToConsingment(){
 		
 		 $("#ingridientSelectGroup  option[value="+id+"]").remove();
 	 }//отображаем данные из масива
-	 showConsignmentDataRow(addIngridient);
+	 showConsignmentDataRow(addIngridient , true);
 }
 

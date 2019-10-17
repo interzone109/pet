@@ -28,8 +28,8 @@ function createNewStoreRow(store){
 		 + "<td id=\"store_mail_id_"+store.id+"\">"+store.mail+"</td>"
 		 
 
-		 +"<td> <i class=\"fas fa-edit\" title=\"редактировать\" onclick=\"updateStoreDataModal("+store.id+")\" ></i> " 
-		 +"<i class=\"fas fa-list-alt\" title=\"товар и цена\" onclick=\"showProductPrice("+store.id+")\"  ></i> " 
+		 +"<td><span class=\"badge badge-success\"> <i class=\"fas fa-edit\" title=\"редактировать\" onclick=\"updateStoreDataModal("+store.id+")\" ></i></span> " 
+		 +"<span class=\"badge badge-info\"><i class=\"fas fa-list-alt\" title=\"товар и цена\" onclick=\"showProductPrice("+store.id+")\"  ></i></span> " 
 		 
 		 +"</td>"
 		

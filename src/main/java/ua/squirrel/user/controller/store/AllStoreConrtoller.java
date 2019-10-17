@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -48,13 +50,14 @@ public class AllStoreConrtoller {
 	 * Метод добавляет новую торговую точку
 	 */
 	@PostMapping
-	public StoreModel addNewStore(@RequestBody StoreModel storeModel, Authentication authentication)
+	public ResponseEntity<StoreModel> addNewStore(@RequestBody StoreModel storeModel, Authentication authentication)
 			throws NotFoundException {
 		log.info("LOGGER: create new store with composite product");
 		User user = userServiceImpl.findOneByLogin(authentication.getName()).get();
 
-
-		
+		int storeCurrent = user.getUserSubscription().getStoreCurrentQuantity();
+		int storeLimit = user.getUserSubscription().getStoreQuantity();
+		if(storeCurrent < storeLimit) {
 		Store newStore = new Store();
 		newStore.setAddress(storeModel.getAddress());
 		newStore.setMail(storeModel.getMail());
@@ -62,9 +65,16 @@ public class AllStoreConrtoller {
 		newStore.setUser(user);
 		storeServiceImpl.save(newStore);
 		
-		storeModel.setId(newStore.getId());
 		
-		return storeModel;
+		user.getUserSubscription().setStoreCurrentQuantity(++storeCurrent);
+		userServiceImpl.save(user);
+
+		storeModel.setId(newStore.getId());
+		return new ResponseEntity<>(storeModel , HttpStatus.OK);
+		}else {
+			return new ResponseEntity<>(StoreModel.builder().address("excess_of_limit").build()
+					, HttpStatus.LENGTH_REQUIRED);
+		}
 	}
 	
 	

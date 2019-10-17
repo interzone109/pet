@@ -17,6 +17,7 @@ import ua.squirrel.web.entity.user.User;
 import ua.squirrel.web.entity.user.UserModel;
 import ua.squirrel.web.entity.user.UserSubscription;
 import ua.squirrel.web.service.registration.RoleServiceImpl;
+import ua.squirrel.web.service.registration.UserSubscriptionServiceImpl;
 import ua.squirrel.web.service.registration.user.UserServiceImpl;
 import ua.squirrel.z.util.FillDataUtil;
 /**
@@ -35,6 +36,8 @@ public class RegistrationController {
 	private RoleServiceImpl roleServiceImpl;
 	@Autowired
 	private FillDataUtil fillDataUtil ;
+	@Autowired
+	private UserSubscriptionServiceImpl userSubscriptionServiceImpl;
 
 	@GetMapping
 	public UserModel hello(Authentication authentication) {
@@ -52,6 +55,7 @@ public class RegistrationController {
 		userSubscription.setPartnerQuantity(2);
 		userSubscription.setProductCurrentQuantity(0);
 		userSubscription.setProductQuantity(2);
+		
 
 		User user1 = new User();
 		user1.setUserSubscription(userSubscription);
@@ -59,7 +63,9 @@ public class RegistrationController {
 		user1.setHashPass(new BCryptPasswordEncoder().encode("user1") );
 		user1.setMail("user1@mail.com");
 		user1.setRoles(role);
+		
 		userSubscription.setUser(user1);
+		//userSubscriptionServiceImpl.save(userSubscription);
 		userServiceImpl.save(user1);
 		
 		List<Partner> l = fillDataUtil.getPartner(user1);

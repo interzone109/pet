@@ -112,6 +112,11 @@
     	 $("#excessOfLimit").collapse('show');
     	 $("#excessOfLimitText").text('Ошибка удаления');  
       }
+      else if ( httpRequest.readyState === 4 && httpRequest.status === 411) {
+     	 console.log("parntner limit");
+     	 $("#excessOfLimit").collapse('show');
+     	 $("#excessOfLimitText").text('Вы исчерпали лимит на создание новых магазинов');  
+       }
    }
     
     

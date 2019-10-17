@@ -130,7 +130,7 @@ function fillConsignmentTable(data ){
 			 + "<td id=\"consignment_meta_id_"+consignment.id+"\"title=\""+consignment.meta.split(":%:")[0]+"\">"+consignment.meta.split(":%:")[1]+"</td>"
 			 + "<td id=\"consignment_status_id_"+consignment.id+"\">"+displayConsignmentStatus(consignment.consignmentStatus, 1)+"</td>"
 			 + "<td id=\"consignment_state_id_"+consignment.id+"\">"+displayConsignmentState(consignment.approved, 1)+"</td>"
-			 +"<td> <i class=\"fas fa-list-alt\" title=\"открыть\" onclick=\loadConsignmentData("+consignment.id+") ></i>  </td>"
+			 +"<td><span class=\"badge badge-info\"> <i class=\"fas fa-list-alt\" title=\"открыть\" onclick=\loadConsignmentData("+consignment.id+") ></i></span>  </td>"
 
 			  return consignmentRow;
  }

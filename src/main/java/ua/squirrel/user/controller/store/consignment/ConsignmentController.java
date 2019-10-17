@@ -133,12 +133,14 @@ public class ConsignmentController {
 	public Map<Long, String> putСonsignmentDataUproved(Authentication authentication,
 			@RequestBody Map<Long, String> consignmentData, @PathVariable("storeId") Long storeId,
 			@PathVariable("consignmentId") Long consignmentId) throws NotFoundException {
+		
 		log.info("LOGGER: uproved Consignment data");
+		
 		User user = userServiceImpl.findOneByLogin(authentication.getName()).get();
 		Store store = getCurrentStore(user, storeId);
 		Consignment consignment = consignmentServiceImpl.findOneByIdAndStore(consignmentId, store)
 				.orElseThrow(() -> new NotFoundException("Status not found"));
-
+		
 		if (!consignment.isApproved()) {//обновляем старые ингридиенты
 			
 			List<ConsignmentNode> consignmentNodeList = consignment.getConsignmentNode(); 
@@ -156,7 +158,7 @@ public class ConsignmentController {
 			});
 			consignment.setApproved(true);
 			consignmentServiceImpl.save(consignment);
-			/*****/
+			//
 			
 			//добавляем новые ингридиенты в остатки на магазин
 			Set<StoreIngridientNode> nodeList = new HashSet<>();
@@ -176,8 +178,10 @@ public class ConsignmentController {
 				nodeList.add(storeIngridientNode);
 			});
 			}
-			storeIngridientNodeServiceImpl.saveAll(nodeList);
-			/*****/
+			 
+			storeIngridientNodeServiceImpl.saveAll(nodeList);/**/
+			 
+			//
 			//обновляем остатки на магазине в соответствии с изменениями в накладной
 			switch (consignment.getConsignmentStatus().getName()) {
 			case "ARRIVAL":// приход

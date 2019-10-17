@@ -13,12 +13,14 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 /***
  * Класс UserSubscription описывает подписку пользователя
  * */
 @Entity
 @Table(name = "subscriptions")
 @Data
+@EqualsAndHashCode(exclude="user")
 public class UserSubscription {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -48,7 +50,7 @@ public class UserSubscription {
 	private int price ;
 		
 
-	@OneToOne(fetch = FetchType.EAGER)
+	@OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
 	private User user;
 }

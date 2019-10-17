@@ -44,6 +44,17 @@
 				</div>
 			<!-- Search end -->
 			<br>
+			<!-- Limit alert -->
+			<div class="alert alert-warning alert-dismissible fade collapse" role="alert" id="excessOfLimit">
+  				<span id="excessOfLimitText"> 
+  				</span>
+  				<button type="button" class="close"   aria-label="Close" onclick="closeExcessOfLimit()">
+    				<span aria-hidden="true">
+    					&times;
+    				</span>
+ 			 	</button>
+			</div>
+			<!-- Limit alert -->
 <!-- ----------------------     content    store  start  --------------------------- -->
 <div class="collapse" id="collapseStoreBody">
 <!-- ---------------- Create new partner form  ------------------------------- -->
@@ -52,20 +63,20 @@
 								Заполните обязательные поля.
 					</div>
 					<div class="form-row">
-						<div class="col">
+						<div class="col-3">
 							<label for="inputStoreAddress" class="sr-only">Адрес</label>
 							 <input type="text" id="inputStoreAddress" class="form-control" placeholder="Адрес">
 						</div>
-						<div class="col">
+						<div class="col-3">
 							<label for="inputStorePhone" class="sr-only">Телефон</label> 
 							<input 	type="text" id="inputStorePhone" class="form-control" placeholder="Телефон">
 						</div>
-						<div class="col">
+						<div class="col-3">
 							<label for="inputStoreMail" class="sr-only">Почта</label> 
 							<input type="text" id="inputStoreMail" class="form-control" placeholder="Почта">
 						</div>
-						<div class="col">
-							<button class="btn btn-info"  onclick="postNewStoreForm()"  >Создать магазин</button>
+						<div class="col-3">
+							<button class="btn btn-success"  onclick="postNewStoreForm()"  >Создать магазин</button>
 						</div>
 					</div>
 				</div>
@@ -99,7 +110,7 @@
 				<div>
 					<div class="form-row">
 						<div class="col-2">
-							<button class="btn btn-info"  onclick="postNewProductStoreForm()"  >Добавить продукт</button>
+							<button class="btn btn-success"  onclick="postNewProductStoreForm()"  >Добавить продукт</button>
 						</div>
 					</div>
 				</div>
@@ -127,7 +138,7 @@
 			</a>
 			</li> 
 			</ul>
-			</caption>
+		</caption>
 </table>
 <!-- ----------------  store table end   ----------------  -->	
 </div>

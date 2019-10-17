@@ -40,7 +40,7 @@ function clicked(){
  // метод размещает строки с данными из накладной в таблицу
 //если накладная не проведена то поля с кол. и ценой то елементы будут инпуты
 //еслипроведена то текст
-function showConsignmentDataRow(data){
+function showConsignmentDataRow(data,removable){
 	
 	var isAproved = $("#currentConsignmentStatusId").text()=== "true";
 	//строки с шаблонами верстки
@@ -55,7 +55,7 @@ function showConsignmentDataRow(data){
 	//формируем строки с данными для каждой позиции из накладной
 	if(data.length !== 0){
 	data.forEach(ingridient => {
-		$('#consignmentDataTableBodyId').append(createNewConsignmentDataRow(ingridient,inputStart, inputValue,inputEnd));
+		$('#consignmentDataTableBodyId').append(createNewConsignmentDataRow(ingridient,inputStart, inputValue,inputEnd ,removable));
 	});
 	}
 	//пересчитываем итоговую сумму
@@ -63,7 +63,11 @@ function showConsignmentDataRow(data){
 }
 
 //метод формирует строку для таблицы с даными из накладной
-function createNewConsignmentDataRow(ingridient, inputStart, inputValue, inputEnd){
+function createNewConsignmentDataRow(ingridient, inputStart, inputValue, inputEnd ,removable){
+	var end = "</td>";
+	if(removable){
+		end ="<span class=\"badge badge-danger\"><i class=\"fas fa-trash-alt\" title=\"удалить\"  onclick=\"removeIngridient("+ingridient.id+")\"></i></span></td>";
+	}
 	 var ingridientRow = document.createElement('tr');
 	 ingridientRow.id = "ingridient_row_id_"+ingridient.id;
 	 
@@ -87,12 +91,32 @@ function createNewConsignmentDataRow(ingridient, inputStart, inputValue, inputEn
 			 
 			 + "<td id=\"ingridient_summ_id_"+ingridient.id+"\">"+
 			 displayProductPrice(totalPrice)+"</td>"
-			 +"<td> <i class=\"fas fa-list-alt\" title=\"вернутся к накладным\" onclick=\hideConsignmentData() ></i>  </td>"
-	
+			 +"<td> <span class=\"badge badge-info\"><i class=\"fas fa-list-alt\" title=\"вернутся к накладным\" onclick=\hideConsignmentData() ></i></span> "
+			 +end;
 	 var ids = $("#consignmentIngridientsId").text();
 	 $("#consignmentIngridientsId").text(ids+" "+ingridient.id);
 			  return ingridientRow;
 }
+
+function removeIngridient(id){
+	$("#ingridient_row_id_"+id).remove();
+	var ids = $("#consignmentIngridientsId").text();
+	var splitIds = ids.split(" ");
+	var res =" " ;
+	for( var i = 0 ; i <splitIds.length; i++ ){
+		if(splitIds[i] ==  id){ 
+			continue;
+		}else{
+			res+=" "+ splitIds[i];
+		}
+	}
+	$("#consignmentIngridientsId").text(" "+res.trim());
+}
+
+
+
+
+
 //метод конвертирует величины измерения
 function displayProductMeasure (measure ,convert){
 	 

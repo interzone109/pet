@@ -166,7 +166,7 @@ function updateIngridientsRateRow(data){
 
 function removeIngridient (id){
 	
-	$('#ingridiet_group_id_'+id).text("delete");
+	$('#ingridiet_group_id_'+id).text("Удаленно");
 	request("DELETE", connectUrl+"/user/composites/"+id+"/edit/");
 }
 
