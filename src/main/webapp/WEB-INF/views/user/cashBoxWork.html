@@ -64,9 +64,6 @@
 									<input type="number" class="form-control" id="startCashBoxDay" placeholder="Кассовый день" value ="">	
 								</div>
   								<div class="d-inline p-2 col-4">
-									<input type="number" class="form-control" id="inputVievCount" placeholder="Карточки" value ="">	
-								</div>
-  								<div class="d-inline p-2 col-4">
 									<button class="btn btn-info" onclick="getStoreCashBox()"  >
 										Применить	 
 									</button>
@@ -123,6 +120,5 @@
 <script th:src="@{/js/cashbox/cashboxBasket.js}"></script>
 <!-- script end -->
  
-<div th:insert="~{template/cashBoxRestCount/cashBoxRestCount :: cash_box_rest}"></div>
 </body>
 </html>

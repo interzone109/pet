@@ -33,10 +33,7 @@ function loadConsignmentData (consignmentId){
 			$("#approvedDataConsignment").prop("disabled",false);
 	}
  }
-function clicked(){
-	var i = 0;
-	console.log(i);
-}
+
  // метод размещает строки с данными из накладной в таблицу
 //если накладная не проведена то поля с кол. и ценой то елементы будут инпуты
 //еслипроведена то текст

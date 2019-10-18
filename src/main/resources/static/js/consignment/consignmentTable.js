@@ -144,8 +144,6 @@ function fillConsignmentTable(data ){
  		return (convert === 1)?"приход": "ARRIVAL";
  	}else if( status ==="CONSAMPTION" || status==="расход"){
  		return  (convert === 1)?"расход": "CONSAMPTION";
- 	}else if( status ==="HAULING" || status==="перемещение"){
- 		return  (convert === 1)?"перемещение": "HAULING";
  	}else if( status ==="RETURN" || status==="возврат"){
  		return  (convert === 1)?"возврат": "RETURN";
  	}else if( status ==="WRITE-OFF" || status==="списание"){

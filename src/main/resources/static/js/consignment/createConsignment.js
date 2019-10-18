@@ -22,13 +22,6 @@ function createNewConsignment (){
 		  meta = "userConsamption:%:Расход ингридиентов c *"+$("#consignmetnStoreSelect option:selected").text()+"*";
 		  $("#hiddenLable").hide();
 	    break;
-	  case "HAULING"://fix
-		  meta = $("#consignmetnStoreDoublerSelect option:selected").val()+":store:%:Перемещение ингридиентов с *"
-		  +$("#consignmetnStoreSelect option:selected").text()
-		  +"* на *"+$("#consignmetnStoreDoublerSelect option:selected").text()+"*";
-		  $("#toNameModal").text($("#consignmetnStoreDoublerSelect option:selected").text());
-		  $("#hiddenLable").show();
-	    break;
 	  case "RETURN":
 		  if($("#consignmetnOnSelectCol").is(":visible") && $("#consignmetnOnSelect option:selected").val() !=="ANY"){
 		  meta = $("#consignmetnOnSelect option:selected").val()+":partner:%:Возврат ингридиентов с *"
@@ -42,7 +35,7 @@ function createNewConsignment (){
 		  }
 		break;
 	  case "WRITE-OFF":
-		  meta = "user:%:Списание ингридиентов с *"+$("#consignmetnStoreSelect option:selected").text()+"*";
+		  meta = "userWriteOff:%:Списание ингридиентов с *"+$("#consignmetnStoreSelect option:selected").text()+"*";
 		  $("#hiddenLable").hide();
 		 break;
 	}
@@ -53,7 +46,7 @@ function createNewConsignment (){
 		}
 	
 	createConsignment =JSON.stringify({
-		 "storeId": $("#consignmetnStoreSelect").val(),
+		 "storeId":$("#consignmetnStoreSelect option:selected").val(),
 		 "meta": meta,
         "date": date,
         "consignmentStatus": $("#consignmetnStatusSelect").val()
@@ -75,7 +68,7 @@ function createNewConsignmentRequest(){
 	//сохраняем id магазина
 	$("#consignmentTableStoreId").text($("#consignmetnStoreSelect").val());
 	$("#createNewConsignmentModal").modal("hide");
-	
+	console.log(createConsignment);
 	request("POST",connectUrl + "/user/stores/consignment/create", fillConsignmentTable, createConsignment );
 	
 }

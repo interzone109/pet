@@ -127,4 +127,20 @@ function conductSale(){
 	$("#topPrice").text(displayProductPrice(0));
 	$("#bottomPrice").text(displayProductPrice(0));
 }
+//метод считает сачу за товар
+$("#calcTooltipinput").on("input", function(){
+	var inputSum =parseFloat( $(this).val());
+	var totalPrice = parseFloat($("#topPrice").text());
+	 $("#restText").text(parseFloat(inputSum-totalPrice));
+	
+});
+
+$( "#calcTooltipinput" )
+.focusout(function() {
+	$(this).val(0);
+});
+
+
+
+
 

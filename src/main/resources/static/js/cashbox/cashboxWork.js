@@ -1,6 +1,13 @@
 var state = new Map();//переменная хранит данные о запросax
 var connectUrl = "http://localhost:8080" ;
 $("#spiners").hide();
+
+$("#storeSelect").change(function(){
+	 var storeId = $("#storeSelect option:selected").val();
+	console.log(storeId);
+});
+
+
 //получаем список  магазинов
 request("GET",connectUrl + "/user/stores", addStoreSearchRow );
 //fix store viev
@@ -10,7 +17,7 @@ function addStoreSearchRow(data){
 		$("#storeSelect").append("<option value=\"NONE\">Создайте магазин</option>");
 	} else {
 		data.forEach(store=>{
-			$("#storeSelect").append("<option value=\""+store.id+"\" selected=\"selected\">"+store.address+"</option>");//добавлям селекты с названиями лоступных магазинов
+			$("#storeSelect").append("<option value=\""+store.id+"\" >"+store.address+"</option>");//добавлям селекты с названиями лоступных магазинов
 			});
 		$("#storeSelect").val(data[0].id);//устанавливаем selected 
 		state.set("stores", data);
@@ -40,6 +47,11 @@ function getStoreCashBox(){
 		 request('POST', connectUrl+'/user/stores/invoice/cashBox/'+storeId, getOrCreateInvoice,data);
 		 
 		 $('#collapseOptional').collapse("hide"); 
+		 //чистим корзину
+		 $("#busketProductList").empty();
+		$("#hiddenFoter").hide()
+		$("#topPrice").text(displayProductPrice(0));
+		$("#bottomPrice").text(displayProductPrice(0));
 }
 
 //метод получает новый инвойс для выбрного магазина и отображает данные из него
@@ -89,7 +101,7 @@ for(var  i = 0 , t= 0; i <data.length; i++){
 function createNewStoreProductElem(product){
 	 var productElem = document.createElement('div');
 	 productElem.className = "col"; 
-	 productElem.innerHTML =  "<div class=\"card border-info mb-3 text-center\" style=\"max-width: 18rem;\" >"
+	 productElem.innerHTML =  "<div class=\"card border-info mb-3 text-center\" style=\"max-width: 12rem; min-width: 12rem;\" >"
 		 	+"<div class=\"card-header text-info\"title=\""+product.name +"\">"+product.name.substring(0, 12) +"</div>"
 		 	+"<div class=\" text-primary\">"+product.group+"</div>"
 		 //+"<div class=\" text\">"+product.name+"</div>"

@@ -117,14 +117,8 @@ function openAddIngridientModal(){
 		var data = "["+jsonData.slice(0, -1)+"]";	
 		request("POST",connectUrl + "/user/products_list", addIngridientList ,data);
 	}
-	else if( meta === "userConsamption"){
+	else if( meta === "userConsamption" || meta === "userWriteOff"){
 		id = $("#consignmentTableStoreId").text();//получаем ид текущего магазина
-		request("GET",connectUrl + "/user/stores/assortment/"+id+"/leftovers", addStoreIngridientList );
-	}
-	else if (meta.endsWith(":store"))//fix
-	{
-		id = meta.split(":store")[0];//получаем ид магазина отправителя
-		//получаем остатки магаина отправителя
 		request("GET",connectUrl + "/user/stores/assortment/"+id+"/leftovers", addStoreIngridientList );
 	}
 	else if(meta.endsWith(":partner"))
@@ -133,6 +127,7 @@ function openAddIngridientModal(){
 		request("GET",connectUrl + "/user/partners/"+id+"/info", addPartnerIngridientList );
 	}
 }
+
 
 function addStoreIngridientList(data){
 	console.log(data);

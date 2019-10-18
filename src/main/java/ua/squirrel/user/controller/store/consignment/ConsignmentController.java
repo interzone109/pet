@@ -194,17 +194,6 @@ public class ConsignmentController {
 					storeServiceImpl.save(store);
 				}
 				break;
-				//fix
-			case "HAULING":// внутренее перемещение
-				storeUtil.updateStoreLeftovers(store, consignmentData, "-"); // удаляем из магазина отправителя
-																				// ингридиенты
-				storeServiceImpl.save(store);
-				// добавляем в магазин получателя
-				long haulingStoreId = Long.parseLong(consignment.getMeta().split(":store:%:")[0]);
-				Store haulingStore = getCurrentStore(user, haulingStoreId);
-				storeUtil.updateStoreLeftovers(store, consignmentData, "+");
-				storeServiceImpl.save(haulingStore);
-				break;
 			case "RETURN":// возрат поставщику
 			case "WRITE-OFF":// списание
 				storeUtil.updateStoreLeftovers(store, consignmentData, "-"); // удаляем из магазина ингридиенты

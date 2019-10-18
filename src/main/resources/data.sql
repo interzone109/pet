@@ -11,6 +11,5 @@ INSERT INTO products_measure (measure_product) VALUES ('KILOGRAM');/*килог�
 INSERT INTO products_measure (measure_product) VALUES ('UNIT');/*единицы*/
 INSERT INTO consignments_status (status_name) VALUES ('ARRIVAL');/*приход*/
 INSERT INTO consignments_status (status_name) VALUES ('CONSAMPTION');/*расход*/
-INSERT INTO consignments_status (status_name) VALUES ('HAULING');/*перемещение*/
 INSERT INTO consignments_status (status_name) VALUES ('RETURN');/*возврат*/
 INSERT INTO consignments_status (status_name) VALUES ('WRITE-OFF');/*списание*/
