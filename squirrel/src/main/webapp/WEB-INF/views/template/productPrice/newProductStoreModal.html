@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+
+<div class="modal fade" id="newModalProductStoreForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+  aria-hidden="true" th:fragment="new_product_store_form">
+  <div class="modal-dialog" role="document">
+     <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold" id="updatePartnerTitle">Добавить товар на ТТ </h4>
+        <button  type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body mx-3">			
+		<div class="modal-body mx-3">
+			<div class="collapse alert alert-danger "  id="updateErroreProductChose"></div>
+			<select name="AvailableFields" id="compositeProductSelect"  size="10">
+															  
+    			<optgroup label="выберите из списка  товаров" id="compositeProductGroup">
+   				</optgroup>
+   			</select>
+		</div>
+		<div class="modal-body mx-3">
+       		<div class="collapse alert alert-danger "  id="updateErrorePrice"></div>
+            <label for="updateCompositeProductPrice" class="sr-only">Цена для текущей ТТ</label>
+            <input type="text" id="updateCompositeProductPrice" class="form-control" placeholder="Цена для текущей ТТ" >   
+        </div>
+
+    </div>
+		<div class="modal-footer d-flex justify-content-center">
+            <button class="btn btn-success" id="newProductStoreButton" >Добавить</button>
+       </div>
+    </div> 
+  </div>
+</div>
+
+</body>
+</html>

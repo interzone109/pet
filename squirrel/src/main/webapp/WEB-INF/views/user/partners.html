@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>user page</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+<title>партнеры</title>
+
+<!-- Bootstrap CSS CDN -->
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+<!-- Our Custom CSS -->
+<link rel="stylesheet" href="../static/css/style.css" th:href="@{/css/style.css}" type="text/css" media="screen">
+<link rel="stylesheet" href="../static/css/spin.css" th:href="@{/css/spin.css}" type="text/css" media="screen">
+<!-- Font Awesome JS -->
+<script defer
+	src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js"></script>
+<script defer
+	src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js"></script>
+
+</head>
+<body>
+	<div class="wrapper">
+		<!-- left side menu -->
+		<div class="wrapper" th:insert="~{template/leftBar :: left_bar}"></div>
+
+		<!-- Content conteiner -->
+		<div id="content">
+			<div th:insert="~{template/topBar :: top_bar}"></div>
+
+			<div class="collapse" id="collapseInfo">
+				<div class="card card-body">Раздел служит для создания базы поставщиков и их товаров.
+						<br> Возможности :
+						<br>-Создание/редактирование карточки поставщика;
+						<br>-Создание/редактирование товаров закупаемых у поставщика;
+				</div>
+			</div>
+			<!-- Placeholder -->
+				<div class="form-row">
+					<div class="col">
+						<input id="namePlaceholder" type="text" placeholder="Название компании" class="form-control collapse" disabled>
+					</div>
+				</div>
+			<!-- Placeholder -->
+			<br>
+			
+			
+			<div class="alert alert-warning alert-dismissible fade   collapse" role="alert" id="excessOfLimit">
+  				<span id="excessOfLimitText"> </span>
+  			<button type="button" class="close"   aria-label="Close" onclick="closeExcessOfLimit()">
+    			<span aria-hidden="true">&times;</span>
+ 			 </button>
+			</div>
+			<!-- ---------------- Partner table  ------------------------------- -->
+
+			<div class="collapse" id="collapsePartnerBody">
+				<div>
+					<!-- ---------------- Create new partner form  ------------------------------- -->
+					<div>
+						<div class="alert alert-danger collapse" id="inputPartnerFormErrore">
+								Заполните обязательные поля.
+						</div>
+						<div class="form-row">
+							<div class="col">
+								<label for="inputCompanyName" class="sr-only">Компания</label> 
+								<input type="text" id="inputCompanyName" class="form-control" placeholder="Компания">
+							</div>
+							<div class="col">
+								<label for="inputCompanyPhon" class="sr-only">Телефон</label> 
+								<input type="text" id="inputCompanyPhon" class="form-control" placeholder="Телефон">
+								
+							</div>
+							<div class="col">
+								<label for="inputCompanyMail" class="sr-only">Почта</label> 
+								<input type="text" id="inputCompanyMail" class="form-control" placeholder="Почта">
+							</div>
+							<div class="col">
+								<button class="btn btn-success" onclick="postNewPartnerForm()">Добавить поставщика</button>
+							</div>
+							
+						</div>
+					</div>
+					<!-- ---------------- Create new partner form  ------------------------------- -->
+					
+					<br>
+					
+					<table class="table" id="partnerContent">
+						<thead>
+							<tr>
+								<th>Компания</th>
+								<th>Телефон</th>
+								<th>Почта</th>
+								<th>Опции</th>
+							</tr>
+						</thead>
+						<tbody id="partnerTable">
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<!-- ---------------- Partner table  ------------------------------- -->
+
+
+			<!-- ---------------- product table  ------------------------------- -->
+			<div class=" center">
+				<div class="loader center"  id="spiners">
+				</div>
+			</div>
+			<div class="collapse" id="collapseProductBody">
+				<div>
+					
+					<div class="alert alert-danger collapse" id="inputPartnerProductFormErrore">
+						Заполните обязательные поля
+					</div>
+					<div class="form-row">
+						<div class="col">
+							<label for="inputProductGroup" class="sr-only">Группа</label> 
+							<input type="text" id="inputProductGroup" class="form-control" placeholder="Группа" >
+						</div>
+						<div class="col">
+							  <label for="inputProductName" class="sr-only">Название</label> 
+							<input  type="text" id="inputProductName" class="form-control " placeholder="Название" required>
+						</div>
+						<div class="col">
+							<label for="inputProductDescription" class="sr-only">Описание</label>
+							<input type="text" id="inputProductDescription" class="form-control" placeholder="Описание">
+						</div>
+						<div class="col" hidden>
+							<select class="form-control"   id="propertieSelect">
+								<option >ингридиент</option>
+								<option>расходник</option>
+								<option selected>универсальный</option>
+								<option>конечный продукт</option>
+							</select>
+						</div>
+						<div class="col">
+							<select class="form-control" id="measureSelect">
+								<option selected>шт</option>
+								<option>кило</option>
+								<option>литр</option>
+							</select>
+						</div>
+						  <div class="col">
+							<label for="inputProductDescription" class="sr-only">Расход</label>
+							<input type="number" id="inputCompositeProductRate" class="form-control" placeholder="Расход" value="0" 
+							 data-toggle="tooltip" data-placement="top" title="Tooltip on left">
+						</div>   
+						<div class="col-2">
+							<button class="btn btn-success" id="sendUpdateProduct">Добавить</button>
+						</div>
+					</div>
+
+					<br>
+					<table class="table" id="productContent">
+
+						<thead>
+							<tr>
+								<th>Группа</th>
+								<th>Название</th>
+								<th>Описание</th>
+								<th>Свойство</th>
+								<th>Расход</th>
+								<th>Опции</th>
+							</tr>
+						</thead>
+						<tbody id="productTable">
+						</tbody>
+					</table>
+					<ul class="nav navbar-nav ml-auto">
+						<li class="nav-item ">
+							<a class="nav-link" href="#" onclick="hideProduct()">
+						 		Вернуться к поставщикам 
+						 	</a>
+						 </li>
+					</ul>
+				</div>
+				<div hidden id="curentPartnerProductList"></div>
+			</div>
+			<!-- ---------------- product table  ------------------------------- -->
+
+			<div class="line"></div>
+		</div>
+	</div>
+
+	<div th:insert="~{template/modal/updateProductForm :: update_product_form}"></div>
+	<div th:insert="~{template/modal/updatePartnerForm :: update_partner_form}"></div>
+	<script th:src="@{/js/info.js}"></script>
+	<script th:src="@{/js/partners.js}"></script>
+</body>
+</html>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>top bar</title>
+
+</head>
+<body>
+	<!-- top_bar  -->
+	<nav class="navbar navbar-expand-lg navbar-light bg-light" th:fragment="top_bar">
+    <div class="container-fluid">
+        <button type="button" id="sidebarCollapse" class="btn btn-info">
+            <i class="fas fa-align-left"></i>
+            <span>Скрыть</span>
+        </button>
+        <div class="col">
+        <input id="searchOnPageTable" type="text" placeholder="Поиск.." class="form-control"> 
+        </div>
+        <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="fas fa-align-justify"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="nav navbar-nav ml-auto" id="topBarContentUl">
+                <li class="nav-item ">
+                <a class="nav-link" id="infoButton" href="#" >Инфо</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/logout}">Выход</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav> 
+
+
+
+</body>
+</html>

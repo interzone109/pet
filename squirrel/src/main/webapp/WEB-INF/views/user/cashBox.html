@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>Интерфейс кассы</title>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js" type="text/javascript"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js" type="text/javascript"></script>
+
+ 
+<link rel="stylesheet" href="../static/css/data.css" th:href="@{/css/data.css}" type="text/css" media="screen">
+<!-- Bootstrap CSS CDN -->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+<!-- Our Custom CSS -->
+<link rel="stylesheet" href="../static/css/style.css" th:href="@{/css/style.css}" type="text/css" media="screen">
+<!-- Font Awesome JS -->
+<script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js"></script>
+<script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js"></script>
+
+</head>
+
+<body>
+	<div class="wrapper">
+		<!-- left side menu -->
+		<div class="wrapper" th:insert="~{template/leftBar :: left_bar}">
+		</div>
+		<!-- left side menu -->		
+		<!-- Content conteiner -->
+		<div id="content">
+			<!--  top bar start -->
+			<div th:insert="~{template/topBar :: top_bar}">
+			</div>
+			<!-- top bar end -->
+			<!--  info collapse start -->
+			<div class="collapse" id="collapseInfo">
+						<div class="card card-body">Раздел служит для настройки интерфейса кассы
+							<br> Возможности :
+							<br>-Настройка интерфейса кассы для сотрудника
+							<br>-Выбор варианта кассы
+						</div>
+						<br>
+					</div>
+			<!-- info collapse end -->
+			<!-- cashbox content start -->
+			 <!-- forma start -->
+				<div class="conteiner">
+					<!-- errore alert start -->
+					<div class="alert alert-danger collapse" id="inputConsignmentFormErrore">
+								Заполните обязательные поля.
+					</div>
+					<!-- errore alert end -->
+					<!-- button start -->
+					<div class="row">
+						<div class="d-inline p-3 col-2">
+							<label>
+								Магазин
+							</label>
+						</div>
+						<div class="d-inline p-2 col-4">
+							<select class="form-control" id="storeSelect" >	
+							</select>
+						</div>
+					</div>
+					<div class="row">
+						<div class="d-inline p-3 col-2">
+							<label>
+								Форму работы
+							</label>
+						</div>
+						<div class="d-inline p-2 col-4">
+							<select class="form-control" id="interfaceSelector" >
+								<option value="1">Касса</option>	
+								<option value="2">Стол заказов</option>	
+							</select>
+						</div>
+						<div  class="d-inline p-3 col" id="cashBoxDescription">Описание</div>
+					</div>
+					<div class="row">
+						<div class="d-inline p-3 col-2">
+							<label>
+								Кассир
+							</label>
+						</div>
+						<div class="d-inline p-2 col-4">
+							<select class="form-control"  id="employeeSelector" disabled>
+							</select>
+						</div>
+					</div>
+					<div class="row">
+						<div class="d-inline p-3 col-2">
+							<label>
+								Стол заказов
+							</label>
+						</div>
+						<div class="d-inline p-2 col-4" >
+							<select class="form-control " disabled id="employeeSelectorDoubler" >
+							</select>
+						</div>
+					</div>
+					<div class="row">
+						<div class="d-inline p-2">
+							<button class="btn btn-info"  onclick="#()" id="saveOptionsBytton" title="просмотреть остатки">
+							Сохранить настройки 	 
+							</button>
+						</div>
+					</div>
+					<!-- button end -->
+				</div>  
+				<!-- forma end -->
+			<!-- cashbox content end -->
+		</div>
+	</div>
+<!-- script start-->
+<script th:src="@{/js/info.js}"></script>
+<script th:src="@{/js/cashbox/cashbox.js}"></script>
+<!-- script end -->
+ 
+</body>
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+
+<div class="modal fade" id="updateModalCompositeProductForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+  aria-hidden="true" th:fragment="update_composite_product_form">
+  <div class="modal-dialog" role="document">
+     <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold" >Oбновить карточку </h4>
+        <button id="closeCompositeProduct" type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body mx-3">
+        <div class="modal-body mx-3">
+            <label for="updateCompositeProductGroup" class="sr-only">Группа</label>
+            <input type="text" id="updateCompositeProductGroup" class="form-control" placeholder="Группа" >
+        </div>
+        <div class="modal-body mx-3">
+            <label for="updateCompositeProductName" class="sr-only">Название</label>
+            <input type="text" id="updateCompositeProductName" class="form-control" placeholder="Название" >
+        </div>
+        <div  class="modal-body mx-3">
+        <select class="form-control" id="updateCompositeMeasureSelect">
+  							<option value="шт" >шт</option>
+  							<option value="кило">кило</option>
+  							<option value="литр">литр</option>
+						</select>
+        </div>
+        
+        </div>
+        <div class="modal-footer d-flex justify-content-center">
+        <div hidden id="sendCompositeId"> </div>
+            <button class="btn btn-info" id="updateCompositeProductButton"  >Обновить</button>
+      </div>
+    </div> 
+  </div>
+</div>
+
+</body>
+</html>

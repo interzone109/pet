@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+ <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="keywords" content="Bootstrap, Landing page, Template, Business, Service">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="Grayrids">
+    <title>Small one</title>
+<title>Insert title here</title>
+
+<!-- <link rel="stylesheet" href="../static/css/index.css"  th:href="@{/css/index.css}"  type="text/css" media="screen"> -->
+<link rel="stylesheet" href="../static/css/landing/bootstrap.min.css" th:href="@{css/landing/bootstrap.min.css}"  type="text/css" media="screen">
+    <link rel="stylesheet" href="../static/css/landing/animate.css" th:href="@{css/landing/animate.css}" type="text/css" media="screen">
+    <link rel="stylesheet" href="../static/css/landing/LineIcons.css" th:href="@{css/landing/LineIcons.css}" type="text/css" media="screen">
+    <link rel="stylesheet" href="../static/css/landing/owl.carousel.css" th:href="@{css/landing/owl.carousel.css}" type="text/css" media="screen">
+    <link rel="stylesheet" href="../static/css/landing/owl.theme.css" th:href="@{css/landing/owl.theme.css}" type="text/css" media="screen">
+    <link rel="stylesheet" href="../static/css/landing/magnific-popup.css" th:href="@{css/landing/magnific-popup.css}" type="text/css" media="screen">
+    <link rel="stylesheet" href="../static/css/landing/nivo-lightbox.css" th:href="@{css/landing/nivo-lightbox.css}" type="text/css" media="screen">
+    <link rel="stylesheet" href="../static/css/landing/main.css" th:href="@{css/landing/main.css}"  type="text/css" media="screen">    
+    <link rel="stylesheet" href="../static/css/landing/responsive.css" th:href="@{css/landing/responsive.css}" type="text/css" media="screen">
+</head>
+ <body>
+
+    <!-- Header Section Start -->
+    <header id="home" class="hero-area">    
+      <div class="overlay">
+        <span></span>
+        <span></span>
+      </div>
+      <!--top bar start-->
+      <nav class="navbar navbar-expand-md bg-inverse fixed-top scrolling-navbar">
+        <div class="container">
+          <a th:href="@{/}" class="navbar-brand">
+          	<img th:src="@{css/img/logoSmallOne.png}"/>
+          </a>       
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="lni-menu"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav mr-auto w-100 justify-content-end">
+              <li class="nav-item">
+                <a class="nav-link page-scroll" th:href="@{/}">Главная</a>
+              </li> 
+              <li class="nav-item">
+                  <a class="nav-link page-scroll" th:href="@{/registration}">Регистрация</a>
+                </li>  
+              <li class="nav-item">
+                <a class="nav-link page-scroll" href="#blog">FAQ</a>
+              </li> 
+            </ul>
+          </div>
+        </div>
+      </nav>  
+      <!--top bar end-->
+      <div class="container">      
+        <div class="row space-100">
+          <div class="">
+            <div class="contents">
+               <div class="col-lg-9 col-md-12">
+          <form  th:action="@{/j_spring_security_check}"  th:object="${user}" method='POST'>
+            <div class="row">
+           		<div class="col-md-12">
+            		<p id="errors" th:if="${(param.error != null) and (param.error[0] == 'true')}">
+   					 Ошибка ввода логина или пароля
+					</p>
+				</div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <input type="text" class="form-control"    placeholder="Login"  
+                   th:field="*{login}" name="j_username">
+                  <div class="help-block with-errors"></div>
+                </div>                                 
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <input type="password" placeholder="Pass"  class="form-control"   
+                  th:field="*{hashPass}" name="j_password">
+                  <div class="help-block with-errors"></div>
+                </div> 
+              </div>
+              <div class="col-md-6">
+                <div class="submit-button">
+                  <button class="btn btn-common"  type="submit">Войти</button>
+                  <div id="msgSubmit" class="h3  "></div> 
+                  <div class="clearfix"></div> 
+                </div>
+              </div>
+              </div>
+              </form>
+              <form>
+              <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="email" name="email" placeholder="Email" required data-error="Please enter your Email">
+                  <div class="help-block with-errors"></div>
+                </div>                                 
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <input type="text" placeholder="Budget" id="budget" class="form-control" name="budget" required data-error="Please enter your Budget">
+                  <div class="help-block with-errors"></div>
+                </div> 
+              </div>
+              <div class="col-md-12">
+                <div class="submit-button">
+                  <button class="btn btn-common" id="submit" type="submit">Войти</button>
+                  <div id="msgSubmit" class="h3 hidden"></div> 
+                  <div class="clearfix"></div> 
+                </div>
+              </div>
+            </div>            
+          </form>
+          </div>
+            </div>
+          </div>
+        </div> 
+      </div>             
+    </header>
+    <!-- Header Section End --> 
+
+
+  
+
+    <!-- Footer Section Start -->
+    <footer>
+      <!-- Footer Area Start -->
+      <section id="footer-Content">
+        <div class="container">
+          <!-- Start Row -->
+          <div class="row">
+
+          <!-- Start Col -->
+            <div class="col-lg-3 col-md-6 col-sm-6 col-xs-6 col-mb-12">
+              
+              <div class="footer-logo">
+                <img th:src="@{css/img/logoSmallOne.png}"/>
+              </div>
+            </div>
+             <!-- End Col -->
+              <!-- Start Col -->
+            <div class="col-lg-2 col-md-6 col-sm-6 col-xs-6 col-mb-12">
+              <div class="widget">
+                <h3 class="block-title">Company</h3>
+                <ul class="menu">
+                  <li><a href="#">  - About Us</a></li>
+                  <li><a href="#">- Career</a></li>
+                  <li><a href="#">- Blog</a></li>
+                  <li><a href="#">- Press</a></li>
+                </ul>
+              </div>
+            </div>
+             <!-- End Col -->
+              <!-- Start Col -->
+            <div class="col-lg-2 col-md-6 col-sm-6 col-xs-6 col-mb-12">
+              <div class="widget">
+                <h3 class="block-title">Product</h3>
+                <ul class="menu">
+                  <li><a href="#">  - Customer Service</a></li>
+                  <li><a href="#">- Enterprise</a></li>
+                  <li><a href="#">- Price</a></li>
+                  <li><a href="#">- Scurity</a></li>
+                  <li><a href="#">- Why SLICK?</a></li>
+                </ul>
+              </div>
+            </div>
+             <!-- End Col -->
+              <!-- Start Col -->
+            <div class="col-lg-2 col-md-6 col-sm-6 col-xs-6 col-mb-12">
+              <div class="widget">
+                <h3 class="block-title">Download App</h3>
+                <ul class="menu">
+                  <li><a href="#">  - Android App</a></li>
+                  <li><a href="#">- IOS App</a></li>
+                  <li><a href="#">- Windows App</a></li>
+                  <li><a href="#">- Play Store</a></li>
+                  <li><a href="#">- IOS Store</a></li>
+                </ul>
+              </div>
+            </div>
+             <!-- End Col -->
+              <!-- Start Col -->
+            <div class="col-lg-3 col-md-6 col-sm-6 col-xs-6 col-mb-12">
+              <div class="widget">
+                <h3 class="block-title">Subscribe Now</h3>
+                <p>Appropriately implement calysts for change visa wireless catalysts for change. </p>
+                <div class="subscribe-area">
+                  <input type="email" class="form-control" placeholder="Enter Email">
+                  <span><i class="lni-chevron-right"></i></span>
+                </div>
+              </div>
+            </div>
+            <!-- End Col -->
+          </div>
+          <!-- End Row -->
+        </div>
+        <!-- Copyright Start  -->
+
+        <div class="copyright">
+          <div class="container">
+            <!-- Star Row -->
+            <div class="row">
+              <div class="col-md-12">
+                <div class="site-info text-center">
+                  <p>Crafted by <a href="http://uideck.com" rel="nofollow">UIdeck</a></p>
+                </div>              
+                
+              </div>
+              <!-- End Col -->
+            </div>
+            <!-- End Row -->
+          </div>
+        </div>
+      <!-- Copyright End -->
+      </section>
+      <!-- Footer area End -->
+      
+    </footer>
+    <!-- Footer Section End --> 
+
+
+    <!-- Go To Top Link -->
+    <a href="#" class="back-to-top">
+      <i class="lni-chevron-up"></i>
+    </a> 
+
+    <!-- Preloader -->
+    <div id="preloader">
+      <div class="loader" id="loader-1"></div>
+    </div>
+    <!-- End Preloader -->
+
+    <!-- jQuery first, then Tether, then Bootstrap JS. -->
+    <script th:src="@{js/landing/jquery-min.js}"></script>
+    <script th:src="@{js/landing/popper.min.js}"></script>
+    <script th:src="@{js/landing/bootstrap.min.js}"></script>
+    <script th:src="@{js/landing/owl.carousel.js}"></script>
+    <script th:src="@{js/landing/jquery.nav.js}"></script>
+    <script th:src="@{js/landing/jquery.easing.min.js}"></script>
+    <script th:src="@{js/landing/nivo-lightbox.js}"></script>
+    <script th:src="@{js/landing/jquery.magnific-popup.min.js}"></script>
+     <script th:src="@{js/landing/main.js}"></script>
+     
+
+    
+  </body>
+</html>

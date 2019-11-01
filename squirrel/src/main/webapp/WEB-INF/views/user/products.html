@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+<title>Товары</title>
+
+<!-- Bootstrap CSS CDN -->
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+<!-- Our Custom CSS -->
+<link rel="stylesheet" href="../static/css/style.css"
+	th:href="@{/css/style.css}" type="text/css" media="screen">
+<!-- Font Awesome JS -->
+<script defer
+	src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js"></script>
+<script defer
+	src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js"></script>
+
+</head>
+<body>
+
+
+
+
+	<div class="wrapper">
+		<!-- left side menu -->
+		<div class="wrapper" th:insert="~{template/leftBar :: left_bar}"></div>
+
+		<!-- Content conteiner -->
+		<div id="content">
+			<div th:insert="~{template/topBar :: top_bar}"></div>
+			
+			<!-- -----------  info collapse --------------------- -->
+			<div class="collapse" id="collapseInfo">
+				<div class="card card-body">Раздел служит для созания доступного для всех магазинов ассортимента готовых продуктов.
+				<b> Пошаговая инструкция: </b>
+				1) Создайте продукт заполнив поля "Группа" и "Название", далее выберите единицы расхода и нажмите кнопку "Добавить".
+				<br>2) В колонке "Опции" нажмите кнопку "Просмотреть ингридиенты".
+				<br>3) После этого таблица с Вашими товара исчезнет и откроется таблица с ингридиентами и расходом.
+				<br>4) Далее нажмите кнопку "Добавить ингридиент".
+				<br>5) В появившемся окне будет представлен список всех ингридиентов которые Вы внесли в разделе "Партнеры"
+				 
+				</div>
+			</div>
+			<!-- -----------  info collapse --------------------- -->
+			
+			<!-- -----------  search  --------------------- -->
+			<!-- Search start -->
+				<div class="form-row">
+					<div class="col">
+						<input id="namePlaceholder" type="text" placeholder="Название продукта" class="form-control collapse" disabled>
+					</div>
+				</div>
+			<!-- Search end -->
+			
+			<br>
+			<!-- Limit alert -->
+			<div class="alert alert-warning alert-dismissible fade collapse" role="alert" id="excessOfLimit">
+  				<span id="excessOfLimitText"> 
+  				</span>
+  				<button type="button" class="close"   aria-label="Close" onclick="closeExcessOfLimit()">
+    				<span aria-hidden="true">
+    					&times;
+    				</span>
+ 			 	</button>
+			</div>
+			<!-- Limit alert -->
+			<!-- -----------  search --------------------- -->
+			
+			
+			<!-- -----------  assortment table  --------------------- -->
+			<div class="collapse" id="collapseCompositeProductBody">
+				<div >
+			
+				<!-- ---------------- Create new composite form  ------------------------------- -->
+				<div>
+				<div class="alert alert-danger collapse" id="inputCompositeFormErrore">
+								Заполните обязательные поля.
+						</div>
+					<div class="form-row">
+					<div class="col">
+							<label for="inputCompositeGroup" class="sr-only">Группа</label> 
+							<input 	type="text" id="inputCompositeGroup" class="form-control" placeholder="Группа">
+						</div>
+						<div class="col">
+							<label for="inputCompositeName" class="sr-only">Название</label>
+							 <input type="text" id="inputCompositeName" class="form-control" placeholder="Название">
+						</div>
+						<div class="col"> 
+						<select class="form-control" id="measureSelect">
+  							<option selected value="шт">шт</option>
+  							<option>кило</option>
+  							<option>литр</option>
+						</select>
+						</div>
+						<div class="col-2">
+							<button class="btn btn-success"  onclick="postNewCompositeProduct()" >Добавить</button>
+						</div>
+					</div>
+				</div>
+				<!-- ---------------- Create new composite form  ------------------------------- -->
+				<br>
+			
+			<!-- -----------  composite table  --------------------- -->	
+			
+				<table class="table">
+					<thead>
+						<tr>
+						    <th>Группа</th>
+							<th>Название</th>
+							<th>Мера</th>
+							<th>Опции</th>
+						</tr>
+					</thead>
+					<tbody id="productTableBody">
+					</tbody>
+				</table>
+				
+				<!-- -----------  composite table  --------------------- -->	
+			</div>
+
+			<div class="line"></div>
+		</div>
+		
+		
+		<!------------------------------  ingridients body   -------------------------------------->
+		
+		<div class="collapse" id="collapseCompositeIngridientBody">
+				<div >
+<!-- ---------------- Create new composite form  ------------------------------- -->
+				<div>
+					<div class="form-row">
+							<div class="col-2">
+							<button class="btn btn-info"  onclick="addIngridients()"  >Добавить ингридиент</button>
+						</div>
+					</div>
+				</div>
+				<!-- ---------------- Create new composite form  ------------------------------- -->
+				<br>
+			
+			<!-- -----------  composite table  --------------------- -->	
+			
+				<table class="table" id="ingridientTableHeader">
+					<thead>
+						<tr>
+						    <th>Группа</th>
+							<th>Название</th>
+							<th>Расход</th>
+							<th>Опции</th>
+						</tr>
+					</thead>
+					<tbody id="ingridientTableBody">
+					</tbody>
+				</table>
+				
+				<div hidden id="listIngridientsId"></div>
+				<div hidden id="currentProductId"></div>
+				<!-- -----------  composite table  --------------------- -->	
+			</div>
+					<ul class="nav navbar-nav ml-auto">
+						<li class="nav-item ">
+							<a class="nav-link" href="#" onclick="hideProduct()">
+						 		Вернуться к продуктам 
+						 	</a>
+						 </li>
+					</ul>
+			<div class="line"></div>
+		</div>
+		
+		
+		<!------------------------------  ingridients body   -------------------------------------->
+		
+		</div>
+	</div>
+
+
+<div th:insert="~{template/modal/updateCompositeProductForm:: update_composite_product_form}"></div>
+<div th:insert="~{template/modal/updateCompositeIngridientForm:: update_composite_ingridient_form}"></div>
+<div th:insert="~{template/modal/updateIngridientQuantityForm:: update_quantity_ingridient_form}"></div>
+
+<script th:src="@{/js/info.js}"></script>
+	<script th:src="@{/js/compositeProducts.js}"></script>
+	<script th:src="@{/js/compositeingridient.js}"></script>
+	
+</body>
+</html>

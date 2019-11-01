@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>Накладные</title>
+
+<link rel="stylesheet" href="../static/css/data.css"
+	th:href="@{/css/data.css}" type="text/css" media="screen">
+
+<!-- Bootstrap CSS CDN -->
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+<!-- Our Custom CSS -->
+<link rel="stylesheet" href="../static/css/style.css"
+	th:href="@{/css/style.css}" type="text/css" media="screen">
+<!-- Font Awesome JS -->
+<script defer
+	src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js"></script>
+<script defer
+	src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js"></script>
+</head>
+<body>
+	<div class="wrapper">
+<!-- left side menu -->
+		<div class="wrapper" th:insert="~{template/leftBar :: left_bar}"></div>
+<!-- left side menu -->		
+<!-- Content conteiner -->
+			<div id="content">
+				<div th:insert="~{template/topBar :: top_bar}"></div>
+<!-- -----------  info collapse --------------------- -->
+					<div class="collapse" id="collapseInfo">
+						<div class="card card-body">Раздел служит для учета и создания накладных.
+						<br> Возможности :
+						<br>-создание накладных;
+						<br>-редактирование накладных;
+						<br>-проведение накладных;
+					</div>
+					<br>
+				</div>
+
+
+<div class="collapse" id="collapseConsignmentBody">
+				<div>
+					<div class="alert alert-danger collapse" id="inputConsignmentFormErrore">
+								Заполните обязательные поля.
+					</div>
+					<div class="form-row">
+					<div class="col-1">
+							<button class="btn btn-success"  onclick="createNewConsignment()" id="createConsignmentBytton" title="Создать накладную">
+								<i class="fas fa-plus"></i>
+							</button>
+						</div>
+						<div class="col-3">
+							<label for="dataRangeValue" class="sr-only">Период</label>	
+                			<input id="dataRangeValue" type='text' data-range="true" placeholder="Период"
+                				  data-multiple-dates-separator=" - " class='datepicker-here form-control' />
+           				</div>
+						<div class="col">
+        						<select class="form-control" id="consignmetnStatusSelect">
+  									<option value="ARRIVAL" selected="selected">приход</option>
+  									<option value="CONSAMPTION">расход</option>
+  									<!-- <option value="HAULING">перемещение</option> -->
+  									<option value="RETURN">возрат</option>
+  									<option value="WRITE-OFF">списание</option>
+								</select>
+						</div>
+						
+						<div class="col">
+							<select class="form-control" id="consignmetnStoreSelect">	
+							</select>
+						</div>
+						<div class="col" id="consignmetnOnSelectCol">
+							<select class="form-control" id="consignmetnOnSelect" >
+  									<option value="ANY" selected="selected">Все партнеры</option>
+							</select>
+						</div>
+						<div class="col" id="consignmetnStoreDoublerSelectCol" style="display: none;">
+							<select class="form-control" id="consignmetnStoreDoublerSelect" >
+  									 
+							</select>
+						</div>
+						<div class="col-1">
+							<button class="btn btn-info"  onclick="postFindConsignmentByValue()" id="searchConsignmentBytton" title="Найти накладную">
+							<i class="fas fa-search"></i>
+							</button>
+						</div>
+						
+					</div>
+				</div>  
+				<br>
+<!--     consignment table start   -->
+
+<table class="table" id="consignmentTableId" summary="0">
+	<thead>
+		<tr>
+			<th>Номер</th>
+			<th>Дата</th>
+			<th>Движение</th>
+			<th>Тип</th>
+			<th>Статус</th>
+			<th>Опции</th>
+		</tr>
+	</thead>
+	<tfoot id="consignmentTableFooter">
+	 </tfoot>
+	
+		<tbody id="consignmentTableBodyId">
+		</tbody>
+	</table>
+<!--     consignment table end   -->	
+</div>
+<!-- ----------------------     content    data  end  --------------------------- -->	
+<div class="collapse" id="collapseConsignmentDataBody">
+<!-- input data start -->
+				<div>
+					<div class="alert alert-danger collapse" id="inputConsignmentFormErrore">
+								Заполните обязательные поля.
+					</div>
+					<div class="form-row">
+						<div class="col-2">
+							<button class="btn btn-info"   id="saveDataConsignment" >Сохранить </button>
+						</div>
+						<div class="col-3">
+							<button class="btn btn-info"   id="addDataConsignment">Добавить ингридиент</button>
+						</div>
+						<div class="col-2">
+							<button class="btn btn-info"  id="approvedDataConsignment">Провести </button>
+						</div>
+					</div>
+				</div>
+<!-- input data end -->
+<br>
+<!--     consignment data table start   -->
+<div hidden id ="consignmentTableStoreId"></div>
+<div hidden id ="currentConsignmentStatusId"></div>
+<div hidden id ="consignmentCurrentId"></div>
+<div hidden id ="consignmentIngridientsId"></div>
+<table class="table" id="consignmentDataTableId">
+	<thead>
+		<tr>
+			<th>Группа</th>
+			<th>Название</th>
+			<th>Количество</th>
+			<th>Остаток партии</th>
+			<th>Расход</th>
+			<th>Цена за шт/кг/л</th>
+			<th>Итого/грн</th>
+			<th>Опции</th>
+		</tr>
+	</thead>
+
+		<tbody id="consignmentDataTableBodyId">
+		</tbody>
+		<tfoot>
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>К оплате</td>
+      <td id="totalSumm"></td>
+      <td><a href="#">+ НДС</a></td>
+    </tr>
+  </tfoot>
+	</table>
+	<a class="nav-link" href="#" onclick="hideConsignmentData()"> Вернуться к последней выборке</a>
+<!--     consignment data table end   -->	
+</div>	
+
+	
+	
+<!-- ----------------------     content  end    --------------------------- -->
+	</div>
+<!-- Content conteiner -->
+</div>
+
+
+ <div th:insert="~{template/modal/consignment/AddIngridientModal :: add_ingridient_to_consignment_modal}"></div> 
+ <div th:insert="~{template/modal/consignment/confirmConsignmentModal :: create_new_consignment_modal}"></div> 
+ 
+<script th:src="@{/js/info.js}"></script>
+ <script th:src="@{/js/consignment/datapiker.js}"></script>	
+ <script th:src="@{/js/consignment/consignmentTable.js}"></script>
+ <script th:src="@{/js/consignment/consignmentDataPanel.js}"></script>
+  <script th:src="@{/js/consignment/consignmentData.js}"></script>
+ <script th:src="@{/js/consignment/createConsignment.js}"></script>
+
+</body>
+</html>

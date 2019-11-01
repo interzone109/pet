@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+
+<div class="modal fade" id="employeeModalBody" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+  aria-hidden="true" th:fragment="employee_modal_form">
+<div class="modal-dialog" role="document">
+     <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold" >Сотрудник </h4>
+        <button id="closeCompositeProduct" type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+
+       
+       <div class="container">
+		<div class="row">
+			<div class="d-inline p-3 col-2">
+				<label>
+					Имя
+				</label>
+			</div>
+			<div class="d-inline p-2 col-4">
+				<label for="employeeNameInput" class="sr-only">Имя</label> 
+				<input type="text" id="employeeNameInput" class="form-control" placeholder="Имя">	
+			</div>
+			<div class="d-inline p-3 col-2">
+				<label>
+					Логин
+				</label>
+			</div>
+			<div class="d-inline p-2 col-4">
+				<label for="employeeLoginInput" class="sr-only">Логин</label> 
+				<input  type="text" id="employeeLoginInput" class="form-control" placeholder="Логин" title="Создайте логин своему сотруднику для доступа к кассе">	
+			</div>
+		</div>
+		<div class="row">
+			<div class="d-inline p-3 col-2">
+				<label>
+					Фамилия
+				</label>
+			</div>
+			<div class="d-inline p-2 col-4">
+				<label for="employeeSecondNameInput" class="sr-only">Фамилия</label> 
+				<input type="text" id="employeeSecondNameInput" class="form-control" placeholder="Фамилия" >	
+			</div>
+			<div class="d-inline p-3 col-2">
+				<label>
+					Пароль
+				</label>
+			</div>
+			<div class="d-inline p-2 col-4">
+				<label for="employeePassInput" class="sr-only">Пароль</label> 
+				<input  type="text" id="employeePassInput" class="form-control" placeholder="Пароль" title="Создайте пароль своему сотруднику для доступа к кассе">	
+			</div>
+		</div>
+		<div class="row">
+			<div class="d-inline p-3 col-4">
+				<label>
+					Зарплата
+				</label>
+			</div>
+			<div class="d-inline p-2 col">
+				<label for="employeeSalaryInput" class="sr-only">Зарплата</label> 
+				<input type="number" id="employeeSalaryInput" class="form-control" placeholder="Зарплата">	
+			</div>
+		</div>
+		<div class="row">
+			<div class="d-inline p-3 col-4">
+				<label>
+					Дата найма
+				</label>
+			</div>
+			<div class="col d-inline p-2">
+				<label for="dateHiringValue" class="sr-only">Дата найма</label>	
+                <input id="dateHiringValue" type='text' placeholder="Дата найма"  class='datepicker-here form-control ' />
+           	</div>
+		</div>
+		<div class="row">
+			<div class="d-inline p-3 col-4">
+				<label>
+					Магазин
+				</label>
+			</div>
+ 			<div class="col d-inline p-2">
+				<select class="form-control" id="storeSelect">
+				</select>
+			 </div>
+       </div>
+       <div class="row">
+			<div class="d-inline p-3 col-4">
+				<label>
+					Статус
+				</label>
+			</div>
+ 			<div class="col d-inline p-2">
+				 <label for="status" class="sr-only">Статус</label> 
+				<input type="text" id="status" class="form-control" placeholder="Статус">	
+			 </div>
+       </div>
+        <div class="modal-footer d-flex justify-content-center">
+            <button class="btn btn-info col" id="addIngridientLins"  >Сохранить</button>
+      </div>
+    </div> 
+  </div>
+</div>
+</div>
+</body>
+</html>
