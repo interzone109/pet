@@ -75,6 +75,7 @@ public class StoreAssortmentController {
 					  .description(Integer.toString(productNode.getLeftOvers()))
 					  .measureProduct(product.getMeasureProduct().getMeasure())
 					  .propertiesProduct(product.getPropertiesProduct().getName())
+					  .rate(productNode.getSumm())
 					  .group(product.getGroup())
 					  .build()
 					  );

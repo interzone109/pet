@@ -80,7 +80,7 @@ public class RegistrationController {
 		
 		fillDataUtil.getStore(user1);
 		
-		//fillDataUtil.setSpend(user1);
+		fillDataUtil.setSpend(user1);
 		
 		//fillDataUtil.setInvoice(user1);
 		

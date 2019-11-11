@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.util.Set;
 import javax.persistence.*;
 import lombok.Data;
+import lombok.ToString;
 
 @Entity
 @Table(name = "user")
@@ -35,6 +36,7 @@ public class User {
 
 	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL,
     fetch = FetchType.LAZY, optional = false)
+	@ToString.Exclude
 	private UserSubscription userSubscription;
 
 }

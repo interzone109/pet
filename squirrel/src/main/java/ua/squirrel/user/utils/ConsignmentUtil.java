@@ -48,7 +48,17 @@ public class ConsignmentUtil extends SmallOneUtil {
 					Product product = consignmentNode.getProduct();// текущий ингридиент
 					int totalProductSpend = productRateMap.get(product);// получаем общее количество расхода ингридиента на текущий чекe
 					int nodeLeftover = consignmentNode.getCurrentQuantity();// остатки в накладной (остатки в партии)
-					int totalSumm = productщеPriceMap.containsKey(product)?totalSumm = productщеPriceMap.get(product):0;// получаем сумму по старой партии
+					//проверяем если продукт храниться в кг/л то получаем цену за грам
+					String measure = product.getMeasureProduct().getMeasure();
+					int totalSumm = 0;
+					if(measure.equals("LITER") || measure.equals("KILOGRAM")) {
+						// получаем сумму по старой партии и выщитываем стоимость за  грамм продукта
+						 totalSumm  = productщеPriceMap.containsKey(product)?totalSumm = productщеPriceMap.get(product)/1000:0;
+					}else {
+						 totalSumm  = productщеPriceMap.containsKey(product)?totalSumm = productщеPriceMap.get(product):0;// получаем сумму по старой партии
+					}
+					
+					
 					if (totalProductSpend > 0 && totalProductSpend > nodeLeftover) {
 						// отмимаем расход от остатков
 						int productRest = totalProductSpend - nodeLeftover;

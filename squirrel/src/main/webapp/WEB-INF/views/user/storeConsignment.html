@@ -6,15 +6,12 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <title>Накладные</title>
 
-<link rel="stylesheet" href="../static/css/data.css"
-	th:href="@{/css/data.css}" type="text/css" media="screen">
+<link rel="stylesheet" href="../static/css/data.css" th:href="@{/css/data.css}" type="text/css" media="screen">
 
 <!-- Bootstrap CSS CDN -->
-<link rel="stylesheet"
-	href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
 <!-- Our Custom CSS -->
-<link rel="stylesheet" href="../static/css/style.css"
-	th:href="@{/css/style.css}" type="text/css" media="screen">
+<link rel="stylesheet" href="../static/css/style.css" th:href="@{/css/style.css}" type="text/css" media="screen">
 <!-- Font Awesome JS -->
 <script defer
 	src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js"></script>
@@ -47,8 +44,8 @@
 								Заполните обязательные поля.
 					</div>
 					<div class="form-row">
-					<div class="col-1">
-							<button class="btn btn-success"  onclick="createNewConsignment()" id="createConsignmentBytton" title="Создать накладную">
+						<div class="col-1">
+							<button class="btn btn-success "   onclick="createNewConsignment()" id="createConsignmentBytton" title="Создать накладную">
 								<i class="fas fa-plus"></i>
 							</button>
 						</div>
@@ -73,7 +70,7 @@
 						</div>
 						<div class="col" id="consignmetnOnSelectCol">
 							<select class="form-control" id="consignmetnOnSelect" >
-  									<option value="ANY" selected="selected">Все партнеры</option>
+  									<option value="ANY" selected="selected">Все поставщики</option>
 							</select>
 						</div>
 						<div class="col" id="consignmetnStoreDoublerSelectCol" style="display: none;">

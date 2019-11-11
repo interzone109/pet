@@ -90,15 +90,24 @@ public class StoreUtil extends SmallOneUtil {
 	
 	public void updateStoreLeftovers(Store store,  Map<Long, String> consignmentData, String sing ) {
 		List<StoreIngridientNode> ingridientNode = store.getStoreIngridientNode();
-		
 			ingridientNode.forEach(node->{
 				if(consignmentData.containsKey(node.getProduct().getId())){
 					String[] data = consignmentData.get(node.getProduct().getId()).split(":|quantity|price");
 					if (sing.equals("+")) {
 						int leftover = node.getLeftOvers() + Integer.parseInt(data[1]);
+						int summ = leftover * Integer.parseInt(data[2]);
+						if(!node.getProduct().getMeasureProduct().getMeasure().equals("UNIT")) {
+							summ /=1000;
+						}
+						node.setSumm(summ);
 						node.setLeftOvers(leftover);
 					}else {
 						int leftover = node.getLeftOvers() - Integer.parseInt(data[1]);
+						int summ = node.getSumm()-(leftover * Integer.parseInt(data[2]));
+						if(!node.getProduct().getMeasureProduct().getMeasure().equals("UNIT")) {
+							summ /=1000;
+						}
+						node.setSumm(summ);
 						node.setLeftOvers(leftover);
 					}
 				}
@@ -111,11 +120,34 @@ public class StoreUtil extends SmallOneUtil {
 			ingridientNode.forEach(node->{
 				if(consignmentData.containsKey(node.getProduct())){ 
 					if (sing.equals("+")) {
+						
+						
 						int leftover = node.getLeftOvers()  + consignmentData.get(node.getProduct());
+						int unitePrice = 0 ;
+						if(!node.getProduct().getMeasureProduct().getMeasure().equals("UNIT")) {
+							 unitePrice = (node.getSumm()/100) /( node.getLeftOvers() / 1000);
+						}else {
+							unitePrice = node.getSumm() / node.getLeftOvers();
+						}
+				
+						int summ = node.getSumm()+(unitePrice*consignmentData.get(node.getProduct()));
+						node.setSumm(summ);
 						node.setLeftOvers(leftover);
+						
 					}else {
 						int leftover = node.getLeftOvers() - consignmentData.get(node.getProduct());
+						int unitePrice = 0 ;
+						if(!node.getProduct().getMeasureProduct().getMeasure().equals("UNIT")) {
+							 unitePrice = (node.getSumm()/100) /( node.getLeftOvers() / 1000);
+						}else {
+							unitePrice = node.getSumm() / node.getLeftOvers();
+						}
+						
+						int summ = node.getSumm()-(unitePrice*consignmentData.get(node.getProduct()));
+						System.err.println(node.getSumm()+"-("+(unitePrice+"*"+consignmentData.get(node.getProduct())));
+						
 						node.setLeftOvers(leftover);
+						node.setSumm(summ);
 					}
 				}
 			});

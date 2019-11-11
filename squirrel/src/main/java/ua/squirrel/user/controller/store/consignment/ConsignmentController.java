@@ -166,15 +166,19 @@ public class ConsignmentController {
 			store.getStoreIngridientNode().forEach(node->{
 				existProductList.add(node.getProduct());
 			});
-			System.err.println("existProductList size "+existProductList.size());
 			ingridientList.removeAll(existProductList);
-			System.err.println("ingridientList size after remove "+ingridientList.size());
 			if(ingridientList.size()>0) {
 			ingridientList.forEach(product->{
+				String[] data = consignmentData.get(product.getId()).split(":|quantity|price");
 				StoreIngridientNode storeIngridientNode = new StoreIngridientNode();
-				storeIngridientNode.setLeftOvers(Integer.parseInt(consignmentData.get(product.getId()).split(":|quantity|price")[1]));
+				storeIngridientNode.setLeftOvers(Integer.parseInt(data[1]));
 				storeIngridientNode.setStore(store);
 				storeIngridientNode.setProduct(product);
+				int summ = Integer.parseInt(data[1]) * Integer.parseInt(data[2]);
+				if(!product.getMeasureProduct().getMeasure().equals("UNIT")) {
+					summ /=1000;
+				}
+				storeIngridientNode.setSumm(summ);
 				nodeList.add(storeIngridientNode);
 			});
 			}

@@ -75,6 +75,10 @@ public class UserController {
 	public String getCashBoxWork() {
 		return "user/cashBoxWork";
 	}
+	@RequestMapping(path = "/user/spends", method = RequestMethod.GET)
+	public String getSpends() {
+		return "user/spends";
+	}
 	
 	
 }

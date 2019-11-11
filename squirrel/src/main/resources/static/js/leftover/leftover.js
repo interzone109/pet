@@ -60,6 +60,7 @@ function displayProductRow(product){
 	  productRow.innerHTML = "<td id=\"product_group_id_"+product.id+"\">"+product.group+"</td>"
 		 + "<td id=\"product_name_id_"+product.id+"\">"+product.name+"</td>"
 		 + "<td id=\"product_leftover_id_"+product.id+"\">"+createMeasureProduct(product.description,product.measureProduct)+"</td>"
+		 +"<td id=\"product_summ_id_"+product.id+"\">"+(product.rate/100).toFixed(2)+" грн</td>"
 		 +"<td id=\"product_measure_id_"+product.id+"\">"+displayProductMeasure(product.measureProduct,1)+"</td>"
 		 +"<td id=\"product_properties_id_"+product.id+"\">"+displayProductProperties(product.propertiesProduct,1)+"</td>";
 		
@@ -143,11 +144,11 @@ function createMeasureProduct(expend, measure){
 	if(measure ==="UNIT"){
 		result = expend;
 	}else {
-		if(expend.length < 2){
+		if(expend.toString(10).length < 2){
 		result = "0.00" + expend  ;
-		}else if(expend.length < 3){
+		}else if(expend.toString(10).length < 3){
 		result = "0.0" + expend  ;
-		}else if(expend.length <4){
+		}else if(expend.toString(10).length <4){
 		result = "0." + expend  ;
 		}
 		else{
@@ -155,6 +156,7 @@ function createMeasureProduct(expend, measure){
 		var strStart = expend.substring(0,expend.length-3);
 		var strEnd = expend.substring(expend.length-3 ,expend.length);
 		result = strStart+"."+strEnd  ;
+		
 		}
 	} 
 	return result

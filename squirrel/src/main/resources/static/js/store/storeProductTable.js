@@ -34,7 +34,7 @@ function fillStoreProductTable(dataJSON){
 			 + "<td id=\"product_price_id_"+product.id+"\">"+displayProductMeasure(product.measureProduct, 1)+"</td>"
 			 +"<td><span class=\"badge badge-success\"> <i class=\"fas fa-edit\" title=\"изменить цену\" onclick=\"updateStoreProductDataModal("+product.id+")\" ></i></span> " 
 			 +"<span class=\"badge badge-info\"><i class=\"fas fa-list-alt\" title=\"вернуться к магазинам\" onclick=\"showStoreTable()\"  ></i></span>"
-			 +" <span class=\"badge badge-danger\"><i class=\"fas fa-trash-alt\" title=\"удалить\"  onclick=\"removeProduct("+product.id+")\"></i></span></td>"
+			 +" <span class=\"badge badge-danger\"><i class=\"fas fa-trash-alt\" title=\"удалить\"  onclick=\"removeProduct("+product.id+")\"></i></span></td>";
 			
 			 
 			 document.getElementById("productPriceIds").innerText+=product.id+" ";

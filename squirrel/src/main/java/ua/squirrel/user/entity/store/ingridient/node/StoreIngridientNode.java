@@ -38,4 +38,7 @@ public class StoreIngridientNode {
 	//остатки ингридиентов на текущий момент времени
 	@Column(name="left_overs")
 	private int leftOvers ;
+	//сумма на остатки ингридиентов 
+	@Column(name="summ")
+	private int summ ;
 }

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+<title>Расходы</title>
+<link rel="stylesheet" href="../static/css/data.css" th:href="@{/css/data.css}" type="text/css" media="screen">
+<!-- Bootstrap CSS CDN -->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+<!-- Our Custom CSS -->
+<link rel="stylesheet" href="../static/css/style.css"  th:href="@{/css/style.css}"  type="text/css" media="screen">
+<!-- Font Awesome JS -->
+<script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js"></script>
+<script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js"></script>
+
+</head>
+<body>
+
+	<div class="wrapper" >
+		<!-- left side menu -->
+		<div  class="wrapper" th:insert="~{template/leftBar :: left_bar}"></div>
+
+		<!-- Content conteiner -->
+		<div id="content">
+			<div th:insert="~{template/topBar :: top_bar}"></div>
+
+			
+			
+			<!-- -----------  info collapse --------------------- -->
+			<div class="collapse" id="collapseInfo">
+				<div class="card card-body">Раздел служит для отображени расходов.
+				<b> Пошаговая инструкция: </b>
+				1) Создайте расходы
+				</div>
+			</div>
+			<!-- -----------  info collapse --------------------- -->
+			<div class="line"></div>
+			<!-- buttons -->
+				<div class="form-row">
+					<div class="col-3">
+						<button class="btn btn-success "   onclick="createNewSpends()" id="createSpendsBytton" title="Создать расход">
+							<i class="fas fa-plus"></i> Создать
+						</button>
+					</div>
+					<div class="col-4">
+						<select class="form-control" id="storeSelect" >
+							<option value="0">Поиск по всем</option>
+						</select>
+					</div>
+					<div class="col-4 ">
+							<label for="dataRangeValue" class="sr-only">Период</label>	
+                			<input id="dataRangeValue" type='text' data-range="true" placeholder="Период"
+                				  data-multiple-dates-separator=" - " class='datepicker-here form-control'  autocomplete="off"/>
+           			</div>
+					<div class="col-1">
+							<button class="btn btn-info"  onclick="postFindSpendsByValue()" id="searchSpendsBytton" title="Найти расходы">
+							<i class="fas fa-search"></i>
+							</button>
+					</div>
+				</div>
+			<!-- buttons -->
+			<br>
+			<!-- spands table start   -->
+			<table class="table" id="spendsTableId" summary="0">
+				<thead>
+					<tr>
+						<th>Наименование</th>
+						<th>Стоимость</th>
+						<th>Период</th>
+						<th>Интервал</th>
+						<th>Статус</th>
+						<th>Магазин</th>
+						<th>Опции</th>
+					</tr>
+				</thead>
+			<tfoot id="spendsTableFooter">
+			</tfoot>
+			<tbody id="spendsTableBodyId">
+			</tbody>
+		</table>
+		<!-- spands table end   -->
+		</div>
+	</div>
+	
+	
+	
+	<div class="modal fade" id="deleteForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+  aria-hidden="true" >
+  <div class="modal-dialog" role="document">
+     <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold" >Oбновить карточку </h4>
+        <button id="closeUpdatePartner" type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body mx-3">
+       Удалить
+      </div>
+      <div hidden id="deleteRowId"></div>
+        <div class="modal-footer d-flex justify-content-center">
+            <button class="btn btn-info"  onclick="deleteSpendsRow()">Да</button>
+            <button class="btn btn-info" aria-label="Close" data-dismiss="modal">Нет</button>
+      </div>
+    </div> 
+  </div>
+</div>
+	
+	
+	
+	
+<div th:insert="~{template/spends/addUpdateSpendModal :: spend_modal_form}"></div> 
+
+<script th:src="@{/js/info.js}"></script>
+ <script th:src="@{/js/consignment/datapiker.js}"></script>	
+<script th:src="@{/js/spends/spends.js}"></script>
+</body>
+</html>

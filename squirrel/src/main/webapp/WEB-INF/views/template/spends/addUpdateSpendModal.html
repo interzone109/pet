@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+
+<div class="modal fade" id="spendModalBody" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+  aria-hidden="true" th:fragment="spend_modal_form">
+<div class="modal-dialog" role="document">
+     <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold" >Операционная деятельность </h4>
+        <button id="closeCompositeProduct" type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+
+       
+       <div class="container">
+		<div class="row">
+			<div class="d-inline p-3 col-4">
+				<label>
+					Наименование
+				</label>
+			</div>
+			<div class="d-inline p-2 col">
+				<label for="nameSpend" class="sr-only">Наименование</label> 
+				<input type="text" id="nameSpend" class="form-control" placeholder="Наименование" maxlength="20" >	
+			</div>
+		</div>
+		<div class="row">
+			<div class="d-inline p-3 col-4">
+				<label>
+					Сумма (грн)
+				</label>
+			</div>
+			<div class="d-inline p-2 col">
+				<label for="costSpend" class="sr-only">Сумма</label> 
+				<input type="number" id="costSpend" class="form-control" placeholder="Сумма" >	
+			</div>
+			
+		</div>
+		<div class="row">
+			<div class="d-inline p-3 col-4">
+				<label> 
+					<span class=" text-warning"><a href="#" onclick="switchInput('day')" title='Интервал в днях'>День</a></span>
+					 / 
+					<span class=" text-warning"> <a href="#" onclick="switchInput('month')"  title='Интервал в месяцах'>Месяц</a></span>
+				</label>
+			</div>
+			<div class="d-inline p-2 col-4"  id="dayPeriod">
+				<label for="intrrvalSpend" class="sr-only">Период в днях</label> 
+				<input type="number" id="intervalDaySpend" class="form-control" placeholder="Период" min="0" value=0>	
+			</div>
+			<div class="col d-inline p-2"  >
+				<select class="form-control" disabled id="intervalMonthSpend">
+				<optgroup label="Интервал в месяцах"></optgroup>
+				<option value="-1">1 месяц</option>
+				<option value="-2">2 месяца</option>
+				<option value="-3">3 месяца</option>
+				<option value="-4">4 месяца</option>
+				<option value="-5">5 месяцев</option>
+				<option value="-6">6 месяцев</option>
+				<option value="-7">7 месяцев</option>
+				<option value="-8">8 месяцев</option>
+				<option value="-9">9 месяцев</option>
+				<option value="-10">10 месяцев</option>
+				<option value="-11">11 месяцев</option>
+				<option value="-12">12 месяцев</option>
+				</select>
+			 </div>
+		</div>
+		<div class="row">
+			<div class="d-inline p-3 col-4">
+				<label>
+					Дата платежа
+				</label>
+			</div>
+			<div class="col d-inline p-2">
+				<label for="payDate" class="sr-only">Дата платежа</label>	
+                <input id="payDate" type='text' placeholder="Дата платежа"  class='datepicker-here form-control ' />
+           	</div>
+		</div>
+		<div class="row">
+			<div class="d-inline p-3 col-4">
+				<label>
+					За магазином
+				</label>
+			</div>
+ 			<div class="col d-inline p-2">
+				<select class="form-control" id="storeSelectModal">
+				<option value="0">Без магазина</option>
+				</select>
+			 </div>
+       </div>
+       <div class="row">
+			<div class="d-inline p-3 col-4">
+				<label title="Статус отвечает за перерасчет общей суммы если расход продолжает действоввать">
+					Статус расхода
+				</label>
+			</div>
+			<div class="col d-inline p-2"  >
+ 				<select class="form-control"  id="spendStatus" >
+					<option value="true">Открыт</option>
+					<option value="false" selected>Закрыт</option>
+				</select>
+			</div>
+       </div>
+        <div class="modal-footer d-flex justify-content-center">
+            <button class="btn btn-info col-4" id="comfirmSpendButton">Сохранить</button>
+      </div>
+    </div> 
+  </div>
+</div>
+</div>
+</body>
+</html>

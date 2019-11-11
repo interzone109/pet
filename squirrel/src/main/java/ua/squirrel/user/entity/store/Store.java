@@ -34,6 +34,7 @@ import ua.squirrel.web.entity.user.User;
 @Entity
 @Table(name = "stores")
 @Data
+
 public class Store {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

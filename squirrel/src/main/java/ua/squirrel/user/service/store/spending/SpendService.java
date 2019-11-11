@@ -1,6 +1,6 @@
 package ua.squirrel.user.service.store.spending;
 
-import java.util.Calendar;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -9,15 +9,15 @@ import ua.squirrel.user.entity.store.spending.Spend;
 import ua.squirrel.web.entity.user.User;
 
 public interface SpendService {
+				
+	List<Spend> findAllByUserAndLasteDateBetweenOrderByLasteDateAsc(User user , LocalDate from, LocalDate to);
 
-	List<Spend> findAllByUserOrderByDateAsc(User user);
+	List<Spend> findAllByStoreAndLasteDateBetweenOrderByLasteDateAsc(Store store , LocalDate from, LocalDate to);
 
-	List<Spend> findAllByStoreOrderByDateAsc(Store store);
+	Optional<Spend> findOneByUserAndId(User user, Long id);
 
-	Optional<Spend> findOneByUserAndIdOrderByDateAsc(User user, Long id);
-
-	Spend save(Spend spend);
+	List<Spend> findAllByUserAndStoreAndLasteDateBetweenOrderByLasteDateAsc(User user,Store store, LocalDate from, LocalDate to);
 	
-	List<Spend> findByUserAndDateBetween(User user, Calendar from, Calendar to);
+	List<Spend> findAllByIsOpen(boolean isOpen);
 }
 

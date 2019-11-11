@@ -56,38 +56,40 @@ public class FillDataUtil {
 	public void setSpend(User user) {
 		Spend spend = new Spend();
 		spend.setName("аренда за магазин 1");
-		spend.setDescription("аренда");
 		spend.setCost(10000);
-		spend.setInterval(15);
-		spend.setIsRegular(true);
+		spend.setStep(10000);
+		spend.setInterval(-1);
+		spend.setIsOpen(true);
 		spend.setUser(user);
 		spend.setStore(storeServiceImpl.findOneByIdAndUser(1l, user).get());
-		Calendar date = new GregorianCalendar(2019, 2, 2);
-
-		spend.setDate(date);
+		LocalDate date =LocalDate.now();
+		spend.setLasteDate(date);
+		spend.setDate(date.minusDays(31l));
 		spendServiceImpl.save(spend);
 
 		spend = new Spend();
 		spend.setName("аренда за оборудования");
-		spend.setDescription("печь, каса, столы");
 		spend.setCost(20000);
-		spend.setInterval(15);
-		spend.setIsRegular(true);
+		spend.setStep(20000);
+		spend.setInterval(3);
+		spend.setIsOpen(true);
 		spend.setUser(user);
 		spend.setStore(storeServiceImpl.findOneByIdAndUser(1l, user).get());
-		date = new GregorianCalendar(2019, 3, 20);
-		spend.setDate(date);
+		date =LocalDate.now();
+		spend.setLasteDate(date);
+		spend.setDate(date.minusDays(3l));
 		spendServiceImpl.save(spend);
 
 		spend = new Spend();
 		spend.setName("ремонт");
-		spend.setDescription("кухня и проч");
 		spend.setCost(100000);
-		spend.setInterval(15);
-		spend.setIsRegular(false);
+		spend.setStep(0);
+		spend.setInterval(0);
+		spend.setIsOpen(false);
 		spend.setUser(user);
 		spend.setStore(storeServiceImpl.findOneByIdAndUser(1l, user).get());
-		date = new GregorianCalendar(2019, 5, 5);
+		date =LocalDate.now();
+		spend.setLasteDate(date);
 		spend.setDate(date);
 		spendServiceImpl.save(spend);
 	}

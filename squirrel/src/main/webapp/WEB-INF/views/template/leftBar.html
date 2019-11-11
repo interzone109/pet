@@ -20,8 +20,8 @@
 			</a>
 				<ul class="collapse list-unstyled" id="storeSubmenu">
 					<li><a th:href="@{/user/leftover}">Продажи и остатки</a></li>
-					<li><a th:href="@{/user/consignment}">Движение товара</a></li>
-					<li><a th:href="@{/user/storePrice}">Настройки магазина</a></li>
+					<li><a th:href="@{/user/consignment}">Накладные</a></li>
+					<li><a th:href="@{/user/storePrice}">Витрина и магазины</a></li>
 				</ul></li>
 
 			<li><a href="#partnerSubmenu" data-toggle="collapse"
@@ -29,25 +29,25 @@
 					class="fas fa-address-book"></i> Товары
 			</a>
 				<ul class="collapse list-unstyled" id="partnerSubmenu">
-					<li><a th:href="@{/user/contacts}">Контакты</a></li>
+					<li><a th:href="@{/user/contacts}">Поставщики</a></li>
 					<li><a th:href="@{/user/products}">Карта товара</a></li>
 				</ul></li>
 
 			<li><a href="#employeeSubmenu" data-toggle="collapse"
 				aria-expanded="false" class="dropdown-toggle"> 
-				<i class="fas fa-user-tie"></i> Персонал
+				<i class="fas fa-briefcase"></i> Деятельность
 			</a>
 				<ul class="collapse list-unstyled" id="employeeSubmenu">
-					<li><a th:href="@{/user/employee}">Карточки</a></li>
-					<li><a href="#">Расчеты</a></li>
+					<li><a th:href="@{/user/employee}">Персонал</a></li>
+					<li><a th:href="@{/user/spends}">Затраты</a></li>
 				</ul></li>
 
 			<li><a href="#analiticSubmenu" data-toggle="collapse"
 				aria-expanded="false" class="dropdown-toggle"> <i
-					class="fas fa-chart-line"></i> Отчеты
+					class="fas fa-chart-line"></i> Аналитика
 			</a>
 				<ul class="collapse list-unstyled" id="analiticSubmenu">
-					<li><a href="#">Продажи</a></li>
+					<li><a href="#">Отчеты</a></li>
 					<li><a href="#">Прогноз</a></li>
 				</ul></li>
 

@@ -1,6 +1,6 @@
 package ua.squirrel.user.service.store.spending;
 
-import java.util.Calendar;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,33 +16,51 @@ public class SpendServiceImpl implements SpendService {
 	
 	private SpendRepository spendRepository;
 	
+	public List<Spend> findAllByIsOpen(boolean isOpen){
+		return spendRepository.findAllByIsOpen( isOpen);
+	}
+	
 	@Autowired
 	public SpendServiceImpl(SpendRepository spendRepository) {
 		this.spendRepository = spendRepository;
 	}
 
 	@Override
-	public List<Spend> findAllByUserOrderByDateAsc(User user) {
-		return spendRepository.findAllByUserOrderByDateAsc(user);
+	public List<Spend> findAllByUserAndLasteDateBetweenOrderByLasteDateAsc(User user, LocalDate from, LocalDate to) {
+		// TODO Auto-generated method stub
+		return spendRepository.findAllByUserAndLasteDateBetweenOrderByLasteDateAsc(user,  from,  to);
 	}
 
 	@Override
-	public List<Spend> findAllByStoreOrderByDateAsc(Store store) {
-		return spendRepository.findAllByStoreOrderByDateAsc(store);
+	public List<Spend> findAllByStoreAndLasteDateBetweenOrderByLasteDateAsc(Store store , LocalDate from, LocalDate to) {
+		// TODO Auto-generated method stub
+		return spendRepository.findAllByStoreAndLasteDateBetweenOrderByLasteDateAsc(store ,  from,  to);
 	}
 
 	@Override
-	public Optional<Spend> findOneByUserAndIdOrderByDateAsc(User user, Long id) {
-		return spendRepository.findOneByUserAndIdOrderByDateAsc(user, id);
-	}
-
-	public List<Spend> findByUserAndDateBetween(User user, Calendar from, Calendar to){
-		return spendRepository.findByUserAndDateBetween(user, from, to);
+	public List<Spend> findAllByUserAndStoreAndLasteDateBetweenOrderByLasteDateAsc(User user, Store store, LocalDate from,
+			LocalDate to) {
+		// TODO Auto-generated method stub
+		return spendRepository.findAllByUserAndStoreAndLasteDateBetweenOrderByLasteDateAsc(user, store, from, to);
 	}
 	
 	@Override
+	public Optional<Spend> findOneByUserAndId(User user, Long id) {
+		// TODO Auto-generated method stub
+		return spendRepository.findOneByUserAndId(user, id);
+	}
+
 	public Spend save(Spend spend) {
 		return spendRepository.save(spend);
 	}
+	
+	public void remove(Spend spend) {
+		 spendRepository.delete(spend);
+	}
+
+	public void saveAll(List<Spend> allSpends) {
+		spendRepository.saveAll(allSpends);
+	}
+
 
 }

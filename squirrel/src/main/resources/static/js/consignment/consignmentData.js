@@ -154,11 +154,11 @@ var result ;
 	if(measure ==="UNIT" || measure ==="шт"  ){
 		return expend ;
 	}else {
-		if(expend.length < 2){
+		if(expend.toString(10).length < 2){
 			result = "0.00" + expend ;
-		}else if(expend.length < 3){
+		}else if(expend.toString(10).length < 3){
 			result = "0.0" + expend ;
-		}else if(expend.length <4){
+		}else if(expend.toString(10).length <4){
 			result = "0." + expend ;
 		}
 		else{

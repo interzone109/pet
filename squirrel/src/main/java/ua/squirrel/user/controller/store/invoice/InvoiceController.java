@@ -39,7 +39,6 @@ import ua.squirrel.user.service.store.StoreServiceImpl;
 import ua.squirrel.user.service.store.consignment.ConsignmentServiceImpl;
 import ua.squirrel.user.service.store.consignment.status.ConsignmentStatusServiceImpl;
 import ua.squirrel.user.service.store.invoice.InvoiceServiceImpl;
-import ua.squirrel.user.service.store.invoice.node.InvoiceNodeServiceImpl;
 import ua.squirrel.user.utils.ConsignmentUtil;
 import ua.squirrel.user.utils.StoreUtil;
 import ua.squirrel.web.entity.user.User;
@@ -63,8 +62,6 @@ public class InvoiceController {
 	private ConsignmentServiceImpl consignmentServiceImpl;
 	@Autowired
 	private ConsignmentStatusServiceImpl consignmentStatusServiceImpl;
-	@Autowired
-	private InvoiceNodeServiceImpl invoiceNodeServiceImpl;
 	@Autowired
 	private ConsignmentUtil consignmentUtil;
 

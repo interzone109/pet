@@ -40,7 +40,7 @@ public class ConsignmentNode {
 	@ManyToOne(fetch = FetchType.LAZY, cascade=CascadeType.ALL)
 	@JoinColumn(name = "consignment_id", nullable = false)
 	private Consignment consignment;
-	//цена за единицу/грам/милилитр товара
+	//цена за шт/кг/л товара
 	@Column(name = "unit_price")
 	private int unitPrice;
 	//начальное количество товара в партии

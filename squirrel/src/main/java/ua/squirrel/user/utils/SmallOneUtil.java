@@ -12,6 +12,9 @@ import org.springframework.stereotype.Component;
 public class SmallOneUtil {
 	
 	public LocalDate convertDate(String date) {
+		if(date.isEmpty() || date == null) {
+			return LocalDate.now();
+		}
 		String[] splite = date.split("[.]");
 		LocalDate calendar = LocalDate.of(Integer.parseInt(splite[2].trim()), Integer.parseInt(splite[1].trim()),
 				Integer.parseInt(splite[0].trim()));

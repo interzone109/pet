@@ -144,7 +144,25 @@
   }
   
     
-    
+//формируем цену в удобнов формате
+  function displayProductPrice(price){ 
+  	price =  parseInt(price);
+  	  if (isNaN(price)) { 
+  		  return 0 ; 
+  		  }
+
+  		if(price < 1){
+  			return 0;
+  		} else if(price < 9){
+  			return "0.0"+price;
+  		}
+  		else if(price <99){
+  			return "0."+price;
+  		}
+  		else if(price >99){
+  		return price/100; 
+  		}
+  	}
     
     
     
