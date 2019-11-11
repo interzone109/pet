@@ -126,7 +126,7 @@ function fillConsignmentTable(data ){
 	 consignmentRow.id = "consignment_row_id_"+consignment.id;
 		  
 	 consignmentRow.innerHTML = "<td id=\"consignment_id_"+consignment.id+"\">"+consignment.id+"</td>"
-			 + "<td id=\"consignment_date_id_"+consignment.id+"\">"+consignment.date+"</td>"
+			 + "<td id=\"consignment_date_id_"+consignment.id+"\">"+converDate(consignment.date)+"</td>"
 			 + "<td id=\"consignment_meta_id_"+consignment.id+"\"title=\""+consignment.meta.split(":%:")[0]+"\">"+consignment.meta.split(":%:")[1]+"</td>"
 			 + "<td id=\"consignment_status_id_"+consignment.id+"\">"+displayConsignmentStatus(consignment.consignmentStatus, 1)+"</td>"
 			 + "<td id=\"consignment_state_id_"+consignment.id+"\">"+displayConsignmentState(consignment.approved, 1)+"</td>"

@@ -95,7 +95,7 @@ function fillSpendtTable(data ){
 
 	 spendRow.innerHTML = "<td id=\"spend_name_id_"+spend.id+"\">"+spend.name+"</td>"
 	 		+ "<td id=\"spend_cost_id_"+spend.id+"\">"+displayProductPrice(spend.cost)+" грн</td>"
-			+ "<td id=\"spend_date_id_"+spend.id+"\">"+spend.dateStart+" - "+spend.dateEnd+"</td>"
+			+ "<td id=\"spend_date_id_"+spend.id+"\">"+converDate(spend.dateStart)+" - "+converDate(spend.dateEnd)+"</td>"
 			+ "<td id=\"spend_interval_id_"+spend.id+"\">"+intrvalForm(spend.interval) +"</td>"
 			+ "<td id=\"spend_status_id_"+spend.id+"\">"+((spend.open)?"Открыт ":"Закрыт") +"</td>"
 			+ "<td id=\"spend_storeId_id_"+spend.id+"\">"+storeName+"</td>"

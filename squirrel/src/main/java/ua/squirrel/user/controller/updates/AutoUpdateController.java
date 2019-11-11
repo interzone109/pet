@@ -25,10 +25,10 @@ public class AutoUpdateController {
         log.info("System controller");
     }
 	/**
-	 * методраз в сутки пересчитывает итоговую сумму расходов
-	 * 
+	 * метод раз в сутки пересчитывает итоговую сумму расходов
+	 * пересчитываем раз в сутки
 	 * */
-	@Scheduled(fixedRate = 50000)
+	@Scheduled(fixedRate = 86_400_000)
     public void checkSpebdsRecount() {
         log.info("auto recound all open spends ");
         LocalDate today = LocalDate.now();
@@ -36,14 +36,17 @@ public class AutoUpdateController {
     	allSpends.forEach(spend->{
     		LocalDate lastPayDay = spend.getLasteDate();
     		LocalDate nextPayDay ;
-    		int interval = spend.getInterval();
-    		 if(interval<0){
-    			 interval = Math.abs(interval);
-    			 nextPayDay = lastPayDay.plusMonths(interval);
+    		
+    		 if(spend.getInterval() < 0){
+    			 nextPayDay = lastPayDay.plusMonths( Math.abs(spend.getInterval()));
     			}else {
-    			 nextPayDay = lastPayDay.plusDays(interval);
+    			 nextPayDay = lastPayDay.plusDays(spend.getInterval());
     			}
-    		if(nextPayDay.isAfter(today)) {
+
+    		 boolean isEquelse = nextPayDay.getDayOfMonth() == today.getDayOfMonth()
+    				 &&  nextPayDay.getMonth() == today.getMonth()
+    				 &&  nextPayDay.getYear() == today.getYear() ;
+    		if(isEquelse) {
     			int total = spend.getStep() + spend.getCost();
     			 spend.setCost(total);
     			 spend.setLasteDate(nextPayDay);

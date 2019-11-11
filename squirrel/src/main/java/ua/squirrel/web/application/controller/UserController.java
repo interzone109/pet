@@ -52,6 +52,11 @@ public class UserController {
 		return "user/products";
 	}
 	
+	@RequestMapping(path = "/user/report", method = RequestMethod.GET)
+	public String getUserreport() {
+		return "user/report";
+	}
+	
 	@RequestMapping(path = "/user/storePrice", method = RequestMethod.GET)
 	public String getStore() {
 		return "user/storePrice";

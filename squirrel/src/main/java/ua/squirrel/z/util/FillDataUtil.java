@@ -62,9 +62,9 @@ public class FillDataUtil {
 		spend.setIsOpen(true);
 		spend.setUser(user);
 		spend.setStore(storeServiceImpl.findOneByIdAndUser(1l, user).get());
-		LocalDate date =LocalDate.now();
+		LocalDate date =LocalDate.of(2019, 10, 11);
 		spend.setLasteDate(date);
-		spend.setDate(date.minusDays(31l));
+		spend.setDate(date.minusMonths(1l));
 		spendServiceImpl.save(spend);
 
 		spend = new Spend();
@@ -75,7 +75,7 @@ public class FillDataUtil {
 		spend.setIsOpen(true);
 		spend.setUser(user);
 		spend.setStore(storeServiceImpl.findOneByIdAndUser(1l, user).get());
-		date =LocalDate.now();
+		date =LocalDate.of(2019, 11, 8);
 		spend.setLasteDate(date);
 		spend.setDate(date.minusDays(3l));
 		spendServiceImpl.save(spend);
