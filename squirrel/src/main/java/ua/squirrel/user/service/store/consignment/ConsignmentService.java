@@ -22,4 +22,7 @@ public interface ConsignmentService {
 	
 	List<Consignment> findByStoreAndConsignmentStatusAndMetaIgnoreCaseContainingAndDateBetween(Store store,
 			ConsignmentStatus consignmentStatus,String meta,  LocalDate start, LocalDate finish);
+	
+	List<Consignment> findByStoreInAndIsApprovedAndConsignmentStatusAndDateBetween(List<Store> store,boolean isApproved,
+			ConsignmentStatus consignmentStatus, LocalDate from, LocalDate to);
 }

@@ -36,6 +36,11 @@ public class ConsignmentServiceImpl implements ConsignmentService {
 			ConsignmentStatus consignmentStatus, LocalDate from, LocalDate to) {
 		return consignmentRepository.findByStoreAndConsignmentStatusAndDateBetween(store, consignmentStatus, from, to);
 	}
+	
+	public List<Consignment> findByStoreInAndIsApprovedAndConsignmentStatusAndDateBetween(List<Store> store,boolean isApproved,
+			ConsignmentStatus consignmentStatus, LocalDate from, LocalDate to){
+		return consignmentRepository.findByStoreInAndIsApprovedAndConsignmentStatusAndDateBetween( store, isApproved, consignmentStatus, from, to);
+	}
 
 	public Optional<Consignment> findOneByDateAndStoreAndConsignmentStatusAndIsApprovedAndMetaIgnoreCaseContaining
 	(LocalDate date, Store store, ConsignmentStatus consignmentStatus,boolean isApproved, String meta) {
@@ -59,4 +64,5 @@ public class ConsignmentServiceImpl implements ConsignmentService {
 	public List<Consignment> getConsigmentFIFO(Store storeId,  Collection<Product> products){
 		return consignmentRepository.getConsigmentFIFO(storeId, products);
 	}
+
 }

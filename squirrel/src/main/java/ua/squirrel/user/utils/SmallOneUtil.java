@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 public class SmallOneUtil {
 	
 	public LocalDate convertDate(String date) {
-		if(date.isEmpty() || date == null) {
+		if( date == null||date.isEmpty() ) {
 			return LocalDate.now();
 		}
 		String[] splite = date.split("[.]");

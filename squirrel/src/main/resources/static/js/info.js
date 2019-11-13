@@ -136,6 +136,8 @@
       	 //$("#excessOfLimit").collapse('show');
       	 //$("#excessOfLimitText").text('');  
         }
+	  
+	  $("#spiners").hide();
    }
     
     
@@ -170,4 +172,42 @@
   }
     
     
+//метод преобразовывает количество ингридиента например 100 = 0.100 кг
+ function createMeasureProduct(expend, measure){
+ 	var result ;
+ 	if(measure ==="UNIT"){
+ 		result = expend;
+ 	}else {
+ 		if(expend.toString(10).length < 2){
+ 		result = "0.00" + expend  ;
+ 		}else if(expend.toString(10).length < 3){
+ 		result = "0.0" + expend  ;
+ 		}else if(expend.toString(10).length <4){
+ 		result = "0." + expend  ;
+ 		}
+ 		else{
+ 			expend = expend.toString(10);
+ 		var strStart = expend.substring(0,expend.length-3);
+ 		var strEnd = expend.substring(expend.length-3 ,expend.length);
+ 		result = strStart+"."+strEnd  ;
+ 		
+ 		}
+ 	} 
+ 	return result
+ }
+
+
+ function displayProductMeasure (measure ,convert){
+ 	 
+ 	if( measure ==="LITER" || measure==="литр"){
+ 		return (convert === 1)?"литр": "LITER";
+ 	}else if( measure ==="KILOGRAM" || measure==="кило"){
+ 		return  (convert === 1)?"кило": "KILOGRAM";
+ 	}else if( measure ==="UNIT" || measure==="шт"){
+ 		return  (convert === 1)?"шт": "UNIT";
+ 	}
+ 	
+ };
+ 
+ 
     

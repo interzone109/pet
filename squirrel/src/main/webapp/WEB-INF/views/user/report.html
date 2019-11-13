@@ -11,6 +11,7 @@
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
 <!-- Our Custom CSS -->
 <link rel="stylesheet" href="../static/css/style.css"  th:href="@{/css/style.css}"  type="text/css" media="screen">
+<link rel="stylesheet" href="../static/css/spin.css" th:href="@{/css/spin.css}" type="text/css" media="screen">
 <!-- Font Awesome JS -->
 <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js"></script>
 <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js"></script>
@@ -40,10 +41,11 @@
 			<!-- buttons -->
 				<div class="form-row">
 					<div class="col-4">
-						<select class="form-control" >
-							<option value="1">Оборот за период</option>
-							<option value="2">Прибыль за период</option>
-							<option value="3">Доход за период</option>
+						<select class="form-control" id="reportSelector">
+							<option value="1">Оборачиваемые средства </option>
+							<option value="2">Поступление выручки</option>
+							<option value="3">Прибыль</option>
+							<option value="4">Маржинальность товара</option>
 						</select>
 					</div>
 					<div class="col-4 ">
@@ -52,18 +54,38 @@
                 				  data-multiple-dates-separator=" - " class='datepicker-here form-control'  autocomplete="off"/>
            			</div>
 					<div class="col-3">
-						<button class="btn btn-success "   onclick="createNewSpends()" id="createSpendsBytton" title="Создать расход">
-							<i class="fas fa-plus"></i> Создать отчет 1 
+						<button class="btn btn-success "   onclick="find()" title="Создать расход">
+							<i class="fas fa-plus"></i> Создать отчет 
+						</button>
+					</div>
+					<div class="col">
+						<button class="btn btn-danger "   onclick="deleteReports()"  title="Очистить">
+							<i class="fas fa-eraser"></i> 
 						</button>
 					</div>
 				</div>
 			<!-- buttons -->
 			<br>
-			<!-- spands table start   -->
-
-		<!-- spands table end   -->
+		<!-- report table start   -->
+			<div class="container" >
+				<div class="row" th:fragment="report_template" >
+       				 <div class="col-xs-12">
+           				 <div class="col-12">
+                   		 <ul class="list-group" id="reportLsit">
+	                    	<li class="list-group-item center" id="spiners">
+	                    		<!-- spiner -->
+									<div class="loader center"  >
+									</div>
+								<!-- spiner -->
+	                    	</li>
+               			</ul>
+           			 </div>
+        		</div>
+    		</div>
 		</div>
+		<!-- report table end   -->
 	</div>
+</div>
 	
 	
 	
@@ -74,6 +96,8 @@
 <div th:insert="~{template/spends/addUpdateSpendModal :: spend_modal_form}"></div> 
 
 <script th:src="@{/js/info.js}"></script>
- <script th:src="@{/js/consignment/datapiker.js}"></script<script th:src="@{/js/spends/spends.js}"></script>
+ <script th:src="@{/js/consignment/datapiker.js}"></script>
+ <script th:src="@{/js/report/reportHandler.js}"></script>
+ <script th:src="@{/js/report/circulatingAssetsReport.js}"></script>
 </body>
 </html>

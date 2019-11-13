@@ -11,7 +11,7 @@ import org.springframework.data.repository.query.Param;
 import ua.squirrel.user.entity.product.Product;
 import ua.squirrel.user.entity.store.Store;
 import ua.squirrel.user.entity.store.consignment.Consignment;
-import ua.squirrel.user.entity.store.consignment.ConsignmentStatus; 
+import ua.squirrel.user.entity.store.consignment.ConsignmentStatus;
 
 
 
@@ -32,4 +32,7 @@ public interface ConsignmentRepository extends JpaRepository<Consignment, Long> 
 	
 	@Query("SELECT distinct c FROM Consignment c   inner join c.consignmentNode p WHERE c.consignmentStatus =1 AND c.store = :storeId AND p.currentQuantity >0 AND  p.product IN :products order by c.date")
 	List<Consignment> getConsigmentFIFO(@Param("storeId")Store storeId,  @Param("products")Collection<Product> products);
+
+	List<Consignment>  findByStoreInAndIsApprovedAndConsignmentStatusAndDateBetween(List<Store> store,boolean isApproved,
+			ConsignmentStatus consignmentStatus, LocalDate from, LocalDate to);
 }

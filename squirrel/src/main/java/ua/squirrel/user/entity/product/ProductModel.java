@@ -15,4 +15,5 @@ public class ProductModel {
 	private String propertiesProduct;
 	private String measureProduct;
 	private int rate;
+	private int quantity;
 }
