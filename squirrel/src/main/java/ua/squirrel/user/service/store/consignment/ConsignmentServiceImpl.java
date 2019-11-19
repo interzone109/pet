@@ -65,4 +65,9 @@ public class ConsignmentServiceImpl implements ConsignmentService {
 		return consignmentRepository.getConsigmentFIFO(storeId, products);
 	}
 
+	public 	List<Consignment>  findByStoreInAndIsApprovedAndConsignmentStatusAndMetaIgnoreCaseContainingAndDateBetween(List<Store> store,boolean isApproved,
+			ConsignmentStatus consignmentStatus,String meta,  LocalDate from, LocalDate to){
+		return consignmentRepository.findByStoreInAndIsApprovedAndConsignmentStatusAndMetaIgnoreCaseContainingAndDateBetween
+				(store, isApproved, consignmentStatus, meta, from, to);
+	}
 }

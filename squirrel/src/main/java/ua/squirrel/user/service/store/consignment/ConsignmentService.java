@@ -25,4 +25,7 @@ public interface ConsignmentService {
 	
 	List<Consignment> findByStoreInAndIsApprovedAndConsignmentStatusAndDateBetween(List<Store> store,boolean isApproved,
 			ConsignmentStatus consignmentStatus, LocalDate from, LocalDate to);
+	
+	List<Consignment>  findByStoreInAndIsApprovedAndConsignmentStatusAndMetaIgnoreCaseContainingAndDateBetween(List<Store> store,boolean isApproved,
+			ConsignmentStatus consignmentStatus,String meta,  LocalDate from, LocalDate to);
 }

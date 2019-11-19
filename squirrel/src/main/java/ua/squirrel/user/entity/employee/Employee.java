@@ -32,7 +32,7 @@ public class Employee {
 	@Column(name = "last_name")
 	private String lastName;
 	@Column(name = "salary")
-	private Long salary;
+	private int salary;
 	@Column(name = "cash_box_type")
 	private Integer cashBoxType; 
 	@Column(name = "login",  nullable = false, unique = true)

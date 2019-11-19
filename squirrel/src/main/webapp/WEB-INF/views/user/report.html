@@ -15,7 +15,9 @@
 <!-- Font Awesome JS -->
 <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js"></script>
 <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js"></script>
-
+<!-- google charts -->
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+   
 </head>
 <body>
 
@@ -40,11 +42,16 @@
 			<div class="line"></div>
 			<!-- buttons -->
 				<div class="form-row">
+				<div class="col-1">
+						<button class="btn btn-danger "   onclick="deleteReports()"  title="Очистить">
+							<i class="fas fa-eraser"></i> 
+						</button>
+					</div>
 					<div class="col-4">
 						<select class="form-control" id="reportSelector">
 							<option value="1">Оборачиваемые средства </option>
 							<option value="2">Поступление выручки</option>
-							<option value="3">Прибыль</option>
+							<option value="3">Прибыль магазинов</option>
 							<option value="4">Маржинальность товара</option>
 						</select>
 					</div>
@@ -54,17 +61,20 @@
                 				  data-multiple-dates-separator=" - " class='datepicker-here form-control'  autocomplete="off"/>
            			</div>
 					<div class="col-3">
-						<button class="btn btn-success "   onclick="find()" title="Создать расход">
+						<button class="btn btn-success "   onclick="find()" title="Создать отчет">
 							<i class="fas fa-plus"></i> Создать отчет 
 						</button>
 					</div>
-					<div class="col">
-						<button class="btn btn-danger "   onclick="deleteReports()"  title="Очистить">
-							<i class="fas fa-eraser"></i> 
-						</button>
-					</div>
+					
 				</div>
 			<!-- buttons -->
+			
+			<br>
+
+			<!-- spiner -->
+			<div class="loader center"  id="spiners" >
+			</div>
+			<!-- spiner -->
 			<br>
 		<!-- report table start   -->
 			<div class="container" >
@@ -72,12 +82,7 @@
        				 <div class="col-xs-12">
            				 <div class="col-12">
                    		 <ul class="list-group" id="reportLsit">
-	                    	<li class="list-group-item center" id="spiners">
-	                    		<!-- spiner -->
-									<div class="loader center"  >
-									</div>
-								<!-- spiner -->
-	                    	</li>
+
                			</ul>
            			 </div>
         		</div>
@@ -99,5 +104,8 @@
  <script th:src="@{/js/consignment/datapiker.js}"></script>
  <script th:src="@{/js/report/reportHandler.js}"></script>
  <script th:src="@{/js/report/circulatingAssetsReport.js}"></script>
+ <script th:src="@{/js/report/marginalityProductReport.js}"></script>
+ <script th:src="@{/js/report/storesProfitReport.js}"></script>
+
 </body>
 </html>

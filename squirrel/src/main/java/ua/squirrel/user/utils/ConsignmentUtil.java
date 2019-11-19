@@ -41,6 +41,9 @@ public class ConsignmentUtil extends SmallOneUtil {
 	 * 2.2 те остатки что не перекрыты накладной попадают в следующую итерацию
 	 **/
 	public Map<Product, Integer> formFIFOIngridientPrices(List<Consignment> consignmentFIFOList, Map<Product, Integer> productRateMap) {
+		if(consignmentFIFOList.isEmpty()) {
+			return new HashMap<Product, Integer>();
+		}
 		Map<Product, Integer> productщеPriceMap = new HashMap<>();
 		consignmentFIFOList.forEach(consignment -> {// проход по накладным
 			consignment.getConsignmentNode().stream().forEach(consignmentNode -> {// проход по узлам

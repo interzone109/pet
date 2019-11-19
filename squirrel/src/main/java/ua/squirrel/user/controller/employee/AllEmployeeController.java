@@ -59,8 +59,8 @@ public class AllEmployeeController {
 		log.info("LOGGER: add new employees ");
 		Employee employee = new Employee(); 
 		User user = userServiceImpl.findOneByLogin(authentication.getName()).get();
-
 		employeeServiceImpl.save(putOrPostEmployee(employee, newEmployeeModel, user));
+		
 		return employeeBuild(employee);
 	}
 	

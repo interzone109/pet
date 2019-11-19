@@ -19,5 +19,7 @@ public interface SpendService {
 	List<Spend> findAllByUserAndStoreAndLasteDateBetweenOrderByLasteDateAsc(User user,Store store, LocalDate from, LocalDate to);
 	
 	List<Spend> findAllByIsOpen(boolean isOpen);
+	
+	List<Spend> findAllByUser(User user);
 }
 

@@ -62,5 +62,8 @@ public class SpendServiceImpl implements SpendService {
 		spendRepository.saveAll(allSpends);
 	}
 
+	public List<Spend> findAllByUser(User user){
+		return spendRepository.findAllByUser(user);
+	}
 
 }

@@ -33,13 +33,34 @@ function find(){
 			"dateEnd":date[1]
 		});
 			request('POST', connectUrl+'/user/report/data/1',createReportOne ,report);
-	} else if($("#reportSelector").val()==4){
-		console.log($("#reportSelector").val());
 	}
+	else if($("#reportSelector").val()==2){
+		
+		$("#spiners").show();
+		var date = $("#dataRangeValue").val().split("-");
+		var report = JSON.stringify({
+			"dateStart":date[0],
+			"dateEnd":date[1]
+		});
+			request('POST', connectUrl+'/user/report/data/2',createReportTwo ,report);
+	}
+	else if($("#reportSelector").val()==4){
+		
+		$("#spiners").show();
+		var date = $("#dataRangeValue").val().split("-");
+		var report = JSON.stringify({
+			"dateStart":date[0],
+			"dateEnd":date[1]
+		});
+			request('POST', connectUrl+'/user/report/data/4',createReportFour ,report);
+	}
+
 }
 
 function deleteReports(){
 	$("#firstReport").remove();
+	$("#fourReport").remove();
+	$("#twoReport").remove();
 }
 
 

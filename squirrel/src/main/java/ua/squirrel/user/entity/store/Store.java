@@ -62,7 +62,7 @@ public class Store {
 	@OneToMany(mappedBy = "store", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<Invoice> invoice;
 	//список сотрудников
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "store",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<Employee> employee;
 	//пользователь
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)

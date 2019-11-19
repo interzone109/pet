@@ -28,7 +28,7 @@ public class InvoiceModel {
 	private int cashBox;
 	//количество продаж в шт
 	private int sellQuantity;
-	//количество заказов
+	//количество заказов/чеков
 	private int orderQuantity;
 	
 	private Long storeId;

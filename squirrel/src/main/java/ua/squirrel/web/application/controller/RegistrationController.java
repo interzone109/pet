@@ -81,10 +81,10 @@ public class RegistrationController {
 		fillDataUtil.getStore(user1);
 		
 		fillDataUtil.setSpend(user1);
+		fillDataUtil.getInvoice(user1);
 		
-		//fillDataUtil.setInvoice(user1);
 		
-		//fillDataUtil.setEmployee(user1);
+		fillDataUtil.setEmployee(user1);
 		UserModel us = new UserModel();
 		us.setLogin(user1.getLogin());
 		us.setHashPass(user1.getHashPass());

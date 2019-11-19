@@ -30,9 +30,12 @@ public interface ConsignmentRepository extends JpaRepository<Consignment, Long> 
 
 	Optional<Consignment> findOneByIdAndStore(Long consignmentId, Store store);
 	
-	@Query("SELECT distinct c FROM Consignment c   inner join c.consignmentNode p WHERE c.consignmentStatus =1 AND c.store = :storeId AND p.currentQuantity >0 AND  p.product IN :products order by c.date")
-	List<Consignment> getConsigmentFIFO(@Param("storeId")Store storeId,  @Param("products")Collection<Product> products);
-
 	List<Consignment>  findByStoreInAndIsApprovedAndConsignmentStatusAndDateBetween(List<Store> store,boolean isApproved,
 			ConsignmentStatus consignmentStatus, LocalDate from, LocalDate to);
+	
+	@Query("SELECT distinct c FROM Consignment c   inner join c.consignmentNode p WHERE c.consignmentStatus =1 AND c.store = :storeId AND p.currentQuantity >0 AND  p.product IN :products order by c.date")
+	List<Consignment> getConsigmentFIFO(@Param("storeId")Store storeId,  @Param("products")Collection<Product> products);
+	
+	List<Consignment>  findByStoreInAndIsApprovedAndConsignmentStatusAndMetaIgnoreCaseContainingAndDateBetween(List<Store> store,boolean isApproved,
+			ConsignmentStatus consignmentStatus,String meta,  LocalDate from, LocalDate to);
 }

@@ -1,6 +1,7 @@
 package ua.squirrel.user.service.store.invoice;
 
 import java.time.LocalDate;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,5 +37,9 @@ public class InvoiceServiceImpl implements InvoiceService {
 	}
 	public List<Invoice> saveAll(Iterable<Invoice> invoices) {
 		return invoiceRepository.saveAll(invoices);
+	}
+	
+	public List<Invoice> findAllByStoreInAndDateBetween(Collection<Store> store, LocalDate start, LocalDate finish){
+		return invoiceRepository.findAllByStoreInAndDateBetween(store, start, finish);
 	}
 }

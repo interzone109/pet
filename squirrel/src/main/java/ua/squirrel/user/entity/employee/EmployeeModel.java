@@ -13,7 +13,7 @@ public class EmployeeModel {
 
 	private String lastName;
 
-	private Long salary;
+	private Integer salary;
 
 	private Long storeId;
 

@@ -1,6 +1,7 @@
 package ua.squirrel.z.util;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -15,7 +16,9 @@ import ua.squirrel.user.entity.product.Product;
 import ua.squirrel.user.entity.product.composite.CompositeProduct;
 import ua.squirrel.user.entity.product.node.ProductMap;
 import ua.squirrel.user.entity.store.Store;
+import ua.squirrel.user.entity.store.compositeproduct.node.StoreCompositeProductNode;
 import ua.squirrel.user.entity.store.invoice.Invoice;
+import ua.squirrel.user.entity.store.invoice.node.InvoiceNode;
 import ua.squirrel.user.entity.store.spending.Spend;
 import ua.squirrel.user.service.employee.EmployeeServiceImpl;
 import ua.squirrel.user.service.partner.PartnerServiceImpl;
@@ -25,6 +28,7 @@ import ua.squirrel.user.service.product.node.ProductMapServiceImpl;
 import ua.squirrel.user.service.product.properties.MeasureProductServiceImpl;
 import ua.squirrel.user.service.product.properties.PropertiesProductServiceImpl;
 import ua.squirrel.user.service.store.StoreServiceImpl;
+import ua.squirrel.user.service.store.compositeproduct.node.StoreCompositeProductServiceImpl;
 import ua.squirrel.user.service.store.invoice.InvoiceServiceImpl;
 import ua.squirrel.user.service.store.spending.SpendServiceImpl;
 import ua.squirrel.web.entity.user.Role;
@@ -34,6 +38,7 @@ import ua.squirrel.web.service.registration.RoleServiceImpl;
 @Component
 public class FillDataUtil {
 
+	
 	/**
 	 * 
 	 * 
@@ -480,7 +485,8 @@ public class FillDataUtil {
 	 */
 	@Autowired
 	private StoreServiceImpl storeServiceImpl;
-
+	@Autowired
+	private StoreCompositeProductServiceImpl storeCompositeProductServiceImpl;
 	public void getStore(User owner) {
 
 		List<Store> storeList = new ArrayList<>();
@@ -489,25 +495,57 @@ public class FillDataUtil {
 		newStore.setPhone("545-254-54");
 		newStore.setMail("empty@mail.com");
 		newStore.setUser(owner);
-
+		
+		List<StoreCompositeProductNode> compList = new ArrayList<>();
+		CompositeProduct s = compositeProductServiceImpl.findByIdAndUser(1l, owner).get();
+		
+		StoreCompositeProductNode node= new StoreCompositeProductNode();
+		node.setPrice(1100);
+		node.setCompositeProduct(s);
+		node.setStore(newStore);
+		
+		compList.add(node);
+		newStore.setStoreCompositeProductNode(compList);
+		
 		storeServiceImpl.save(newStore);
-
+		storeCompositeProductServiceImpl.save(node);
+		
+		
 		newStore = new Store();
 		newStore.setAddress("Тираспольский грук 15.Б");
 		newStore.setPhone("545-254-54");
 		newStore.setMail("test@mail.com");
 		newStore.setUser(owner);
-
+		
+		compList = new ArrayList<>();
+		node= new StoreCompositeProductNode();
+		node.setPrice(1100);
+		node.setCompositeProduct(s);
+		node.setStore(newStore);
+		
+		compList.add(node);
+		newStore.setStoreCompositeProductNode(compList);
 		storeServiceImpl.save(newStore);
-
+		storeCompositeProductServiceImpl.save(node);
+		
+		
 		newStore = new Store();
 		newStore.setAddress("Test");
 		newStore.setPhone("545-254-54");
 		newStore.setMail("test@mail.com");
 		newStore.setUser(owner);
-
+		
+		compList = new ArrayList<>();
+		node= new StoreCompositeProductNode();
+		node.setPrice(1100);
+		node.setCompositeProduct(s);
+		node.setStore(newStore);
+		
+		compList.add(node);
+		newStore.setStoreCompositeProductNode(compList);
+		
 		storeServiceImpl.save(newStore);
-
+		storeCompositeProductServiceImpl.save(node);
 	}
 
 	@Autowired
@@ -525,7 +563,7 @@ public class FillDataUtil {
 			Employee employee = new Employee();
 			employee.setFirstName("BOBA");
 			employee.setLastName("BIBA");
-			employee.setSalary(900000l);
+			employee.setSalary(900000);
 			employee.setCashBoxType(0);
 			employee.setHairingDate(LocalDate.now());
 			employee.setUser(user);
@@ -536,36 +574,42 @@ public class FillDataUtil {
 
 			employeeServiceImpl.save(employee);
 
-			employee = new Employee();
-			employee.setFirstName("DODA");
-			employee.setLastName("DODOVSKI");
-			employee.setSalary(900000l);
-			employee.setCashBoxType(1);
-			employee.setHairingDate(LocalDate.now());
-			employee.setUser(user);
-			employee.setStore(store);
-			employee.setRole(roleServiceImpl.findOneByName("EMPLOYEE"));
-			employee.setLogin("%autogenerate%" + store.getId() + new Long(System.currentTimeMillis()).toString());
-			employee.setPassword("%autogenerate%" + store.getId() + new Long(System.currentTimeMillis()).toString());
-
-			employeeServiceImpl.save(employee);
-
-			employee = new Employee();
-			employee.setFirstName("ЗУЗУ");
-			employee.setLastName("ЗУЗАСОВИЧ");
-			employee.setSalary(900000l);
-			employee.setCashBoxType(2);
-			employee.setHairingDate(LocalDate.now());
-			employee.setUser(user);
-			employee.setStore(store);
-			employee.setRole(roleServiceImpl.findOneByName("EMPLOYEE"));
-			employee.setLogin("%autogenerate%" + store.getId() + new Long(System.currentTimeMillis()).toString());
-			employee.setPassword("%autogenerate%" + store.getId() + new Long(System.currentTimeMillis()).toString());
-
-			employeeServiceImpl.save(employee);
+		
 
 		});
 
+	}
+	
+	@Autowired
+	private InvoiceServiceImpl invoiceServiceImpl;
+	
+	public void getInvoice(User user) {
+		List<Store> st = storeServiceImpl.findAllByUser(user);
+		st.forEach(store->{
+			CompositeProduct s = compositeProductServiceImpl.findByIdAndUser(1l, user).get();
+			List<InvoiceNode> invoiceNodes = new ArrayList<>();
+			
+			Invoice invoice = new Invoice ();
+			invoice.setCashBox(0);
+			invoice.setCashBoxStartDay(3330);
+			LocalDate date = LocalDate.now();
+			invoice.setDate(date.minusDays(1));
+			invoice.setOrderQuantity(0);
+			invoice.setSellQuantity(0);
+			invoice.setStore(store);
+			
+			InvoiceNode invoiceNode = new InvoiceNode();
+			invoiceNode.setPrice(11000);
+			invoiceNode.setCompositeProduct(s);
+			invoiceNode.setInvoice(invoice);
+			invoiceNode.setSaleQuantity(2*(int)store.getId());
+			invoiceNode.setTime(LocalDateTime.now());
+			invoiceNodes.add(invoiceNode);
+			invoice.setInvoiceNode(invoiceNodes);
+			
+			invoiceServiceImpl.save(invoice);
+		});
+		
 	}
 
 }

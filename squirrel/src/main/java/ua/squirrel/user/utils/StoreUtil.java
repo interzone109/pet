@@ -123,12 +123,8 @@ public class StoreUtil extends SmallOneUtil {
 						
 						
 						int leftover = node.getLeftOvers()  + consignmentData.get(node.getProduct());
-						int unitePrice = 0 ;
-						if(!node.getProduct().getMeasureProduct().getMeasure().equals("UNIT")) {
-							 unitePrice = (node.getSumm()/100) /( node.getLeftOvers() / 1000);
-						}else {
-							unitePrice = node.getSumm() / node.getLeftOvers();
-						}
+						int unitePrice =  node.getSumm() / node.getLeftOvers();
+						
 				
 						int summ = node.getSumm()+(unitePrice*consignmentData.get(node.getProduct()));
 						node.setSumm(summ);
@@ -136,13 +132,8 @@ public class StoreUtil extends SmallOneUtil {
 						
 					}else {
 						int leftover = node.getLeftOvers() - consignmentData.get(node.getProduct());
-						int unitePrice = 0 ;
-						if(!node.getProduct().getMeasureProduct().getMeasure().equals("UNIT")) {
-							 unitePrice = (node.getSumm()/100) /( node.getLeftOvers() / 1000);
-						}else {
-							unitePrice = node.getSumm() / node.getLeftOvers();
-						}
-						
+						int  unitePrice = node.getSumm() / node.getLeftOvers();
+	
 						int summ = node.getSumm()-(unitePrice*consignmentData.get(node.getProduct()));
 						System.err.println(node.getSumm()+"-("+(unitePrice+"*"+consignmentData.get(node.getProduct())));
 						
