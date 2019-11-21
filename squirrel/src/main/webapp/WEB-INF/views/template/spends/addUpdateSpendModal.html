@@ -44,15 +44,19 @@
 		</div>
 		<div class="row">
 			<div class="d-inline p-3 col-4">
-				<label> 
-					<span class=" text-warning"><a href="#" onclick="switchInput('day')" title='Интервал в днях'>День</a></span>
-					 / 
-					<span class=" text-warning"> <a href="#" onclick="switchInput('month')"  title='Интервал в месяцах'>Месяц</a></span>
+				 <label> 
+					<span class=" text-warning">День</span>
+					 /
+					<span class=" text-warning"> Месяц</span>
 				</label>
+				 <label class="switch" >
+            			<input type="checkbox" onclick="switchInput()">
+            			<span class="slider"></span>
+       			 </label>
 			</div>
 			<div class="d-inline p-2 col-4"  id="dayPeriod">
 				<label for="intrrvalSpend" class="sr-only">Период в днях</label> 
-				<input type="number" id="intervalDaySpend" class="form-control" placeholder="Период" min="0" value=0>	
+				<input type="number" id="intervalDaySpend" class="form-control" placeholder="Период" min="0" >	
 			</div>
 			<div class="col d-inline p-2"  >
 				<select class="form-control" disabled id="intervalMonthSpend">

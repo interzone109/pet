@@ -135,14 +135,16 @@ function fillSpendtTable(data ){
  }
 
  //переключатель для формы заполнения интервала платежа
- function switchInput(type){
-	 if(type==="day"){
+ var switchResult = false ;
+ function switchInput(){
+	 if(switchResult){
 		 $("#intervalMonthSpend").prop( "disabled", true );
 		 $("#intervalDaySpend").prop( "disabled", false );
 	 }else{
 		 $("#intervalMonthSpend").prop( "disabled", false );
 		 $("#intervalDaySpend").prop( "disabled", true );
 	 }
+	 switchResult = !switchResult;
  }
  
 

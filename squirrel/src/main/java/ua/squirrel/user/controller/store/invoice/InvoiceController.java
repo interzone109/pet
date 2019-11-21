@@ -224,7 +224,7 @@ public class InvoiceController {
 			// по методу ФИФО
 			List<Consignment> consignmentFIFOList = consignmentServiceImpl.getConsigmentFIFO(store,
 					productRateMap.keySet());
-			Map<Product, Integer> productPriceMap = consignmentUtil.formFIFOIngridientPrices(consignmentFIFOList , productRateMap);
+			Map<Product, Integer> productPriceMap = consignmentUtil.formFIFOIngridientPrices(consignmentFIFOList , productRateMap, store);
 			/**
 			 * 		6 пункт
 			 */
@@ -241,7 +241,11 @@ public class InvoiceController {
 				Set <Product> existProduct = new HashSet<>();
 				consignment.getConsignmentNode().forEach(node->{//обновляем среднуюю цену и количество в расходной накладной
 					if(productRateMapCopy.containsKey(node.getProduct())) {
-						int totalSumm = node.getQuantity()*node.getUnitPrice() + productPriceMap.get(node.getProduct());//старое кол * на старую цену + новую сумму
+						int addSumm = 	productPriceMap.get(node.getProduct());		
+						int totalSumm = addSumm == 0
+								? (node.getQuantity()+productRateMapCopy.get(node.getProduct())) * node.getUnitPrice()
+								:node.getQuantity()*node.getUnitPrice() + addSumm;//старое кол * на старую цену + новую сумму
+						
 						int totalQuantity = node.getQuantity() + productRateMapCopy.get(node.getProduct());//получаем общее количество расхода по ингридиенту
 						node.setQuantity(totalQuantity);
 						node.setUnitPrice(totalSumm/totalQuantity);//получаем среднуюю цену деля общюю стоимость на количество ингридиента

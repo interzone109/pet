@@ -130,14 +130,13 @@ public class ReportController {
 		ConsignmentStatus status = consignmentStatusServiceImpl.findOneByName("CONSAMPTION").get();
 		List<Consignment> consignments = consignmentServiceImpl.findByStoreInAndIsApprovedAndConsignmentStatusAndMetaIgnoreCaseContainingAndDateBetween
 		(stores , true, status,"auto:%:", dateStart,  dateEnd);
-		
-		
+		int daysInterval = dayInterval(dateStart, dateEnd);
+		Map <Long, Integer> spends = spendCount( spendServiceImpl.findAllByUser(user), daysInterval);
 		
 		 List<InvoiceModel> invoiceModelList = new ArrayList<>();
 
 		 stores.forEach(store->{
-			 System.out.println(store.getEmployee().size());
-			int employeeCost = employeeCount(store.getEmployee() ,dayInterval(dateStart, dateEnd) );
+			int employeeCost = employeeCount(store.getEmployee() ,daysInterval );
 
 			List<Invoice> storeInvoics = store.getInvoice().stream().filter(invoice->
 			(invoice.getDate().isAfter(dateStart) || invoice.getDate().equals(dateStart))
@@ -145,13 +144,19 @@ public class ReportController {
 			).collect(Collectors.toList());
 			
 			storeInvoics.forEach(invoice->{
-				int summ = totalSumOfConsingment(consignments.stream().filter(cons -> cons.getDate().equals(invoice.getDate()) 
+				int consingmentSumm = totalSumOfConsingment(consignments.stream().filter(cons -> cons.getDate().equals(invoice.getDate()) 
 									&& cons.getStore().getId() ==  invoice.getStore().getId() ).findFirst());
+				
+				int spend =0;
+				if(spends.containsKey(store.getId())) {
+					spend = spends.get(store.getId())/daysInterval;
+				}
 				
 				 invoiceModelList.add(InvoiceModel.builder()
 						 .dateStart(invoice.getDate().toString())
 						 .cashBox(invoice.getCashBox())
-						 .sellQuantity(summ)
+						 .orderQuantity(spend)
+						 .sellQuantity(consingmentSumm)
 						 .dateEnd(store.getAddress())
 						 .cashBoxStartDay(employeeCost)
 						 .storeId(store.getId())
@@ -159,15 +164,15 @@ public class ReportController {
 			 });
 			});
 		
-		Map <Long, Integer> spends = spendCount( spendServiceImpl.findAllByUser(user), dayInterval(dateStart, dateEnd));
-		 spends.keySet().forEach(key->{
+		if(spends.containsKey(0l)) {
 			 invoiceModelList.add(InvoiceModel.builder()
 					 .dateStart("total spend")
-					 .dateEnd("ss")
-					 .cashBox( spends.get( key))
-					 .storeId(key)
+					 .dateEnd("spends")
+					 .cashBox( spends.get(0l))
+					 .storeId(0l)
 					 .build());
-		 });
+		}
+
 		reportModel.setInvoiceData(invoiceModelList);
 		return new ResponseEntity<>(reportModel, HttpStatus.OK);
 	}
@@ -179,15 +184,16 @@ public class ReportController {
 		return (int)ChronoUnit.DAYS.between(from,to);
 		
 	}
-	
+	// считаем расходы на  сотрудников за период
 	private int employeeCount(List<Employee> employee, int interval) {
+		int weekEndDays = 8;
 		int[] summ= new int[] {0};
 		employee.forEach(empl->{
-			 summ[0] += (empl.getSalary()/ LocalDate.now().getDayOfMonth())*interval;
+			 summ[0] += (empl.getSalary()/ (LocalDate.now().getDayOfMonth())-weekEndDays)*interval;
 		});
 		return summ[0];
 	}
-
+	//считаем стороние расходы за период
 	private Map<Long, Integer> spendCount(List<Spend> spendList , int interval) {
 		Map<Long, Integer> spends = new HashMap<>();
 		
@@ -196,19 +202,15 @@ public class ReportController {
 			if(spend.getInterval() <0 ) {
 				int monthCount = Math.abs(spend.getInterval()) ;
 				payInterval = dayInterval(spend.getLasteDate().minusMonths(monthCount) , spend.getLasteDate());
-				System.err.println("month intervale  " + monthCount+"| days -"+ payInterval) ;
 			}else if (spend.getInterval() ==0 ) {
 				payInterval = 1 ;
-				System.err.println("with out intervale : "+ payInterval);
 			}else {
 				payInterval = spend.getInterval();
-				System.err.println(" onli days :"+ payInterval);
 			}
 			
 			int oneDayCost = (spend.getStep() / payInterval);
-			
 			int days = spend.getInterval() == 0 ? 1 : interval;
-			 
+			
 			int summ = oneDayCost *  days;
 			long id = (spend.getStore() == null) ?0l : spend.getStore().getId();
 			
@@ -218,7 +220,6 @@ public class ReportController {
 			}else {
 				spends.put(id, summ);
 			}
-			 System.err.println("formula "+oneDayCost +"*"+days+" ="+summ);
 		});
 		
 		return spends;

@@ -186,13 +186,16 @@ public class ConsignmentController {
 			storeIngridientNodeServiceImpl.saveAll(nodeList);/**/
 			 
 			//
-			//обновляем остатки на магазине в соответствии с изменениями в накладной
+			//обновляем остатки на магазине в соответствии с изменениями в накладной,
+			//обновляем количество и сумму новых ингридиентов
 			switch (consignment.getConsignmentStatus().getName()) {
 			case "ARRIVAL":// приход
 				storeUtil.updateStoreLeftovers(store, consignmentData, "+");
+				
 				storeServiceImpl.save(store);
 				break;
 			case "CONSAMPTION":// расход
+				System.err.println("meta = "+consignment.getMeta());
 				if (!consignment.getMeta().startsWith("auto:%:")) {
 					storeUtil.updateStoreLeftovers(store, consignmentData, "-");
 					storeServiceImpl.save(store);
