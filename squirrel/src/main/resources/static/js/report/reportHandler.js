@@ -24,34 +24,23 @@ fillDate();
 
 
 function find(){
-
-	if($("#reportSelector").val()==1){
-		$("#spiners").show();
-		var date = $("#dataRangeValue").val().split("-");
-		var report = JSON.stringify({
-			"dateStart":date[0],
-			"dateEnd":date[1]
-		});
+	$("#spiners").show();
+	var date = $("#dataRangeValue").val().split("-");
+	var report = JSON.stringify({
+		"dateStart":date[0],
+		"dateEnd":date[1]
+	});
+	var reportNum =$("#reportSelector").val();
+	if(reportNum==1){
 			request('POST', connectUrl+'/user/report/data/1',createReportOne ,report);
 	}
-	else if($("#reportSelector").val()==2){
-		
-		$("#spiners").show();
-		var date = $("#dataRangeValue").val().split("-");
-		var report = JSON.stringify({
-			"dateStart":date[0],
-			"dateEnd":date[1]
-		});
+	else if(reportNum==2){
 			request('POST', connectUrl+'/user/report/data/2',createReportTwo ,report);
 	}
-	else if($("#reportSelector").val()==4){
-		
-		$("#spiners").show();
-		var date = $("#dataRangeValue").val().split("-");
-		var report = JSON.stringify({
-			"dateStart":date[0],
-			"dateEnd":date[1]
-		});
+	else if(reportNum==3){
+			request('POST', connectUrl+'/user/report/data/3',createReportThree ,report);
+	}
+	else if(reportNum==4){
 			request('POST', connectUrl+'/user/report/data/4',createReportFour ,report);
 	}
 
@@ -59,8 +48,9 @@ function find(){
 
 function deleteReports(){
 	$("#firstReport").remove();
-	$("#fourReport").remove();
 	$("#twoReport").remove();
+	$("#threeReport").remove();
+	$("#fourReport").remove();
 }
 
 

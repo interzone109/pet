@@ -240,6 +240,35 @@ public class ReportController {
 	}
 	
 	
+	@PostMapping("3")
+	public  ResponseEntity<ReportModel> getThreeReport(Authentication authentication, @RequestBody ReportModel reportModel){
+		log.info("LOGGER: get third report");
+		User user = userServiceImpl.findOneByLogin(authentication.getName()).get();
+		List<Store> stores = storeServiceImpl.findAllByUser(user);
+		LocalDate dateStart = consignmentUtil.convertDate(reportModel.getDateStart());
+		LocalDate dateEnd = consignmentUtil.convertDate(reportModel.getDateEnd());
+		List<InvoiceModel> invoiceModelList = new ArrayList<>();
+
+		 stores.forEach(store->{
+
+			List<Invoice> storeInvoics = store.getInvoice().stream().filter(invoice->
+			(invoice.getDate().isAfter(dateStart) || invoice.getDate().equals(dateStart))
+			&& (invoice.getDate().isBefore(dateEnd) || invoice.getDate().equals(dateEnd))
+			).collect(Collectors.toList());
+			
+			int totalSellumm[] = new int[] {0};
+			storeInvoics.forEach(invoice->{
+				totalSellumm[0]+=invoice.getCashBox();
+			});
+			invoiceModelList.add(InvoiceModel.builder()
+			 .dateStart(dateStart.toString()+":"+dateEnd.toString())
+			 .cashBox(totalSellumm[0])
+			 .dateEnd(store.getAddress())
+			 .build());
+		 });
+		 reportModel.setInvoiceData(invoiceModelList);
+		return new ResponseEntity<>(reportModel, HttpStatus.OK);
+	}
 	
 	
 	@PostMapping("4")
@@ -299,18 +328,7 @@ public class ReportController {
 	
 		return new ResponseEntity<>(reportModel, HttpStatus.OK);
 	}
-	
-	
-	@PostMapping("5")
-	public  ResponseEntity<ReportModel> getFourReport1(Authentication authentication, @RequestBody ReportModel reportModel){
-		log.info("LOGGER: get four report");
-		//User user = userServiceImpl.findOneByLogin(authentication.getName()).get();
-		//List<Store> stores = storeServiceImpl.findAllByUser(user);
-		
-		
-		
-		return new ResponseEntity<>(null, HttpStatus.OK);
-	}
+
 }
 
 

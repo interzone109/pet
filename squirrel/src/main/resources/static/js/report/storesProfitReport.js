@@ -1,7 +1,6 @@
-var twoReportData
+//строим второй отчет
 function createReportTwo(report){
 	$("#twoReport").remove();
-	twoReportData = report;
 	var stores =  new Set();
 	 var reportBlock = document.createElement('li');
 	 reportBlock.className = "list-group-item";
@@ -18,7 +17,7 @@ function createReportTwo(report){
 			 +"<th>"+displayProductPrice(row.sellQuantity)+" грн</th>"
 			 +"<th>"+displayProductPrice(row.cashBoxStartDay)+" грн</th>"
 			 +"<th>"+displayProductPrice(row.cashBox)+" грн</th>"
-			 +"<th>"+profit.toFixed(2); +" грн</th></tr>";
+			 +"<th>"+profit.toFixed(2) +" грн</th></tr>";
 			 
 			 if(!stores.has(row.dateEnd)){
 				 stores.add(row.dateEnd);
@@ -31,7 +30,7 @@ function createReportTwo(report){
 		 +"</div><div class=\"col-3\"><select class=\"form-control\" id=\"storeSelect\"></select></div>"
 		 +"<div class=\"col-1\"> <button class=\"btn btn-info\"  onclick=\"showChart()\" title=\"построить график\"><i class=\"fas fa-chart-line\"></i> График </button></div>"
 		 +"<div class=\" col-3\" ><label class=\"switch\" > <input type=\"checkbox\" onclick=\"switchInput()\"> <span class=\"slider\"></span> </label></div>"
-		 +"<div class=\"line\"></div><div id=\"report\"></div><div id='reportFooter'></div> </li>";
+		 +"<div class=\"line\"></div><div id=\"report\"></div> </li>";
 
 		 reportBlock.innerHTML =  headTable+body+footer;
 		 $("#spiners").hide();
@@ -88,10 +87,8 @@ function showChart(){
 		  });
 		  
 	 } 
-	var cleanReportChart = "<div class=\"col-5\"> <button class=\"btn btn-danger\" onclick=\"cleanReportTwoChart()\"  title=\"Удлить таблицу\"> <i class=\"fas fa-eraser\"></i> Удлить таблицу</button></div>"
-		 
-		conctrucktChart(array);
-	$("#reportFooter").prepend(cleanReportChart);
+	conctrucktChart(array);
+	
 }
 //строим график 
 var lastData ;
@@ -105,7 +102,7 @@ function conctrucktChart(array){
 	    	 var data = google.visualization.arrayToDataTable(array);
 
 	      var options = {
-	        width: 600,
+	        width: 800,
 	        height: 400,
 	        legend: { position: 'top', maxLines: 3 },
 	        bar: { groupWidth: '55%' },
