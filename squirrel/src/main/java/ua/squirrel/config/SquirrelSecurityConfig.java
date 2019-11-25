@@ -18,7 +18,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 public class SquirrelSecurityConfig  {
 	
 	 @Configuration
-	 @Order(2)
+	 @Order(1)
 	public class UserSecurityConfig  extends WebSecurityConfigurerAdapter {
 
 	  @Autowired
@@ -42,7 +42,7 @@ public class SquirrelSecurityConfig  {
          // добавление шаблонов страниц, требующих авторизации
          .antMatchers("/","/registration", "/test","/css/**","/js/**").permitAll()
          .antMatchers("/user/**").hasAuthority("USER")
-         //.antMatchers("/employee/**").hasAuthority("EMPLOYEE")
+         .antMatchers("/employee/**").hasAuthority("EMPLOYEE")
        .and()
          // указание формы для аутентификации
          .formLogin()
@@ -75,7 +75,7 @@ public class SquirrelSecurityConfig  {
 	
 }
 	 @Configuration
-	 @Order(1)
+	 @Order(2)
 	public class EmployeeSecurityConfig  extends WebSecurityConfigurerAdapter {
  
 	 @Autowired
