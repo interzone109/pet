@@ -8,6 +8,7 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import ua.squirrel.user.entity.employee.Employee;
@@ -559,7 +560,7 @@ public class FillDataUtil {
 
 		List<Store> stores = storeServiceImpl.findAllByUser(user);
 		stores.forEach(store -> {
-
+			
 			Employee employee = new Employee();
 			employee.setFirstName("BOBA");
 			employee.setLastName("BIBA");
@@ -569,8 +570,8 @@ public class FillDataUtil {
 			employee.setUser(user);
 			employee.setStore(store);
 			employee.setRole(roleServiceImpl.findOneByName("EMPLOYEE_WITH_ACCESS"));
-			employee.setLogin("%autogenerate%" + store.getId() + new Long(System.currentTimeMillis()).toString());
-			employee.setPassword("%autogenerate%" + store.getId() + new Long(System.currentTimeMillis()).toString());
+			employee.setLogin("log" + store.getId() );
+			employee.setPassword(new BCryptPasswordEncoder().encode("ter"));
 
 			employeeServiceImpl.save(employee);
 

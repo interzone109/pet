@@ -89,6 +89,7 @@ public class RegistrationController {
 		us.setLogin(user1.getLogin());
 		us.setHashPass(user1.getHashPass());
 		us.setMail(user1.getMail());
+		us.setRole(user1.getRoles().stream().filter(r->r.getName().equals("USER")).findFirst().get().getName());
 		
 		return us;
 	}

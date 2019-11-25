@@ -36,4 +36,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 		return employeeRepository.findById(id);
 	}
 
+	public  Optional<Employee> findOneByLogin(String login) {
+		return employeeRepository.findOneByLogin( login);
+	}
+
 }

@@ -88,24 +88,31 @@
               </div>
               </div>
               </form>
-              <form>
-              <div class="row">
-              <div class="col-md-6">
+              <form  th:action="@{/j_spring_security_check}"  th:object="${employee}" method='POST' >
+               <div class="row">
+           		<div class="col-md-12">
+            		<p id="errors" th:if="${(param.error != null) and (param.error[0] == 'true')}">
+   					 Ошибка ввода логина или пароля
+					</p>
+				</div>
+             <div class="col-md-6">
                 <div class="form-group">
-                  <input type="text" class="form-control" id="email" name="email" placeholder="Email" required data-error="Please enter your Email">
+                  <input type="text" class="form-control"    placeholder="Login"  
+                   th:field="*{login}" name="j_username">
                   <div class="help-block with-errors"></div>
                 </div>                                 
               </div>
               <div class="col-md-6">
                 <div class="form-group">
-                  <input type="text" placeholder="Budget" id="budget" class="form-control" name="budget" required data-error="Please enter your Budget">
+                  <input type="password" placeholder="Pass"  class="form-control"   
+                  th:field="*{password}" name="j_password">
                   <div class="help-block with-errors"></div>
                 </div> 
               </div>
-              <div class="col-md-12">
+              <div class="col-md-6">
                 <div class="submit-button">
-                  <button class="btn btn-common" id="submit" type="submit">Войти</button>
-                  <div id="msgSubmit" class="h3 hidden"></div> 
+                  <button class="btn btn-common"  type="submit">Войти</button>
+                  <div id="msgSubmit" class="h3  "></div> 
                   <div class="clearfix"></div> 
                 </div>
               </div>

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import ua.squirrel.user.entity.employee.EmployeeModel;
 import ua.squirrel.web.entity.user.Role; 
 import ua.squirrel.web.entity.user.User;
 import ua.squirrel.web.entity.user.UserModel;
@@ -39,6 +40,7 @@ public class AppController {
 	@RequestMapping(path = "/login", method = RequestMethod.GET)
 	public String login(Model model) {
 		model.addAttribute("user",  new UserModel());
+		model.addAttribute("employee",   EmployeeModel.builder().build());
 		return "landing/login";
 	}
 	
@@ -111,6 +113,7 @@ public class AppController {
 	public String logout(Model model) {
 		SecurityContextHolder.clearContext();
 		model.addAttribute("user",  new UserModel());
+		model.addAttribute("employee",   EmployeeModel.builder().build());
 		return "logout";
 	}
 }

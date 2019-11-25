@@ -14,5 +14,7 @@ public interface EmployeeService {
 
 	Optional<Employee> findOneByIdAndUser(Long id, User user);
 	
+	Optional<Employee> findOneByLogin(String login);
+	
 	
 }

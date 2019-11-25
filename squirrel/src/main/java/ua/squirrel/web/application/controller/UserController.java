@@ -23,8 +23,8 @@ public class UserController {
 		System.err.println(authentication.getPrincipal().toString());
 		UserModel userModel = new UserModel ();
 		userModel.setLogin(user.getLogin());
-		/*userModel.setLastPatyDate(user.getUserSubscription().getLastPatyDate());
-		 userModel.setDeadlineDate(user.getUserSubscription().getDeadlineDate());*/
+		userModel.setLastPatyDate(user.getUserSubscription().getLastPatyDate());
+		 userModel.setDeadlineDate(user.getUserSubscription().getDeadlineDate());
 		userModel.setStoreQuantity(user.getUserSubscription().getStoreQuantity());
 		userModel.setEmployeesQuantity(user.getUserSubscription().getEmployeesQuantity());
 		userModel.setPartnerQuantity(user.getUserSubscription().getPartnerQuantity());
@@ -41,6 +41,7 @@ public class UserController {
 	public String getEmployeePageUser() {
 		return "/user/employee";
 	}
+	
 	
 	@RequestMapping(path = "/user/contacts", method = RequestMethod.GET)
 	public String getUserPartners() {
