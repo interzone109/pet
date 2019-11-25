@@ -42,7 +42,7 @@ public class SquirrelSecurityConfig  {
          // добавление шаблонов страниц, требующих авторизации
          .antMatchers("/","/registration", "/test","/css/**","/js/**").permitAll()
          .antMatchers("/user/**").hasAuthority("USER")
-         .antMatchers("/employee/**").hasAuthority("EMPLOYEE")
+         //.antMatchers("/employee/**").hasAuthority("EMPLOYEE")
        .and()
          // указание формы для аутентификации
          .formLogin()
