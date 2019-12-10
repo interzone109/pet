@@ -94,8 +94,11 @@ function postOrPutEmployee(){
 		        "storeId": $("#storeSelect option:selected").val(),
 		        "hairingDate": $("#dateHiringValue").val(),
 		        "status": $("#status").val(),
-		        "login": isHassAcces ?$("#employeeLoginInput").val():"",
-		        "password":isHassAcces ? $("#employeePassInput").val():""
+		        "accountAppModel":{
+		        	"login": isHassAcces ?$("#employeeLoginInput").val():"",
+		    		 "password":isHassAcces ? $("#employeePassInput").val():""
+		        }
+		        
 			   });
 		if(putEmployeeId!==0){
 			request("PUT",connectUrl + "/user/rest/employee/"+putEmployeeId+"/edit", updateEmployeeRow,  employee);

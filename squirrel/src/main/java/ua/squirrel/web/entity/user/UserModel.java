@@ -5,22 +5,16 @@ import java.time.LocalDate;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 import lombok.Data;
+import ua.squirrel.web.entity.account.AccountAppModel;
 
 
 @Data
 public class UserModel {
-	@NotNull
-    @Size(min=6, max=20, message = "Не менее 6-ти знаков")
-	private String login;
-	@NotNull
-    @Size(min=8, max=20, message = "Не менее 8-ти знаков")
-	private String hashPass;
-	@NotNull
-    @Size(min=8, max=20, message = "Не менее 8-ти знаков")
-	private String repidPass;
+	
+	private AccountAppModel accountAppModel;
+
 	@NotNull
 	@Email(message = "Проверьте правельность написания email")
 	private String mail;

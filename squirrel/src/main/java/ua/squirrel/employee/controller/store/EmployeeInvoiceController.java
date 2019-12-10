@@ -4,9 +4,11 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,16 +24,25 @@ import org.springframework.web.bind.annotation.RestController;
 import javassist.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import ua.squirrel.user.entity.employee.Employee;
+import ua.squirrel.user.entity.product.Product;
 import ua.squirrel.user.entity.product.composite.CompositeProduct;
 import ua.squirrel.user.entity.store.Store;
 import ua.squirrel.user.entity.store.compositeproduct.node.StoreCompositeProductNode;
+import ua.squirrel.user.entity.store.consignment.Consignment;
+import ua.squirrel.user.entity.store.consignment.ConsignmentStatus;
+import ua.squirrel.user.entity.store.consignment.node.ConsignmentNode;
 import ua.squirrel.user.entity.store.invoice.Invoice;
 import ua.squirrel.user.entity.store.invoice.InvoiceModel;
 import ua.squirrel.user.entity.store.invoice.node.InvoiceNode;
 import ua.squirrel.user.service.employee.EmployeeServiceImpl;
 import ua.squirrel.user.service.product.CompositeProductServiceImpl;
+import ua.squirrel.user.service.store.StoreServiceImpl;
+import ua.squirrel.user.service.store.consignment.ConsignmentServiceImpl;
+import ua.squirrel.user.service.store.consignment.status.ConsignmentStatusServiceImpl;
 import ua.squirrel.user.service.store.invoice.InvoiceServiceImpl;
+import ua.squirrel.user.utils.ConsignmentUtil;
 import ua.squirrel.user.utils.StoreUtil;
+import ua.squirrel.web.service.account.AccountAppServiceImpl;
 
 @RestController
 @RequestMapping("/employee/stores/invoice")
@@ -45,6 +56,16 @@ public class EmployeeInvoiceController {
 	private InvoiceServiceImpl invoiceServiceImpl;
 	@Autowired
 	private StoreUtil storeUtil;
+	@Autowired
+	private AccountAppServiceImpl accountAppServiceImpl;
+	@Autowired
+	private ConsignmentServiceImpl consignmentServiceImpl;
+	@Autowired
+	private StoreServiceImpl storeServiceImpl;
+	@Autowired
+	private ConsignmentUtil consignmentUtil;
+	@Autowired
+	private ConsignmentStatusServiceImpl consignmentStatusServiceImpl;
 
 
 	/**
@@ -55,7 +76,7 @@ public class EmployeeInvoiceController {
 	public List<InvoiceModel> createСonsignment(Authentication authentication, @RequestBody InvoiceModel invoiceModel)
 			throws NotFoundException {
 		log.info("LOGGER: get cuurent day sell");
-		Employee employee = employeeServiceImpl.findOneById(1l).get();
+		Employee employee = employeeServiceImpl.findOneByAccountApp(accountAppServiceImpl.findOneByLogin(authentication.getName()).get()).get();
 		Store store = employee.getStore();
 
 		List<Invoice> invoices = new ArrayList<>();
@@ -81,7 +102,7 @@ public class EmployeeInvoiceController {
 	public ResponseEntity<InvoiceModel> createOrFindInvoice(Authentication authentication,
 			@RequestBody InvoiceModel invoiceModel) throws NotFoundException {
 		log.info("LOGGER: get current invoice or create new");
-		Employee employee = employeeServiceImpl.findOneById(1l).get();
+		Employee employee = employeeServiceImpl.findOneByAccountApp(accountAppServiceImpl.findOneByLogin(authentication.getName()).get()).get();
 		Store store = employee.getStore();
 		LocalDate date = LocalDate.now();
 		// находим инвойс за сегодня
@@ -102,12 +123,17 @@ public class EmployeeInvoiceController {
 	 * и формирует расходную накладную по ингридиентам по FIFO 
 	 * 1. Получение данных и базы (магазин, инавойс, список композитных продуктов) и обновляем продажи в рамках одного часа
 	 * 2. Создаем узел с  продуктом который еще не был продан в рамках часа, количеством продаж и временем покупки 
+	 * 3. Получаем список ингридиентов из композитных продуктов (нужно для поиска их входной цены и
+	 * обновления остатков на магазине), так же умножаем расход ингридиентов н аколичество продаж копмозитного продукта
+	 * 4. Обновляем остатки на магазине
+	 * 5. Делаем выборку по накладным, для нахождение входной цены продукта
+	 * 6. Обновляем данные в накладной
 	 * */
 	@PutMapping()
-	public InvoiceModel saleCompositeProduct(Authentication authentication, @RequestBody InvoiceModel invoiceModel
+	public ResponseEntity<InvoiceModel> saleCompositeProduct(Authentication authentication, @RequestBody InvoiceModel invoiceModel
 			) throws NotFoundException {
 		log.info("LOGGER: add sale to current date and store invoice");
-		Employee employee = employeeServiceImpl.findOneById(1l).get();
+		Employee employee = employeeServiceImpl.findOneByAccountApp(accountAppServiceImpl.findOneByLogin(authentication.getName()).get()).get();
 		/**
 		 *		1 пункт
 		 */
@@ -125,7 +151,7 @@ public class EmployeeInvoiceController {
 			invoice.setCashBox(invoiceModel.getCashBox()+ cash);
 			invoice.setOrderQuantity(invoiceModel.getOrderQuantity() + order);
 			invoice.setSellQuantity(invoiceModel.getSellQuantity() + sell);
-			
+			//получаем текущий час
 			LocalDateTime time = LocalDateTime.now();
 			int currentHour = time.getHour();
 			// получаем все проданыe продукты
@@ -163,11 +189,109 @@ public class EmployeeInvoiceController {
 				}
 			});// сохраняем новые продажи для инвойса
 			invoiceServiceImpl.save(invoice);
-			return storeUtil.createInvoiceModel(invoiceOption.get());
+			//обновить остатки на магазине
+			// списать остатки с накладной приходной и создать накладную расходную
+			/**
+			 * 		3 пункт
+			 */
+			// делаем мапу ингридиента и его общего расхода из инвойса
+			Map<Product, Integer> productRateMap = new HashMap<>();
+			Map<Product, Integer> productRateMapCopy = new HashMap<>();
+			compositeProductList.forEach(compositeProduct -> {
+				compositeProduct.getProductMap().forEach(productNode -> {
+					//если ингридиент уже есть в мапе то увеличиваем его общий расход
+					if(productRateMap.containsKey(productNode.getProduct())) {
+						int totalRate = productRateMap.get(productNode.getProduct());//текущий расход ингридиентов
+						//прибавляем к текущему расходу, расход ингридиентов от продаж
+						totalRate += productNode.getRate()* invoiceData.get(compositeProduct.getId()); 
+						//сохраняем в мапу
+						productRateMap.put(productNode.getProduct(), totalRate);
+						productRateMapCopy.put(productNode.getProduct(), totalRate);
+					}else {
+						productRateMap.put(productNode.getProduct(), productNode.getRate()* invoiceData.get(compositeProduct.getId()));
+						productRateMapCopy.put(productNode.getProduct(), productNode.getRate()* invoiceData.get(compositeProduct.getId()));
+					}
+				});
+			});
+			/**
+			 * 		4 пункт
+			 */
+			storeUtil.updateStoreLeftoversForSale(store, productRateMap, "-");
+			storeServiceImpl.save(store);
+			/**
+			 * 		5 пункт
+			 */
+			// получаем список накладных для реализации расчетов отпускаемых ингридиентов с
+			// по методу ФИФО
+			List<Consignment> consignmentFIFOList = consignmentServiceImpl.getConsigmentFIFO(store,
+					productRateMap.keySet());
+			Map<Product, Integer> productPriceMap = consignmentUtil.formFIFOIngridientPrices(consignmentFIFOList , productRateMap, store);
+			/**
+			 * 		6 пункт
+			 */
+			ConsignmentStatus consStatus = consignmentStatusServiceImpl.findOneByName("CONSAMPTION").get();
+			// находим расходную накладную за сегодняшний день
+			// эта накладная создаеться автоматически и отвечаетза расход ингридиентов
+			// относительно количества продаж
+			Optional<Consignment> consOptional = consignmentServiceImpl
+					.findOneByDateAndStoreAndConsignmentStatusAndIsApprovedAndMetaIgnoreCaseContaining(date, store,
+							consStatus, true, "auto:%:");
+			Consignment consignment  = null;
+			if (consOptional.isPresent()) {
+				consignment = consOptional.get();
+				Set <Product> existProduct = new HashSet<>();
+				consignment.getConsignmentNode().forEach(node->{//обновляем среднуюю цену и количество в расходной накладной
+					if(productRateMapCopy.containsKey(node.getProduct())) {
+						int addSumm = 	productPriceMap.get(node.getProduct());		
+						int totalSumm = addSumm == 0
+								? (node.getQuantity()+productRateMapCopy.get(node.getProduct())) * node.getUnitPrice()
+								:node.getQuantity()*node.getUnitPrice() + addSumm;//старое кол * на старую цену + новую сумму
+						
+						int totalQuantity = node.getQuantity() + productRateMapCopy.get(node.getProduct());//получаем общее количество расхода по ингридиенту
+						node.setQuantity(totalQuantity);
+						node.setUnitPrice(totalSumm/totalQuantity);//получаем среднуюю цену деля общюю стоимость на количество ингридиента
+						existProduct.add(node.getProduct());
+					}
+				});
+				productRateMap.keySet().removeAll(existProduct);
+				//добавляем расход новых ингридиентов 
+				for(Product product : productRateMap.keySet())  {
+					ConsignmentNode consignmentNode = new ConsignmentNode();
+					consignmentNode.setConsignment(consignment);
+					consignmentNode.setProduct(product);
+					consignmentNode.setQuantity(productRateMapCopy.get(product));
+					consignmentNode.setUnitPrice(productPriceMap.get(product));
+					consignment.getConsignmentNode().add(consignmentNode);
+				}
+				
+
+			} else {
+				consignment  = new Consignment();
+				consignment.setDate(date);
+				consignment.setApproved(true);
+				consignment.setMeta("auto:%:Продажи магазина "+store.getAddress());
+				consignment.setStore(store);
+				consignment.setConsignmentStatus(consStatus);
+
+				List<ConsignmentNode> consignmentsNode = new ArrayList<>();
+				for(Product product : productRateMap.keySet())  {
+					ConsignmentNode consignmentNode = new ConsignmentNode();
+					consignmentNode.setConsignment(consignment);
+					consignmentNode.setProduct(product);
+					consignmentNode.setQuantity(productRateMapCopy.get(product));
+					consignmentNode.setUnitPrice(productPriceMap.get(product)/productRateMapCopy.get(product));
+					consignmentsNode.add(consignmentNode);
+				}
+				consignment.setConsignmentNode(consignmentsNode);
+			}
+			consignmentFIFOList.add(consignment);
+			consignmentServiceImpl.saveAll(consignmentFIFOList);
+			
+			return new ResponseEntity<InvoiceModel>(storeUtil.createInvoiceModel(invoiceOption.get()), HttpStatus.OK);
 		} 
 		// если инвойс не найден значит что он небыл заранее создан в контроллере
 		// createOrFindInvoice и работать с ним невыйдет
-		return InvoiceModel.builder().build();
+		return  new ResponseEntity<InvoiceModel>(InvoiceModel.builder().dateStart("create invoice errore").build(), HttpStatus.PAYLOAD_TOO_LARGE);
 
 	}
 	

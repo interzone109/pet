@@ -7,22 +7,28 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import ua.squirrel.web.entity.account.AccountAppModel;
 import ua.squirrel.web.entity.user.User;
 import ua.squirrel.web.entity.user.UserModel;
+import ua.squirrel.web.service.account.AccountAppServiceImpl;
 import ua.squirrel.web.service.registration.user.UserServiceImpl;
 
 @Controller
 public class UserController {
 	@Autowired
-	  private UserServiceImpl userServiceImpl;
-	
+	 private UserServiceImpl userServiceImpl;
+	@Autowired
+	private AccountAppServiceImpl accountAppServiceImpl;
 	
 	@RequestMapping(path = "/user/home", method = RequestMethod.GET)
 	public String getUserHomePage(Authentication authentication, Model model) {
-		User user = userServiceImpl.findOneByLogin(authentication.getName()).get();
+		accountAppServiceImpl.findOneByLogin(authentication.getName());
+		
+		User user = userServiceImpl.findOneByAccount(accountAppServiceImpl.findOneByLogin(authentication.getName()).get()).get();
 		System.err.println(authentication.getPrincipal().toString());
 		UserModel userModel = new UserModel ();
-		userModel.setLogin(user.getLogin());
+		userModel.setAccountAppModel(new AccountAppModel());
+		userModel.getAccountAppModel().setLogin(user.getAccount().getLogin());
 		userModel.setLastPatyDate(user.getUserSubscription().getLastPatyDate());
 		 userModel.setDeadlineDate(user.getUserSubscription().getDeadlineDate());
 		userModel.setStoreQuantity(user.getUserSubscription().getStoreQuantity());

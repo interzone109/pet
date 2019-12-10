@@ -4,10 +4,11 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import ua.squirrel.web.entity.account.AccountApp;
 import ua.squirrel.web.entity.user.User;
 
 public interface UserRepository extends JpaRepository<User, Long> {
 
-	Optional<User> findOneByLogin(String login);
-	boolean existsByLoginOrMail(String login, String mail);
+	Optional<User> findOneByAccount(AccountApp account);
+	boolean existsByAccount(AccountApp account);
 }

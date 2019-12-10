@@ -37,6 +37,7 @@ import ua.squirrel.user.service.store.ingridient.node.StoreIngridientNodeService
 import ua.squirrel.user.utils.ConsignmentUtil;
 import ua.squirrel.user.utils.StoreUtil;
 import ua.squirrel.web.entity.user.User;
+import ua.squirrel.web.service.account.AccountAppServiceImpl;
 import ua.squirrel.web.service.registration.user.UserServiceImpl;
 
 @RestController
@@ -60,12 +61,14 @@ public class ConsignmentController {
 	private ConsignmentUtil consignmentUtil;
 	@Autowired
 	private StoreUtil storeUtil;
+	@Autowired
+	private AccountAppServiceImpl accountAppServiceImpl;
 
 	@GetMapping("{storeId}/{consignmentId}")
 	public List<ProductModel> getСonsignmentData(Authentication authentication, @PathVariable("storeId") Long storeId,
 			@PathVariable("consignmentId") Long consignmentId) throws NotFoundException {
 		log.info("LOGGER: get Consignment data");
-		User user = userServiceImpl.findOneByLogin(authentication.getName()).get();
+		User user = userServiceImpl.findOneByAccount(accountAppServiceImpl.findOneByLogin(authentication.getName()).get()).get();
 		Store store = getCurrentStore(user, storeId);
 		Consignment consignment = consignmentServiceImpl.findOneByIdAndStore(consignmentId, store)
 				.orElseThrow(() -> new NotFoundException("Status not found"));
@@ -88,7 +91,7 @@ public class ConsignmentController {
 		/**
 		 *		1 пункт
 		 * */
-		User user = userServiceImpl.findOneByLogin(authentication.getName()).get();//тестовый пользователь
+		User user = userServiceImpl.findOneByAccount(accountAppServiceImpl.findOneByLogin(authentication.getName()).get()).get();//тестовый пользователь
 		Store store = getCurrentStore(user, storeId);//находим магазин к которому был направлен запрос
 		Consignment consignment = consignmentServiceImpl.findOneByIdAndStore(consignmentId, store)
 				.orElseThrow(() -> new NotFoundException("Status not found"));//находим накладную  в  которую будем вносить обновления
@@ -136,7 +139,7 @@ public class ConsignmentController {
 		
 		log.info("LOGGER: uproved Consignment data");
 		
-		User user = userServiceImpl.findOneByLogin(authentication.getName()).get();
+		User user = userServiceImpl.findOneByAccount(accountAppServiceImpl.findOneByLogin(authentication.getName()).get()).get();
 		Store store = getCurrentStore(user, storeId);
 		Consignment consignment = consignmentServiceImpl.findOneByIdAndStore(consignmentId, store)
 				.orElseThrow(() -> new NotFoundException("Status not found"));
@@ -219,7 +222,7 @@ public class ConsignmentController {
 	public List<ConsignmentModel> createСonsignment(Authentication authentication,
 			@RequestBody ConsignmentModel createConsignment) throws NotFoundException {
 		log.info("LOGGER: save new empty Consignment");
-		User user = userServiceImpl.findOneByLogin(authentication.getName()).get();
+		User user = userServiceImpl.findOneByAccount(accountAppServiceImpl.findOneByLogin(authentication.getName()).get()).get();
 		Store store = getCurrentStore(user, createConsignment.getStoreId());
 
 		String[] date = createConsignment.getDate().split("\\.");
@@ -250,7 +253,7 @@ public class ConsignmentController {
 	public List<ConsignmentModel> getСonsignmentSearch(Authentication authentication,
 			@RequestBody ConsignmentSearchModel consignmentSearchModel) throws NotFoundException {
 		log.info("LOGGER: get Consignment for search value");
-		User user = userServiceImpl.findOneByLogin(authentication.getName()).get();
+		User user = userServiceImpl.findOneByAccount(accountAppServiceImpl.findOneByLogin(authentication.getName()).get()).get();
 		Store store = getCurrentStore(user, consignmentSearchModel.getStoreId());
 
 		List<Consignment> resultList = null;

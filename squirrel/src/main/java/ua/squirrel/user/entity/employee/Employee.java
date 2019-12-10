@@ -16,7 +16,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import lombok.Data;
 import ua.squirrel.user.entity.store.Store;
-import ua.squirrel.web.entity.user.Role;
+import ua.squirrel.web.entity.account.AccountApp;
 import ua.squirrel.web.entity.user.User;
 
 @Data
@@ -35,14 +35,16 @@ public class Employee {
 	private int salary;
 	@Column(name = "cash_box_type")
 	private Integer cashBoxType; 
-	@Column(name = "login",  nullable = false, unique = true)
-	private String login;
-	@Column(name = "password",  nullable = false)
-	private String password;
+	
+
 	@Column(name = "hairing_date")
 	private LocalDate hairingDate;
 	@Column(name = "status")
 	private String status;
+	
+	@OneToOne(cascade={CascadeType.PERSIST})
+    @JoinColumn(name="account_id")
+	private AccountApp accountApp;
 	
 	@ManyToOne(fetch = FetchType.LAZY, cascade=CascadeType.ALL)
 	@JoinColumn(name = "store_employee_id", nullable = false)
@@ -52,6 +54,4 @@ public class Employee {
 	@JoinColumn(name = "employee_user_id", nullable = false)
 	private User user;
 	
-	 @OneToOne(cascade = CascadeType.ALL)
-	private Role role;
 }

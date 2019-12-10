@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import ua.squirrel.web.entity.account.AccountApp;
 import ua.squirrel.web.entity.user.User;
 
 @Service
@@ -19,10 +20,13 @@ public class UserServiceImpl implements UserService {
 		userRepository.save(user);
 	}
 	@Override
-	public Optional<User> findOneByLogin(String login) {
-		return userRepository.findOneByLogin(login);
+	public Optional<User> findOneByAccount(AccountApp account) {
+		return userRepository.findOneByAccount(account);
 	}
-	public boolean existsByLoginOrMail(String login, String mail) {
-		return userRepository.existsByLoginOrMail(login, mail);
+
+	@Override
+	public boolean existsByAccount(AccountApp account) {
+		// TODO Auto-generated method stub
+		return userRepository.existsByAccount(account);
 	}
 }

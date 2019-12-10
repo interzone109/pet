@@ -19,6 +19,7 @@ import ua.squirrel.user.entity.partner.PartnerModel;
 import ua.squirrel.user.entity.product.ProductModel;
 import ua.squirrel.user.service.partner.PartnerServiceImpl;
 import ua.squirrel.web.entity.user.User;
+import ua.squirrel.web.service.account.AccountAppServiceImpl;
 import ua.squirrel.web.service.registration.user.UserServiceImpl;
 
 
@@ -38,6 +39,8 @@ public class PartnerController {
 	private PartnerServiceImpl partnerServiceImpl;
 	@Autowired
 	private UserServiceImpl userServiceImpl;
+	@Autowired
+	private AccountAppServiceImpl accountAppServiceImpl;
 
 	/**
 	 * метод находит по id и текущему User партнера и возращает информацию о нем и о
@@ -49,18 +52,18 @@ public class PartnerController {
 
 		log.info("LOGGER: return current partner product: /user/partners/{partner_id}/info ");
 
-		User userCurrentSesion = userServiceImpl.findOneByLogin(authentication.getName()).get();
+		User user = userServiceImpl.findOneByAccount(accountAppServiceImpl.findOneByLogin(authentication.getName()).get()).get();
 		// вызываем медот преобразования сущности в модель
-		return getPartnerModel(id, userCurrentSesion);
+		return getPartnerModel(id, user);
 	}
 
 	@PutMapping
 	public PartnerModel updatePartnerInfo(@PathVariable("partner_id") Long id, @RequestBody PartnerModel partnerModel,
 			Authentication authentication) throws NotFoundException {
 		log.info("LOGGER: update curent partners info : /user/partners/{partner_id}/info");
-		User userCurrentSesion = userServiceImpl.findOneByLogin(authentication.getName()).get();
+		User user = userServiceImpl.findOneByAccount(accountAppServiceImpl.findOneByLogin(authentication.getName()).get()).get();
 		// получаем из базы Partner по ид и текущему пользователю
-		Partner currentPartner = getCurrentPartner(id, userCurrentSesion);
+		Partner currentPartner = getCurrentPartner(id, user);
 		//обновляем данные и сохраняем в базу
 		currentPartner.setPartnerMail(partnerModel.getPartnerMail());
 		currentPartner.setPhonNumber(partnerModel.getPhonNumber());

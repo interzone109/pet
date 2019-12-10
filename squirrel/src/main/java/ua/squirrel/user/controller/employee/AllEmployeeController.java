@@ -1,7 +1,9 @@
 package ua.squirrel.user.controller.employee;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -21,7 +23,9 @@ import ua.squirrel.user.entity.store.Store;
 import ua.squirrel.user.service.employee.EmployeeServiceImpl;
 import ua.squirrel.user.service.store.StoreServiceImpl;
 import ua.squirrel.user.utils.SmallOneUtil;
+import ua.squirrel.web.entity.user.Role;
 import ua.squirrel.web.entity.user.User;
+import ua.squirrel.web.service.account.AccountAppServiceImpl;
 import ua.squirrel.web.service.registration.RoleService;
 import ua.squirrel.web.service.registration.user.UserServiceImpl;
 
@@ -39,6 +43,8 @@ public class AllEmployeeController {
 	private RoleService roleService;
 	@Autowired
 	private SmallOneUtil smallOneUtil;
+	@Autowired
+	private AccountAppServiceImpl accountAppServiceImpl;
 
 	/**
 	 * метод возращает лист моделей всех работников
@@ -47,7 +53,7 @@ public class AllEmployeeController {
 	@GetMapping
 	public List<EmployeeModel> getAllEmployee(Authentication authentication) {
 		log.info("LOGGER: show all employees "); 
-		User user = userServiceImpl.findOneByLogin(authentication.getName()).get();
+		User user = userServiceImpl.findOneByAccount(accountAppServiceImpl.findOneByLogin(authentication.getName()).get()).get();
 		return buildEmployeeModel(user);
 	}
 	/**
@@ -58,7 +64,7 @@ public class AllEmployeeController {
 	public EmployeeModel addEmployee(@RequestBody EmployeeModel newEmployeeModel, Authentication authentication) throws NotFoundException {
 		log.info("LOGGER: add new employees ");
 		Employee employee = new Employee(); 
-		User user = userServiceImpl.findOneByLogin(authentication.getName()).get();
+		User user = userServiceImpl.findOneByAccount(accountAppServiceImpl.findOneByLogin(authentication.getName()).get()).get();
 		employeeServiceImpl.save(putOrPostEmployee(employee, newEmployeeModel, user));
 		
 		return employeeBuild(employee);
@@ -70,7 +76,7 @@ public class AllEmployeeController {
 	public EmployeeModel updateEmployee(@RequestBody EmployeeModel newEmployeeModel,
 			@PathVariable Long id ,Authentication authentication) throws NotFoundException {
 		log.info("LOGGER: update current employees "); 
-		User user = userServiceImpl.findOneByLogin(authentication.getName()).get();
+		User user = userServiceImpl.findOneByAccount(accountAppServiceImpl.findOneByLogin(authentication.getName()).get()).get();
 		Employee employee = getEmployee(user, id);
 	
 		employeeServiceImpl.save(putOrPostEmployee(employee, newEmployeeModel, user));
@@ -79,8 +85,8 @@ public class AllEmployeeController {
 	
 	
 	private Employee putOrPostEmployee(Employee employee ,EmployeeModel newEmployeeModel, User user ) throws NotFoundException {
-		String login = newEmployeeModel.getLogin();
-		String pass = newEmployeeModel.getPassword();
+		String login = newEmployeeModel.getAccountAppModel().getLogin();
+		String pass = newEmployeeModel.getAccountAppModel().getPassword();
 		String role = !(login == null & login.isEmpty()) && !( pass == null & pass.isEmpty()) 
 				?"EMPLOYEE"
 				:"EMPLOYEE_WITH_ACCESS";
@@ -88,7 +94,8 @@ public class AllEmployeeController {
 			login = "%autogenerate%"+newEmployeeModel.getStoreId()+ new Long(System.currentTimeMillis()).toString();
 			pass = login;
 		}
-		
+		Set<Role> roles = new HashSet<>();
+		roles.add(roleService.findOneByName(role));
 		employee.setFirstName(newEmployeeModel.getFirstName());
 		employee.setLastName(newEmployeeModel.getLastName());
 		employee.setSalary(newEmployeeModel.getSalary());
@@ -96,9 +103,9 @@ public class AllEmployeeController {
 		employee.setHairingDate(smallOneUtil.convertDate(newEmployeeModel.getHairingDate()));
 		employee.setUser(user);
 		employee.setStatus(newEmployeeModel.getStatus());
-		employee.setLogin(login);
-		employee.setPassword(pass);
-		employee.setRole(roleService.findOneByName(role));
+		employee.getAccountApp().setLogin(login);
+		employee.getAccountApp().setPassword(pass);
+		employee.getAccountApp().setRoles(roles);
 		employee.setStore(getStore(user , newEmployeeModel.getStoreId()));
 		return employee;
 	}

@@ -24,6 +24,7 @@ import ua.squirrel.user.service.product.node.ProductMapServiceImpl;
 import ua.squirrel.user.service.product.properties.MeasureProductServiceImpl;
 import ua.squirrel.user.service.product.properties.PropertiesProductServiceImpl;
 import ua.squirrel.web.entity.user.User;
+import ua.squirrel.web.service.account.AccountAppServiceImpl;
 import ua.squirrel.web.service.registration.user.UserServiceImpl;
 
 /**
@@ -49,6 +50,8 @@ public class ProductController {
 	private MeasureProductServiceImpl measureProductServiceImpl;
 	@Autowired
 	private ProductMapServiceImpl productMapServiceImpl;
+	@Autowired
+	private AccountAppServiceImpl accountAppServiceImpl;
 	
 	/**
 	 * мeтод получает  новый продукт и добавляет его
@@ -60,9 +63,9 @@ public class ProductController {
 			@RequestBody ProductModel productsModel) throws NotFoundException {
 		log.info("LOGGER: add product to current partner");
 
-		User userCurrentSesion = userServiceImpl.findOneByLogin(authentication.getName()).get();
+		User user = userServiceImpl.findOneByAccount(accountAppServiceImpl.findOneByLogin(authentication.getName()).get()).get();
 
-		Partner partner = getCurrentPartner(id, userCurrentSesion);
+		Partner partner = getCurrentPartner(id, user);
 
 			Product addProduct = new Product();
 			addProduct.setDescription(productsModel.getDescription());
@@ -74,7 +77,7 @@ public class ProductController {
 			addProduct.setGroup(productsModel.getGroup());
 			addProduct.setPartner(partner);
 
-			addProduct.setUser(userCurrentSesion);
+			addProduct.setUser(user);
 
 		productServiceImpl.save(addProduct);
 		
@@ -94,7 +97,7 @@ public class ProductController {
 			@RequestBody ProductModel productsModel) throws NotFoundException {
 		log.info("LOGGER: add product to current partner and create composite product");
 
-		User user  = userServiceImpl.findOneByLogin(authentication.getName()).get();
+		User user = userServiceImpl.findOneByAccount(accountAppServiceImpl.findOneByLogin(authentication.getName()).get()).get();
 
 		Partner partner = getCurrentPartner(idPartner, user);
 
@@ -148,9 +151,9 @@ public class ProductController {
 			@PathVariable("product_id") Long productId ,@RequestBody ProductModel productModel) throws NotFoundException {
 		log.info("LOGGER: update current product");
 		
-		User userCurrentSesion = userServiceImpl.findOneByLogin(authentication.getName()).get();
+		User user = userServiceImpl.findOneByAccount(accountAppServiceImpl.findOneByLogin(authentication.getName()).get()).get();
 
-		Partner partner = getCurrentPartner(id, userCurrentSesion);
+		Partner partner = getCurrentPartner(id, user);
 		
 		Product updateProduct = productServiceImpl.findOneByIdAndPartner(productId, partner)
 				.orElseThrow(() -> new NotFoundException("Product not found"));

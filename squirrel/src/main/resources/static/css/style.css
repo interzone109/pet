@@ -1,3 +1,8 @@
+.tooltip-inner {
+    width:450px!important;
+    max-height:250px!important;
+    overflow-y:scroll
+}
 /*switch*/
 .switch input { 
     display:none;

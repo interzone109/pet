@@ -18,6 +18,7 @@ import ua.squirrel.user.entity.product.composite.CompositeProductModel;
 import ua.squirrel.user.entity.store.Store;
 import ua.squirrel.user.service.employee.EmployeeServiceImpl;
 import ua.squirrel.user.utils.StoreUtil;
+import ua.squirrel.web.service.account.AccountAppServiceImpl;
 
 
 @RestController
@@ -29,6 +30,8 @@ public class EmployeLeftoverController {
 	private EmployeeServiceImpl employeeServiceImpl;
 	@Autowired
 	private StoreUtil storeUtil ;
+	@Autowired
+	private AccountAppServiceImpl accountAppServiceImpl;
 
 	/**
 	 * метод возращает список ингридиентов магазина на котором закреплен сотрудник
@@ -38,7 +41,7 @@ public class EmployeLeftoverController {
 	public List<ProductModel> getLeftOvers( Authentication authentication) throws NotFoundException {
 
 		log.info("LOGGER: get leftovers for  store");
-		Employee employee = employeeServiceImpl.findOneById(1l).get();
+		Employee employee = employeeServiceImpl.findOneByAccountApp(accountAppServiceImpl.findOneByLogin(authentication.getName()).get()).get();
 
 		
 		Store store = employee.getStore();
@@ -66,7 +69,7 @@ public class EmployeLeftoverController {
 	public List<CompositeProductModel> getAssortment(Authentication authentication) throws NotFoundException {
 
 		log.info("LOGGER: get assortment for current user");
-		Employee employee = employeeServiceImpl.findOneById(1l).get();
+		Employee employee = employeeServiceImpl.findOneByAccountApp(accountAppServiceImpl.findOneByLogin(authentication.getName()).get()).get();
 		return storeUtil.getProductPriceModel( employee.getStore().getStoreCompositeProductNode());
 		
 	}

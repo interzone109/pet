@@ -12,10 +12,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import lombok.extern.slf4j.Slf4j;
 import ua.squirrel.user.entity.partner.Partner;
+import ua.squirrel.web.entity.account.AccountApp;
+import ua.squirrel.web.entity.account.AccountAppModel;
 import ua.squirrel.web.entity.user.Role;
 import ua.squirrel.web.entity.user.User;
 import ua.squirrel.web.entity.user.UserModel;
 import ua.squirrel.web.entity.user.UserSubscription;
+import ua.squirrel.web.service.account.AccountAppServiceImpl;
 import ua.squirrel.web.service.registration.RoleServiceImpl;
 import ua.squirrel.web.service.registration.UserSubscriptionServiceImpl;
 import ua.squirrel.web.service.registration.user.UserServiceImpl;
@@ -39,6 +42,7 @@ public class RegistrationController {
 	@Autowired
 	private UserSubscriptionServiceImpl userSubscriptionServiceImpl;
 
+
 	@GetMapping
 	public UserModel hello(Authentication authentication) {
 	
@@ -57,13 +61,18 @@ public class RegistrationController {
 		userSubscription.setProductCurrentQuantity(0);
 		userSubscription.setProductQuantity(2);
 		
-
+		 AccountApp accountApp = new AccountApp();
+		 accountApp.setLogin("test1");
+		 accountApp.setPassword(new BCryptPasswordEncoder().encode("user1"));
+		 accountApp.setRoles(role);
+		 
 		User user1 = new User();
 		user1.setUserSubscription(userSubscription);
-		user1.setLogin("test1");
-		user1.setHashPass(new BCryptPasswordEncoder().encode("user1") );
+		//user1.setLogin("test1");
+		//user1.setRoles(role);
+		//user1.setHashPass(new BCryptPasswordEncoder().encode("user1") );
 		user1.setMail("user1@mail.com");
-		user1.setRoles(role);
+		user1.setAccount(accountApp);
 		
 		userSubscription.setUser(user1);
 		//userSubscriptionServiceImpl.save(userSubscription);
@@ -86,10 +95,10 @@ public class RegistrationController {
 		
 		fillDataUtil.setEmployee(user1);
 		UserModel us = new UserModel();
-		us.setLogin(user1.getLogin());
-		us.setHashPass(user1.getHashPass());
+		us.setAccountAppModel(new AccountAppModel());
+		us.getAccountAppModel().setLogin(user1.getAccount().getLogin());
+		us.getAccountAppModel().setPassword(user1.getAccount().getPassword());
 		us.setMail(user1.getMail());
-		us.setRole(user1.getRoles().stream().filter(r->r.getName().equals("USER")).findFirst().get().getName());
 		
 		return us;
 	}

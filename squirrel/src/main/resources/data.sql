@@ -2,6 +2,7 @@ INSERT INTO roles (role_name) VALUES ('USER');
 INSERT INTO roles (role_name) VALUES ('ADMIN');
 INSERT INTO roles (role_name) VALUES ('MODERATOR');
 INSERT INTO roles (role_name) VALUES ('EMPLOYEE');
+INSERT INTO roles (role_name) VALUES ('EMPLOYEE_WITH_ACCESS');
 INSERT INTO properties_product (properties_product_name) VALUES ('INGREDIENS');/*ингридиенты*/
 INSERT INTO properties_product (properties_product_name) VALUES ('CONSUMABLES');/*расходные материалы*/
 INSERT INTO properties_product (properties_product_name) VALUES ('PRODUCT_COMPOSITE');/*конечный продукт & ингридиент*/

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import ua.squirrel.user.entity.employee.Employee;
+import ua.squirrel.web.entity.account.AccountApp;
 import ua.squirrel.web.entity.user.User;
 
 @Service
@@ -36,8 +37,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 		return employeeRepository.findById(id);
 	}
 
-	public  Optional<Employee> findOneByLogin(String login) {
-		return employeeRepository.findOneByLogin( login);
+	public  Optional<Employee> findOneByAccountApp( AccountApp accountApp) {
+		return employeeRepository.findOneByAccountApp( accountApp);
 	}
 
 }

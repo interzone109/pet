@@ -38,7 +38,7 @@ import ua.squirrel.user.service.store.consignment.status.ConsignmentStatusServic
 import ua.squirrel.user.service.store.ingridient.node.StoreIngridientNodeServiceImpl;
 import ua.squirrel.user.utils.ConsignmentUtil;
 import ua.squirrel.user.utils.StoreUtil;
-import ua.squirrel.web.entity.user.User;
+import ua.squirrel.web.service.account.AccountAppServiceImpl;
 
 @RestController
 @RequestMapping("/employee/stores/consignment")
@@ -60,12 +60,14 @@ public class EmployeeConsignmentController {
 	private ConsignmentUtil consignmentUtil;
 	@Autowired
 	private StoreUtil storeUtil;
+	@Autowired
+	private AccountAppServiceImpl accountAppServiceImpl;
 
 	@GetMapping("/{consignmentId}")
 	public List<ProductModel> getСonsignmentData(Authentication authentication, @PathVariable("storeId") Long storeId,
 			@PathVariable("consignmentId") Long consignmentId) throws NotFoundException {
 		log.info("LOGGER: get Consignment data");
-		Employee employee = employeeServiceImpl.findOneById(1l).get();
+		Employee employee = employeeServiceImpl.findOneByAccountApp(accountAppServiceImpl.findOneByLogin(authentication.getName()).get()).get();
 		Store store = employee.getStore();
 		Consignment consignment = consignmentServiceImpl.findOneByIdAndStore(consignmentId, store)
 				.orElseThrow(() -> new NotFoundException("Status not found"));
@@ -88,7 +90,7 @@ public class EmployeeConsignmentController {
 		/**
 		 *		1 пункт
 		 * */
-		Employee employee = employeeServiceImpl.findOneById(1l).get();
+		Employee employee = employeeServiceImpl.findOneByAccountApp(accountAppServiceImpl.findOneByLogin(authentication.getName()).get()).get();
 		Store store = employee.getStore();//находим магазин к которому был направлен запрос
 		Consignment consignment = consignmentServiceImpl.findOneByIdAndStore(consignmentId, store)
 				.orElseThrow(() -> new NotFoundException("Status not found"));//находим накладную  в  которую будем вносить обновления
@@ -134,7 +136,7 @@ public class EmployeeConsignmentController {
 			@RequestBody Map<Long, String> consignmentData, @PathVariable("storeId") Long storeId,
 			@PathVariable("consignmentId") Long consignmentId) throws NotFoundException {
 		log.info("LOGGER: uproved Consignment data");
-		Employee employee = employeeServiceImpl.findOneById(1l).get();
+		Employee employee = employeeServiceImpl.findOneByAccountApp(accountAppServiceImpl.findOneByLogin(authentication.getName()).get()).get();
 		Store store = employee.getStore();
 		Consignment consignment = consignmentServiceImpl.findOneByIdAndStore(consignmentId, store)
 				.orElseThrow(() -> new NotFoundException("Status not found"));
@@ -178,28 +180,20 @@ public class EmployeeConsignmentController {
 			}
 			storeIngridientNodeServiceImpl.saveAll(nodeList);
 			/*****/
-			//обновляем остатки на магазине в соответствии с изменениями в накладной
+			//обновляем остатки на магазине в соответствии с изменениями в накладной,
+			//обновляем количество и сумму новых ингридиентов
 			switch (consignment.getConsignmentStatus().getName()) {
 			case "ARRIVAL":// приход
 				storeUtil.updateStoreLeftovers(store, consignmentData, "+");
+				
 				storeServiceImpl.save(store);
 				break;
 			case "CONSAMPTION":// расход
+				System.err.println("meta = "+consignment.getMeta());
 				if (!consignment.getMeta().startsWith("auto:%:")) {
 					storeUtil.updateStoreLeftovers(store, consignmentData, "-");
 					storeServiceImpl.save(store);
 				}
-				break;
-				//fix
-			case "HAULING":// внутренее перемещение
-				storeUtil.updateStoreLeftovers(store, consignmentData, "-"); // удаляем из магазина отправителя
-																				// ингридиенты
-				storeServiceImpl.save(store);
-				// добавляем в магазин получателя
-				long haulingStoreId = Long.parseLong(consignment.getMeta().split(":store:%:")[0]);
-				Store haulingStore = getCurrentStore(employee.getUser(), haulingStoreId);
-				storeUtil.updateStoreLeftovers(store, consignmentData, "+");
-				storeServiceImpl.save(haulingStore);
 				break;
 			case "RETURN":// возрат поставщику
 			case "WRITE-OFF":// списание
@@ -219,7 +213,7 @@ public class EmployeeConsignmentController {
 	public List<ConsignmentModel> createСonsignment(Authentication authentication,
 			@RequestBody ConsignmentModel createConsignment) throws NotFoundException {
 		log.info("LOGGER: save new empty Consignment");
-		Employee employee = employeeServiceImpl.findOneById(1l).get();
+		Employee employee = employeeServiceImpl.findOneByAccountApp(accountAppServiceImpl.findOneByLogin(authentication.getName()).get()).get();
 		Store store = employee.getStore();
 
 		String[] date = createConsignment.getDate().split("\\.");
@@ -271,14 +265,6 @@ public class EmployeeConsignmentController {
 		return consignmentUtil.createConsignmentModelList(resultList);
 	}
 
-	
-	
-	
-	
-	private Store getCurrentStore(User user, Long id) throws NotFoundException {
-		return storeServiceImpl.findOneByIdAndUser(id, user)
-				.orElseThrow(() -> new NotFoundException("Store not found"));
-	}
 
 	private ConsignmentStatus getConsignmentStatus(String name) throws NotFoundException {
 		return consignmentStatusServiceImpl.findOneByName(name)

@@ -74,8 +74,8 @@
               <div class="col-md-3">
                 <div class="form-group">
                 <label  for="login"  class=""><p>Логин</p></label>
-                  <input type="text" class="form-control"  id="login"  placeholder="Login"  th:field="*{login}" >
-                  <p th:if="${#fields.hasErrors('login')}" th:errors="*{login}" class="help-block ">
+                  <input type="text" class="form-control"  id="login"  placeholder="Login"  th:field="*{accountAppModel.login}" >
+                  <p th:if="${#fields.hasErrors('accountAppModel.login')}" th:errors="*{accountAppModel.login}" class="help-block ">
 				 </p>
                   
                 </div>                                 
@@ -83,16 +83,16 @@
               <div class="col-md-3">
                 <div class="form-group">
                 	<label  for="pass"  class=""><p>Пароль</p></label>
-                  <input type="password" placeholder="Pass" id="pass" class="form-control" th:field="*{hashPass}">
-                  <p th:if="${#fields.hasErrors('hashPass')}" th:errors="*{hashPass}" class="help-block "  >
+                  <input type="password" placeholder="Pass" id="pass" class="form-control" th:field="*{accountAppModel.password}">
+                  <p th:if="${#fields.hasErrors('accountAppModel.password')}" th:errors="*{accountAppModel.password}" class="help-block "  >
 				 </p>
                 </div> 
               </div>
               <div class="col-md-3">
                 <div class="form-group">
                 <label  for="repidPass"  class=""><p>Повторите пароль</p></label>
-                  <input type="password" class="form-control" id="repidPass" name="email" placeholder="Pass" th:field="*{repidPass}" >
-                  <p th:if="${#fields.hasErrors('repidPass')}" th:errors="*{repidPass}" class="help-block "  >
+                  <input type="password" class="form-control" id="repidPass" name="email" placeholder="Pass" th:field="*{accountAppModel.repidPassword}" >
+                  <p th:if="${#fields.hasErrors('accountAppModel.repidPassword')}" th:errors="*{accountAppModel.repidPassword}" class="help-block "  >
 				 </p>
                 </div>                                 
               </div>

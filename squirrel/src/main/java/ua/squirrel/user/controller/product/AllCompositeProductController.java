@@ -25,6 +25,7 @@ import ua.squirrel.user.service.product.CompositeProductServiceImpl;
 import ua.squirrel.user.service.product.properties.MeasureProductServiceImpl;
 import ua.squirrel.user.service.product.properties.PropertiesProductServiceImpl;
 import ua.squirrel.web.entity.user.User;
+import ua.squirrel.web.service.account.AccountAppServiceImpl;
 import ua.squirrel.web.service.registration.user.UserServiceImpl;
 
 @RestController
@@ -40,6 +41,8 @@ public class AllCompositeProductController {
 	private MeasureProductServiceImpl measureProductServiceImpl;
 	@Autowired
 	private CompositeProductServiceImpl compositeProductServiceImpl;
+	@Autowired
+	private AccountAppServiceImpl accountAppServiceImpl;
 	
 	/**
 	 * метод получает зарегисрированого пользователя берет у него список композитных
@@ -51,7 +54,7 @@ public class AllCompositeProductController {
 	public List<CompositeProductModel> getAllCompositeProduct(Authentication authentication) {
 		log.info("LOGGER: show all Composite ProductModel");
 
-		User user = userServiceImpl.findOneByLogin(authentication.getName()).get();
+		User user = userServiceImpl.findOneByAccount(accountAppServiceImpl.findOneByLogin(authentication.getName()).get()).get();
 
 		return getAllCompositProduct(user);
 	}
@@ -68,7 +71,7 @@ public class AllCompositeProductController {
 		
 		System.out.println(newCompositeProductModels.getMeasureProduct());
 		
-		User user = userServiceImpl.findOneByLogin(authentication.getName()).get();
+		User user = userServiceImpl.findOneByAccount(accountAppServiceImpl.findOneByLogin(authentication.getName()).get()).get();
 		int productCurrent = user.getUserSubscription().getProductCurrentQuantity();
 		int productrLimit = user.getUserSubscription().getProductQuantity();
 		if(productCurrent < productrLimit) {
@@ -105,7 +108,7 @@ public class AllCompositeProductController {
 		if (bindingResult.hasErrors()) {
 			return CompositeProductModel.builder().build();
 		}
-		User user = userServiceImpl.findOneByLogin(authentication.getName()).get();
+		User user = userServiceImpl.findOneByAccount(accountAppServiceImpl.findOneByLogin(authentication.getName()).get()).get();
 		CompositeProduct compositeProduct = getCompositeProduct(newCompositeProductModels.getId(), user);
 		compositeProduct.setName(newCompositeProductModels.getName());
 		compositeProduct.setGroup(newCompositeProductModels.getGroup());

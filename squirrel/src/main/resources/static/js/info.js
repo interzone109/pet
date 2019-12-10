@@ -135,7 +135,11 @@
       	 console.log("не удалено");
       	 //$("#excessOfLimit").collapse('show');
       	 //$("#excessOfLimitText").text('');  
-        }
+        } else if ( httpRequest.readyState === 4 && httpRequest.status === 413) {
+         	 console.log("оплата не зачислена");
+          	 $("#excessOfLimit").collapse('show');
+          	 $("#excessOfLimitText").text('Оплата не зачислена');  
+            }
 	  
 	  $("#spiners").hide();
    }
@@ -209,5 +213,24 @@
  	
  };
  
+ $(function () {
+	 $('[data-toggle=tooltip]').tooltip();
+ });
  
-    
+
+ $('#ddd').tooltip({placement: 'bottom',trigger: 'manual'}).tooltip('hide');
+
+ var hideTooltip = true ;
+$('#ddd').on('click',function(){
+	if(hideTooltip){
+	 $(this).tooltip('show');
+	}else{
+		 $(this).tooltip('hide');
+	}
+	hideTooltip = !hideTooltip;
+	 });
+
+
+ function saveUserActionInfo(action){
+	 request('POST', 'http://localhost:8080/user/saveAction', addToJornal, action);
+ }

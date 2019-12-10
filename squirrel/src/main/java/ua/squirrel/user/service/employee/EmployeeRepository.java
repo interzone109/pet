@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import ua.squirrel.user.entity.employee.Employee;
+import ua.squirrel.web.entity.account.AccountApp;
 import ua.squirrel.web.entity.user.User;
 
 public interface EmployeeRepository extends JpaRepository<Employee, Long> {
@@ -14,5 +15,5 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 	
 	Optional<Employee> findOneByIdAndUser(Long id, User user);
 
-	Optional<Employee> findOneByLogin(String login);
+	Optional<Employee> findOneByAccountApp(AccountApp accountApp);
 }

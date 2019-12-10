@@ -22,6 +22,7 @@ import ua.squirrel.user.service.store.StoreServiceImpl;
 import ua.squirrel.user.service.store.spending.SpendServiceImpl;
 import ua.squirrel.user.utils.SmallOneUtil;
 import ua.squirrel.web.entity.user.User;
+import ua.squirrel.web.service.account.AccountAppServiceImpl;
 import ua.squirrel.web.service.registration.user.UserServiceImpl;
 
 @RestController
@@ -37,6 +38,8 @@ public class AllSpendController {
 	private StoreServiceImpl storeServiceImpl;
 	@Autowired
 	private SmallOneUtil smallOneUtil;
+	@Autowired
+	private AccountAppServiceImpl accountAppServiceImpl;
 	
 	
 	/**
@@ -48,7 +51,7 @@ public class AllSpendController {
 	public List<SpendModel> findSpends(Authentication authentication, @RequestBody SpendModel spendModel) throws NotFoundException {
 		log.info("LOGGER: find spends");
 	
-		User user = userServiceImpl.findOneByLogin(authentication.getName()).get();
+		User user = userServiceImpl.findOneByAccount(accountAppServiceImpl.findOneByLogin(authentication.getName()).get()).get();
 		
 		
 		 if(spendModel.getStoreId() == 0) {
@@ -67,7 +70,7 @@ public class AllSpendController {
 	@PostMapping
 	public SpendModel createSpends(Authentication authentication, @RequestBody SpendModel spendModel) throws NotFoundException {
 		log.info("LOGGER: save new spends");
-		User user = userServiceImpl.findOneByLogin(authentication.getName()).get();
+		User user = userServiceImpl.findOneByAccount(accountAppServiceImpl.findOneByLogin(authentication.getName()).get()).get();
 		Store store = null ;
 		if(spendModel.getStoreId() != 0) {
 			store = storeServiceImpl.findOneByIdAndUser(spendModel.getStoreId(), user).get();
@@ -94,7 +97,7 @@ public class AllSpendController {
 	@DeleteMapping("{spend_id}")
 	public void deleteSpends(Authentication authentication, @PathVariable("spend_id") Long spendId ) throws NotFoundException {
 		log.info("LOGGER: delete spends");
-		User user = userServiceImpl.findOneByLogin(authentication.getName()).get();
+		User user = userServiceImpl.findOneByAccount(accountAppServiceImpl.findOneByLogin(authentication.getName()).get()).get();
 		Spend spend = spendServiceImpl.findOneByUserAndId(user, spendId).get();
 		spendServiceImpl.remove(spend);
 	}

@@ -36,6 +36,7 @@ import ua.squirrel.user.service.store.consignment.status.ConsignmentStatusServic
 import ua.squirrel.user.service.store.spending.SpendServiceImpl;
 import ua.squirrel.user.utils.ConsignmentUtil;
 import ua.squirrel.web.entity.user.User;
+import ua.squirrel.web.service.account.AccountAppServiceImpl;
 import ua.squirrel.web.service.registration.user.UserServiceImpl;
 
 @RestController
@@ -59,10 +60,15 @@ public class ReportController {
 	private StoreServiceImpl storeServiceImpl;
 	@Autowired
 	private ConsignmentUtil consignmentUtil;
+	@Autowired
+	private AccountAppServiceImpl accountAppServiceImpl;
+
+
+
 	@PostMapping("1")
 	public  ResponseEntity<ReportModel> getFirstReport(Authentication authentication, @RequestBody ReportModel reportModel){
 		log.info("LOGGER: get first report");
-		User user = userServiceImpl.findOneByLogin(authentication.getName()).get();
+		User user = userServiceImpl.findOneByAccount(accountAppServiceImpl.findOneByLogin(authentication.getName()).get()).get();
 		ConsignmentStatus status = consignmentStatusServiceImpl.findOneByName("ARRIVAL").get();
 		List<Store> stores = storeServiceImpl.findAllByUser(user);
 		List<Consignment> consignmentList = consignmentServiceImpl.findByStoreInAndIsApprovedAndConsignmentStatusAndDateBetween(
@@ -122,7 +128,7 @@ public class ReportController {
 	@PostMapping("2")
 	public  ResponseEntity<ReportModel> getSecondReport(Authentication authentication, @RequestBody ReportModel reportModel){
 		log.info("LOGGER: get second report");
-		User user = userServiceImpl.findOneByLogin(authentication.getName()).get();
+		User user = userServiceImpl.findOneByAccount(accountAppServiceImpl.findOneByLogin(authentication.getName()).get()).get();
 		List<Store> stores = storeServiceImpl.findAllByUser(user);
 		LocalDate dateStart = consignmentUtil.convertDate(reportModel.getDateStart());
 		LocalDate dateEnd = consignmentUtil.convertDate(reportModel.getDateEnd());
@@ -243,7 +249,7 @@ public class ReportController {
 	@PostMapping("3")
 	public  ResponseEntity<ReportModel> getThreeReport(Authentication authentication, @RequestBody ReportModel reportModel){
 		log.info("LOGGER: get third report");
-		User user = userServiceImpl.findOneByLogin(authentication.getName()).get();
+		User user = userServiceImpl.findOneByAccount(accountAppServiceImpl.findOneByLogin(authentication.getName()).get()).get();
 		List<Store> stores = storeServiceImpl.findAllByUser(user);
 		LocalDate dateStart = consignmentUtil.convertDate(reportModel.getDateStart());
 		LocalDate dateEnd = consignmentUtil.convertDate(reportModel.getDateEnd());
@@ -274,7 +280,7 @@ public class ReportController {
 	@PostMapping("4")
 	public  ResponseEntity<ReportModel> getFourReport(Authentication authentication, @RequestBody ReportModel reportModel){
 		log.info("LOGGER: get four report");
-		User user = userServiceImpl.findOneByLogin(authentication.getName()).get();
+		User user = userServiceImpl.findOneByAccount(accountAppServiceImpl.findOneByLogin(authentication.getName()).get()).get();
 		List<Store> stores = storeServiceImpl.findAllByUser(user);
 		
 		 List<ProductModel> reportProductlList = getFirstReport(authentication, reportModel).getBody().getProductReportData();

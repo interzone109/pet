@@ -35,6 +35,7 @@ import ua.squirrel.user.service.store.consignment.ConsignmentServiceImpl;
 import ua.squirrel.user.service.store.consignment.status.ConsignmentStatusServiceImpl; 
 import ua.squirrel.user.utils.StoreUtil;
 import ua.squirrel.web.entity.user.User;
+import ua.squirrel.web.service.account.AccountAppServiceImpl;
 import ua.squirrel.web.service.registration.user.UserServiceImpl;
 
 @RestController
@@ -55,6 +56,8 @@ public class StoreAssortmentController {
 	private StoreServiceImpl storeServiceImpl;
 	@Autowired
 	private StoreUtil storeUtil;
+	@Autowired
+	private AccountAppServiceImpl accountAppServiceImpl;
 	
 	
 
@@ -64,7 +67,7 @@ public class StoreAssortmentController {
 	public List<ProductModel> getLeftOvers(@PathVariable("store_id")Long storeId, Authentication authentication) throws NotFoundException {
 
 		log.info("LOGGER: get leftovers for current store");
-		User user = userServiceImpl.findOneByLogin(authentication.getName()).get();
+		User user = userServiceImpl.findOneByAccount(accountAppServiceImpl.findOneByLogin(authentication.getName()).get()).get();
 		Store store = getCurrentStore(user ,storeId);
 		List<ProductModel> productModel = new ArrayList<>();
 		store.getStoreIngridientNode().forEach(productNode->{
@@ -92,7 +95,7 @@ public class StoreAssortmentController {
 			Authentication authentication) throws NotFoundException {
 
 		log.info("LOGGER: get assortment for current user");
-		User user = userServiceImpl.findOneByLogin(authentication.getName()).get();
+		User user = userServiceImpl.findOneByAccount(accountAppServiceImpl.findOneByLogin(authentication.getName()).get()).get();
 		return storeUtil.getProductPriceModel( getCurrentStore(user ,storeId).getStoreCompositeProductNode());
 		
 	}
@@ -105,7 +108,7 @@ public class StoreAssortmentController {
 			Authentication authentication) throws NotFoundException {
 
 		log.info("LOGGER: remove");
-		User user = userServiceImpl.findOneByLogin(authentication.getName()).get();
+		User user = userServiceImpl.findOneByAccount(accountAppServiceImpl.findOneByLogin(authentication.getName()).get()).get();
 		Store store = getCurrentStore(user ,storeId) ;
 		Optional<StoreCompositeProductNode> storeNode = store.getStoreCompositeProductNode().stream().filter(node-> node.getCompositeProduct().getId() == productId).findFirst();
 		if(storeNode.isPresent()) {
@@ -129,7 +132,7 @@ public class StoreAssortmentController {
 	public List<CompositeProductModel> addToStoreProduct(@PathVariable("store_id") Long storeId ,
 			@RequestBody Map<Long, Integer> newProductPrice, Authentication authentication) throws NotFoundException {
 		log.info("LOGGER: add new product price to store");
-		User user = userServiceImpl.findOneByLogin(authentication.getName()).get();
+		User user = userServiceImpl.findOneByAccount(accountAppServiceImpl.findOneByLogin(authentication.getName()).get()).get();
 		Store store = getCurrentStore(user ,storeId) ;
 		
 		List<Product> newIngridients = new ArrayList<>();
@@ -197,7 +200,7 @@ public class StoreAssortmentController {
 	public List<CompositeProductModel> updateToStoreProduct(@PathVariable("store_id") Long storeId ,
 			@RequestBody Map<Long, Integer> productPrice, Authentication authentication) throws NotFoundException {
 		log.info("LOGGER: update product price to store");
-		User user = userServiceImpl.findOneByLogin(authentication.getName()).get(); 
+		User user = userServiceImpl.findOneByAccount(accountAppServiceImpl.findOneByLogin(authentication.getName()).get()).get();
 		 //получаем колекцию узлов которые нунжо обновить
 		 Store store = getCurrentStore(user ,storeId);
 		List<StoreCompositeProductNode> newPriceNode = store .getStoreCompositeProductNode().stream()

@@ -5,7 +5,9 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -32,6 +34,7 @@ import ua.squirrel.user.service.store.StoreServiceImpl;
 import ua.squirrel.user.service.store.compositeproduct.node.StoreCompositeProductServiceImpl;
 import ua.squirrel.user.service.store.invoice.InvoiceServiceImpl;
 import ua.squirrel.user.service.store.spending.SpendServiceImpl;
+import ua.squirrel.web.entity.account.AccountApp;
 import ua.squirrel.web.entity.user.Role;
 import ua.squirrel.web.entity.user.User;
 import ua.squirrel.web.service.registration.RoleServiceImpl;
@@ -555,11 +558,17 @@ public class FillDataUtil {
 	private EmployeeServiceImpl employeeServiceImpl;
 
 	public void setEmployee(User user) {
-		Role role = new Role();
-		role = roleServiceImpl.findOneByName("EMPLOYEE");
-
+	
 		List<Store> stores = storeServiceImpl.findAllByUser(user);
+		Role role1 = roleServiceImpl.findOneByName("EMPLOYEE_WITH_ACCESS");
 		stores.forEach(store -> {
+			
+			Set<Role> roles = new HashSet<>();
+			roles.add(role1);
+			AccountApp accountApp = new AccountApp();
+			 accountApp.setLogin("log" + store.getId());
+			 accountApp.setPassword(new BCryptPasswordEncoder().encode("ter"));
+			 accountApp.setRoles(roles);
 			
 			Employee employee = new Employee();
 			employee.setFirstName("BOBA");
@@ -569,9 +578,8 @@ public class FillDataUtil {
 			employee.setHairingDate(LocalDate.now());
 			employee.setUser(user);
 			employee.setStore(store);
-			employee.setRole(roleServiceImpl.findOneByName("EMPLOYEE_WITH_ACCESS"));
-			employee.setLogin("log" + store.getId() );
-			employee.setPassword(new BCryptPasswordEncoder().encode("ter"));
+			employee.setAccountApp(accountApp);
+		
 
 			employeeServiceImpl.save(employee);
 

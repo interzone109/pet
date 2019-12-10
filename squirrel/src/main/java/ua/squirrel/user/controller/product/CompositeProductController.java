@@ -41,6 +41,7 @@ import ua.squirrel.user.service.store.consignment.status.ConsignmentStatusServic
 import ua.squirrel.user.utils.CompositeProductUtil;
 import ua.squirrel.user.utils.StoreUtil;
 import ua.squirrel.web.entity.user.User;
+import ua.squirrel.web.service.account.AccountAppServiceImpl;
 import ua.squirrel.web.service.registration.user.UserServiceImpl;
 
 @RestController
@@ -65,6 +66,8 @@ public class CompositeProductController {
 	private StoreUtil storeUtil;
 	@Autowired
 	private ProductMapServiceImpl  productMapServiceImpl;
+	@Autowired
+	private AccountAppServiceImpl accountAppServiceImpl;
 	
 	/**
 	 * метод находит по id и User CompositeProduct и возращает информацию о нем и о
@@ -74,7 +77,7 @@ public class CompositeProductController {
 	public List<ProductModel> getCompositeProductInfo(Authentication authentication, @PathVariable("id") Long id)
 			throws NotFoundException {
 		log.info("LOGGER: return curent composite product");
-		User user = userServiceImpl.findOneByLogin(authentication.getName()).get();
+		User user = userServiceImpl.findOneByAccount(accountAppServiceImpl.findOneByLogin(authentication.getName()).get()).get();
 		
 		CompositeProduct compositeProduct = getCompositeProduct(id, user);
 		// вызывается привaтный метод возращающий модель коспозитного продукта
@@ -87,7 +90,7 @@ public class CompositeProductController {
 	public List<ProductModel> addToCompositeProduct(@PathVariable("id") Long compositeId ,
 			@RequestBody Map<Long, Integer> composites, Authentication authentication) throws NotFoundException {
 		log.info("LOGGER:  product add new ingridient in  curent composite product");
-		User user = userServiceImpl.findOneByLogin(authentication.getName()).get();
+		User user = userServiceImpl.findOneByAccount(accountAppServiceImpl.findOneByLogin(authentication.getName()).get()).get();
 		
 		//получаем композитный продукт в который будем добавлять новые ингридиенты и их расход
 		CompositeProduct compositeProduct = getCompositeProduct(compositeId, user);
@@ -146,7 +149,7 @@ public class CompositeProductController {
 			@RequestBody  Integer updateRate) throws NotFoundException {
 		
 		log.info("LOGGER: update  product expends");
-		User user = userServiceImpl.findOneByLogin(authentication.getName()).get();
+		User user = userServiceImpl.findOneByAccount(accountAppServiceImpl.findOneByLogin(authentication.getName()).get()).get();
 		
 		// получаем текущий композитный продукт по Id и пользователю
 		ProductMap node = productMapServiceImpl.findOneByIdAndCompositeProduct(productMapId, getCompositeProduct(compositeId, user));
@@ -166,7 +169,7 @@ public class CompositeProductController {
 	public ResponseEntity<String> removeIngridient(@PathVariable("id") Long compositeId, @PathVariable("product_map") Long productMapId,
 			Authentication authentication ) throws NotFoundException{
 		log.info("LOGGER: remove ingridient from  product ");
-		User user = userServiceImpl.findOneByLogin(authentication.getName()).get();
+		User user = userServiceImpl.findOneByAccount(accountAppServiceImpl.findOneByLogin(authentication.getName()).get()).get();
 		CompositeProduct product = getCompositeProduct(compositeId, user);
 		 
 		  Optional<ProductMap> exist = product.getProductMap().stream().filter(node-> node.getId() == productMapId).findFirst();

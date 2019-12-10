@@ -17,6 +17,7 @@ import ua.squirrel.user.entity.product.Product;
 import ua.squirrel.user.entity.product.ProductModel;
 import ua.squirrel.user.service.product.ProductServiceImpl;
 import ua.squirrel.web.entity.user.User;
+import ua.squirrel.web.service.account.AccountAppServiceImpl;
 import ua.squirrel.web.service.registration.user.UserServiceImpl;
 
 @RestController
@@ -27,12 +28,14 @@ public class AllProductController {
 	private UserServiceImpl userServiceImpl;
 	@Autowired
 	private ProductServiceImpl productServiceImpl;
+	@Autowired
+	private AccountAppServiceImpl accountAppServiceImpl;
 	
 	@GetMapping
 	public List<ProductModel> getUserProduct(Authentication authentication) throws NotFoundException {
 		
 		log.info("LOGGER: get all user product : /user/products_list"); 
-		User user = userServiceImpl.findOneByLogin(authentication.getName()).get();
+		User user = userServiceImpl.findOneByAccount(accountAppServiceImpl.findOneByLogin(authentication.getName()).get()).get();
 		
 		List<ProductModel> productList = new ArrayList<>();
 		
@@ -48,7 +51,7 @@ public class AllProductController {
 			Authentication authentication) throws NotFoundException {
 		
 		log.info("LOGGER: get all user product : /user/products_list");
-		User user = userServiceImpl.findOneByLogin(authentication.getName()).get();
+		User user = userServiceImpl.findOneByAccount(accountAppServiceImpl.findOneByLogin(authentication.getName()).get()).get();
 		
 		List<ProductModel> productList = new ArrayList<>();
 		

@@ -2,10 +2,10 @@ package ua.squirrel.web.entity.user;
 
 
 import java.time.LocalDate;
-import java.util.Set;
 import javax.persistence.*;
 import lombok.Data;
 import lombok.ToString;
+import ua.squirrel.web.entity.account.AccountApp;
 
 @Entity
 @Table(name = "user")
@@ -17,21 +17,16 @@ public class User {
 	@Column(name = "user_id", nullable = false, unique = true, updatable= false)
 	private long id;
 
-	@Column(name = "login", nullable = false, unique = true)
-	private String login;
-
-	@Column(name = "password", nullable = false)
-	private String hashPass;
 
 	@Column(name = "mail", nullable = false, unique = true)
 	private String mail;
 	
 	// дата регистрации
 	private LocalDate date;
-
-	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
-	private Set<Role> roles;
+	
+	@OneToOne(cascade={CascadeType.PERSIST}, fetch = FetchType.EAGER)
+    @JoinColumn(name="account_id")
+	private AccountApp account;
 	
 
 	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL,

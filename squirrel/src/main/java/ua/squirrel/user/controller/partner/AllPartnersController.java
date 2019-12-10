@@ -17,6 +17,7 @@ import ua.squirrel.user.entity.partner.Partner;
 import ua.squirrel.user.entity.partner.PartnerModel;
 import ua.squirrel.user.service.partner.PartnerServiceImpl;
 import ua.squirrel.web.entity.user.User;
+import ua.squirrel.web.service.account.AccountAppServiceImpl;
 import ua.squirrel.web.service.registration.user.UserServiceImpl;
 /**
  * Controller :
@@ -33,6 +34,8 @@ public class AllPartnersController {
 	private UserServiceImpl userServiceImpl;
 	@Autowired
 	private PartnerServiceImpl partnerServiceImpl;
+	@Autowired
+	private AccountAppServiceImpl accountAppServiceImpl;
 	
 	/**
 	 * метод получает зарегисрированого пользователя 
@@ -43,7 +46,7 @@ public class AllPartnersController {
 	@GetMapping
 	public List<PartnerModel> getAllPartner(Authentication authentication) {
 		log.info("LOGGER: retгrn all partners for current user: /user/partners");
-		User user = userServiceImpl.findOneByLogin(authentication.getName()).get();
+		User user = userServiceImpl.findOneByAccount(accountAppServiceImpl.findOneByLogin(authentication.getName()).get()).get();
 		
 		List<PartnerModel> partnersModel = new ArrayList<>();
 		partnerServiceImpl.findAllByUser(user).stream().forEach(obj->{
@@ -66,7 +69,7 @@ public class AllPartnersController {
 	@PostMapping
 	public ResponseEntity<PartnerModel> addNewPartner(@RequestBody PartnerModel newPartners ,Authentication authentication) {
 		log.info("LOGGER: save new partners from model: /user/partners" );
-		User user = userServiceImpl.findOneByLogin(authentication.getName()).get();
+		User user = userServiceImpl.findOneByAccount(accountAppServiceImpl.findOneByLogin(authentication.getName()).get()).get();
 		int partnerCurrent = user.getUserSubscription().getPartnerCurrentQuantity();
 		int partnerLimit = user.getUserSubscription().getPartnerQuantity();
 		if(partnerCurrent < partnerLimit) {

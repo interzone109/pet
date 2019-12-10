@@ -21,6 +21,7 @@ import ua.squirrel.user.entity.store.Store;
 import ua.squirrel.user.entity.store.StoreModel;
 import ua.squirrel.user.service.store.StoreServiceImpl;
 import ua.squirrel.web.entity.user.User;
+import ua.squirrel.web.service.account.AccountAppServiceImpl;
 import ua.squirrel.web.service.registration.user.UserServiceImpl;
 
 @RestController
@@ -32,6 +33,8 @@ public class AllStoreConrtoller {
 	private StoreServiceImpl storeServiceImpl;
 	@Autowired
 	private UserServiceImpl userServiceImpl;
+	@Autowired
+	private AccountAppServiceImpl accountAppServiceImpl;
 
 
 	/**
@@ -41,8 +44,8 @@ public class AllStoreConrtoller {
 	public List<StoreModel> showAllStores(Authentication authentication) throws NotFoundException {
 
 		log.info("LOGGER: return all stores current user");
-		User userCurrentSesion = userServiceImpl.findOneByLogin(authentication.getName()).get();
-		return getAllStore(userCurrentSesion);
+		User user = userServiceImpl.findOneByAccount(accountAppServiceImpl.findOneByLogin(authentication.getName()).get()).get();
+		return getAllStore(user);
 		
 	}
 
@@ -53,7 +56,7 @@ public class AllStoreConrtoller {
 	public ResponseEntity<StoreModel> addNewStore(@RequestBody StoreModel storeModel, Authentication authentication)
 			throws NotFoundException {
 		log.info("LOGGER: create new store with composite product");
-		User user = userServiceImpl.findOneByLogin(authentication.getName()).get();
+		User user = userServiceImpl.findOneByAccount(accountAppServiceImpl.findOneByLogin(authentication.getName()).get()).get();
 
 		int storeCurrent = user.getUserSubscription().getStoreCurrentQuantity();
 		int storeLimit = user.getUserSubscription().getStoreQuantity();
@@ -85,7 +88,7 @@ public class AllStoreConrtoller {
 	public StoreModel updateStore(@PathVariable("id") Long storeId, @RequestBody StoreModel storeModel, Authentication authentication)
 			throws NotFoundException {
 		log.info("LOGGER: create new store with composite product");
-		User user = userServiceImpl.findOneByLogin(authentication.getName()).get();
+		User user = userServiceImpl.findOneByAccount(accountAppServiceImpl.findOneByLogin(authentication.getName()).get()).get();
 
 		Store updateStore =  storeServiceImpl.findOneByIdAndUser(storeId, user)
 				.orElseThrow(() -> new NotFoundException("Store not found"));
