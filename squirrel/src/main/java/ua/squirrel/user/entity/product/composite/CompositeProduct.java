@@ -32,7 +32,7 @@ import ua.squirrel.web.entity.user.User;
 @Table(name = "сomposite_product")
 public class CompositeProduct {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	@Column(name = "сomposite_product_id", nullable = false)
 	private long id;
 	// наименование

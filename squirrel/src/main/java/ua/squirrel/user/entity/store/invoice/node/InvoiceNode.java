@@ -26,7 +26,7 @@ import ua.squirrel.user.entity.store.invoice.Invoice;
 @Data
 public class InvoiceNode {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	@Column(name = "invoice_node_id", nullable = false)
 	private long id;
 	//продукт

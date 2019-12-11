@@ -28,7 +28,7 @@ import ua.squirrel.web.entity.user.User;
 @Table(name = "products")
 public class Product {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	@Column(name = "product_id", nullable = false)
 	private long id;
 	// наименование игридиента

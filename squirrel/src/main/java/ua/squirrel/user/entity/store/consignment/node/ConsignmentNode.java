@@ -29,7 +29,7 @@ import ua.squirrel.user.entity.store.consignment.Consignment;
 @Table(name = "consignments_node")
 public class ConsignmentNode {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	@Column(name = "consignment_node_id", nullable = false)
 	private long id;
 	//товар

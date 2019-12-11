@@ -52,7 +52,7 @@ public class AppController {
 			AccountApp account = accountOption.get();
 			
 			for(Role role:account.getRoles()){
-				if(role.getName().startsWith("USER")) {
+				if(role.getName().startsWith("USER_ROLE")) {
 					return "redirect:user/home";
 				}else if(role.getName().equals("EMPLOYEE_WITH_ACCESS")) {
 					return "redirect:employee/home";
@@ -98,7 +98,7 @@ public class AppController {
         }
 		
 		
-		  Role role = roleServiceImpl.findOneByName("USER");
+		  Role role = roleServiceImpl.findOneByName("USER_ROLE");
 		  Set<Role> roles = new HashSet<>();
 		  roles.add(role);
 		  UserSubscription userSubscription = new UserSubscription();

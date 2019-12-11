@@ -37,7 +37,7 @@ import ua.squirrel.web.entity.user.User;
 
 public class Store {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	@Column(name = "store_id", nullable = false)
 	private long id;
 	//адрес

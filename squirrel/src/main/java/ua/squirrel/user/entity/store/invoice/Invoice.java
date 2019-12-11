@@ -28,7 +28,7 @@ import ua.squirrel.user.entity.store.invoice.node.InvoiceNode;
 @Data
 public class Invoice {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	@Column(name = "invoice_id", nullable = false)
 	private long id;
 	//денег в кассе на начало рабочего дня

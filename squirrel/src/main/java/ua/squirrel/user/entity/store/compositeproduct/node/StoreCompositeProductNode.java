@@ -25,7 +25,7 @@ import ua.squirrel.user.entity.store.Store;
 @Table(name = "store_composite_product_node")
 public class StoreCompositeProductNode {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	@Column(name = "store_composite_product_node_id", nullable = false)
 	private long id;
 	// композитный продукт

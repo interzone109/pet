@@ -31,7 +31,7 @@ import ua.squirrel.user.entity.store.consignment.node.ConsignmentNode;
 @Table(name = "consignments")
 public class Consignment {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	@Column(name = "consignment_id", nullable = false)
 	private long id;
 	// дата создание / прихода товара

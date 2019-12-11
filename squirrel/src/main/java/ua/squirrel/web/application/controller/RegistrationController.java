@@ -48,7 +48,7 @@ public class RegistrationController {
 	
 		log.info("LOGGER: return new user model ");
 		Set<Role> role = new HashSet<>();
-		role.add(roleServiceImpl.findOneByName("USER"));
+		role.add(roleServiceImpl.findOneByName("USER_ROLE"));
 		
 	
 		UserSubscription userSubscription = new UserSubscription();

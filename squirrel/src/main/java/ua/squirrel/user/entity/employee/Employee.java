@@ -24,7 +24,7 @@ import ua.squirrel.web.entity.user.User;
 @Table(name = "employees")
 public class Employee {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	@Column(name = "employee_id", nullable = false)
 	private long id;
 	@Column(name = "first_name", nullable = false)

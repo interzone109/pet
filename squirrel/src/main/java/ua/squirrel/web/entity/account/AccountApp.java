@@ -21,11 +21,11 @@ import ua.squirrel.web.entity.user.Role;
 @Table(name = "accounts_app")
 public class AccountApp {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	@Column(name = "account_app_id", nullable = false)
 	private long id;
 	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(name = "account_role", joinColumns = @JoinColumn(name = "account_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+	@JoinTable(name = "account_roles", joinColumns = @JoinColumn(name = "account_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
 	private Set<Role> roles;
 	@Column(name = "login",  nullable = false, unique = true)
 	private String login;

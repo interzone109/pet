@@ -14,7 +14,7 @@ import lombok.Data;
 @Table(name = "consignments_status")
 public class ConsignmentStatus {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	@Column(name = "consignment_status_id", nullable = false)
 	private long id;
 	@Column(name = "status_name", nullable = false, unique = true, updatable=false)

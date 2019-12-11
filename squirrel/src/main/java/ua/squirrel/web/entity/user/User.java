@@ -8,12 +8,12 @@ import lombok.ToString;
 import ua.squirrel.web.entity.account.AccountApp;
 
 @Entity
-@Table(name = "user")
+@Table(name = "users")
 @Data
 public class User {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	@Column(name = "user_id", nullable = false, unique = true, updatable= false)
 	private long id;
 

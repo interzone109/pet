@@ -14,7 +14,7 @@ import lombok.Data;
 @Table(name = "products_measure")
 public class MeasureProduct {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	@Column(name = "measure_product_Id", nullable = false)
 	private long id;
 	@Column(name = "measure_product", nullable = false, unique = true)

@@ -24,7 +24,7 @@ import ua.squirrel.user.entity.store.Store;
 @Table(name = "store_ingridient_node")
 public class StoreIngridientNode {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	@Column(name = "store_ingridient_id", nullable = false)
 	private long id;
 	//продукт к которому подвязан узел

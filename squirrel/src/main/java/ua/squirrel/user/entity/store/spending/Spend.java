@@ -26,7 +26,7 @@ import ua.squirrel.web.entity.user.User;
 @Data
 public class Spend {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	@Column(name = "spend_id", nullable = false)
 	private long id;
 	//наименование

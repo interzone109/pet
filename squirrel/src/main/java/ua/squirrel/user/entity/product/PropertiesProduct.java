@@ -15,7 +15,7 @@ import lombok.Data;
 @Table(name="properties_product")
 public class PropertiesProduct {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	@Column(name = "properties_product_Id", nullable = false)
 	private long id;
 	@Column(name = "properties_product_name", nullable = false , unique=true)
