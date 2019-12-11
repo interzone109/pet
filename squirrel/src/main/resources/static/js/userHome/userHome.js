@@ -33,7 +33,7 @@ function showReportProfit (reportTwoData){
 	    	 var data = google.visualization.arrayToDataTable(array);
 
 	      var options = {
-	        width: 800,
+	        width: 850,
 	        height: 400,
 	        legend: { position: 'top', maxLines: 3 },
 	        bar: { groupWidth: '55%' },
